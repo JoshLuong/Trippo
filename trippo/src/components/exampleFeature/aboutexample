@@ -1,0 +1,6 @@
+TODO: delete this file
+
+This folder are supposed to hold components used by exampleFeature. Any globally used components (i.e. buttons, search bars, etc. (if not from libraries))
+should be placed elsewhere. 
+
+Also, don't try to run these examples locally-- it'll probably result in build errors. 

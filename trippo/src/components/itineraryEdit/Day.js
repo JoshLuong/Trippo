@@ -183,7 +183,7 @@ function Day({ date, handleCalendarView}) {
                       );
                   })
               }
-                <Grid style={{marginTop: "0.65em",textAlign: "center", borderTop: "2px solid #F5F3F3"}} lg={12} md={12} sm={12} xs={12}>
+                <Grid style={{marginTop: "0.65em",textAlign: "center"}} lg={12} md={12} sm={12} xs={12}>
                     {
                         edit ? 
                         <><sc.EditButton marginRight="2em"onClick={() => alert("TODO")}>Cancel</sc.EditButton><sc.Spacer/></>

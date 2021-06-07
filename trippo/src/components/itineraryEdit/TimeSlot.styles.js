@@ -5,6 +5,8 @@ export const Slot = styled.div`
     margin-top: 0.5em;
     border-radius: 5px;
     padding-top: 0.75em;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
     background-color: #fff;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.45);
     z-index:1;
@@ -65,7 +67,7 @@ export const CommentButton = styled.div`
 
 export const Comments = styled.ul`
     margin-top: 0.25em;
-    margin-right: 1em;
+    margin-right: 1.5em;
     color:  rgba(71,71,71,0.8);
     padding-left: 1.5em;
     ${props => props.contentEditable && editStyles}

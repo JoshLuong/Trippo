@@ -161,7 +161,7 @@ function Day({ date, handleCalendarView}) {
                       if (index === date.getDay()){
                           return <sc.daysWeek>{d}</sc.daysWeek>
                       }
-                      return <sc.daysWeek style={{background:c.WHITE, color: c.GREY}}>{d}</sc.daysWeek>
+                      return <sc.daysWeek style={{background:"#fff", color: c.GREY}}>{d}</sc.daysWeek>
                   })
               }
               </div>

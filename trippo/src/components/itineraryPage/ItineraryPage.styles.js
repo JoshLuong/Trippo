@@ -39,7 +39,7 @@ export const SideBar = styled.div`
 
 export const Container = styled.div`
     display: inline-block;
-    background-color: ${c.WHITE};
+    background-color: #fff;
     height: 65vh;
     flex: 0 0 585px;
     position: relative;

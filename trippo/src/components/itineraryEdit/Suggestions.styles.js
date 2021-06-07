@@ -10,11 +10,17 @@ export const Time = styled.div`
 export const Destination = styled.div`
     padding-top: 5px;
     color: rgba(71,71,71,0.65);
+    @media (max-width: 960px) {
+        margin-left: 1em;
+    }
 `;
 
 export const SuggestionTitle = styled.div`
-    color: ${c.WHITE};
-    padding-bottom: 0.5em;
+    color: ${c.GREY};
+    border-right: 2px solid ${c.YELLOW};
+    padding-right: 1.105em;
+    margin-bottom: 0.5em;
+    padding-left: 4px;
 `;
 
 export const Comments = styled.div`
@@ -22,6 +28,8 @@ export const Comments = styled.div`
     padding-top: 5px;
     font-size: 0.85em;
     padding-left: 1.5em;
+    padding-right: 1em;
+    padding-bottom: 1em;
     text-align: right;
 `;
 

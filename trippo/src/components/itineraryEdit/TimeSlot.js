@@ -42,14 +42,14 @@ function TimeSlot({timeSlot, showEdit}) {
               </sc.Destination>
             </Grid>
             <Grid contatiner item lg={1} md={1} sm={1} xs={1}>
-              <sc.Destination>
+              <sc.CommentButton>
               <button onClick={() => setShowSuggestions(!showSuggestions)}>
                 {
                   !showSuggestions ? 
                     <i class="fas fa-chevron-down"></i> : <i style={{color: c.DARK_ORANGE}}class="fas fa-chevron-up"></i>
                 }
                 </button>
-              </sc.Destination>
+              </sc.CommentButton>
             </Grid>
             <Grid contatiner item lg={12} md={12} sm={12} xs={12}>
             <sc.Comments contentEditable= {showEdit ? true : false}>

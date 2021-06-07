@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import * as sc from "./Day.styles";
 import * as d from "../../app/destinations/destinationTypes";
+import * as c from "../../colors/colors";
 import TimeSlot from './TimeSlot';
 import moment from 'moment';
 import Settings from './Settings';
 import { Grid } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 function Day({ date, handleCalendarView}) {
 
@@ -141,6 +143,8 @@ function Day({ date, handleCalendarView}) {
                                 }
     ];
 
+    const days = ["SU","MO","TU","WE","TH","FR","SA"];
+
     return (
       <sc.dayDiv>
           <sc.dayDate>
@@ -151,14 +155,23 @@ function Day({ date, handleCalendarView}) {
                 <i class="fas fa-chevron-left"></i><i class="far fa-calendar-alt"></i>
             </button>
               }
-            <div><div>{moment(date).format('dddd MMMM D Y')}</div></div>
+              <div>
+              {
+                  days.map((d, index)=>{
+                      if (index === date.getDay()){
+                          return <sc.daysWeek>{d}</sc.daysWeek>
+                      }
+                      return <sc.daysWeek style={{background:c.WHITE, color: c.GREY}}>{d}</sc.daysWeek>
+                  })
+              }
+              </div>
             <button onClick={handleSettingsView}>
                 <i class="fas fa-cog"></i>
             </button>
           </sc.dayDate>
           {
               settings ? <Settings></Settings> :
-              <div>
+              <div style={{zIndex:"1"}}>
               {
                   timeSlots.map(slot => {
                       return (

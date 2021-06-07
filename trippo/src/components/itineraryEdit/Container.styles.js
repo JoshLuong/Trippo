@@ -11,7 +11,7 @@ export const containerDiv = styled.div`
     width: 100%;
     max-height: 100%;
     box-sizing: border-box;
-    background-color: #a0c9e4;
+    background-color: ${c.WHITE};
     overflow-x: hidden;
     ::-webkit-scrollbar {
         width: 10px;

@@ -28,7 +28,9 @@ function ItineraryPage() {
           <Container></Container>
         </sc.Container> : null
       }
-        <div style={{display:"inline-block", backgroundColor: "grey", height:"65vh", flex: "1"}}>
+        <div onClick={()=> {
+          if (showItinerary) handleOpenItinerary();
+        }}style={{display:"inline-block", backgroundColor: "grey", height:"65vh", flex: "1"}}>
         </div>
       </div>
     );

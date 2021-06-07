@@ -28,6 +28,11 @@ export const EditButton = styled.button`
     }
 `;
 
+export const Spacer = styled.div`
+    display: inline-block;
+    width: 2em;
+`;
+
 
 export const dayDate = styled.div`
     padding-bottom: 0.5em;
@@ -58,8 +63,8 @@ export const dayDate = styled.div`
         align-items: center;
         transform: skew(-45deg);
         div {
-            padding-left: 4em;
-            padding-right: 4em;
+            padding-left: 2em;
+            padding-right: 2em;
             padding-top: 0.5em;
             padding-bottom: 0.5em;
             transform: skew(45deg);

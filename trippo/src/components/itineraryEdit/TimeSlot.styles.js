@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import * as c from "../../colors/colors"
 const darkGrey = c.GREY;
 export const Slot = styled.div`
@@ -38,6 +38,13 @@ export const Comments = styled.ul`
     margin-top: 0.25em;
     color:  rgba(71,71,71,0.8);
     padding-left: 1.5em;
+    ${props => props.contentEditable && editStyles}
+`;
+
+const editStyles = css`
+    border: 1.25px solid ${c.DARK_BLUE}; 
+    border-radius: 7px;
+    outline: none;
 `;
 
 export const Icon = styled.i`

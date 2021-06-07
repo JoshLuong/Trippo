@@ -37,4 +37,7 @@ export const calendarDiv = styled.div`
     @media (max-width: 668px) {
         margin-top: 10%;
     }
+    @media (max-width: 400px) {
+        margin-top: 15%;
+    }
 `;

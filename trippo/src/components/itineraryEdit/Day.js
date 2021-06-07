@@ -171,7 +171,14 @@ function Day({ date, handleCalendarView}) {
                   })
               }
                 <Grid style={{marginTop: "0.65em",textAlign: "center", borderTop: "2px solid #F5F3F3"}} lg={12} md={12} sm={12} xs={12}>
-                    <sc.EditButton onClick={handleEditView}>Edit</sc.EditButton>
+                    {
+                        edit ? 
+                        <><sc.EditButton marginRight="2em"onClick={() => alert("TODO")}>Cancel</sc.EditButton><sc.Spacer/></>
+                         : null
+                    }
+                    <sc.EditButton onClick={handleEditView}>{
+                        edit ? "Done" : "Edit"
+                    }</sc.EditButton>
                 </Grid>
             </div>
           }

@@ -6,8 +6,8 @@ import { DateRangePickerCalendar, START_DATE } from 'react-nice-dates'
 import './Calendar.scss'
 
 function Calendar({children, handleDayClick}) {
-    const [startDate, setStartDate] = useState(new Date(2021, 5, 20))
-    const [endDate, setEndDate] = useState(new Date(2021, 5, 25))
+    const [startDate, setStartDate] = useState(new Date(2022, 5, 20))
+    const [endDate, setEndDate] = useState(new Date(2022, 6, 25))
     const [focus, setFocus] = useState(START_DATE)
     const handleFocusChange = newFocus => {
       setFocus(newFocus || START_DATE)

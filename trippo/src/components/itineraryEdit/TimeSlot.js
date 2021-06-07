@@ -52,7 +52,7 @@ function TimeSlot({timeSlot, showEdit}) {
               </sc.Destination>
             </Grid>
             <Grid contatiner item lg={12} md={12} sm={12} xs={12}>
-            <sc.Comments>
+            <sc.Comments contentEditable= {showEdit ? true : false}>
               {
                 comments.map(c => {
                   return (

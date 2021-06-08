@@ -20,6 +20,7 @@ export const dayDiv = styled.div`
 export const SideBar = styled.div`
     min-height: 100%;
     background-color: ${c.DARK_BLUE};
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.45);
     button {
         border: none;
         height: 100%;
@@ -43,6 +44,7 @@ export const Container = styled.div`
     height: 65vh;
     flex: 0 0 585px;
     position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.45);
 
     @media (max-width: 668px) {
         flex: 0 0 80%;

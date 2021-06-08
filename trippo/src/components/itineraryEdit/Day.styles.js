@@ -39,7 +39,7 @@ export const dayDate = styled.div`
     position: relative;
     display: flex;
     color: ${c.WHITE};
-    font-weight: 550;
+    font-weight: 545;
     letter-spacing: 2px;
     button {
         border: none;
@@ -65,7 +65,9 @@ export const dayDate = styled.div`
 `;
 
 export const daysWeek = styled.div`
-display: inline-block;
-padding: 0.5em 0.7em;
-background-color: ${c.YELLOW};
+    display: inline-block;
+    padding: 0.5em 0.7em;
+    background-color: ${c.YELLOW};
+    font-family: 'Lato', sans-serif;
+    font-weight: 590;
 `;

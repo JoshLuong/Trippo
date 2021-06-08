@@ -13,12 +13,15 @@ export const Destination = styled.div`
     @media (max-width: 960px) {
         margin-left: 1em;
     }
+    i {
+        color: ${c.DARK_BLUE};
+    }
 `;
 
 export const SuggestionTitle = styled.div`
     color: ${c.GREY};
     border-right: 2px solid ${c.YELLOW};
-    padding-right: 1.105em;
+    padding-right: 0.795em;
     margin-bottom: 0.5em;
     padding-left: 4px;
 `;

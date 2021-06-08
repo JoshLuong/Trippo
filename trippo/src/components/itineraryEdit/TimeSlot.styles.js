@@ -10,7 +10,10 @@ export const Slot = styled.div`
     background-color: #fff;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.45);
     z-index:1;
-    position: relative
+    position: relative;
+    &:hover {
+        transform: scale(1.025);
+      }
 `;
 
 export const Time = styled.div`
@@ -69,7 +72,7 @@ export const Comments = styled.ul`
     margin-top: 0.25em;
     margin-right: 1.5em;
     color:  rgba(71,71,71,0.8);
-    padding-left: 1.5em;
+    padding-left: 1em;
     ${props => props.contentEditable && editStyles}
     @media (max-width: 960px) {
         margin-left: 1em;

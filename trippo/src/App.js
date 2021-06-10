@@ -1,9 +1,10 @@
 import "./App.css";
-import ItineraryPage from "./components/itineraryPage/ItineraryPage";
+import WelcomePage from "./components/welcomePage/WelcomePage";
+
 function App() {
   return (
     <div>
-      <ItineraryPage></ItineraryPage>
+      <WelcomePage></WelcomePage>
     </div>
   );
 }

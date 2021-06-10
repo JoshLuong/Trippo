@@ -1,0 +1,8 @@
+/* body css styling */
+
+body {
+  margin: 0;
+  font-family: Muli, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* use styled-components instead */

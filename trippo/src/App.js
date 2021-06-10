@@ -1,5 +1,5 @@
-import './App.css';
-import ItineraryPage from './components/itineraryPage/ItineraryPage';
+import "./App.css";
+import ItineraryPage from "./components/itineraryPage/ItineraryPage";
 function App() {
   return (
     <div>

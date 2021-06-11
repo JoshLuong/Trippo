@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
 
 export const fancytext = styled.div`
   text-align: center;

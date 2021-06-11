@@ -6,7 +6,6 @@ import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
 import { Grid } from "@material-ui/core";
-import PropTypes from "prop-types";
 
 interface Props {
   date: Date;
@@ -174,10 +173,10 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
         <div>
           {days.map((d, index) => {
             if (index === date.getDay()) {
-              return <sc.daysWeek>{d}</sc.daysWeek>;
+              return <sc.daysWeek key={index}>{d}</sc.daysWeek>;
             }
             return (
-              <sc.daysWeek style={{ background: "#fff", color: c.BLACK }}>
+              <sc.daysWeek key={index} style={{ background: "#fff", color: c.BLACK }}>
                 {d}
               </sc.daysWeek>
             );
@@ -191,9 +190,9 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
         <Settings></Settings>
       ) : (
         <div style={{ zIndex: 1 }}>
-          {timeSlots.map((slot) => {
+          {timeSlots.map((slot, idx) => {
             return (
-              <div>
+              <div key={idx}>
                 <TimeSlot
                   handleHideCostToggle={handleHideCostToggle}
                   timeSlot={slot}
@@ -202,11 +201,12 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
               </div>
             );
           })}
-          <sc.Cost container lg={12}>
+          <sc.Cost container item lg={12}>
             <div>Total cost for {moment(date).format("YYYY/MM/DD")}:</div>
             <div>${dayCost}</div>
           </sc.Cost>
           <Grid
+            item
             style={{ marginTop: "0.65em", textAlign: "center" }}
             lg={12}
             md={12}

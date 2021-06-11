@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 
-const darkGrey = c.GREY;
-
 export const Time = styled.div`
   color: #f5f3f3;
 `;

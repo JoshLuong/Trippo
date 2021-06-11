@@ -1,5 +1,5 @@
 $nice-dates-color-gray-dark: #474747 !default;
-$nice-dates-color-nav: #FFB703 !default;
+$nice-dates-color-nav: #ffb703 !default;
 $nice-dates-color-dark-orange: #fb8500 !default;
 $nice-dates-color-gray: #868686 !default;
 $nice-dates-color-gray-light: #ddd !default;
@@ -26,7 +26,8 @@ $nice-dates-cell-width: calc(100% / 7);
       font-size: 1.5em;
     }
 
-    &_previous, &_next {
+    &_previous,
+    &_next {
       cursor: pointer;
       height: 0;
       padding-bottom: $nice-dates-cell-width;
@@ -37,7 +38,7 @@ $nice-dates-cell-width: calc(100% / 7);
         border-right: 2px solid $nice-dates-color-gray;
         border-top: 2px solid $nice-dates-color-gray;
         box-sizing: border-box;
-        content: '';
+        content: "";
         display: block;
         height: 14px;
         left: 50%;
@@ -70,7 +71,7 @@ $nice-dates-cell-width: calc(100% / 7);
   }
 
   &-week-header {
-    box-shadow: 0 1px 0 rgba(#000, .06);
+    box-shadow: 0 1px 0 rgba(#000, 0.06);
     display: flex;
     padding: 8px 0;
 
@@ -97,7 +98,7 @@ $nice-dates-cell-width: calc(100% / 7);
       left: 0;
       position: absolute;
       right: 0;
-      transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       transition-property: none;
       will-change: transform;
 
@@ -154,11 +155,12 @@ $nice-dates-cell-width: calc(100% / 7);
       z-index: 3;
     }
 
-    &:before, &:after {
+    &:before,
+    &:after {
       border-radius: 999px;
       bottom: 0;
       box-sizing: border-box;
-      content: '';
+      content: "";
       display: block;
       left: 0;
       opacity: 0;
@@ -174,7 +176,7 @@ $nice-dates-cell-width: calc(100% / 7);
 
     &:after {
       border: 2px solid $nice-dates-color-accent;
-      transform: scale(.95);
+      transform: scale(0.95);
       transition-duration: 150ms;
       transition-property: transform, opacity;
       z-index: 2;
@@ -193,7 +195,7 @@ $nice-dates-cell-width: calc(100% / 7);
       }
 
       &.-selected * {
-        color:  $nice-dates-color-gray;
+        color: $nice-dates-color-gray;
       }
     }
 
@@ -208,7 +210,8 @@ $nice-dates-cell-width: calc(100% / 7);
         }
       }
 
-      &:not(:hover), &.-disabled {
+      &:not(:hover),
+      &.-disabled {
         * {
           color: #fff;
         }
@@ -254,7 +257,8 @@ $nice-dates-cell-width: calc(100% / 7);
     }
 
     &.-wide {
-      &:before, &:after {
+      &:before,
+      &:after {
         left: 12.5%;
         right: 12.5%;
       }
@@ -274,7 +278,7 @@ $nice-dates-cell-width: calc(100% / 7);
   &-popover {
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 1px 8px rgba(#000, .12);
+    box-shadow: 0 1px 8px rgba(#000, 0.12);
     margin: 8px 0;
     max-width: 600px;
     position: absolute;
@@ -282,7 +286,7 @@ $nice-dates-cell-width: calc(100% / 7);
     transform: perspective(1000px);
     transition-property: transform, opacity;
     transition-duration: 400ms;
-    transition-timing-function: cubic-bezier(.4, .2, 0, 1.1);
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0, 1.1);
     width: 100%;
     will-change: transform, opacity;
     z-index: 9;

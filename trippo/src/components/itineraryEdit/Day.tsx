@@ -176,7 +176,10 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
               return <sc.daysWeek key={index}>{d}</sc.daysWeek>;
             }
             return (
-              <sc.daysWeek key={index} style={{ background: "#fff", color: c.BLACK }}>
+              <sc.daysWeek
+                key={index}
+                style={{ background: "#fff", color: c.BLACK }}
+              >
                 {d}
               </sc.daysWeek>
             );

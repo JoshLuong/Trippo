@@ -1,18 +1,22 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import * as sc from "./Container.styles";
 import { format } from "date-fns";
 import { enGB } from "date-fns/locale";
-import { DateRangePickerCalendar, START_DATE } from "react-nice-dates";
+import { DateRangeFocus, DateRangePickerCalendar, Modifiers } from "react-nice-dates";
 import "./Calendar.scss";
 
-function Calendar({ children, handleDayClick }) {
+interface Props {
+  handleDayClick: (date: Date | null) => void;
+}
+
+const Calendar: FC<Props> = ({ children, handleDayClick }) => {
   const [startDate, setStartDate] = useState(new Date(2022, 5, 20));
   const [endDate, setEndDate] = useState(new Date(2022, 6, 25));
-  const [focus, setFocus] = useState(START_DATE);
-  const handleFocusChange = (newFocus) => {
-    setFocus(newFocus || START_DATE);
+  const [focus, setFocus] = useState<DateRangeFocus>("startDate");
+  const handleFocusChange = (newFocus: DateRangeFocus) => {
+    setFocus(newFocus || "startDate");
   };
-  const modifiers = {
+  const modifiers: Modifiers = {
     disabled: (date) => {
       return date < startDate || date > endDate ? true : false;
     }, // Disables Saturdays
@@ -32,6 +36,7 @@ function Calendar({ children, handleDayClick }) {
         locale={enGB}
         modifiers={modifiers}
         modifiersClassNames={modifiersClassNames}
+        //@ts-ignore
         onDayClick={handleDayClick}
       />
     </div>

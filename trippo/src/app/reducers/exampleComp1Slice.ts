@@ -1,5 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+interface State {
+  value: any[];
+}
+
+interface Action {
+  payload: string;
+}
+
 export const exampleComp1Slice = createSlice({
   // reducer uses the actions
   name: "exampleState",
@@ -8,7 +16,7 @@ export const exampleComp1Slice = createSlice({
   },
   reducers: {
     // reducer receives data from the payload
-    add: (state, action) => {
+    add: (state: State, action: Action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
@@ -22,6 +30,10 @@ export const exampleComp1Slice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { deleteIdx, add, deleteAll } = exampleComp1Slice.actions;
+export const {
+  // deleteIdx,
+  add,
+  deleteAll
+} = exampleComp1Slice.actions;
 
 export default exampleComp1Slice.reducer;

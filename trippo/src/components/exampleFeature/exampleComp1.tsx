@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import ExampleComp2 from "./exampleComp2";
-import * as sc from "./ExampleComp1.styles";
+import * as sc from "./exampleComp1.styles";
 import { useDispatch, useSelector } from "react-redux";
-import { add } from "../../app/reducers/exampleComp1sSlice";
+import { add } from "../../app/reducers/exampleComp1Slice";
 
-function ExampleComp1({ desc, index }) {
+interface Props {
+  desc: string;
+  index: number;
+}
+
+const ExampleComp1: FC<Props> = ({ desc, index }) => {
   // destructure the props!
   const dispatch = useDispatch();
   const [description, setDesc] = useState(desc);
   // this is the state as defined in the slice
-  const state = useSelector((state) => state.exampleState.value);
+  // const state = useSelector((state) => state.exampleState.value);
 
   return (
     <li>
@@ -20,7 +25,7 @@ function ExampleComp1({ desc, index }) {
             dispatch(
               add(
                 JSON.stringify({
-                  url,
+                  url: "",
                   desc,
                 })
               )

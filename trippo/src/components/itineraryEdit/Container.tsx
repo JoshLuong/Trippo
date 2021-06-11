@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import Calendar from "./Calendar";
 import * as sc from "./Container.styles";
 import Day from "./Day";
 
-function Container({ children, handleClick }) {
-  // TODO: change this
-  const [day, setDay] = useState(null);
+interface Props {
+  handleClick?: (date: Date) => void;
+}
 
-  const handleDayClick = (date) => {
-    setDay({
-      date: date,
-    });
+const Container: FC<Props> = ({ children, handleClick }) => {
+  // TODO: change this
+  const [day, setDay] = useState<Date | null>(null);
+
+  const handleDayClick = (date: Date | null) => {
+    setDay(date);
   };
 
   const handleCalendarView = () => {
@@ -21,7 +23,7 @@ function Container({ children, handleClick }) {
     <sc.containerDiv>
       <div>
         {day !== null ? (
-          <Day handleCalendarView={handleCalendarView} date={day.date}></Day>
+          <Day handleCalendarView={handleCalendarView} date={day}></Day>
         ) : (
           <sc.calendarDiv>
             <Calendar handleDayClick={handleDayClick}></Calendar>

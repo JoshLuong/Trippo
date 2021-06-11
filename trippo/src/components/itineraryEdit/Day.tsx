@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import * as sc from "./Day.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import * as c from "../../colors/colors";
@@ -8,7 +8,12 @@ import Settings from "./Settings";
 import { Grid } from "@material-ui/core";
 import PropTypes from "prop-types";
 
-function Day({ date, handleCalendarView }) {
+interface Props {
+  date: Date;
+  handleCalendarView: () => void;
+}
+
+const Day: FC<Props> = ({ date, handleCalendarView }) => {
   let timeSlots = [
     {
       time: new Date(date.setHours(8)),
@@ -125,7 +130,7 @@ function Day({ date, handleCalendarView }) {
     },
   ];
   let cost = timeSlots
-    .map((slot) => (slot.cost ? parseFloat(slot.cost) : 0))
+    .map((slot) => (slot.cost ? slot.cost : 0))
     .reduce(function (total, cost) {
       return total + cost;
     });
@@ -141,14 +146,14 @@ function Day({ date, handleCalendarView }) {
     setEdit(!edit);
   };
 
-  const handleHideCostToggle = (slotCost) => {
-    setDayCost(dayCost + slotCost);
+  const handleHideCostToggle = (slotCost: number | undefined) => {
+    setDayCost(dayCost + (slotCost || 0));
   };
 
-  Date.prototype.addHours = function (h) {
-    this.setTime(this.getTime() + h * 60 * 60 * 1000);
-    return this;
-  };
+  // Date.prototype.addHours = function (h) {
+  //   this.setTime(this.getTime() + h * 60 * 60 * 1000);
+  //   return this;
+  // };
 
   const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
@@ -156,14 +161,14 @@ function Day({ date, handleCalendarView }) {
     <sc.dayDiv>
       <sc.dayDate>
         {settings ? (
-          <button float="left" onClick={handleSettingsView}>
-            <i class="fas fa-chevron-left"></i>
-            <i class="fas fa-list"></i>
+          <button style={{ float: 'left' }} onClick={handleSettingsView}>
+            <i className="fas fa-chevron-left"></i>
+            <i className="fas fa-list"></i>
           </button>
         ) : (
-          <button float="left" onClick={handleCalendarView}>
-            <i class="fas fa-chevron-left"></i>
-            <i class="far fa-calendar-alt"></i>
+          <button style={{ float: 'left' }} onClick={handleCalendarView}>
+            <i className="fas fa-chevron-left"></i>
+            <i className="far fa-calendar-alt"></i>
           </button>
         )}
         <div>
@@ -179,13 +184,13 @@ function Day({ date, handleCalendarView }) {
           })}
         </div>
         <button onClick={handleSettingsView}>
-          <i class="fas fa-cog"></i>
+          <i className="fas fa-cog"></i>
         </button>
       </sc.dayDate>
       {settings ? (
         <Settings></Settings>
       ) : (
-        <div style={{ zIndex: "1" }}>
+        <div style={{ zIndex: 1 }}>
           {timeSlots.map((slot) => {
             return (
               <div>
@@ -210,7 +215,7 @@ function Day({ date, handleCalendarView }) {
           >
             {edit ? (
               <>
-                <sc.EditButton marginRight="2em" onClick={() => alert("TODO")}>
+                <sc.EditButton style={{ marginRight: '2em' }} onClick={() => alert("TODO")}>
                   Cancel
                 </sc.EditButton>
                 <sc.Spacer />

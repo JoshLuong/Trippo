@@ -18,9 +18,9 @@ function ItineraryPage() {
       <sc.SideBar style={{ width: "2em" }}>
         <button onClick={handleOpenItinerary}>
           {showItinerary ? (
-            <i class="fas fa-chevron-left"></i>
+            <i className="fas fa-chevron-left"></i>
           ) : (
-            <i class="fas fa-chevron-right"></i>
+            <i className="fas fa-chevron-right"></i>
           )}
         </button>
       </sc.SideBar>

@@ -88,10 +88,10 @@ const Navbar = props => {
         </div>
         <Divider />
         <List>
-          {menuItems.map(menuItem => {
+          {menuItems.map((menuItem, index) => {
           const { menuTitle, pageURL } = menuItem;
           return(
-            <ListItem button onClick={() => handleMenuClick(pageURL)}>
+            <ListItem button onClick={() => handleMenuClick(pageURL)} key={index}> 
               {menuTitle}
             </ListItem>
             );

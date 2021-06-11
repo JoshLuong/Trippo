@@ -1,57 +1,161 @@
 import React from "react";
-import { Link, Route, Switch, BrowserRouter } from "react-router-dom";
-import ItineraryPage from "../itineraryPage/ItineraryPage";
-// import Drawer from 'react-motion-drawer';
 import "./navstyle.css";
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import { withRouter } from "react-router-dom";
 
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-);
+// https://github.com/mui-org/material-ui/tree/master/docs/src/pages/components/drawers
+const drawerWidth = 240;
 
-export default function Navbar() {
+const Navbar = props => {
+  const { history } = props;
+  const classes = useStyles();
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  
+  const handleMenuClick = pageURL => {
+    history.push(pageURL);
+  };
+  
+  const menuItems = [
+    {
+      menuTitle: "Home",
+      pageURL: "/"
+    },
+    {
+      menuTitle: "My Itineraries",
+      pageURL: "/itineraries"
+    },
+  ];
+
   return (
-    <div>
-    <BrowserRouter>
-      <nav className="navbar navbar-light">
-        <ul className="nav navbar-nav">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/itineraries">My Itineraries</Link>
-          </li>
-          <li>
-            <Link to="/newItinerary">New Itinerary</Link>
-          </li>
-        </ul>
-      </nav>
-{/* 
-    <Drawer open={false} onChange={onChange}>
-    <ul>
-      <li>Home</li>
-      <li>My Itineraries</li>
-      <li>New Itinerary</li>
-    </ul>
-    </Drawer> */}
-
-
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/itineraries">
-          <ItineraryPage />
-        </Route>
-        <Route path="/login">
-          {/* <Login /> */}
-        </Route>
-        <Route path="/newItinerary">
-            {/* <NewItinerary/> */}
-        </Route>
-      </Switch>
-      </BrowserRouter>
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Trippo
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {menuItems.map(menuItem => {
+          const { menuTitle, pageURL } = menuItem;
+          return(
+            <ListItem button onClick={() => handleMenuClick(pageURL)}>
+              {menuTitle}
+            </ListItem>
+            );
+          })}
+        </List>
+      </Drawer>
     </div>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+}));
+
+export default withRouter(Navbar);

@@ -5,9 +5,9 @@ import { Grid } from "@material-ui/core";
 interface Props {
   renderIcon: (icon: string) => JSX.Element;
   suggested?: {
-    type?: string,
-    destination?: string,
-    comments?: string
+    type?: string;
+    destination?: string;
+    comments?: string;
   }[];
 }
 
@@ -36,6 +36,6 @@ const Suggestions: FC<Props> = ({ renderIcon, suggested }) => {
       </Grid>
     </Grid>
   );
-}
+};
 
 export default Suggestions;

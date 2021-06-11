@@ -33,7 +33,7 @@ export const exampleComp1Slice = createSlice({
 export const {
   // deleteIdx,
   add,
-  deleteAll
+  deleteAll,
 } = exampleComp1Slice.actions;
 
 export default exampleComp1Slice.reducer;

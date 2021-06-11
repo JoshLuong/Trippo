@@ -1,6 +1,10 @@
 import React, { FC, useState } from "react";
 import { enGB } from "date-fns/locale";
-import { DateRangeFocus, DateRangePickerCalendar, Modifiers } from "react-nice-dates";
+import {
+  DateRangeFocus,
+  DateRangePickerCalendar,
+  Modifiers,
+} from "react-nice-dates";
 import "./Calendar.scss";
 
 interface Props {
@@ -39,6 +43,6 @@ const Calendar: FC<Props> = ({ handleDayClick }) => {
       />
     </div>
   );
-}
+};
 
 export default Calendar;

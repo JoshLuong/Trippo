@@ -32,6 +32,6 @@ const Container: FC<Props> = ({ children, handleClick }) => {
       </div>
     </sc.containerDiv>
   );
-}
+};
 
 export default Container;

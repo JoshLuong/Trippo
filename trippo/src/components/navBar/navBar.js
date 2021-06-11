@@ -1,5 +1,4 @@
 import React from "react";
-import "./navstyle.css";
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -15,6 +14,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import { withRouter } from "react-router-dom";
+import { BLACK, WHITE } from "../../colors/colors";
 
 // https://github.com/mui-org/material-ui/tree/master/docs/src/pages/components/drawers
 const drawerWidth = 240;
@@ -55,6 +55,7 @@ const Navbar = props => {
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
+        style={{ background: WHITE}}
       >
         <Toolbar>
           <IconButton
@@ -64,9 +65,9 @@ const Navbar = props => {
             edge="start"
             className={clsx(classes.menuButton, open && classes.hide)}
           >
-            <MenuIcon />
+            <MenuIcon style={{ color: BLACK}}/>
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap style={{ color: BLACK}}>
             Trippo
           </Typography>
         </Toolbar>

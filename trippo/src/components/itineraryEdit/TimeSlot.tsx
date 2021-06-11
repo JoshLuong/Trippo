@@ -11,7 +11,7 @@ interface Props {
   timeSlot: {
     time?: Date;
     destination?: string;
-    comments?: string[]
+    comments?: string[];
     type?: string;
     suggested?: {
       destination?: string;
@@ -128,6 +128,6 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
       </Grid>
     </sc.Slot>
   );
-}
+};
 
 export default TimeSlot;

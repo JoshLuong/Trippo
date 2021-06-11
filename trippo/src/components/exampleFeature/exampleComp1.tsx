@@ -37,6 +37,6 @@ const ExampleComp1: FC<Props> = ({ desc, index }) => {
       </sc.div>
     </li>
   );
-}
+};
 
 export default ExampleComp1;

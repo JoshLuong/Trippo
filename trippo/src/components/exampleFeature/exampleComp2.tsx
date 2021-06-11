@@ -6,13 +6,7 @@ interface Props {
 }
 
 const ExampleComp2: FC<Props> = ({ children, handleClick }) => {
-  return (
-    <sc.fancytext
-      onClick={handleClick}
-    >
-      {children}
-    </sc.fancytext>
-  );
-}
+  return <sc.fancytext onClick={handleClick}>{children}</sc.fancytext>;
+};
 
 export default ExampleComp2;

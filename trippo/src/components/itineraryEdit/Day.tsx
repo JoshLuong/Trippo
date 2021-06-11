@@ -161,12 +161,12 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     <sc.dayDiv>
       <sc.dayDate>
         {settings ? (
-          <button style={{ float: 'left' }} onClick={handleSettingsView}>
+          <button style={{ float: "left" }} onClick={handleSettingsView}>
             <i className="fas fa-chevron-left"></i>
             <i className="fas fa-list"></i>
           </button>
         ) : (
-          <button style={{ float: 'left' }} onClick={handleCalendarView}>
+          <button style={{ float: "left" }} onClick={handleCalendarView}>
             <i className="fas fa-chevron-left"></i>
             <i className="far fa-calendar-alt"></i>
           </button>
@@ -215,7 +215,10 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
           >
             {edit ? (
               <>
-                <sc.EditButton style={{ marginRight: '2em' }} onClick={() => alert("TODO")}>
+                <sc.EditButton
+                  style={{ marginRight: "2em" }}
+                  onClick={() => alert("TODO")}
+                >
                   Cancel
                 </sc.EditButton>
                 <sc.Spacer />
@@ -229,6 +232,6 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
       )}
     </sc.dayDiv>
   );
-}
+};
 
 export default Day;

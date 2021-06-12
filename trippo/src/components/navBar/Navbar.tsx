@@ -39,7 +39,7 @@ const Navbar = (props: { history: any }) => {
   const menuItems = [
     {
       menuTitle: "Welcome",
-      pageURL: "/welcome-page",
+      pageURL: "/",
     },
     {
       menuTitle: "My Itineraries",
@@ -67,9 +67,9 @@ const Navbar = (props: { history: any }) => {
           >
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
-          <Typography variant="h6" noWrap style={{ color: BLACK }}>
-            Trippo
-          </Typography>
+          <div style={{display: "flex", justifyContent: "center"}}>
+            <img src="trippo.png" width="120"></img>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer

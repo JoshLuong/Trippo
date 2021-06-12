@@ -6,6 +6,7 @@ export const fancytext = styled.div`
 `;
 
 export const containerDiv = styled.div`
+  border-radius: 7px;
   position: absolute;
   width: 100%;
   max-height: 100%;

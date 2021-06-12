@@ -38,8 +38,8 @@ const Navbar = (props: { history: any }) => {
 
   const menuItems = [
     {
-      menuTitle: "Home",
-      pageURL: "/",
+      menuTitle: "Welcome",
+      pageURL: "/welcome-page",
     },
     {
       menuTitle: "My Itineraries",

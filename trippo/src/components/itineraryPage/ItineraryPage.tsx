@@ -15,7 +15,7 @@ function ItineraryPage() {
   // relative is imporant for absolute calendar
   //585px
   return (
-    <div style={{ position: "relative", display: "flex" }}>
+    <div style={{ position: "relative", display: "flex", marginTop: "5em" }}>
       <sc.SideBar style={{ width: "2em" }}>
         <button onClick={handleOpenItinerary}>
           {showItinerary ? (

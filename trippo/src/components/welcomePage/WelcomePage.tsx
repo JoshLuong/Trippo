@@ -9,7 +9,7 @@ import * as sc from './WelcomePage.styles';
 function WelcomePage() {
     return (
         <sc.containerDiv>
-            <Grid container spacing={3}>
+            <Grid container spacing={1}>
                 <Grid item xs={12} sm={8} >
                     <LoginContainer />
                 </Grid>

@@ -49,5 +49,5 @@ export const forgotPassButton = styled(Button)` &&{
 
 export const loginPane = styled.div`
   width: 100%;
-  height: 50%;
+  height: 100%;
 `;

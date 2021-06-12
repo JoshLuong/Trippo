@@ -4,10 +4,11 @@ import styled from "styled-components";
 export const containerDiv = styled.div`
     display: flex;
     position: relative;
+    padding-top: 10em;
     background-image: url(welcome.png);
     /* background-position: center center; */
     /* background-size:100% 100%; */
-    width: 100vh;
+    width: 100%;
     height: 100vh;
     
 `;

@@ -1,14 +1,18 @@
-import React from 'react'
+import { FC } from 'react'
 import { IconButton } from '@material-ui/core'
 import { AccountCircle, Lock, AlternateEmail, ArrowBack } from '@material-ui/icons';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 
-function SignUpPane(props) {
+interface Props {
+    handleBack: any
+}
+
+const SignUpPane: FC<Props> = (Props) => {
 
     return (
         <div>
-            <IconButton onClick={props.handleBack}>
+            <IconButton onClick={Props.handleBack}>
                 <ArrowBack />
             </IconButton>
             <sc.signUpHeader>Sign Up</sc.signUpHeader>

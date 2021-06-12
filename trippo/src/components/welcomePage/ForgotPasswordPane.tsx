@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { FC, useState } from "react";
 import { IconButton } from '@material-ui/core'
 import { AlternateEmail, ArrowBack } from '@material-ui/icons';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 
+interface Props {
+    handleBack: any,
+}
 
-function ForgotPasswordPane(props) {
+const ForgotPasswordPane: FC<Props> = (Props) => {
     return (
         <div>
-            <IconButton onClick={props.handleBack}>
+            <IconButton onClick={Props.handleBack}>
                 <ArrowBack />
             </IconButton>
             <h1>Account Recovery</h1>

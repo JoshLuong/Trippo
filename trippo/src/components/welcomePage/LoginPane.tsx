@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { AccountCircle, Lock } from '@material-ui/icons';
 import { Button, TextField } from '@material-ui/core'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 import styled from 'styled-components';
 
-function LoginPane(props) {
+interface Props {
+    onForgotPassword: any,
+    onSignUp: any
+}
+
+const LoginPane: FC<Props> = (Props) => {
 
     return (
         <div>
@@ -26,10 +31,10 @@ function LoginPane(props) {
                 ),
             }} />
             <br />
-            <sc.forgotPassButton onClick={props.onForgotPassword}>Forgot Password?</sc.forgotPassButton>
+            <sc.forgotPassButton onClick={Props.onForgotPassword}>Forgot Password?</sc.forgotPassButton>
             <br />
             <sc.userButton size="large" variant="contained" >Login</sc.userButton>
-            <sc.userButton size="large" variant="contained" onClick={props.onSignUp}>Sign Up</sc.userButton>
+            <sc.userButton size="large" variant="contained" onClick={Props.onSignUp}>Sign Up</sc.userButton>
         </div>
     )
 }

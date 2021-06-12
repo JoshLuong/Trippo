@@ -1,11 +1,12 @@
 import * as React from "react";
 import mapboxgl from "mapbox-gl";
-import { MapContainer, MapDiv } from "./Map.styles";
+import "./Map.css";
 
 interface State {
   lng: number;
   lat: number;
   zoom: number;
+  // marker: mapboxgl.Marker[];
 }
 
 export default class Map extends React.Component<{}, State> {
@@ -17,6 +18,7 @@ export default class Map extends React.Component<{}, State> {
       lng: 0,
       lat: 40,
       zoom: 2,
+      // marker: [],
     };
     this.mapContainer = React.createRef();
   }
@@ -37,13 +39,30 @@ export default class Map extends React.Component<{}, State> {
         zoom: Number(map.getZoom().toFixed(2)),
       });
     });
+
+    map.on("click", (event) => {
+      // if (this.state.marker) {
+      //   this.state.marker.remove();
+      // }
+
+      const coordinates = event.lngLat;
+      const marker = new mapboxgl.Marker();
+
+      marker.getElement().addEventListener("click", (e) => {
+        e.stopPropagation();
+        marker.remove();
+      });
+
+      marker.setLngLat(coordinates).addTo(map);
+      // this.setState({ marker });
+    });
   }
 
   render() {
     return (
-      <MapContainer>
-        <MapDiv ref={this.mapContainer} />
-      </MapContainer>
+      <div className="map-container">
+        <div className="map-div" ref={this.mapContainer} />
+      </div>
     );
   }
 }

@@ -1,0 +1,13 @@
+.mapboxgl-marker {
+  cursor: pointer;
+}
+
+.map-container {
+  position: absolute;
+  right: 0;
+}
+
+.map-div {
+  width: 50vw;
+  height: 65vh;
+}

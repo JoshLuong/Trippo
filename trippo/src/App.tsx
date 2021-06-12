@@ -1,6 +1,7 @@
 import "./App.css";
-import WelcomePage from "./components/welcomePage/WelcomePage";
+import ItieraryPage from "./components/itineraryPage/ItineraryPage";
 import mapboxgl from "mapbox-gl";
+import WelcomePage from "components/welcomePage/WelcomePage";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN!;
 

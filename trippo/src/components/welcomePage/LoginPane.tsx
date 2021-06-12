@@ -6,14 +6,14 @@ import * as sc from './Pane.styles';
 import styled from 'styled-components';
 
 interface Props {
-    onForgotPassword: any,
-    onSignUp: any
+    onForgotPassword: () => void,
+    onSignUp: () => void
 }
 
 const LoginPane: FC<Props> = (Props) => {
 
     return (
-        <div>
+        <sc.loginPane>
             <h1>Log in to your account</h1>
             <sc.userTextField variant="outlined" color="secondary" label="Username" InputProps={{
                 startAdornment: (
@@ -35,7 +35,7 @@ const LoginPane: FC<Props> = (Props) => {
             <br />
             <sc.userButton size="large" variant="contained" >Login</sc.userButton>
             <sc.userButton size="large" variant="contained" onClick={Props.onSignUp}>Sign Up</sc.userButton>
-        </div>
+        </sc.loginPane>
     )
 }
 

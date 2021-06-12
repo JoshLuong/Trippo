@@ -7,6 +7,7 @@ export const loginHeader = styled.h1`
     font-style: normal;
     letter-spacing: 0.04em;
     font-size: 34px;
+    line-height: 41px;
 `;
 
 export const signUpHeader = styled.h1`
@@ -19,6 +20,7 @@ export const signUpHeader = styled.h1`
 
 export const userTextField = styled(TextField)` && {
   margin: 12px;
+  width: 75%;
 }`;
 
 
@@ -27,6 +29,7 @@ export const userButton = styled(Button)` && {
   color: #fff;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   margin: 10px;
+  width : 40%;
   &:hover {
     background-color: #5469d4;
   }
@@ -43,3 +46,8 @@ export const forgotPassButton = styled(Button)` &&{
     background-color: #5469d4;
   }
 }`;
+
+export const loginPane = styled.div`
+  width: 100%;
+  height: 50%;
+`;

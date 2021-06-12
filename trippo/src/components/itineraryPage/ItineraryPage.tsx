@@ -37,7 +37,7 @@ function ItineraryPage() {
         }}
         style={{
           backgroundColor: "grey",
-          height: "70vh",
+          height: "600px",
           flex: "1",
         }}
       ></div>

@@ -205,7 +205,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
             );
           })}
           <sc.Cost container item lg={12}>
-            <div>Total cost for {moment(date).format("YYYY/MM/DD")}:</div>
+            <div>Total cost for {moment(date).format("MMM Do YYYY")}:</div>
             <div>${dayCost}</div>
           </sc.Cost>
           <Grid

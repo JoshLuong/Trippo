@@ -20,7 +20,7 @@ const Suggestions: FC<Props> = ({ renderIcon, suggested }) => {
       <Grid container item lg={9} md={9} sm={12} xs={12}>
         {suggested?.map((s, index) => {
           return (
-            <Grid container lg={12} key={index}>
+            <Grid container item lg={12} key={index}>
               <Grid container item lg={8} md={8} sm={8} xs={8}>
                 <sc.Destination>
                   {renderIcon(s.type || "HOTEL")}

@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 
-const darkGrey = c.GREY;
-
 export const Time = styled.div`
   color: #f5f3f3;
 `;
@@ -29,6 +27,7 @@ export const SuggestionTitle = styled.div`
 `;
 
 export const Comments = styled.div`
+  width: 100%;
   color: rgba(71, 71, 71, 0.55);
   padding-top: 5px;
   font-size: 0.85em;

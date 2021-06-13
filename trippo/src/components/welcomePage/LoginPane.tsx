@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 import { AccountCircle, Lock } from '@material-ui/icons';
-import { Button, TextField } from '@material-ui/core'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
-import styled from 'styled-components';
 
 interface Props {
     onForgotPassword: () => void,

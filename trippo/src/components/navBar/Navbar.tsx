@@ -6,7 +6,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -39,7 +38,7 @@ const Navbar = (props: { history: any }) => {
   const menuItems = [
     {
       menuTitle: "Welcome",
-      pageURL: "/welcome-page",
+      pageURL: "/",
     },
     {
       menuTitle: "My Itineraries",
@@ -67,9 +66,9 @@ const Navbar = (props: { history: any }) => {
           >
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
-          <Typography variant="h6" noWrap style={{ color: BLACK }}>
-            Trippo
-          </Typography>
+          <div style={{display: "flex", justifyContent: "center"}}>
+            <img src="trippo.png" alt="Trippo logo" width="120"></img>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer

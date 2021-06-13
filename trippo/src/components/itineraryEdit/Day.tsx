@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import * as sc from "./Day.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import * as c from "../../colors/colors";
@@ -6,7 +6,8 @@ import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
 import { Grid } from "@material-ui/core";
-import PropTypes from "prop-types";
+import { setLocations, Location } from "../../app/reducers/locationSlice";
+import { useAppDispatch } from 'app/store';
 
 interface Props {
   date: Date;
@@ -16,6 +17,11 @@ interface Props {
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
   let timeSlots = [
     {
+      id: 1,
+      coordinates: {
+        lat: 49.26765379043226,
+        lng: -123.01076355931461,
+      },
       time: new Date(date.setHours(8)),
       destination: "Executive Suites Hotel Metro Vancouver",
       cost: 10,
@@ -137,6 +143,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost);
+  const dispatch = useAppDispatch();
 
   const handleSettingsView = () => {
     setSettings(!settings);
@@ -150,12 +157,22 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     setDayCost(dayCost + (slotCost || 0));
   };
 
-  // Date.prototype.addHours = function (h) {
-  //   this.setTime(this.getTime() + h * 60 * 60 * 1000);
-  //   return this;
-  // };
-
   const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+
+  useEffect(() => {
+    const locations = timeSlots.reduce((acc: Location[], slot) => {
+      if (slot.id) {
+        acc.push({
+          coordinates: slot.coordinates,
+          timeSlotId: slot.id,
+        });
+      }
+      return acc;
+    }, []);
+
+    dispatch(setLocations(locations));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <sc.dayDiv>
@@ -174,10 +191,13 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
         <div>
           {days.map((d, index) => {
             if (index === date.getDay()) {
-              return <sc.daysWeek>{d}</sc.daysWeek>;
+              return <sc.daysWeek key={index}>{d}</sc.daysWeek>;
             }
             return (
-              <sc.daysWeek style={{ background: "#fff", color: c.BLACK }}>
+              <sc.daysWeek
+                key={index}
+                style={{ background: "#fff", color: c.BLACK }}
+              >
                 {d}
               </sc.daysWeek>
             );
@@ -191,9 +211,9 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
         <Settings></Settings>
       ) : (
         <div style={{ zIndex: 1 }}>
-          {timeSlots.map((slot) => {
+          {timeSlots.map((slot, idx) => {
             return (
-              <div>
+              <div key={idx}>
                 <TimeSlot
                   handleHideCostToggle={handleHideCostToggle}
                   timeSlot={slot}
@@ -202,11 +222,12 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
               </div>
             );
           })}
-          <sc.Cost container lg={12}>
+          <sc.Cost container item lg={12}>
             <div>Total cost for {moment(date).format("YYYY/MM/DD")}:</div>
             <div>${dayCost}</div>
           </sc.Cost>
           <Grid
+            item
             style={{ marginTop: "0.65em", textAlign: "center" }}
             lg={12}
             md={12}

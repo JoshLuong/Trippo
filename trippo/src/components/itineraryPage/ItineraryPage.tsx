@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
+import Map from "../map/Map";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
@@ -29,14 +30,14 @@ function ItineraryPage() {
           <Container></Container>
         </sc.Container>
       ) : null}
+      <Map />
       <div
         onClick={() => {
           if (showItinerary) handleOpenItinerary();
         }}
         style={{
-          display: "inline-block",
           backgroundColor: "grey",
-          height: "65vh",
+          height: "600px",
           flex: "1",
         }}
       ></div>

@@ -1,6 +1,4 @@
 import React, { FC, useState } from "react";
-import * as sc from "./Container.styles";
-import { format } from "date-fns";
 import { enGB } from "date-fns/locale";
 import {
   DateRangeFocus,
@@ -13,9 +11,9 @@ interface Props {
   handleDayClick: (date: Date | null) => void;
 }
 
-const Calendar: FC<Props> = ({ children, handleDayClick }) => {
-  const [startDate, setStartDate] = useState(new Date(2022, 5, 20));
-  const [endDate, setEndDate] = useState(new Date(2022, 6, 25));
+const Calendar: FC<Props> = ({ handleDayClick }) => {
+  const [startDate] = useState(new Date(2022, 5, 20));
+  const [endDate] = useState(new Date(2022, 5, 30));
   const [focus, setFocus] = useState<DateRangeFocus>("startDate");
   const handleFocusChange = (newFocus: DateRangeFocus) => {
     setFocus(newFocus || "startDate");

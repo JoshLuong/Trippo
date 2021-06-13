@@ -13,14 +13,14 @@ interface Props {
 
 const Suggestions: FC<Props> = ({ renderIcon, suggested }) => {
   return (
-    <Grid container lg={12}>
+    <Grid container item lg={12}>
       <Grid container item lg={3} md={3} sm={12} xs={12}>
         <sc.SuggestionTitle>Suggestions</sc.SuggestionTitle>
       </Grid>
       <Grid container item lg={9} md={9} sm={12} xs={12}>
-        {suggested?.map((s) => {
+        {suggested?.map((s, index) => {
           return (
-            <>
+            <Grid container lg={12} key={index}>
               <Grid container item lg={8} md={8} sm={8} xs={8}>
                 <sc.Destination>
                   {renderIcon(s.type || "HOTEL")}
@@ -30,7 +30,7 @@ const Suggestions: FC<Props> = ({ renderIcon, suggested }) => {
               <Grid container item lg={4} md={4} sm={4} xs={4}>
                 <sc.Comments>{s.comments}</sc.Comments>
               </Grid>
-            </>
+            </Grid>
           );
         })}
       </Grid>

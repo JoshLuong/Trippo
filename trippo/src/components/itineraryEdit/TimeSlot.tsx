@@ -32,7 +32,6 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
     switch (t) {
       case d.AIRPORT:
         return <sc.Icon className="fas fa-plane-departure"></sc.Icon>;
-        break;
       case d.HOTEL:
         return <sc.Icon className="fas fa-hotel"></sc.Icon>;
       default:
@@ -84,7 +83,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
 
   return (
     <sc.Slot>
-      <Grid container lg={12}>
+      <Grid container item lg={12}>
         <Grid container item lg={3} md={3} sm={12}>
           <sc.Time>
             {moment(date, "ddd DD-MMM-YYYY, hh:mm A").format("HH:mm A")}
@@ -108,8 +107,8 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
           </Grid>
           <Grid container item lg={12} md={12} sm={12} xs={12}>
             <sc.Comments contentEditable={showEdit ? true : false}>
-              {comments?.map((c) => {
-                return <li>{c}</li>;
+              {comments?.map((c, index) => {
+                return <li key={index}>{c}</li>;
               })}
             </sc.Comments>
           </Grid>

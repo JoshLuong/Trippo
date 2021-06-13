@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import * as sc from "./Day.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import * as c from "../../colors/colors";
@@ -6,6 +6,8 @@ import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
 import { Grid } from "@material-ui/core";
+import { setLocations, Location } from "../../app/reducers/locationSlice";
+import { useAppDispatch } from 'app/store';
 
 interface Props {
   date: Date;
@@ -15,6 +17,11 @@ interface Props {
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
   let timeSlots = [
     {
+      id: 1,
+      coordinates: {
+        lat: 49.26765379043226,
+        lng: -123.01076355931461,
+      },
       time: new Date(date.setHours(8)),
       destination: "Executive Suites Hotel Metro Vancouver",
       cost: 10,
@@ -136,6 +143,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost);
+  const dispatch = useAppDispatch();
 
   const handleSettingsView = () => {
     setSettings(!settings);
@@ -149,12 +157,22 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     setDayCost(dayCost + (slotCost || 0));
   };
 
-  // Date.prototype.addHours = function (h) {
-  //   this.setTime(this.getTime() + h * 60 * 60 * 1000);
-  //   return this;
-  // };
-
   const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+
+  useEffect(() => {
+    const locations = timeSlots.reduce((acc: Location[], slot) => {
+      if (slot.id) {
+        acc.push({
+          coordinates: slot.coordinates,
+          timeSlotId: slot.id,
+        });
+      }
+      return acc;
+    }, []);
+
+    dispatch(setLocations(locations));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <sc.dayDiv>

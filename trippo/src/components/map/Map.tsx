@@ -1,68 +1,71 @@
-import * as React from "react";
 import mapboxgl from "mapbox-gl";
 import "./Map.css";
+import { useEffect, useRef, RefObject } from 'react';
+import { useAppSelector } from 'app/store';
 
-interface State {
-  lng: number;
-  lat: number;
-  zoom: number;
-  // marker: mapboxgl.Marker[];
+const initialMapCenter = {
+  lng: 0,
+  lat: 40,
+  zoom: 2,
 }
 
-export default class Map extends React.Component<{}, State> {
-  mapContainer: React.RefObject<HTMLDivElement>;
+export default function Map() {
+  const mapContainer: RefObject<HTMLDivElement> = useRef(null);
+  const mapRef: RefObject<{ map?: mapboxgl.Map }> = useRef({});
+  const markers: RefObject<mapboxgl.Marker[]> = useRef([]);
+  const locations = useAppSelector((state) => state.location.value);
 
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      lng: 0,
-      lat: 40,
-      zoom: 2,
-      // marker: [],
-    };
-    this.mapContainer = React.createRef();
+  const addMarker = (coords: mapboxgl.LngLatLike) => {
+    if (mapRef.current?.map) {
+      const marker = new mapboxgl.Marker();
+      markers.current!.push(marker);
+
+      marker.getElement().addEventListener("click", (e) => {
+        e.stopPropagation();
+        marker.remove();
+        markers.current?.splice(markers.current.indexOf(marker), 1);
+      });
+  
+      marker.setLngLat(coords).addTo(mapRef.current.map);
+      console.log(markers.current);
+    }
   }
 
-  componentDidMount() {
-    const { lng, lat, zoom } = this.state;
+  useEffect(() => {
+    const { lng, lat, zoom } = initialMapCenter;
     const map = new mapboxgl.Map({
-      container: this.mapContainer.current!,
+      container: mapContainer.current!,
       style: "mapbox://styles/mapbox/streets-v11",
       center: [lng, lat],
       zoom: zoom,
     });
 
-    map.on("move", () => {
-      this.setState({
-        lng: Number(map.getCenter().lng.toFixed(4)),
-        lat: Number(map.getCenter().lat.toFixed(4)),
-        zoom: Number(map.getZoom().toFixed(2)),
+    mapRef.current!.map = map;
+
+    map.on("click", (event) => addMarker(event.lngLat));
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // Clear all markers
+    markers.current?.forEach((marker) => marker.remove());
+    markers.current?.splice(0, markers.current.length);
+    locations.forEach((location) => addMarker(location.coordinates));
+
+    if (locations.length && mapRef.current?.map) {
+      mapRef.current.map.flyTo({
+        center: locations[0].coordinates,
+        zoom: 10,
       });
-    });
+    }
 
-    map.on("click", (event) => {
-      // if (this.state.marker) {
-      //   this.state.marker.remove();
-      // }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locations]);
 
-      const coordinates = event.lngLat;
-      const marker = new mapboxgl.Marker();
-
-      marker.getElement().addEventListener("click", (e) => {
-        e.stopPropagation();
-        marker.remove();
-      });
-
-      marker.setLngLat(coordinates).addTo(map);
-      // this.setState({ marker });
-    });
-  }
-
-  render() {
-    return (
-      <div className="map-container">
-        <div className="map-div" ref={this.mapContainer} />
-      </div>
-    );
-  }
+  return (
+    <div className="map-container">
+      <div className="map-div" ref={mapContainer} />
+    </div>
+  );
 }

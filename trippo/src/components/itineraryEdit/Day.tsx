@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import * as sc from "./Day.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import * as c from "../../colors/colors";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
-import { Grid } from "@material-ui/core";
+import { Grid, Tooltip } from "@material-ui/core";
 import { setLocations, Location } from "../../app/reducers/locationSlice";
-import { useAppDispatch } from 'app/store';
+import { useAppDispatch } from "app/store";
 
 interface Props {
   date: Date;
@@ -143,6 +143,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost);
+  const budget = 50;
   const dispatch = useAppDispatch();
 
   const handleSettingsView = () => {
@@ -171,7 +172,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     }, []);
 
     dispatch(setLocations(locations));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -224,7 +225,18 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
           })}
           <sc.Cost container item lg={12}>
             <div>Total cost for {moment(date).format("MMM Do YYYY")}:</div>
-            <div>${dayCost}</div>
+            <div>
+              {dayCost > budget ? (
+                <Tooltip
+                  title={`Warning: You're over the budget by $${
+                    dayCost - budget
+                  }`}
+                >
+                  <sc.StyledWarningIcon />
+                </Tooltip>
+              ) : null}
+              <span>${dayCost}</span>
+            </div>
           </sc.Cost>
           <Grid
             item

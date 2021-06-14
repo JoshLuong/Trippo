@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
-import { Grid } from "@material-ui/core";
+import { Grid, Tooltip } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
@@ -59,18 +59,19 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
         <Grid container item lg={2} md={2} sm={2} xs={2}>
           <sc.Cost {...costStyling} contentEditable={showEdit ? true : false}>
             {timeSlot.cost ? (
-              <button
+              <Tooltip
                 title={`${
-                  showCost ? "Remove from" : "Add to"
+                  showCost ? "Remove from" : "Include in"
                 } the total daily cost`}
-                onClick={handleShowCostToggle}
               >
-                {showCost ? (
-                  <i className="fas fa-eye"></i>
-                ) : (
-                  <i className="far fa-eye-slash"></i>
-                )}
-              </button>
+                <button onClick={handleShowCostToggle}>
+                  {showCost ? (
+                    <i className="fas fa-eye"></i>
+                  ) : (
+                    <i className="far fa-eye-slash"></i>
+                  )}
+                </button>
+              </Tooltip>
             ) : null}
             <div>{timeSlot.cost ? `$${timeSlot.cost}` : ""}</div>
           </sc.Cost>

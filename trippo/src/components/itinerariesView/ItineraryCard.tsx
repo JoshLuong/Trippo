@@ -5,6 +5,8 @@ import { Grid } from "@material-ui/core";
 
 interface Props {
   card: any;
+  showEdit: boolean;
+  handleRemove: () => void;
 }
 
 const renderNames = (name: string, collaborators: string) => {
@@ -19,7 +21,7 @@ const renderNames = (name: string, collaborators: string) => {
   );
 };
 
-const ItineraryCard: FC<Props> = ({ card }) => {
+const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
   let collaborators = card.collaborators.reduce(
     (str: string, c: any, index: number) => {
       if (index === 2) {
@@ -46,7 +48,7 @@ const ItineraryCard: FC<Props> = ({ card }) => {
         <sc.CommentGrid container item lg={12}>
           {card.description}
         </sc.CommentGrid>
-        <sc.LabelGrid lg={12}>
+        <sc.LabelGrid container item lg={12}>
           {card.labels.map((card: any, index: number) => {
             return (
               <sc.LabelDiv key={index}>
@@ -56,6 +58,13 @@ const ItineraryCard: FC<Props> = ({ card }) => {
             );
           })}
         </sc.LabelGrid>
+        {showEdit ? (
+          <sc.EditGrid container item lg={12}>
+            <sc.EditButton onClick={handleRemove}>
+              <i className="fas fa-minus-circle"></i>
+            </sc.EditButton>
+          </sc.EditGrid>
+        ) : null}
       </Grid>
     </sc.Card>
   );

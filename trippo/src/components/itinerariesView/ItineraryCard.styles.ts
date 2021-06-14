@@ -87,3 +87,25 @@ export const DateGrid = styled(Grid)`
     margin-right: 0.35em;
   }
 `;
+
+export const EditGrid = styled(Grid)`
+  justify-content: center;
+`;
+
+export const EditButton = styled.button`
+  border: none;
+  margin-top: 0.5em;
+  height: 2em;
+  width: 2em;
+  padding: 0;
+  background-color: transparent;
+  i {
+    display: inline;
+    padding-right: 0.5em;
+    color: ${c.DARK_ORANGE};
+    font-size: 1.75em;
+  }
+  :hover {
+    cursor: pointer;
+  }
+`;

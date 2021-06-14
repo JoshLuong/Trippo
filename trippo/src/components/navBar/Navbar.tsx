@@ -68,7 +68,9 @@ const Navbar = (props: { history: any }) => {
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
           <sc.Logo>
-            <img src="trippo.png" width="120"></img>
+            <sc.LogoButton onClick={() => handleMenuClick("/home")}>
+              <img alt="Trippo Logo" src="trippo.png" width="120"></img>
+            </sc.LogoButton>
           </sc.Logo>
         </Toolbar>
       </AppBar>

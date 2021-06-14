@@ -1,6 +1,8 @@
-import { FC } from "react";
+/// <reference path='./ItinerariesView.d.ts' />
+import { FC, useState } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
+import Fade from "react-reveal/Fade";
 
 interface Props {}
 
@@ -25,6 +27,10 @@ const data = [
 ];
 
 const ItinerariesView: FC<Props> = () => {
+  const [showEdit, setShowEdit] = useState(false);
+  const handleRemove = () => {
+    alert("removing");
+  };
   return (
     <sc.ItinerariesViewGrid>
       <div
@@ -38,13 +44,24 @@ const ItinerariesView: FC<Props> = () => {
         search placeholder
       </div>
       <sc.ButtonDiv>
-        <button>Edit Itineraries</button>
+        <button onClick={() => setShowEdit(!showEdit)}>
+          {!showEdit ? "Edit Itineraries" : "Done"}
+        </button>
         <button>Plan A New Trip</button>
       </sc.ButtonDiv>
       <sc.Cards>
-        {data.map((card, index) => {
-          return <ItineraryCard card={card} key={index} />;
-        })}
+        <Fade duration={900} delay={300}>
+          {data.map((card, index) => {
+            return (
+              <ItineraryCard
+                card={card}
+                key={index}
+                showEdit={showEdit}
+                handleRemove={handleRemove}
+              />
+            );
+          })}
+        </Fade>
       </sc.Cards>
     </sc.ItinerariesViewGrid>
   );

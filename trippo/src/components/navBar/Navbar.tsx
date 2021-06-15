@@ -42,6 +42,10 @@ const Navbar = (props: { history: any }) => {
       pageURL: "/home",
     },
     {
+      menuTitle: "New Itinerary",
+      pageURL: "/newitinerary"
+    },
+    {
       menuTitle: "My Itineraries",
       pageURL: "/itineraries",
     },

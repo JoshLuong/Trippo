@@ -1,15 +1,19 @@
 import mapboxgl from "mapbox-gl";
 import "./Map.css";
-import { useEffect, useRef, RefObject } from 'react';
-import { useAppSelector } from 'app/store';
+import { useEffect, useRef, RefObject, useState, FC } from "react";
+import { useAppSelector } from "app/store";
 
 const initialMapCenter = {
   lng: 0,
   lat: 40,
   zoom: 2,
+};
+
+interface Props {
+  handleIsLoading: () => void;
 }
 
-export default function Map() {
+const Map: FC<Props> = ({ handleIsLoading }) => {
   const mapContainer: RefObject<HTMLDivElement> = useRef(null);
   const mapRef: RefObject<{ map?: mapboxgl.Map }> = useRef({});
   const markers: RefObject<mapboxgl.Marker[]> = useRef([]);
@@ -25,11 +29,11 @@ export default function Map() {
         marker.remove();
         markers.current?.splice(markers.current.indexOf(marker), 1);
       });
-  
+
       marker.setLngLat(coords).addTo(mapRef.current.map);
       console.log(markers.current);
     }
-  }
+  };
 
   useEffect(() => {
     const { lng, lat, zoom } = initialMapCenter;
@@ -43,8 +47,12 @@ export default function Map() {
     mapRef.current!.map = map;
 
     map.on("click", (event) => addMarker(event.lngLat));
+    map.on("load", () => {
+      console.log("change");
+      handleIsLoading();
+    });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -60,7 +68,7 @@ export default function Map() {
       });
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locations]);
 
   return (
@@ -68,4 +76,6 @@ export default function Map() {
       <div className="map-div" ref={mapContainer} />
     </div>
   );
-}
+};
+
+export default Map;

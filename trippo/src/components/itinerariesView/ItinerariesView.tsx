@@ -50,7 +50,7 @@ const ItinerariesView: FC<Props> = () => {
         <button>Plan A New Trip</button>
       </sc.ButtonDiv>
       <sc.Cards>
-        <Fade duration={900} delay={300}>
+        <Fade duration={900} delay={500}>
           {data.map((card, index) => {
             return (
               <ItineraryCard

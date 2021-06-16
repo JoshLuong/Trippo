@@ -1,8 +1,16 @@
 /* body css styling */
-
-body {
+body, html {
   margin: 0;
   font-family: Muli, "Helvetica Neue", Arial, sans-serif;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-x: none;
+}
+
+* {
+  box-sizing: inherit;
 }
 
 /* use styled-components instead */

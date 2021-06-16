@@ -18,7 +18,8 @@ export const dayDiv = styled.div`
 `;
 
 export const SideBar = styled.div`
-  min-height: 100%;
+  z-index: 1;
+  height: 550px;
   background-color: ${c.DARK_BLUE};
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
   button {
@@ -39,9 +40,11 @@ export const SideBar = styled.div`
 `;
 
 export const Container = styled.div`
+  border-radius: 7px;
+  z-index: 1;
   display: inline-block;
   background-color: #fff;
-  height: 65vh;
+  height: 550px;
   flex: 0 0 585px;
   position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);

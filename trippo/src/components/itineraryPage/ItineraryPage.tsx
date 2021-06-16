@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
+import Map from "../map/Map";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
@@ -14,13 +15,13 @@ function ItineraryPage() {
   // relative is imporant for absolute calendar
   //585px
   return (
-    <div style={{ position: "relative", display: "flex" }}>
+    <div style={{ position: "relative", display: "flex", marginTop: "5em" }}>
       <sc.SideBar style={{ width: "2em" }}>
         <button onClick={handleOpenItinerary}>
           {showItinerary ? (
-            <i class="fas fa-chevron-left"></i>
+            <i className="fas fa-chevron-left"></i>
           ) : (
-            <i class="fas fa-chevron-right"></i>
+            <i className="fas fa-chevron-right"></i>
           )}
         </button>
       </sc.SideBar>
@@ -29,14 +30,14 @@ function ItineraryPage() {
           <Container></Container>
         </sc.Container>
       ) : null}
+      <Map />
       <div
         onClick={() => {
           if (showItinerary) handleOpenItinerary();
         }}
         style={{
-          display: "inline-block",
           backgroundColor: "grey",
-          height: "65vh",
+          height: "600px",
           flex: "1",
         }}
       ></div>

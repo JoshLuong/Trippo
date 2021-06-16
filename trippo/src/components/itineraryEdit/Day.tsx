@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import * as sc from "./Day.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import * as c from "../../colors/colors";
@@ -6,11 +6,22 @@ import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
 import { Grid } from "@material-ui/core";
-import PropTypes from "prop-types";
+import { setLocations, Location } from "../../app/reducers/locationSlice";
+import { useAppDispatch } from 'app/store';
 
-function Day({ date, handleCalendarView }) {
+interface Props {
+  date: Date;
+  handleCalendarView: () => void;
+}
+
+const Day: FC<Props> = ({ date, handleCalendarView }) => {
   let timeSlots = [
     {
+      id: 1,
+      coordinates: {
+        lat: 49.26765379043226,
+        lng: -123.01076355931461,
+      },
       time: new Date(date.setHours(8)),
       destination: "Executive Suites Hotel Metro Vancouver",
       cost: 10,
@@ -125,13 +136,14 @@ function Day({ date, handleCalendarView }) {
     },
   ];
   let cost = timeSlots
-    .map((slot) => (slot.cost ? parseFloat(slot.cost) : 0))
+    .map((slot) => (slot.cost ? slot.cost : 0))
     .reduce(function (total, cost) {
       return total + cost;
     });
   const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost);
+  const dispatch = useAppDispatch();
 
   const handleSettingsView = () => {
     setSettings(!settings);
@@ -141,54 +153,67 @@ function Day({ date, handleCalendarView }) {
     setEdit(!edit);
   };
 
-  const handleHideCostToggle = (slotCost) => {
-    setDayCost(dayCost + slotCost);
-  };
-
-  Date.prototype.addHours = function (h) {
-    this.setTime(this.getTime() + h * 60 * 60 * 1000);
-    return this;
+  const handleHideCostToggle = (slotCost: number | undefined) => {
+    setDayCost(dayCost + (slotCost || 0));
   };
 
   const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+
+  useEffect(() => {
+    const locations = timeSlots.reduce((acc: Location[], slot) => {
+      if (slot.id) {
+        acc.push({
+          coordinates: slot.coordinates,
+          timeSlotId: slot.id,
+        });
+      }
+      return acc;
+    }, []);
+
+    dispatch(setLocations(locations));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <sc.dayDiv>
       <sc.dayDate>
         {settings ? (
-          <button float="left" onClick={handleSettingsView}>
-            <i class="fas fa-chevron-left"></i>
-            <i class="fas fa-list"></i>
+          <button style={{ float: "left" }} onClick={handleSettingsView}>
+            <i className="fas fa-chevron-left"></i>
+            <i className="fas fa-list"></i>
           </button>
         ) : (
-          <button float="left" onClick={handleCalendarView}>
-            <i class="fas fa-chevron-left"></i>
-            <i class="far fa-calendar-alt"></i>
+          <button style={{ float: "left" }} onClick={handleCalendarView}>
+            <i className="fas fa-chevron-left"></i>
+            <i className="far fa-calendar-alt"></i>
           </button>
         )}
         <div>
           {days.map((d, index) => {
             if (index === date.getDay()) {
-              return <sc.daysWeek>{d}</sc.daysWeek>;
+              return <sc.daysWeek key={index}>{d}</sc.daysWeek>;
             }
             return (
-              <sc.daysWeek style={{ background: "#fff", color: c.BLACK }}>
+              <sc.daysWeek
+                key={index}
+                style={{ background: "#fff", color: c.BLACK }}
+              >
                 {d}
               </sc.daysWeek>
             );
           })}
         </div>
         <button onClick={handleSettingsView}>
-          <i class="fas fa-cog"></i>
+          <i className="fas fa-cog"></i>
         </button>
       </sc.dayDate>
       {settings ? (
         <Settings></Settings>
       ) : (
-        <div style={{ zIndex: "1" }}>
-          {timeSlots.map((slot) => {
+        <div style={{ zIndex: 1 }}>
+          {timeSlots.map((slot, idx) => {
             return (
-              <div>
+              <div key={idx}>
                 <TimeSlot
                   handleHideCostToggle={handleHideCostToggle}
                   timeSlot={slot}
@@ -197,11 +222,12 @@ function Day({ date, handleCalendarView }) {
               </div>
             );
           })}
-          <sc.Cost container lg={12}>
+          <sc.Cost container item lg={12}>
             <div>Total cost for {moment(date).format("YYYY/MM/DD")}:</div>
             <div>${dayCost}</div>
           </sc.Cost>
           <Grid
+            item
             style={{ marginTop: "0.65em", textAlign: "center" }}
             lg={12}
             md={12}
@@ -210,7 +236,10 @@ function Day({ date, handleCalendarView }) {
           >
             {edit ? (
               <>
-                <sc.EditButton marginRight="2em" onClick={() => alert("TODO")}>
+                <sc.EditButton
+                  style={{ marginRight: "2em" }}
+                  onClick={() => alert("TODO")}
+                >
                   Cancel
                 </sc.EditButton>
                 <sc.Spacer />
@@ -224,6 +253,6 @@ function Day({ date, handleCalendarView }) {
       )}
     </sc.dayDiv>
   );
-}
+};
 
 export default Day;

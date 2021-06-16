@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
 
 export const fancytext = styled.div`
   text-align: center;
@@ -7,6 +6,7 @@ export const fancytext = styled.div`
 `;
 
 export const containerDiv = styled.div`
+  border-radius: 7px;
   position: absolute;
   width: 100%;
   max-height: 100%;

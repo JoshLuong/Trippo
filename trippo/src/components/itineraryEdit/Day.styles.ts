@@ -73,7 +73,7 @@ export const daysWeek = styled.div`
 `;
 
 export const Cost = styled(Grid)`
-  margin-top: 1em;
+  padding-top: 1em;
   padding-left: 0.5em;
 
   div:nth-child(2) {

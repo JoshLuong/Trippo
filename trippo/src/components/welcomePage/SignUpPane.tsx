@@ -11,17 +11,17 @@ interface Props {
 const SignUpPane: FC<Props> = (Props) => {
 
     return (
-        <Grid container spacing={2} direction="column">
-            <Grid item xs={12}>
+        <Grid container spacing={2} direction="column" justify="center">
+            <Grid item xs={12} lg={12}>
                 <IconButton onClick={Props.handleBack}>
                     <ArrowBack />
                 </IconButton>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} lg={12}>
                 <sc.signUpHeader>Sign Up</sc.signUpHeader>
             </Grid>
-            <Grid item xs={12} lg={9}>
-                <sc.userTextField variant="outlined" color="secondary" label="Email" InputProps={{
+            <Grid item xs={12} lg={12}>
+                <sc.userTextField fullWidth variant="outlined" color="secondary" label="Email" InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
                             <AlternateEmail />
@@ -29,7 +29,7 @@ const SignUpPane: FC<Props> = (Props) => {
                     ),
                 }} />
                 <br />
-                <sc.userTextField variant="outlined" color="secondary" label="Username" InputProps={{
+                <sc.userTextField fullWidth variant="outlined" color="secondary" label="Username" InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
                             <AccountCircle />
@@ -37,7 +37,7 @@ const SignUpPane: FC<Props> = (Props) => {
                     ),
                 }} />
                 <br />
-                <sc.userTextField variant="outlined" color="secondary" label="Password" type="password" InputProps={{
+                <sc.userTextField fullWidth variant="outlined" color="secondary" label="Password" type="password" InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
                             <Lock />
@@ -47,7 +47,7 @@ const SignUpPane: FC<Props> = (Props) => {
                 <br />
 
             </Grid>
-            <Grid item xs={11} lg={8}>
+            <Grid item xs={12} lg={12}>
                 <sc.signUpButton size="large" variant="contained">Sign Up</sc.signUpButton>
             </Grid>
         </Grid>

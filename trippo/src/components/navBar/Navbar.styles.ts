@@ -1,6 +1,21 @@
 import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 
 const drawerWidth = 240;
+
+export const Logo = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const LogoButton = styled.button`
+  &:hover {
+    cursor: pointer;
+  }
+
+  border: none;
+  background: transparent;
+`;
 
 export const useStyles = makeStyles((theme) => ({
   root: {

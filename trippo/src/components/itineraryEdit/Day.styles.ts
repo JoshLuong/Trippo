@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
+import WarningIcon from "@material-ui/icons/Warning";
 
 export const dayDiv = styled.div`
   padding: 1em;
@@ -26,6 +27,11 @@ export const EditButton = styled.button`
   :hover {
     cursor: pointer;
   }
+`;
+
+export const StyledWarningIcon = styled(WarningIcon)`
+  color: ${c.DARK_ORANGE};
+  padding-right: 0.25em;
 `;
 
 export const Spacer = styled.div`
@@ -77,8 +83,14 @@ export const Cost = styled(Grid)`
   padding-left: 0.5em;
 
   div:nth-child(2) {
+    display: flex;
     float: right;
     margin-left: auto;
     margin-right: 0.5em;
+  }
+
+  span {
+    padding-top: 3px;
+    display: inline-block;
   }
 `;

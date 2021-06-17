@@ -15,6 +15,7 @@ import ListItem from "@material-ui/core/ListItem";
 import { withRouter } from "react-router-dom";
 import { BLACK, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
+import * as sc from "./Navbar.styles";
 
 // https://github.com/mui-org/material-ui/tree/master/docs/src/pages/components/drawers
 
@@ -37,8 +38,8 @@ const Navbar = (props: { history: any }) => {
 
   const menuItems = [
     {
-      menuTitle: "Welcome",
-      pageURL: "/",
+      menuTitle: "Home",
+      pageURL: "/home",
     },
     {
       menuTitle: "My Itineraries",
@@ -66,9 +67,11 @@ const Navbar = (props: { history: any }) => {
           >
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
-          <div style={{display: "flex", justifyContent: "center"}}>
-            <img src="trippo.png" alt="Trippo logo" width="120"></img>
-          </div>
+          <sc.Logo>
+            <sc.LogoButton onClick={() => handleMenuClick("/home")}>
+              <img alt="Trippo Logo" src="trippo.png" width="120"></img>
+            </sc.LogoButton>
+          </sc.Logo>
         </Toolbar>
       </AppBar>
       <Drawer

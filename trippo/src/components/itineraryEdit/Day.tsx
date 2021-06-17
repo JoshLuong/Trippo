@@ -4,7 +4,7 @@ import * as c from "../../colors/colors";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
-import { Grid } from "@material-ui/core";
+import { Grid, Tooltip } from "@material-ui/core";
 import { useAppSelector } from 'app/store';
 
 interface Props {
@@ -23,6 +23,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost);
+  const budget = 50;
 
   const handleSettingsView = () => {
     setSettings(!settings);
@@ -87,8 +88,19 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
             );
           })}
           <sc.Cost container item lg={12}>
-            <div>Total cost for {moment(date).format("YYYY/MM/DD")}:</div>
-            <div>${dayCost}</div>
+            <div>Total cost for {moment(date).format("MMM Do YYYY")}:</div>
+            <div>
+              {dayCost > budget ? (
+                <Tooltip
+                  title={`Warning: You're over the budget by $${
+                    dayCost - budget
+                  }`}
+                >
+                  <sc.StyledWarningIcon />
+                </Tooltip>
+              ) : null}
+              <span>${dayCost}</span>
+            </div>
           </sc.Cost>
           <Grid
             item

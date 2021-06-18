@@ -1,14 +1,14 @@
 import mapboxgl from "mapbox-gl";
 import "./Map.css";
-import { useEffect, useRef, RefObject } from 'react';
-import { useAppSelector, useAppDispatch } from 'app/store';
-import { setHighlighted, TimeSlot } from 'app/reducers/timeSlotSlice';
+import { useEffect, useRef, RefObject } from "react";
+import { useAppSelector, useAppDispatch } from "app/store";
+import { setHighlighted, TimeSlot } from "app/reducers/timeSlotSlice";
 
 const initialMapCenter = {
   lng: 0,
   lat: 40,
   zoom: 2,
-}
+};
 
 export default function Map() {
   const mapContainer: RefObject<HTMLDivElement> = useRef(null);
@@ -26,11 +26,11 @@ export default function Map() {
         e.stopPropagation();
         dispatch(setHighlighted(timeSlot.id));
       });
-  
+
       marker.setLngLat(timeSlot.location).addTo(mapRef.current.map);
       console.log(markers.current);
     }
-  }
+  };
 
   useEffect(() => {
     const { lng, lat, zoom } = initialMapCenter;
@@ -45,7 +45,7 @@ export default function Map() {
 
     // map.on("click", (event) => addMarker(event.lngLat));
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function Map() {
       });
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeSlots]);
 
   return (

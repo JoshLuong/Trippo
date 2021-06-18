@@ -3,7 +3,7 @@ import Calendar from "./Calendar";
 import * as sc from "./Container.styles";
 import Day from "./Day";
 import { useAppDispatch } from "../../app/store";
-import { setTimeSlots, clearTimeSlots } from 'app/reducers/timeSlotSlice';
+import { setTimeSlots, clearTimeSlots } from "app/reducers/timeSlotSlice";
 
 interface Props {
   handleClick?: (date: Date) => void;

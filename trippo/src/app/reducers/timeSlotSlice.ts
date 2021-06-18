@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMockTimeSlots } from 'app/states';
-import { Location } from './locationSlice';
+import { getMockTimeSlots } from "app/states";
+import { Location } from "./locationSlice";
 
 export interface TimeSlot {
   id: number;
@@ -67,17 +67,15 @@ export const timeSlot = createSlice<State, SliceReducers, "timeSlot">({
     },
     setHighlighted: (state: State, action: IdAction) => {
       if (action?.payload) {
-        state.highlighted = state.value.find((slot) => slot.id === action.payload) || null;
+        state.highlighted =
+          state.value.find((slot) => slot.id === action.payload) || null;
       }
-    }
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  clearTimeSlots,
-  setTimeSlots,
-  setHighlighted,
-} = timeSlot.actions;
+export const { clearTimeSlots, setTimeSlots, setHighlighted } =
+  timeSlot.actions;
 
 export default timeSlot.reducer;

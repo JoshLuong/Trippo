@@ -1,7 +1,7 @@
-import { DestinationType } from 'app/destinations/destinationTypes';
-import { TimeSlot } from 'app/reducers/timeSlotSlice';
+import { DestinationType } from "app/destinations/destinationTypes";
+import { TimeSlot } from "app/reducers/timeSlotSlice";
 
-export const getMockTimeSlots = (date: Date): TimeSlot[] => ([
+export const getMockTimeSlots = (date: Date): TimeSlot[] => [
   {
     id: 1,
     location: {
@@ -150,4 +150,4 @@ export const getMockTimeSlots = (date: Date): TimeSlot[] => ([
       },
     ],
   },
-]);
+];

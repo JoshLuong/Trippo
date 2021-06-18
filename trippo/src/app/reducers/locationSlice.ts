@@ -1,11 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface Location {
-  coordinates: {
-    lng: number;
-    lat: number;
-  };
-  timeSlotId: number;
+  lng: number;
+  lat: number;
 }
 
 interface State {

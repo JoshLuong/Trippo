@@ -1,13 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import * as sc from "./Day.styles";
-import * as d from "../../app/destinations/destinationTypes";
 import * as c from "../../colors/colors";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
 import { Grid, Tooltip } from "@material-ui/core";
-import { setLocations, Location } from "../../app/reducers/locationSlice";
-import { useAppDispatch } from "app/store";
+import { useAppSelector } from 'app/store';
 
 interface Props {
   date: Date;
@@ -15,126 +13,8 @@ interface Props {
 }
 
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
-  let timeSlots = [
-    {
-      id: 1,
-      coordinates: {
-        lat: 49.26765379043226,
-        lng: -123.01076355931461,
-      },
-      time: new Date(date.setHours(8)),
-      destination: "Executive Suites Hotel Metro Vancouver",
-      cost: 10,
-      type: d.HOTEL,
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          type: d.OTHER,
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      cost: 20,
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      cost: 50,
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      comments: [
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        "rest",
-      ],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(13)),
-      destination: "Hotel",
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-  ];
+  const timeSlots = useAppSelector((state) => state.timeSlot.value);
+
   let cost = timeSlots
     .map((slot) => (slot.cost ? slot.cost : 0))
     .reduce(function (total, cost) {
@@ -144,7 +24,6 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost);
   const budget = 50;
-  const dispatch = useAppDispatch();
 
   const handleSettingsView = () => {
     setSettings(!settings);
@@ -159,21 +38,6 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   };
 
   const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-
-  useEffect(() => {
-    const locations = timeSlots.reduce((acc: Location[], slot) => {
-      if (slot.id) {
-        acc.push({
-          coordinates: slot.coordinates,
-          timeSlotId: slot.id,
-        });
-      }
-      return acc;
-    }, []);
-
-    dispatch(setLocations(locations));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <sc.dayDiv>

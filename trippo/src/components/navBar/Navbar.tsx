@@ -12,6 +12,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { withRouter } from "react-router-dom";
 import { BLACK, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
@@ -76,7 +77,8 @@ const Navbar = (props: { history: any }) => {
       </AppBar>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
+        variant="temporary"
+        onBackdropClick={handleDrawerClose}
         anchor="left"
         open={open}
         classes={{

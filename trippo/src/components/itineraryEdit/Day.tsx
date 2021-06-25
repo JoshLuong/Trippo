@@ -13,9 +13,9 @@ interface Props {
 }
 
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
-  const timeSlots = useAppSelector((state) => state.timeSlot.value);
+  const day = useAppSelector((state) => state.day.value);
 
-  let cost = timeSlots
+  let cost = day
     .map((slot) => (slot.cost ? slot.cost : 0))
     .reduce(function (total, cost) {
       return total + cost;
@@ -76,7 +76,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
         <Settings></Settings>
       ) : (
         <div style={{ zIndex: 1 }}>
-          {timeSlots.map((slot, idx) => {
+          {day.map((slot, idx) => {
             return (
               <div key={idx}>
                 <TimeSlot

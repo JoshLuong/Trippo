@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import exampleReducer from "../reducers/exampleComp1Slice";
 import locationReducer from "../reducers/locationSlice";
-import timeSlotReducer from "../reducers/timeSlotSlice";
+import dayReducer from "../reducers/daySlice";
+import itineraryReducer from "../reducers/itinerarySlice";
 
 const store = configureStore({
   // add reducers to the store
   reducer: {
-    exampleState: exampleReducer,
     location: locationReducer,
-    timeSlot: timeSlotReducer,
+    day: dayReducer,
+    itinerary: itineraryReducer,
   },
 });
 

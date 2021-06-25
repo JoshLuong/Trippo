@@ -1,21 +1,34 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import "./loading.css";
 import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
 import Map from "../map/Map";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   function handleOpenItinerary() {
     setShowItinerary(!showItinerary);
+  }
+
+  function handleIsLoading() {
+    setIsLoading(!isLoading);
   }
   // TODO: REMOVE INLINE STYLE
 
   // consume search, etc.
   // relative is imporant for absolute calendar
   //585px
+
   return (
-    <>
+    <div>
+      {isLoading ? (
+        <sc.LoadingDiv>
+          <div className="loader"></div>
+          trippo is getting your itinerary ready...
+        </sc.LoadingDiv>
+      ) : null}
       <div
         style={{
           marginTop: "5em",
@@ -50,9 +63,9 @@ function ItineraryPage() {
             <Container></Container>
           </sc.Container>
         ) : null}
-        <Map />
+        <Map handleIsLoading={handleIsLoading} />
       </div>
-    </>
+    </div>
   );
 }
 

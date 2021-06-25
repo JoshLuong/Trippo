@@ -21,31 +21,46 @@ export const headerDiv = styled.div`
   flex-grow: 1;
   flex-shrink:80%;
   flex-basis: 40%;
-  margin-left: 4em;
-  margin-right: 4em;
-  margin-top: 5em;
-  margin-bottom: 5em;
+  margin: 5em 4em;
+  @media(max-width: 1130px){
+    margin-bottom: 1em;
+    text-align: center;
+    br{
+      display: none;
+    }
+  }
+  @media(max-width: 600px){
+    margin: 3em 0.5em 1em 0.5em;
+    padding: 2em 2em 0em 2em;
+  }
   padding: 2em;
   `;
 
 export const homeHeader = styled.h1`
-  font: Lato;
   color: #ffffff;
   font-size: 48px;
   font-weight: extra bold;
-
-  @media(max-width: 600){
-    font-size: 8px;
+  @media(max-width: 1130px){
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  @media(max-width: 600px){
+    font-size: 40px;
   }
 `;
 
 export const descHeader = styled.h2`
-  font: Lato;
   color: #ffffff;
   font-size: 36px;
   font-weight: bold;
-  @media(max-width: 600){
-    font-size: 6px;
+
+  @media(max-width: 1130px){
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  @media(max-width: 600px){
+    display: none;
   }
 `;
 
@@ -60,9 +75,7 @@ export const loginDiv = styled.div`
     height: 60%;
     box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
     order: 2;
-    margin-left: 4em;
-    margin-right: 4em;
-    margin-bottom: 4em;
+    margin: 0 4em 4em 4em;
     flex-grow: 2;
     flex-shrink: 80%;
     flex-basis: 40%;

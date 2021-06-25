@@ -7,7 +7,7 @@ function WelcomePage() {
             <sc.headerDiv>
                 <sc.homeHeader>Plan Your Trips Like A Pro With Trippo</sc.homeHeader>
                 <br></br>
-                <sc.descHeader>An all-in-on itinerary management application</sc.descHeader>
+                <sc.descHeader>An all-in-one itinerary management application</sc.descHeader>
             </sc.headerDiv>
             <sc.loginDiv>
                 <LoginContainer />

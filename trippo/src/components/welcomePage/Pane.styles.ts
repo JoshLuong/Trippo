@@ -1,9 +1,10 @@
 import { Button, TextField } from '@material-ui/core'
 import styled from 'styled-components';
 import * as c from "../../colors/colors";
+import GoogleLogin from 'react-google-login';
+import { Grid } from '@material-ui/core';
 
 export const loginHeader = styled.h1`
-    font-family: Lato;
     font-style: normal;
     letter-spacing: 0.04em;
     font-size: 34px;
@@ -12,7 +13,6 @@ export const loginHeader = styled.h1`
 `;
 
 export const signUpHeader = styled.h1`
-    font-family: Lato;
     font-style: normal;
     letter-spacing: 0.04em;
     font-size: 20px;
@@ -52,15 +52,25 @@ export const signUpButton = styled(Button)` && {
 `;
 
 export const forgotPassButton = styled(Button)` &&{
+  display: block;
+  margin: auto;
+  margin-bottom: 7px;
   background-color: none;
   border: none;
   text-decoration: underline;
-  margin: 5px;
 }`;
 
 export const loginPane = styled.div`
   margin: auto;
   width: 100%;
+`;
 
+export const StyledGoogleLogin = styled(GoogleLogin)`
+  width: 50%;
+`;
+
+export const GoogleDiv = styled(Grid)`
+  flex-direction: column;
+  align-items: center;
 `;
 

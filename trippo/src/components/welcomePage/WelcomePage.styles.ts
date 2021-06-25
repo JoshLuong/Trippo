@@ -55,7 +55,8 @@ export const loginDiv = styled.div`
     background-color: white;
     border-top: 10px solid ${c.DARK_BLUE};
     padding-bottom: 2em;
-    width: 40%;
+    max-width: 500px;
+    min-height: 400px;
     height: 60%;
     box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
     order: 2;

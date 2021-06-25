@@ -3,13 +3,16 @@ import { AccountCircle, Lock } from '@material-ui/icons';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 import { Grid } from '@material-ui/core';
-
 interface Props {
     onForgotPassword: () => void,
     onSignUp: () => void
 }
 
 const LoginPane: FC<Props> = (Props) => {
+    const handleLogin = (googleData: any) => {
+        console.log("LOGGING IN");
+        console.log(googleData);
+    }
 
     return (
         <Grid container spacing={2} direction="column">
@@ -32,10 +35,17 @@ const LoginPane: FC<Props> = (Props) => {
                     ),
                 }} />
             </Grid>
-            <Grid item xs={12} lg={12}>
+            <sc.GoogleDiv container item xs={12} lg={12}>
                 <sc.forgotPassButton onClick={Props.onForgotPassword}>Forgot Password?</sc.forgotPassButton>
-            </Grid>
-            <Grid item xs={12} lg={12} container spacing={2}>
+                <sc.StyledGoogleLogin
+                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
+                    buttonText="Log in with Google"
+                    onSuccess={handleLogin}
+                    onFailure={handleLogin}
+                    cookiePolicy={'single_host_origin'}
+                />
+            </sc.GoogleDiv>
+            <Grid item xs={12} lg={12} container>
                 <Grid item xs={12} lg={12}>
                     <sc.userButton size="large" variant="contained" >Login</sc.userButton>
                     <sc.signUpButton size="large" variant="contained" onClick={Props.onSignUp}>Sign Up</sc.signUpButton>

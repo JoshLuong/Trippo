@@ -17,6 +17,23 @@ export const dayDiv = styled.div`
   height: 100%;
 `;
 
+export const LoadingDiv = styled.div`
+  position: absolute;
+  font-size: 2.25em;
+  color: ${c.DARK_ORANGE};
+  background-color: ${c.WHITE};
+  z-index: 2000;
+  display: flex;
+  height: 715px;
+  margin-top: 3em;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 960px) {
+    font-size: 1.5em;
+  }
+`;
+
 export const SideBar = styled.div`
   z-index: 1;
   height: 650px;

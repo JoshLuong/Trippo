@@ -14,8 +14,7 @@ function App() {
     <>
       <Navbar />
       <Switch>
-        <Route exact path="/itineraries" component={() => <ItineraryPage />} />
-        <Route exact path="/newitinerary" component={() => <NewItineraryPage />} />
+        <Route exact path="/itinerary" component={() => <ItineraryPage />} />
         <Route exact path="/" component={() => <WelcomePage />} />
         <Route exact path="/home" component={() => <ItinerariesView />} />
       </Switch>

@@ -1,20 +1,24 @@
 import mapboxgl from "mapbox-gl";
 import "./Map.css";
-import { useEffect, useRef, RefObject } from 'react';
+import { useEffect, useRef, RefObject, FC } from 'react';
 import { useAppSelector, useAppDispatch } from 'app/store';
-import { setHighlighted, TimeSlot } from 'app/reducers/timeSlotSlice';
+import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
 
 const initialMapCenter = {
   lng: 0,
   lat: 40,
   zoom: 2,
+};
+
+interface Props {
+  handleIsLoading: () => void;
 }
 
-export default function Map() {
+const Map: FC<Props> = ({ handleIsLoading }) => {
   const mapContainer: RefObject<HTMLDivElement> = useRef(null);
   const mapRef: RefObject<{ map?: mapboxgl.Map }> = useRef({});
   const markers: RefObject<mapboxgl.Marker[]> = useRef([]);
-  const timeSlots = useAppSelector((state) => state.timeSlot.value);
+  const day = useAppSelector((state) => state.day.value);
   const dispatch = useAppDispatch();
 
   const addMarker = (timeSlot: TimeSlot) => {
@@ -30,7 +34,7 @@ export default function Map() {
       marker.setLngLat(timeSlot.location).addTo(mapRef.current.map);
       console.log(markers.current);
     }
-  }
+  };
 
   useEffect(() => {
     const { lng, lat, zoom } = initialMapCenter;
@@ -44,29 +48,35 @@ export default function Map() {
     mapRef.current!.map = map;
 
     // map.on("click", (event) => addMarker(event.lngLat));
+    map.on("load", () => {
+      console.log("change");
+      handleIsLoading();
+    });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     // Clear all markers
     markers.current?.forEach((marker) => marker.remove());
     markers.current?.splice(0, markers.current.length);
-    timeSlots.forEach((slot) => addMarker(slot));
+    day.forEach((slot) => addMarker(slot));
 
-    if (timeSlots.length && mapRef.current?.map) {
+    if (day.length && mapRef.current?.map) {
       mapRef.current.map.flyTo({
-        center: timeSlots[0].location,
+        center: day[0].location,
         zoom: 10,
       });
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeSlots]);
+  }, [day]);
 
   return (
     <div className="map-container">
       <div className="map-div" ref={mapContainer} />
     </div>
   );
-}
+};
+
+export default Map;

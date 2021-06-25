@@ -1,5 +1,3 @@
-import React from 'react'
-import * as sc from "./LoginContainer.styles"
 import { useState } from 'react';
 import LoginPane from './LoginPane';
 import SignUpPane from './SignUpPane';
@@ -20,7 +18,7 @@ function LoginContainer() {
     }
 
     return (
-        <sc.loginDiv>
+        <div>
             {!signUpClicked && !forgotPasswordClicked &&
                 <LoginPane onSignUp={handleSignUp} onForgotPassword={handleForgotPassword} />
             }
@@ -30,7 +28,7 @@ function LoginContainer() {
             {forgotPasswordClicked &&
                 <ForgotPasswordPane handleBack={handleForgotPassword} />
             }
-        </sc.loginDiv>
+        </div>
     )
 }
 

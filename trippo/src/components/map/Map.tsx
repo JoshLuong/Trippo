@@ -1,8 +1,12 @@
 import mapboxgl from "mapbox-gl";
 import "./Map.css";
-import { useEffect, useRef, RefObject } from "react";
+import { useEffect, useRef, RefObject, FC } from "react";
 import { useAppSelector, useAppDispatch } from "app/store";
 import { setHighlighted, TimeSlot } from "app/reducers/timeSlotSlice";
+
+interface Props {
+  // setGeocoderEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+}
 
 const initialMapCenter = {
   lng: 0,
@@ -10,10 +14,11 @@ const initialMapCenter = {
   zoom: 2,
 };
 
-export default function Map() {
+const Map: FC<Props> = () => {
   const mapContainer: RefObject<HTMLDivElement> = useRef(null);
   const mapRef: RefObject<{ map?: mapboxgl.Map }> = useRef({});
   const markers: RefObject<mapboxgl.Marker[]> = useRef([]);
+
   const timeSlots = useAppSelector((state) => state.timeSlot.value);
   const dispatch = useAppDispatch();
 
@@ -45,6 +50,14 @@ export default function Map() {
 
     // map.on("click", (event) => addMarker(event.lngLat));
 
+    // const geocoder = new MapboxGeocoder({
+    //   accessToken: mapboxgl.accessToken,
+    //   mapboxgl: map,
+    // });
+
+    //setGeocoderEl(geocoder.onAdd(map));
+    // document.getElementById("test")?.appendChild(geocoder.onAdd(map));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -70,3 +83,5 @@ export default function Map() {
     </div>
   );
 }
+
+export default Map;

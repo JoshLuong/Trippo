@@ -41,7 +41,7 @@ export const SideBar = styled.div`
 
 export const Container = styled.div`
   border-radius: 7px;
-  z-index: 1;
+  // z-index: 1;
   display: inline-block;
   background-color: #fff;
   height: 650px;

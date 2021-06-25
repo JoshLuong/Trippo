@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const GeocoderContainer = styled.div`
   border-radius: 7px;
   z-index: 1;
   display: inline-block;

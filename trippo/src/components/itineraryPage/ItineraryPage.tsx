@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
-import Map from "../map/Map";
-import Searchbar from "components/searchBar/Searchbar";
+import Map from "../newMap/Map";
+import "../map/Map.css";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
@@ -26,7 +26,7 @@ function ItineraryPage() {
           textAlign: "center",
         }}
       >
-        <Searchbar />
+        {/* <div id="test" dangerouslySetInnerHTML={{ __html: geocoderEl?.innerHTML || '' }} /> */}
       </div>
       <div
         style={{
@@ -37,6 +37,7 @@ function ItineraryPage() {
           height: "80%",
         }}
       >
+        <Map />
         <sc.SideBar style={{ width: "2em" }}>
           <button onClick={handleOpenItinerary}>
             {showItinerary ? (
@@ -51,7 +52,6 @@ function ItineraryPage() {
             <Container></Container>
           </sc.Container>
         ) : null}
-        <Map />
       </div>
     </>
   );

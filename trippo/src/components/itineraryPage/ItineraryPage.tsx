@@ -26,7 +26,6 @@ function ItineraryPage() {
           textAlign: "center",
         }}
       >
-        <Searchbar />
       </div>
       <div
         style={{

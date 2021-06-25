@@ -12,7 +12,7 @@ interface Props {
 const renderNames = (name: string, collaborators: string) => {
   return (
     <sc.NameGrid container item lg={8} sm={12}>
-      <sc.TripName>{name}</sc.TripName>
+      <sc.TripName href="./itinerary">{name}</sc.TripName>
       <sc.Collaborators>
         <sc.StyledPeopleIcon />
         {collaborators}

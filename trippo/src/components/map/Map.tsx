@@ -1,7 +1,8 @@
 import mapboxgl from "mapbox-gl";
 import "./Map.css";
 import { useEffect, useRef, RefObject } from 'react';
-import { useAppSelector } from 'app/store';
+import { useAppSelector, useAppDispatch } from 'app/store';
+import { setHighlighted, TimeSlot } from 'app/reducers/timeSlotSlice';
 
 const initialMapCenter = {
   lng: 0,
@@ -13,20 +14,20 @@ export default function Map() {
   const mapContainer: RefObject<HTMLDivElement> = useRef(null);
   const mapRef: RefObject<{ map?: mapboxgl.Map }> = useRef({});
   const markers: RefObject<mapboxgl.Marker[]> = useRef([]);
-  const locations = useAppSelector((state) => state.location.value);
+  const timeSlots = useAppSelector((state) => state.timeSlot.value);
+  const dispatch = useAppDispatch();
 
-  const addMarker = (coords: mapboxgl.LngLatLike) => {
+  const addMarker = (timeSlot: TimeSlot) => {
     if (mapRef.current?.map) {
       const marker = new mapboxgl.Marker();
       markers.current!.push(marker);
 
       marker.getElement().addEventListener("click", (e) => {
         e.stopPropagation();
-        marker.remove();
-        markers.current?.splice(markers.current.indexOf(marker), 1);
+        dispatch(setHighlighted(timeSlot.id));
       });
   
-      marker.setLngLat(coords).addTo(mapRef.current.map);
+      marker.setLngLat(timeSlot.location).addTo(mapRef.current.map);
       console.log(markers.current);
     }
   }
@@ -42,7 +43,7 @@ export default function Map() {
 
     mapRef.current!.map = map;
 
-    map.on("click", (event) => addMarker(event.lngLat));
+    // map.on("click", (event) => addMarker(event.lngLat));
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -51,17 +52,17 @@ export default function Map() {
     // Clear all markers
     markers.current?.forEach((marker) => marker.remove());
     markers.current?.splice(0, markers.current.length);
-    locations.forEach((location) => addMarker(location.coordinates));
+    timeSlots.forEach((slot) => addMarker(slot));
 
-    if (locations.length && mapRef.current?.map) {
+    if (timeSlots.length && mapRef.current?.map) {
       mapRef.current.map.flyTo({
-        center: locations[0].coordinates,
+        center: timeSlots[0].location,
         zoom: 10,
       });
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locations]);
+  }, [timeSlots]);
 
   return (
     <div className="map-container">

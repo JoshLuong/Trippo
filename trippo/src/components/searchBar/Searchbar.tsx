@@ -1,17 +1,20 @@
-import SearchBar from "material-ui-search-bar";
 import * as sc from "./Searchbar.styles";
+import Search from "./Search";
 
 function Searchbar() {
   return (
     <div
       style={{
-        marginTop: "7em",
+        marginTop: "10em",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
       <sc.Container>
-        <SearchBar />
+      <Search
+          searchValue
+          onChangeHandler
+        />
       </sc.Container>
     </div>
   );

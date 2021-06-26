@@ -47,6 +47,7 @@ const Navbar = (props: { history: any }) => {
 
   const handleMenuClick = (pageURL: string) => {
     history.push(pageURL);
+    handleDrawerClose();
   };
 
   const menuItems = [

@@ -10,7 +10,6 @@ export const Slot = styled.div`
   padding-right: 0.25em;
   background-color: #fff;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.4);
-  z-index: 1;
   position: relative;
   &:hover {
     transform: scale(1.025);
@@ -123,6 +122,7 @@ export const Comments = styled.ul`
   margin-top: 0.25em;
   margin-right: 1.5em;
   color: ${c.BLACK};
+  width: 100%;
   list-style: none;
   padding-left: 0.5em;
   ${(props) => props.contentEditable && editStyles}

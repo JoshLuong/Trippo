@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { FC, ReactElement } from 'react';
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
@@ -6,7 +7,10 @@ import SearchIcon from "@material-ui/icons/Search";
 import * as sc from "./Searchbar.styles";
 import {DARK_BLUE} from "../../colors/colors";
 
-
+interface Props {
+  children?: ReactElement<any, any>;
+}
+// TODO: refactor
 const useStyles = makeStyles(theme => ({
   root: {
     padding: "2px 4px",
@@ -32,6 +36,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ColoredLine = () => (
+  // TODO remove inline style
   <hr
       style={{
           color: DARK_BLUE,
@@ -45,9 +50,9 @@ const ColoredLine = () => (
   />
 );
 
-export default function Searchbar() {
+const Searchbar: FC<Props> = ({children}) => {
   const classes = useStyles();
-
+// TODO remove inline line 60... do we need this? should just use margins
   return (
     <>
     <ColoredLine />
@@ -59,21 +64,29 @@ export default function Searchbar() {
         }}
       >
       </div>
-    <Paper component="form" className={classes.root}>
-      <InputBase
-        className={classes.input}
-        placeholder="Search..."
-        inputProps={{ "aria-label": "search itineraries" }}
-      />
-      <IconButton
-        type="submit"
-        className={classes.iconButton}
-        aria-label="search"
-      >
-        <SearchIcon />
-      </IconButton>
-    </Paper>
+      {
+        children
+          ? children
+          : (
+            <Paper component="form" className={classes.root}>
+              <InputBase
+                className={classes.input}
+                placeholder="Search..."
+                inputProps={{ "aria-label": "search itineraries" }}
+              />
+              <IconButton
+                type="submit"
+                className={classes.iconButton}
+                aria-label="search"
+              >
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          )
+      }
     </sc.Container>
     </>
   );
 }
+
+export default Searchbar

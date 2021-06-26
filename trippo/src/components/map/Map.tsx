@@ -1,71 +1,37 @@
-import mapboxgl from "mapbox-gl";
-import "./Map.css";
-import { useEffect, useRef, RefObject, FC } from 'react';
-import { useAppSelector, useAppDispatch } from 'app/store';
-import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
-
-const initialMapCenter = {
-  lng: 0,
-  lat: 40,
-  zoom: 2,
-};
+import { FC, useEffect, useRef, useState } from 'react';
+import ReactMapGL, { FlyToInterpolator, MapRef, Marker } from 'react-map-gl';
+// @ts-ignore No type declaration for this package
+import Geocoder from 'react-map-gl-geocoder';
+import Pin from './Marker';
+import { useAppDispatch, useAppSelector } from 'app/store';
+import { InteractiveMapProps } from 'react-map-gl/src/components/interactive-map';
+import { setHighlighted } from 'app/reducers/daySlice';
+import './Map.css';
 
 interface Props {
+  geocoderContainerRef: React.RefObject<HTMLDivElement>;
   handleIsLoading: () => void;
 }
 
-const Map: FC<Props> = ({ handleIsLoading }) => {
-  const mapContainer: RefObject<HTMLDivElement> = useRef(null);
-  const mapRef: RefObject<{ map?: mapboxgl.Map }> = useRef({});
-  const markers: RefObject<mapboxgl.Marker[]> = useRef([]);
+const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading }) => {
+  const mapRef: React.Ref<MapRef> = useRef(null);
+  const [viewport, setViewport] = useState<InteractiveMapProps>({
+    longitude: 0,
+    latitude: 40,
+    zoom: 2,
+  });
+
   const day = useAppSelector((state) => state.day.value);
   const dispatch = useAppDispatch();
 
-  const addMarker = (timeSlot: TimeSlot) => {
-    if (mapRef.current?.map) {
-      const marker = new mapboxgl.Marker();
-      markers.current!.push(marker);
-
-      marker.getElement().addEventListener("click", (e) => {
-        e.stopPropagation();
-        dispatch(setHighlighted(timeSlot.id));
-      });
-
-      marker.setLngLat(timeSlot.location).addTo(mapRef.current.map);
-      console.log(markers.current);
-    }
-  };
-
   useEffect(() => {
-    const { lng, lat, zoom } = initialMapCenter;
-    const map = new mapboxgl.Map({
-      container: mapContainer.current!,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
-      zoom: zoom,
-    });
-
-    mapRef.current!.map = map;
-
-    // map.on("click", (event) => addMarker(event.lngLat));
-    map.on("load", () => {
-      console.log("change");
-      handleIsLoading();
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    // Clear all markers
-    markers.current?.forEach((marker) => marker.remove());
-    markers.current?.splice(0, markers.current.length);
-    day.forEach((slot) => addMarker(slot));
-
-    if (day.length && mapRef.current?.map) {
-      mapRef.current.map.flyTo({
-        center: day[0].location,
+    if (day.length) {
+      setViewport({
+        longitude: day[0].location.lng,
+        latitude: day[0].location.lat,
         zoom: 10,
+        transitionDuration: 5000,
+        transitionInterpolator: new FlyToInterpolator(),
       });
     }
 
@@ -73,9 +39,39 @@ const Map: FC<Props> = ({ handleIsLoading }) => {
   }, [day]);
 
   return (
-    <div className="map-container">
-      <div className="map-div" ref={mapContainer} />
-    </div>
+    <ReactMapGL
+      {...viewport}
+      ref={mapRef}
+      width="100%"
+      height="100%"
+      // className doesn't work here, it styles the wrong element
+      style={{ position: 'absolute', minHeight: 700 }}
+      onViewportChange={setViewport}
+      onLoad={handleIsLoading}
+      mapStyle="mapbox://styles/mapbox/streets-v11"
+    >
+      {day.map((slot) => (
+        <Marker
+          key={slot.id}
+          latitude={slot.location.lat}
+          longitude={slot.location.lng}
+          // SVG width / 2
+          offsetLeft={-13.415}
+          // SVG height + 1px
+          offsetTop={-41}
+        >
+          <Pin className="marker" onClick={() => dispatch(setHighlighted(slot.id))} />
+        </Marker>
+      ))}
+      <Geocoder
+        mapRef={mapRef}
+        containerRef={geocoderContainerRef}
+        onViewportChange={setViewport}
+        onResult={() => console.log('test')}
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+        style={{ maxWidth: '100%', width: '100%' }}
+      />
+    </ReactMapGL>
   );
 };
 

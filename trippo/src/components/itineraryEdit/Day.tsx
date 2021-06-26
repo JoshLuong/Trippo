@@ -19,7 +19,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     .map((slot) => (slot.cost ? slot.cost : 0))
     .reduce(function (total, cost) {
       return total + cost;
-    });
+    }, 0);
   const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost);
@@ -68,7 +68,8 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
             );
           })}
         </div>
-        <button onClick={handleSettingsView}>
+        {/* TODO: REMOVE INLINE STYLE HERE */}
+        <button onClick={handleSettingsView} style={{ zIndex: 0 }}>
           <i className="fas fa-cog"></i>
         </button>
       </sc.dayDate>

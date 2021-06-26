@@ -1,12 +1,15 @@
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./loading.css";
 import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
 import Map from "../map/Map";
+import "../map/Map.css";
+import { GeocoderContainer } from 'components/map/Map.styles';
 import Searchbar from "components/searchBar/Searchbar";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
+  const geocoderContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
 
   function handleOpenItinerary() {
@@ -30,16 +33,11 @@ function ItineraryPage() {
           trippo is getting your itinerary ready...
         </sc.LoadingDiv>
       ) : null}
-      <div
-        style={{
-          marginTop: "5em",
-          height: "7em",
-          width: "100%",
-          boxShadow: "0 4.5px 4px 0 rgba(0, 0, 0, 0.4)",
-          textAlign: "center",
-        }}
-      >
-      </div>
+      <sc.SearchContainer>
+        <Searchbar>
+          <GeocoderContainer ref={geocoderContainerRef} />
+        </Searchbar>
+      </sc.SearchContainer>
       <div
         style={{
           bottom: "0",
@@ -49,6 +47,10 @@ function ItineraryPage() {
           height: "80%",
         }}
       >
+        <Map
+          geocoderContainerRef={geocoderContainerRef}
+          handleIsLoading={handleIsLoading}
+        />
         <sc.SideBar style={{ width: "2em" }}>
           <button onClick={handleOpenItinerary}>
             {showItinerary ? (
@@ -63,7 +65,6 @@ function ItineraryPage() {
             <Container></Container>
           </sc.Container>
         ) : null}
-        <Map handleIsLoading={handleIsLoading} />
       </div>
     </div>
   );

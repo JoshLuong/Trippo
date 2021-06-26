@@ -58,7 +58,7 @@ export const SideBar = styled.div`
 
 export const Container = styled.div`
   border-radius: 7px;
-  z-index: 1;
+  // z-index: 1;
   display: inline-block;
   background-color: #fff;
   height: 650px;
@@ -68,5 +68,19 @@ export const Container = styled.div`
 
   @media (max-width: 668px) {
     flex: 0 0 80%;
+  }
+`;
+
+export const SearchContainer = styled.div`
+  margin-top: 5em;
+  height: 7em;
+  width: 100%;
+  box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
+  text-align: center;
+
+  input {
+    &:focus {
+      outline: none;
+    }
   }
 `;

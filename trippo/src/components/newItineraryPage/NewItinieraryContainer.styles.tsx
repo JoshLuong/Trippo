@@ -3,12 +3,15 @@ import styled from 'styled-components';
 import * as c from "../../colors/colors";
 
 export const newItineraryContainer = styled.div`
+  z-index: 100;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
   background-color: white; 
-  margin: auto;
-  margin-bottom: 20em;
   min-height: 14em;
   width: 900px;
-  box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.6);
   border-radius: 16px;
   border-top: 16px solid ${c.DARK_BLUE};
   padding-left: 3em;
@@ -18,6 +21,7 @@ export const newItineraryContainer = styled.div`
   @media (max-width: 960px) {
     width: 70%;
   }
+
   
 `;
 

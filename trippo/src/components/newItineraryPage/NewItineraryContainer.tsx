@@ -5,7 +5,7 @@ import * as sc from './NewItinieraryContainer.styles'
 import { Remove } from '@material-ui/icons';
 
 interface Props {
-
+    handleShowNewItinerary: (canShow: boolean) => void;
 }
 
 const collabData = [
@@ -21,7 +21,7 @@ const countryData = [
 
 
 
-const NewItineraryContainer: FC<Props> = (Props) => {
+const NewItineraryContainer: FC<Props> = ({handleShowNewItinerary}) => {
 
     return (
         <sc.newItineraryContainer>
@@ -89,7 +89,7 @@ const NewItineraryContainer: FC<Props> = (Props) => {
                 </Grid>
                 <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
                     <Grid item xs={12} sm={9} md={6} lg={4}>
-                        <sc.userButton size="large" variant="contained" >Go Back</sc.userButton>
+                        <sc.userButton onClick={()=> handleShowNewItinerary(false)}size="large" variant="contained" >Cancel</sc.userButton>
                         <sc.userButton size="large" variant="contained" >Submit</sc.userButton>
                     </Grid>
                 </Grid>

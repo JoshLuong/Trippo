@@ -67,9 +67,11 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading }) => {
         mapRef={mapRef}
         containerRef={geocoderContainerRef}
         onViewportChange={setViewport}
-        onResult={() => console.log('test')}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         style={{ maxWidth: '100%', width: '100%' }}
+        // Resets the input value after a search is made.
+        // If this isn't done then Mapbox will keep loading the same query.
+        inputValue=""
       />
     </ReactMapGL>
   );

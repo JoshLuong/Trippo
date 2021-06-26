@@ -5,6 +5,7 @@ import * as sc from "./ItineraryPage.styles";
 import Map from "../map/Map";
 import "../map/Map.css";
 import { GeocoderContainer } from 'components/map/Map.styles';
+import Searchbar from "components/searchBar/Searchbar";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
@@ -33,7 +34,9 @@ function ItineraryPage() {
         </sc.LoadingDiv>
       ) : null}
       <sc.SearchContainer>
-        <GeocoderContainer ref={geocoderContainerRef} />
+        <Searchbar>
+          <GeocoderContainer ref={geocoderContainerRef} />
+        </Searchbar>
       </sc.SearchContainer>
       <div
         style={{

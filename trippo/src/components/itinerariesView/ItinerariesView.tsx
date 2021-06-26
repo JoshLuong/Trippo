@@ -38,6 +38,7 @@ const ItinerariesView: FC<Props> = () => {
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);
   }
+  // TODO: take out inline style; move to search 
   return (
     <sc.ItinerariesViewGrid>
       <div

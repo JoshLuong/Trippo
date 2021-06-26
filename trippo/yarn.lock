@@ -1273,6 +1273,11 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@freakycoder/react-native-bounceable@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@freakycoder/react-native-bounceable/-/react-native-bounceable-0.2.5.tgz#ad61bdafbf68465e9c2145e99c09b500ae091f0e"
+  integrity sha512-J8WBOYxbm/um7SqXYneduZ08T5Kin9z+ixsS3wOLtpeNvKscuqmDEgsgefTYydeSIoI5dOfWmklnRRgu5i/8nA==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -10965,6 +10970,11 @@ react-error-overlay@^6.0.9:
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
   integrity sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==
+
+react-facebook-login@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-facebook-login/-/react-facebook-login-4.1.1.tgz#005121236a6ac0dee02099976fb1a3265f9d633e"
+  integrity sha512-COnHEHlYGTKipz4963safFAK9PaNTcCiXfPXMS/yxo8El+/AJL5ye8kMJf23lKSSGGPgqFQuInskIHVqGqTvSw==
 
 react-google-login@^5.2.2:
   version "5.2.2"

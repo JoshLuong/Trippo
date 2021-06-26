@@ -30,9 +30,9 @@ export const StyledLabelIcon = styled(LabelIcon)`
   margin-right: 0.25em;
 `;
 
-export const TripName = styled.div`
+export const TripName = styled.a`
   display: block;
-  width: 100%;
+  margin-right: auto;
   color: ${c.DARK_BLUE};
   font-weight: 600;
   font-size: 1.75em;

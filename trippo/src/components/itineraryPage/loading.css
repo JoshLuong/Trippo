@@ -1,0 +1,20 @@
+/* https://www.w3schools.com/howto/howto_css_loader.asp  */
+.loader {
+  border: 3px solid #cac8c8; /* Light grey */
+  border-top: 3px solid #219ebc; /* Blue */
+  border-bottom: 3x solid #219ebc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 3s linear infinite;
+  margin-right: 0.5em;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,9 +1,8 @@
-import React from "react";
-import * as sc from "./LoginContainer.styles";
-import { useState } from "react";
-import LoginPane from "./LoginPane";
-import SignUpPane from "./SignUpPane";
-import ForgotPasswordPane from "./ForgotPasswordPane";
+import { useState } from 'react';
+import LoginPane from './LoginPane';
+import SignUpPane from './SignUpPane';
+import ForgotPasswordPane from './ForgotPasswordPane'
+
 
 function LoginContainer() {
   const [signUpClicked, updateSignUp] = useState(false);
@@ -17,20 +16,19 @@ function LoginContainer() {
     updateForgotPassword(!forgotPasswordClicked);
   };
 
-  return (
-    <sc.loginDiv>
-      {!signUpClicked && !forgotPasswordClicked && (
-        <LoginPane
-          onSignUp={handleSignUp}
-          onForgotPassword={handleForgotPassword}
-        />
-      )}
-      {signUpClicked && <SignUpPane handleBack={handleSignUp} />}
-      {forgotPasswordClicked && (
-        <ForgotPasswordPane handleBack={handleForgotPassword} />
-      )}
-    </sc.loginDiv>
-  );
+    return (
+        <div>
+            {!signUpClicked && !forgotPasswordClicked &&
+                <LoginPane onSignUp={handleSignUp} onForgotPassword={handleForgotPassword} />
+            }
+            {signUpClicked &&
+                <SignUpPane handleBack={handleSignUp} />
+            }
+            {forgotPasswordClicked &&
+                <ForgotPasswordPane handleBack={handleForgotPassword} />
+            }
+        </div>
+    )
 }
 
 export default LoginContainer;

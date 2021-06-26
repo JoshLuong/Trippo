@@ -4,8 +4,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 import { Grid } from '@material-ui/core';
 interface Props {
-    onForgotPassword: () => void,
-    onSignUp: () => void
+  onForgotPassword: () => void;
+  onSignUp: () => void;
 }
 
 const LoginPane: FC<Props> = (Props) => {

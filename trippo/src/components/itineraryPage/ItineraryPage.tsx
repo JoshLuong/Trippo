@@ -3,6 +3,7 @@ import "./loading.css";
 import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
 import Map from "../map/Map";
+import Searchbar from "components/searchBar/Searchbar";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
@@ -38,7 +39,6 @@ function ItineraryPage() {
           textAlign: "center",
         }}
       >
-        search placeholder
       </div>
       <div
         style={{

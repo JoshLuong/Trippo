@@ -5,17 +5,16 @@ import ForgotPasswordPane from './ForgotPasswordPane'
 
 
 function LoginContainer() {
+  const [signUpClicked, updateSignUp] = useState(false);
+  const [forgotPasswordClicked, updateForgotPassword] = useState(false);
 
-    const [signUpClicked, updateSignUp] = useState(false);
-    const [forgotPasswordClicked, updateForgotPassword] = useState(false);
+  const handleSignUp = () => {
+    updateSignUp(!signUpClicked);
+  };
 
-    const handleSignUp = () => {
-        updateSignUp(!signUpClicked);
-    }
-
-    const handleForgotPassword = () => {
-        updateForgotPassword(!forgotPasswordClicked);
-    }
+  const handleForgotPassword = () => {
+    updateForgotPassword(!forgotPasswordClicked);
+  };
 
     return (
         <div>
@@ -32,4 +31,4 @@ function LoginContainer() {
     )
 }
 
-export default LoginContainer
+export default LoginContainer;

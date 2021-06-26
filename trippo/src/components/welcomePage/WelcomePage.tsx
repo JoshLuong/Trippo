@@ -16,4 +16,4 @@ function WelcomePage() {
     )
 }
 
-export default WelcomePage
+export default WelcomePage;

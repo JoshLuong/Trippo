@@ -1,5 +1,5 @@
-import { Button, TextField } from '@material-ui/core'
-import styled from 'styled-components';
+import { Button, TextField } from "@material-ui/core";
+import styled from "styled-components";
 import * as c from "../../colors/colors";
 import GoogleLogin from 'react-google-login';
 import { Grid } from '@material-ui/core';
@@ -18,7 +18,6 @@ export const signUpHeader = styled.h1`
     font-size: 20px;
     color: ${c.GREY};
 `;
-
 
 export const userTextField = styled(TextField)` && {
   margin: 12px;

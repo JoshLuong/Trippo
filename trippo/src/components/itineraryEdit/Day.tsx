@@ -5,7 +5,7 @@ import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
 import { Grid, Tooltip } from "@material-ui/core";
-import { useAppSelector } from 'app/store';
+import { useAppSelector } from "app/store";
 
 interface Props {
   date: Date;

@@ -5,7 +5,6 @@ export const GeocoderContainer = styled.div`
   z-index: 1;
   display: inline-block;
   width: 90%;
-  height: 2em;
   position: relative;
   border-radius: 25px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.45);

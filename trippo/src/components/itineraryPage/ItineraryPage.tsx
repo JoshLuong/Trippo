@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
-import Map from "../newMap/Map";
+import Map from "../map/Map";
 import "../map/Map.css";
+import { GeocoderContainer } from 'components/map/Map.styles';
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
+  const geocoderContainerRef = useRef(null);
 
   function handleOpenItinerary() {
     setShowItinerary(!showItinerary);
@@ -17,17 +19,9 @@ function ItineraryPage() {
   //585px
   return (
     <>
-      <div
-        style={{
-          marginTop: "5em",
-          height: "7em",
-          width: "100%",
-          boxShadow: "0 4.5px 4px 0 rgba(0, 0, 0, 0.4)",
-          textAlign: "center",
-        }}
-      >
-        {/* <div id="test" dangerouslySetInnerHTML={{ __html: geocoderEl?.innerHTML || '' }} /> */}
-      </div>
+      <sc.SearchContainer>
+        <GeocoderContainer ref={geocoderContainerRef} />
+      </sc.SearchContainer>
       <div
         style={{
           bottom: "0",
@@ -37,7 +31,7 @@ function ItineraryPage() {
           height: "80%",
         }}
       >
-        <Map />
+        <Map geocoderContainerRef={geocoderContainerRef} />
         <sc.SideBar style={{ width: "2em" }}>
           <button onClick={handleOpenItinerary}>
             {showItinerary ? (

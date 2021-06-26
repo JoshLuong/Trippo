@@ -11,4 +11,9 @@ export const GeocoderContainer = styled.div`
   @media (max-width: 1200px) {
     flex: 0 0 100%;
   }
+
+  > * {
+    max-width: 100%;
+    width: 100%;
+  }
 `;

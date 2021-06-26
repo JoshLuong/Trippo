@@ -2484,10 +2484,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/jsonlint-lines-primitives/-/jsonlint-lines-primitives-2.0.2.tgz#ce56e539f83552b58d10d672ea4d6fc9adc7b234"
   integrity sha1-zlblOfg1UrWNENZy6k1vya3HsjQ=
 
-"@mapbox/mapbox-gl-geocoder@^4.7.1":
-  version "4.7.1"
-  resolved "https://registry.yarnpkg.com/@mapbox/mapbox-gl-geocoder/-/mapbox-gl-geocoder-4.7.1.tgz#8da9f3cc13f7c4d061bc61bb60d577fcdfc7acf3"
-  integrity sha512-3T7fatm5SbRuM/ONaBVK6QvnO6qmUNEvS5pXd8AqOYgM2wYXu3GLiemTiGNiTw5OMlVCNfM18N4mp9QNf2vxFg==
+"@mapbox/mapbox-gl-geocoder@4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/mapbox-gl-geocoder/-/mapbox-gl-geocoder-4.7.0.tgz#ff3b3b6a8e89e4c62df46be8e95502b6c5e510bc"
+  integrity sha512-Fy4jlWWCQt2jKsQ7Agt2nDF1bEY9easOBJVE+yXdpC2D/y/FPnXEQkj9ryhZL05j1iQVOIyU87pM3GI3ETmOVA==
   dependencies:
     "@mapbox/mapbox-sdk" "^0.11.0"
     lodash.debounce "^4.0.6"
@@ -13288,6 +13288,15 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-map-gl-geocoder@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/react-map-gl-geocoder/-/react-map-gl-geocoder-2.1.6.tgz#8c306ba6e4a4d1465fef7281029f6488f7f54d8a"
+  integrity sha512-0JQ4bQWpUO420WZik1zQ+iPSq+lVMBO0ARQGeLf5VRvSf7gXZxM0jwexDVtLxZV7+QWwVPJg6Brzzwf6oCh9sg==
+  dependencies:
+    "@mapbox/mapbox-gl-geocoder" "4.7.0"
+    prop-types "^15.7.2"
+    viewport-mercator-project "6.1.1"
+
 react-map-gl@^6.1.16:
   version "6.1.16"
   resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-6.1.16.tgz#47e1a200b4dea7f981f2be36f96933f202e6bd7e"
@@ -15933,6 +15942,14 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+viewport-mercator-project@6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-6.1.1.tgz#d7b2cb3cb772b819f1daab17cf4019102a9102a6"
+  integrity sha512-nI0GEmXnESwZxWSJuaQkdCnvOv6yckUfqqFbNB8KWVbQY3eUExVM4ZziqCVVs5mNznLjDF1auj6HLW5D5DKcng==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    gl-matrix "^3.0.0"
 
 viewport-mercator-project@^7.0.3:
   version "7.0.3"

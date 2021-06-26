@@ -53,3 +53,14 @@ export const Container = styled.div`
     flex: 0 0 80%;
   }
 `;
+
+export const SearchContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5em;
+  height: 7em;
+  width: 100%;
+  box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
+  text-align: center;
+`;

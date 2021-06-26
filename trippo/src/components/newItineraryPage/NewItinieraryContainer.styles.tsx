@@ -1,7 +1,21 @@
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Grid } from '@material-ui/core';
+import LabelIcon from "@material-ui/icons/Label";
 import styled from 'styled-components';
 import * as c from "../../colors/colors";
+import InfoIcon from '@material-ui/icons/Info';
 
+export const StyledInfoIcon = styled(InfoIcon)`
+  margin: auto 0.5em;
+  color: ${c.DARK_GREY};
+`;
+
+export const FormGrid = styled(Grid)`
+  margin: 0 0 0 3em;
+  padding-right: 3em;
+  overflow: scroll;
+  height: 93%;
+  overflow-x: hidden;
+`;
 export const newItineraryContainer = styled.div`
   z-index: 100;
   position: fixed;
@@ -9,15 +23,11 @@ export const newItineraryContainer = styled.div`
   transform: translate(-50%, -50%);
   top: 50%;
   background-color: white; 
-  min-height: 14em;
+  height: 65vh;
   width: 900px;
   box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.6);
-  border-radius: 16px;
+  border-radius: 16px 16px 7px 7px;
   border-top: 16px solid ${c.DARK_BLUE};
-  padding-left: 3em;
-  padding-right: 3em;
-  padding-bottom: 3em;
-  
   @media (max-width: 960px) {
     width: 70%;
   }
@@ -28,14 +38,12 @@ export const newItineraryContainer = styled.div`
 export const header = styled.p`
   background-color: ${c.DARK_BLUE};
   position: relative;
+  padding-left: 2em;
+  padding-bottom: 3px;
   color: white;
-  margin-top: 0;
+  margin-top: -1px;
   margin-bottom: 0;
-  padding: 0;
   font-size: 20px;
-  /* fix this - padding of div creates white space*/
-  width: calc(100% + 4.2em);
-  margin-left: -2.1em;
 `;
 
 export const inputTags = styled.h2`
@@ -53,9 +61,38 @@ export const userButton = styled(Button)` && {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-radius: 20px;
 }
+`;
+
+export const StyledLabelIcon = styled(LabelIcon)` && {
+  color: ${c.DARK_ORANGE};
+  margin-right: 0.25em;
+  }
 `;
 
 export const textField = styled(TextField)`
   border-radius: 40px;
 `;
+
+export const DateGrid = styled(Grid)`
+  margin-top: 1em;
+`;
+export const preferencesButton = styled.button`
+    line-height: 1em;
+    border-radius: 15px;
+    padding: 7px 15px;
+    border: none;
+    background-color: ${c.DARK_BLUE};
+    color: ${c.WHITE};
+    font-size: 1em;
+    margin: 1.5em 0;
+
+    i {
+      margin: auto 0 auto 7px;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+`

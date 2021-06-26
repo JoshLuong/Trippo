@@ -13,7 +13,8 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     borderRadius: 25,
-    boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .3)',
+    boxShadow: '0 3px 2px 0.5px rgba(0, 0, 0, .3)',
+    height: "3em"
     
   },
   input: {

@@ -7,4 +7,7 @@ export const Container = styled.div`
   display: inline-block;
   width: 45%;
   position: relative;
+    @media (max-width: 1030px) {
+    width: 60%;
+  }
 `;

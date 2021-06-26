@@ -61,7 +61,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
             {timeSlot.cost ? (
               <Tooltip
                 title={`${
-                  showCost ? "Remove from" : "Include in"
+                  showCost ? "Hide from" : "Include in"
                 } the total daily cost`}
               >
                 <button onClick={handleShowCostToggle}>

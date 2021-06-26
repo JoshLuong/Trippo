@@ -1,8 +1,10 @@
+/// <reference path='./LoginPane.d.ts' />
 import { FC } from 'react';
 import { AccountCircle, Lock } from '@material-ui/icons';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 import { Grid } from '@material-ui/core';
+import FacebookLogin from 'react-facebook-login'
 interface Props {
   onForgotPassword: () => void;
   onSignUp: () => void;
@@ -12,6 +14,10 @@ const LoginPane: FC<Props> = (Props) => {
     const handleLogin = (googleData: any) => {
         console.log("LOGGING IN");
         console.log(googleData);
+    }
+
+    const responseFacebook = (response: any) => {
+        console.log(response);
     }
 
     return (
@@ -45,6 +51,13 @@ const LoginPane: FC<Props> = (Props) => {
                     cookiePolicy={'single_host_origin'}
                 />
             </sc.GoogleDiv>
+            <FacebookLogin
+                appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}
+                autoLoad={true}
+                size="medium"
+                fields="name,email,picture"
+                callback={responseFacebook}
+            />
             <Grid item xs={12} lg={12} container>
                 <Grid item xs={12} lg={12}>
                     <sc.userButton size="large" variant="contained" >Login</sc.userButton>

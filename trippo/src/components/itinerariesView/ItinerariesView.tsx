@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
 import Fade from "react-reveal/Fade";
+import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar"
 
 interface Props {}
@@ -29,9 +30,14 @@ const data = [
 
 const ItinerariesView: FC<Props> = () => {
   const [showEdit, setShowEdit] = useState(false);
+  const [showNewItinerary, setShowNewItinerary] = useState(false);
   const handleRemove = () => {
     alert("removing");
   };
+
+  const handleShowNewItinerary = (canShow: boolean) => {
+    setShowNewItinerary(canShow);
+  }
   return (
     <sc.ItinerariesViewGrid>
       <div
@@ -48,8 +54,13 @@ const ItinerariesView: FC<Props> = () => {
         <button onClick={() => setShowEdit(!showEdit)}>
           {!showEdit ? "Edit Itineraries" : "Done"}
         </button>
-        <button>Plan A New Trip</button>
+        <button onClick={() => setShowNewItinerary(true)}>Plan A New Trip</button>
       </sc.ButtonDiv>
+      {
+        showNewItinerary
+          ? <NewItineraryContainer handleShowNewItinerary={handleShowNewItinerary}/>
+          : null
+      }
       <sc.Cards>
         <Fade duration={900} delay={500}>
           {data.map((card, index) => {

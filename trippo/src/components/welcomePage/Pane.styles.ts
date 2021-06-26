@@ -34,6 +34,7 @@ export const userButton = styled(Button)` && {
   margin: 5px;
   overflow: hidden;
   text-overflow: ellipsis;
+  border-radius: 20px;
 }
 `;
 
@@ -47,6 +48,7 @@ export const signUpButton = styled(Button)` && {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-radius: 20px;
 }
 `;
 

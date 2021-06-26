@@ -5,14 +5,15 @@ import Geocoder from 'react-map-gl-geocoder';
 import Pin from './Marker';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { InteractiveMapProps } from 'react-map-gl/src/components/interactive-map';
-import { setHighlighted } from 'app/reducers/timeSlotSlice';
+import { setHighlighted } from 'app/reducers/daySlice';
 import './Map.css';
 
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
+  handleIsLoading: () => void;
 }
 
-const Map: FC<Props> = ({ geocoderContainerRef }) => {
+const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading }) => {
   const mapRef: React.Ref<MapRef> = useRef(null);
   const [viewport, setViewport] = useState<InteractiveMapProps>({
     longitude: 0,
@@ -20,21 +21,22 @@ const Map: FC<Props> = ({ geocoderContainerRef }) => {
     zoom: 2,
   });
 
-  const timeSlots = useAppSelector((state) => state.timeSlot.value);
+  const day = useAppSelector((state) => state.day.value);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (timeSlots.length) {
+    if (day.length) {
       setViewport({
-        longitude: timeSlots[0].location.lng,
-        latitude: timeSlots[0].location.lat,
+        longitude: day[0].location.lng,
+        latitude: day[0].location.lat,
         zoom: 10,
         transitionDuration: 5000,
         transitionInterpolator: new FlyToInterpolator(),
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeSlots]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [day]);
 
   return (
     <ReactMapGL
@@ -45,9 +47,10 @@ const Map: FC<Props> = ({ geocoderContainerRef }) => {
       // className doesn't work here, it styles the wrong element
       style={{ position: 'absolute', minHeight: 700 }}
       onViewportChange={setViewport}
+      onLoad={handleIsLoading}
       mapStyle="mapbox://styles/mapbox/streets-v11"
     >
-      {timeSlots.map((slot) => (
+      {day.map((slot) => (
         <Marker
           key={slot.id}
           latitude={slot.location.lat}
@@ -70,6 +73,6 @@ const Map: FC<Props> = ({ geocoderContainerRef }) => {
       />
     </ReactMapGL>
   );
-}
+};
 
 export default Map;

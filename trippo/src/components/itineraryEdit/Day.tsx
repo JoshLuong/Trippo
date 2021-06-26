@@ -13,13 +13,13 @@ interface Props {
 }
 
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
-  const timeSlots = useAppSelector((state) => state.timeSlot.value);
+  const day = useAppSelector((state) => state.day.value);
 
-  let cost = timeSlots
+  let cost = day
     .map((slot) => (slot.cost ? slot.cost : 0))
     .reduce(function (total, cost) {
       return total + cost;
-    });
+    }, 0);
   const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost);
@@ -68,7 +68,8 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
             );
           })}
         </div>
-        <button onClick={handleSettingsView}>
+        {/* TODO: REMOVE INLINE STYLE HERE */}
+        <button onClick={handleSettingsView} style={{ zIndex: 0 }}>
           <i className="fas fa-cog"></i>
         </button>
       </sc.dayDate>
@@ -76,7 +77,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
         <Settings></Settings>
       ) : (
         <div style={{ zIndex: 1 }}>
-          {timeSlots.map((slot, idx) => {
+          {day.map((slot, idx) => {
             return (
               <div key={idx}>
                 <TimeSlot

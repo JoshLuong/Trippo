@@ -6,9 +6,7 @@ export const Container = styled.div`
   display: inline-block;
   width: 45%;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.45);
-
-  @media (max-width: 1200px) {
-    flex: 0 0 100%;
+    @media (max-width: 1030px) {
+    width: 60%;
   }
 `;

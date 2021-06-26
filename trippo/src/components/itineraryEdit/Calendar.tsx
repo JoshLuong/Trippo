@@ -9,11 +9,13 @@ import "./Calendar.scss";
 
 interface Props {
   handleDayClick: (date: Date | null) => void;
+  startDay: Date;
+  endDay: Date;
 }
 
-const Calendar: FC<Props> = ({ handleDayClick }) => {
-  const [startDate] = useState(new Date(2022, 5, 20));
-  const [endDate] = useState(new Date(2022, 5, 30));
+const Calendar: FC<Props> = ({ handleDayClick, startDay, endDay }) => {
+  const [startDate] = useState(startDay);
+  const [endDate] = useState(endDay);
   const [focus, setFocus] = useState<DateRangeFocus>("startDate");
   const handleFocusChange = (newFocus: DateRangeFocus) => {
     setFocus(newFocus || "startDate");

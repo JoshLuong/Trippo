@@ -13,6 +13,21 @@ export const containerDiv = styled.div`
   box-sizing: border-box;
   background-color: #fff;
   overflow-x: hidden;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(101,100,100, 0.4);
+    border-radius: 20px;
+  }
 `;
 
 export const calendarDiv = styled.div`

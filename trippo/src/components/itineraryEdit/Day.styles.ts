@@ -56,7 +56,7 @@ export const dayDate = styled.div`
     i {
       display: inline;
       padding-right: 0.25em;
-      color: ${c.DARK_BLUE};
+      color: ${c.GREY};
       font-size: 1.5em;
     }
   }

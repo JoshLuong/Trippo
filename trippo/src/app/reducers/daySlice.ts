@@ -17,8 +17,9 @@ export interface TimeSlot {
   cost?: number;
 }
 
-interface State {
+export interface State {
   value: TimeSlot[];
+  day_id: number;
   highlighted: TimeSlot | null;
 }
 
@@ -26,23 +27,28 @@ interface Action {
   payload: any;
 }
 
-interface DateAction extends Action {
-  payload: Date;
+interface TimeSlotAction extends Action {
+  payload: TimeSlot;
 }
 
 interface IdAction extends Action {
   payload: number;
 }
 
+interface dateAction extends Action {
+  payload: Date;
+}
+
 interface SliceReducers {
   [x: string]: (state: State, action: Action) => void;
 }
 
-export const timeSlot = createSlice<State, SliceReducers, "timeSlot">({
+export const day = createSlice<State, SliceReducers, "day">({
   // reducer uses the actions
-  name: "timeSlot",
+  name: "day",
   initialState: {
     value: [],
+    day_id: -1,
     highlighted: null,
   },
   reducers: {
@@ -60,9 +66,9 @@ export const timeSlot = createSlice<State, SliceReducers, "timeSlot">({
     clearTimeSlots: (state: State) => {
       state.value = [];
     },
-    setTimeSlots: (state: State, action: DateAction) => {
+    setTimeSlots: (state: State, action: TimeSlotAction) => {
       if (action?.payload) {
-        state.value = getMockTimeSlots(action.payload);
+        state.value = [action.payload]; // idk abt this
       }
     },
     setHighlighted: (state: State, action: IdAction) => {
@@ -71,11 +77,18 @@ export const timeSlot = createSlice<State, SliceReducers, "timeSlot">({
           state.value.find((slot) => slot.id === action.payload) || null;
       }
     },
+    setDayState: (state: State, action: dateAction) => {
+      state = Object.assign(state, getMockTimeSlots(action.payload));
+    }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { clearTimeSlots, setTimeSlots, setHighlighted } =
-  timeSlot.actions;
+export const {
+  clearTimeSlots,
+  setTimeSlots,
+  setHighlighted,
+  setDayState,
+} = day.actions;
 
-export default timeSlot.reducer;
+export default day.reducer;

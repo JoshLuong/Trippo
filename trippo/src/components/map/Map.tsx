@@ -20,6 +20,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading }) => {
     latitude: 40,
     zoom: 2,
   });
+  const [placeholder, setPlaceholder] = useState('Search');
 
   const day = useAppSelector((state) => state.day.value);
   const dispatch = useAppDispatch();
@@ -67,8 +68,10 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading }) => {
         mapRef={mapRef}
         containerRef={geocoderContainerRef}
         onViewportChange={setViewport}
+        onResult={(e: any) => setPlaceholder(e.result.place_name)}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         style={{ maxWidth: '100%', width: '100%' }}
+        placeholder={placeholder}
         // Resets the input value after a search is made.
         // If this isn't done then Mapbox will keep loading the same query.
         inputValue=""

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMockTimeSlots } from 'app/states';
-import { Location } from './locationSlice';
+import { getMockTimeSlots } from "app/states";
+import { Location } from "./locationSlice";
 
 export interface TimeSlot {
   id: number;
@@ -73,7 +73,8 @@ export const day = createSlice<State, SliceReducers, "day">({
     },
     setHighlighted: (state: State, action: IdAction) => {
       if (action?.payload) {
-        state.highlighted = state.value.find((slot) => slot.id === action.payload) || null;
+        state.highlighted =
+          state.value.find((slot) => slot.id === action.payload) || null;
       }
     },
     setDayState: (state: State, action: dateAction) => {

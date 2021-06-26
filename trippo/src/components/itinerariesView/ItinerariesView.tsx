@@ -4,6 +4,7 @@ import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
 import Fade from "react-reveal/Fade";
 import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
+import Searchbar from "../searchBar/Searchbar"
 
 interface Props {}
 
@@ -47,7 +48,7 @@ const ItinerariesView: FC<Props> = () => {
           textAlign: "center",
         }}
       >
-        search placeholder
+      <Searchbar />
       </div>
       <sc.ButtonDiv>
         <button onClick={() => setShowEdit(!showEdit)}>

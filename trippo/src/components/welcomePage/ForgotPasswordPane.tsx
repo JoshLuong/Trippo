@@ -5,7 +5,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 
 interface Props {
-    handleBack: () => void,
+  handleBack: () => void;
 }
 
 const ForgotPasswordPane: FC<Props> = (Props) => {
@@ -35,4 +35,4 @@ const ForgotPasswordPane: FC<Props> = (Props) => {
     )
 }
 
-export default ForgotPasswordPane
+export default ForgotPasswordPane;

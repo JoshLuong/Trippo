@@ -30,7 +30,7 @@ const Map: FC<Props> = ({ handleIsLoading }) => {
         e.stopPropagation();
         dispatch(setHighlighted(timeSlot.id));
       });
-  
+
       marker.setLngLat(timeSlot.location).addTo(mapRef.current.map);
       console.log(markers.current);
     }

@@ -37,7 +37,7 @@ export const location = createSlice<State, SliceReducers, "location">({
     // },
     setLocations: (state: State, action: Action) => {
       state.value = action.payload;
-    }
+    },
   },
 });
 
@@ -46,7 +46,7 @@ export const {
   // deleteIdx,
   // add,
   // deleteAll,
-  setLocations
+  setLocations,
 } = location.actions;
 
 export default location.reducer;

@@ -40,24 +40,26 @@ export const Spacer = styled.div`
 `;
 
 export const dayDate = styled.div`
-  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
   position: relative;
   display: flex;
   color: ${c.WHITE};
   font-weight: 545;
   letter-spacing: 2px;
+  border-radius: 3px;
   button {
     border: none;
     height: 2em;
     padding: 0;
     padding-left: 0.25em;
     background-color: transparent;
+    margin: auto 0 auto 0;
     z-index: 1;
     i {
       display: inline;
       padding-right: 0.25em;
       color: ${c.GREY};
-      font-size: 1.5em;
+      font-size: 1.3em;
     }
   }
   button:hover {
@@ -71,11 +73,14 @@ export const dayDate = styled.div`
 
 export const daysWeek = styled.div`
   display: inline-block;
-  padding: 0.5em 0.7em;
-  background-color: ${c.YELLOW};
-  font-family: "Lato", sans-serif;
-  font-weight: 590;
-  box-shadow: 0 4.5px 2px 0 rgba(0, 0, 0, 0.3);
+  font-size: 1.25em;
+  letter-spacing: 0.25px;
+  color: ${c.BLACK};
+`;
+
+export const TimeSlots = styled.div`
+  padding: 0px 4px;
+  border-left: 2.5px solid ${c.YELLOW};
 `;
 
 export const Cost = styled(Grid)`

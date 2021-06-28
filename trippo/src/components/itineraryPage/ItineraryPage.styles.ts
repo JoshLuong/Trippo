@@ -48,7 +48,7 @@ export const SideBar = styled.div`
     i {
       display: inline;
       color: ${c.WHITE};
-      font-size: 1.75em;
+      font-size: 1.5em;
     }
   }
   button:hover {

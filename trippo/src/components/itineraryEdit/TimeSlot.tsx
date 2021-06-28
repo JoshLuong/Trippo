@@ -1,4 +1,5 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useRef } from "react";
+import { TextField } from '@material-ui/core';
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid, Tooltip } from "@material-ui/core";
@@ -21,12 +22,15 @@ interface Props {
     cost?: number;
   };
   showEdit?: boolean;
+  timeChange: (date:any, timeRef:any, index:number) => void;
+  index: number;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
+const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeChange, index }) => {
   const { time, destination, comments, type, suggested } = timeSlot;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
+  const timeRef = useRef(null);
 
   const renderIcon = (t: string | undefined) => {
     switch (t) {
@@ -83,11 +87,23 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
   const date = time ? new Date(time) : new Date();
 
   return (
-    <sc.Slot>
+    <sc.Slot showSuggestions={showSuggestions}>
       <Grid container item lg={12}>
         <Grid container item lg={3} md={3} sm={12}>
           <sc.Time>
-            {moment(date, "ddd DD-MMM-YYYY, hh:mm A").format("HH:mm A")}
+          <TextField
+            onChange={(date) => timeChange(date, timeRef, index)}
+            ref={timeRef}
+            id="time"
+            type="time"
+            defaultValue={moment(date, "dd DD-MMM-YYYY, hh:mm").format("HH:mm")}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 300, // 5 min
+            }}
+          />
           </sc.Time>
         </Grid>
         <sc.SlotGrid container item lg={9} md={9} sm={12} xs={12}>

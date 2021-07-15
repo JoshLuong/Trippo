@@ -24,7 +24,7 @@ export const SuggestionTitle = styled.div`
     border-right: 0px;
   }
   padding-bottom: 3px;
-  padding-right: 1.83em;
+  width: 7.5em;
   padding-left: 4px;
 `;
 

@@ -6,7 +6,7 @@ import Map from "../map/Map";
 import "../map/Map.css";
 import { GeocoderContainer } from 'components/map/Map.styles';
 import Searchbar from "components/searchBar/Searchbar";
-import { NewSlot } from "components/itineraryEdit/NewSlot.styles";
+import NewSlot from "components/itineraryEdit/NewSlot";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
@@ -77,7 +77,7 @@ function ItineraryPage() {
           </sc.Container>
         ) : null}
         {
-          canOpenNewSlot ? <NewSlot />
+          canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose}/>
             : null
         }
       </div>

@@ -4,6 +4,7 @@ import { Grid } from "@material-ui/core";
 const darkGrey = c.GREY;
 export interface StyledTimeSlotProps{
   showSuggestions: boolean
+  borderColor: string
 }
 
 export const Slot = styled.div<StyledTimeSlotProps>`
@@ -12,7 +13,7 @@ export const Slot = styled.div<StyledTimeSlotProps>`
   padding-top: 0.75em;
   padding-bottom: 0.75em;
   padding-left: 0.25em;
-  border-left: 7px solid ${props => !props.showSuggestions ? c.BLUE : c.DARK_ORANGE};
+  border-left: 8px solid ${props => !props.showSuggestions ? props.borderColor : c.DARK_ORANGE};
   padding-right: 0.25em;
   background-color: #fff;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.4);
@@ -25,9 +26,9 @@ export const Slot = styled.div<StyledTimeSlotProps>`
 export const Time = styled.div`
   color: ${c.BLACK};
   border-right: 1.5px solid ${c.DARK_GREY};
-  padding-right: 0.8em;
+  width: 7.5em;
   padding-bottom: 0.5em;
-  margin-left: 4px;
+  padding-left: 4px;
 
   div:before, div:after{
     content: none;
@@ -58,7 +59,6 @@ export const Destination = styled.div`
   font-weight: 550;
   i {
     margin-right: 5px;
-    color: ${c.YELLOW};
   }
 
   button {

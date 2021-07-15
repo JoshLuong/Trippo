@@ -80,7 +80,6 @@ export const daysWeek = styled.div`
 
 export const TimeSlots = styled.div`
   padding: 0px 4px;
-  border-left: 2.5px solid ${c.YELLOW};
 `;
 
 export const Cost = styled(Grid)`

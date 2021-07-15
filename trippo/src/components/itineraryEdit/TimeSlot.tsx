@@ -32,18 +32,6 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
   const [showCost, setShowCost] = useState(true);
   const timeRef = useRef(null);
 
-  const renderIcon = (t: string | undefined) => {
-    switch (t) {
-      case d.AIRPORT:
-        return <sc.Icon className="fas fa-plane-departure"></sc.Icon>;
-      case d.HOTEL:
-        return <sc.Icon className="fas fa-hotel"></sc.Icon>;
-      default:
-        return <sc.Icon className="fas fa-map-marker-alt"></sc.Icon>;
-      // code block
-    }
-  };
-
   const handleShowCostToggle = () => {
     !showCost
       ? handleHideCostToggle(timeSlot.cost)
@@ -55,7 +43,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
     <Grid container item lg={11} md={11} sm={11} xs={11}>
       <sc.Destination>
         <Grid container item lg={1} md={1} sm={1} xs={1}>
-          {renderIcon(type)}
+          {d.renderIcon(type)}
         </Grid>
         <Grid item lg={10} md={10} sm={10} xs={10}>
           {destination}
@@ -87,7 +75,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
   const date = time ? new Date(time) : new Date();
 
   return (
-    <sc.Slot showSuggestions={showSuggestions}>
+    <sc.Slot showSuggestions={showSuggestions} borderColor={d.getIconColor(type)}>
       <Grid container item lg={12}>
         <Grid container item lg={3} md={3} sm={12}>
           <sc.Time>
@@ -132,7 +120,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
         </sc.SlotGrid>
         {showSuggestions ? (
           <Suggestions
-            renderIcon={renderIcon}
+            renderIcon={d.renderIcon}
             suggested={suggested}
           ></Suggestions>
         ) : null}

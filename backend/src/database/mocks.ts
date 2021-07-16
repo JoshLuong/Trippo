@@ -447,6 +447,7 @@ export const itineraries = [
     name: "Hawaii 2022 Trip",
     budget: 1000,
     current_cost: 10,
+    destination: "Honolulu, Hawaii",
     collaborators: [],
     comments:
       "Our island-hopping Hawaii Trip planned for 2022; A 10 day adventure for the family",
@@ -454,10 +455,11 @@ export const itineraries = [
     start_date: new Date(2022, 5, 20),
     end_date: new Date(2022, 5, 30),
     activities: activities,
-  },
-  {
+    },
+    {
     name: "Alaska 2021 Trip",
     current_cost: 300,
+    destination: "Anchorage, Alaska",
     collaborators: [],
     comments: "Our 7 day Alaskan cruise from Vancouver",
     tags: ["Cruise", "Sight-seeing"],

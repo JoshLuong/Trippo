@@ -40,7 +40,7 @@ export const ButtonDiv = styled.div`
     width: 10em;
     line-heght: 1.5em;
     border-radius: 15px;
-    margin-bottom: 4em;
+    margin-bottom: 2em;
     padding: 7px 5px;
     border: none;
     background-color: ${c.DARK_BLUE};
@@ -60,4 +60,10 @@ export const ButtonDiv = styled.div`
       margin-bottom: 2em;
     }
   }
+`;
+
+export const PaginationDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2em;
 `;

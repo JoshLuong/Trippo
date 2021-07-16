@@ -12,9 +12,9 @@ export interface IActivity {
   type?: string;
   comments: string[];
   suggested?: {
-    destination?: string;
-    type?: string;
-    comments?: string;
+    destination: string;
+    type: string;
+    comments: string;
   }[];
 }
 
@@ -49,11 +49,16 @@ export interface IItinerary {
   name: string;
   start_date: Date;
   end_date: Date;
+  destination: string;
   collaborators: {
     user_id: string;
     name: string;
   }[];
   budget?: number;
+  dining_budget?: number;
+  restaurant_ratings?: number;
+  max_walking_dist?: number;
+  max_driving_dist?: number;
   current_cost?: number;
   comments?: string;
   tags: string[];
@@ -69,8 +74,13 @@ export const userSchema = new Schema<IUser>({
 export const itinerarySchema = new Schema<IItinerary>({
   user_id: { type: Schema.Types.ObjectId, required: true },
   name: { type: String, required: true },
+  destination: { type: String, required: true },
   budget: Number,
   current_cost: Number,
+  dining_budget: Number,
+  restaurant_ratings: Number,
+  max_walking_dist: Number,
+  max_driving_dist: Number,
   collaborators: [new Schema({
     user_id: Schema.Types.ObjectId,
     name: { type: String, required: true },

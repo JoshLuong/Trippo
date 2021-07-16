@@ -1,21 +1,27 @@
 import 'dotenv/config';
-import { Schema, model, Mongoose, ObjectId } from 'mongoose';
+import { Schema, model, ObjectId } from 'mongoose';
 
 export interface IActivity {
   location: {
-    lat: number,
-    lng: number,
-  },
-  time?: Date,
-  destination?: string,
-  cost?: number,
-  type?: string,
-  comments: string[],
+    lat: number;
+    lng: number;
+  };
+  time?: Date;
+  destination?: string;
+  cost?: number;
+  type?: string;
+  comments: string[];
   suggested?: {
-    destination: string,
-    type: string,
-    comments: string,
-  }[],
+    destination: string;
+    type: string;
+    comments: string;
+  }[];
+}
+
+export interface IUser {
+  name: string;
+  email: string;
+  password: string;
 }
 
 export const activitySchema = new Schema<IActivity>({
@@ -32,9 +38,9 @@ export const activitySchema = new Schema<IActivity>({
   type: String,
   comments: [String],
   suggested: [new Schema({
-      destination: String,
-      type: String,
-      comments: String,
+    destination: String,
+    type: String,
+    comments: String,
   })],
 }, { toObject: { versionKey: false } });
 
@@ -44,44 +50,44 @@ export interface IUser {
   password: string,
 }
 
-export const userSchema = new Schema<IUser>({
-  name: String,
-  email: String,
-  password: String,
-}, { toObject: { versionKey: false } });
-
 export interface IItinerary {
   user_id: ObjectId;
   name: string;
-  budget?: number;
-  current_cost?: number;
+  start_date: Date;
+  end_date: Date;
   contributers: {
     user_id: string;
     name: string;
   }[];
+  budget?: number;
+  current_cost?: number;
   comments?: string;
-  tags?: string[];
-  start_date: Date;
-  end_date: Date;
+  tags: string[];
+  activities: IActivity[];
 }
 
+export const userSchema = new Schema<IUser>({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+}, { toObject: { versionKey: false } });
+
 export const itinerarySchema = new Schema<IItinerary>({
-  user_id: Schema.Types.ObjectId,
-  name: String,
+  user_id: { type: Schema.Types.ObjectId, required: true },
+  name: { type: String, required: true },
   budget: Number,
   current_cost: Number,
   contributers: [new Schema({
     user_id: Schema.Types.ObjectId,
-    name: String,
-})],
+    name: { type: String, required: true },
+  })],
   comments: String,
   tags: [String],
-  start_date: Date,
-  end_date: Date,
+  start_date: { type: Date, required: true },
+  end_date: { type: Date, required: true },
+  activities: [activitySchema],
 }, { toObject: { versionKey: false } });
 
 export const User = model<IUser>('User', userSchema);
-
 export const Itinerary = model<IItinerary>('Itinerary', itinerarySchema);
-
 export const Activity = model<IActivity>('Activity', activitySchema);

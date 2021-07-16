@@ -18,10 +18,6 @@ export interface IActivity {
   }[],
 }
 
-export interface IDay {
-  activities: Schema.Types.ObjectId[],
-}
-
 export const activitySchema = new Schema<IActivity>({
   location: {
     type: {
@@ -40,14 +36,6 @@ export const activitySchema = new Schema<IActivity>({
       type: String,
       comments: String,
   })],
-});
+}, { toObject: { versionKey: false } });
 
-export const daySchema = new Schema<IDay>({
-  activities: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Activity',
-  }],
-});
-
-export const Activity = model('Activity', activitySchema);
-export const Day = model('Day', daySchema);
+export const Activity = model<IActivity>('Activity', activitySchema);

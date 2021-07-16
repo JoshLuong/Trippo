@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./app.ts",
-    "seed": "ts-node ./database/seed.ts"
+    "start": "nodemon ./src/app.ts",
+    "seed": "ts-node ./src/database/seed.ts"
   },
   "dependencies": {
     "dotenv": "^10.0.0",

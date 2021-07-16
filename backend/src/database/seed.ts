@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import { Activity, Day } from './models';
-import { days } from './mocks';
+import { Activity } from './models';
+import { activities } from './mocks';
 
 const seed = async () => {
   console.log('Seeding started...');
@@ -10,13 +10,9 @@ const seed = async () => {
     useUnifiedTopology: true,
   });
 
-  for (const day of days) {
-    const activities = await Activity.insertMany(day.map(activity => {
-      return new Activity(activity);
-    }));
-
-    await Day.create({ activities: activities.map(act => act.id!)});
-  }
+  await Activity.insertMany(activities.map(activity => {
+    return new Activity(activity);
+  }));
 
   await mongoose.connection.close();
 }

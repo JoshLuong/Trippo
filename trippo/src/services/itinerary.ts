@@ -11,6 +11,9 @@ export const itineraryApi = createApi({
     getItineraries: builder.query<Itinerary[], void>({
       query: () => '/',
     }),
+    deleteItinerary: builder.query<Itinerary[], void>({
+      query: () => '/deleteItinerary',
+    }),
   }),
 });
 

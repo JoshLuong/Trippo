@@ -7,6 +7,8 @@ import NewItineraryContainer from "components/newItineraryPage/NewItineraryConta
 import Searchbar from "../searchBar/Searchbar"
 import { useGetItinerariesQuery } from 'services/itinerary';
 
+
+const server = "http://localhost:4000/api/itineraries/";
 // const data = [
 //   {
 //     tripName: "Hawaii 2022 Trip",
@@ -33,7 +35,10 @@ const ItinerariesView = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [showNewItinerary, setShowNewItinerary] = useState(false);
   const handleRemove = () => {
-    alert("removing");
+    fetch(server + "deleteItinerary", {
+      method: "DELETE"
+    })
+      .then((res) => res.json())
   };
 
   const handleShowNewItinerary = (canShow: boolean) => {

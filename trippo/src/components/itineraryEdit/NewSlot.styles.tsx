@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid, TextField } from "@material-ui/core";
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 export const Cancel = styled.button`
   top: 0;
@@ -161,3 +161,18 @@ export const textField = withStyles({
     },
   },
 })(TextField);
+
+export const selectStyles = makeStyles((theme) => ({
+  underline: {
+    color: '#219EBC',
+    '&::after': {
+      borderBottom: '#219EBC'
+    },
+    '&::before': {
+      borderBottom: '#219EBC'
+    }
+  },
+  inputLabelRoot: {
+    color: '#219EBC',
+  }
+}));

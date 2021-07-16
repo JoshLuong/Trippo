@@ -15,13 +15,16 @@ const NewSlot: FC<Props> = ({ handleClose }) => {
     setType(event.target.value);
   }
 
+  const selectStyles = sc.selectStyles();
+
   const renderHeaderContent = () => (
     <Grid container direction="row" item lg={11} md={11} sm={11} xs={11}>
       <sc.Destination>
         <Grid item lg={9} md={9} sm={9} xs={9}>
           <FormControl variant="outlined">
-            <InputLabel>Type</InputLabel>
+            <InputLabel classes={{ root: selectStyles.inputLabelRoot }}>Type</InputLabel>
             <Select
+              className={selectStyles.underline}
               value={type}
               onChange={handleTypechange}
               label="Type"

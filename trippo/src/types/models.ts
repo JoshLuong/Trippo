@@ -22,16 +22,20 @@ export interface User {
 }
 
 export interface Itinerary {
-  user_id: string;
+  user_id: any; // should we use mongoose ObjectID type?
   name: string;
   start_date: Date;
   end_date: Date;
+  destination: string;
+  dining_budget?: number;
+  restaurant_ratings?: number;
+  max_walking_dist?: number;
+  max_driving_dist?: number;
   collaborators: {
     user_id: string;
     name: string;
   }[];
   budget?: number;
-  current_cost?: number;
   comments?: string;
   tags: string[];
   activities: Activity[];

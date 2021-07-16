@@ -11,9 +11,18 @@ export const itineraryApi = createApi({
     getItineraries: builder.query<Itinerary[], void>({
       query: () => '/',
     }),
+    createItinerary: builder.mutation<Itinerary, Partial<Itinerary>>({
+      query(body) {
+        return {
+          url: `/`,
+          method: 'POST',
+          body,
+        }
+      },
+    }) 
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetItinerariesQuery } = itineraryApi;
+export const { useGetItinerariesQuery, useCreateItineraryMutation } = itineraryApi;

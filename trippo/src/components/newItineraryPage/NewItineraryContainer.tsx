@@ -1,21 +1,17 @@
-import { FC, useState } from 'react';
+import { FC, useState, useRef } from 'react';
+import mongoose from 'mongoose';
 import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
 import FaceIcon from '@material-ui/icons/Face';
+import {useCreateItineraryMutation} from "services/itinerary";
 import * as sc from './NewItinieraryContainer.styles'
+import { Itinerary } from 'types/models';
 
 interface Props {
     handleShowNewItinerary: (canShow: boolean) => void;
 }
 
-const collabData = [
-    { name: "Jane Doe", email: 'janedoe@gmail.com' },
-    { name: "John Doe", email: 'johndoe@gmail.com' },
-    { name: "ane Doe", email: 'anedoe@gmail.com' },
-    { name: "ohn Doe", email: 'ohndoe@gmail.com' },
-    { name: "ne Doe", email: 'nedoe@gmail.com' },
-    { name: "hn Doe", email: 'hndoe@gmail.com' },
-];
+const collabData: any[] = [];
 
 const countryData = [
     { code: 'AD', label: 'Andorra' },
@@ -28,20 +24,54 @@ const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
 
     const [showPreference, setPreference] = useState(false);
-    const [rating, setRating] = useState(1);
-    const [price, setPrice] = useState(1);
+    const [rating, setRating] = useState(3);
+    const [price, setPrice] = useState(2);
+    const [collaborators, setCollaborators] = useState<{ user_id: string; name: string; }[]>([]);
+    const [tags, setTags] = useState<string[]>([]);
+    const [destination, setDestination] = useState<any>(null);
+    const nameRef = useRef<HTMLInputElement>();
+    const descRef = useRef<HTMLInputElement>();
+    const budgetRef = useRef<HTMLInputElement>();
+    const startRef = useRef<HTMLInputElement>();
+    const endRef = useRef<HTMLInputElement>();
+    const maxWalkRef = useRef<HTMLInputElement>();
+    const maxDriveRef = useRef<HTMLInputElement>();
 
-    const handleRating = (e: any) => {
-        setRating(e.target.value)
-    }
+    const [
+        createItinerary, // This is the mutation trigger
+        { isLoading: isUpdating }, // This is the destructured mutation result
+      ] = useCreateItineraryMutation()
 
-    const handlePrice = (e: any) => {
-        setPrice(e.target.value)
-    }
+    // const [toAdd, setToAdd] = useState<UseMutationStateOptions<MutationDefinition<Partial<Itinerary>(null);
 
-    const handleSubmit = (e : any) => {
+    const handleSubmit = async () => {
         handleShowNewItinerary(false);
-    } 
+        // TODO: remove mongoose from package.json, and use some objectId taken from localstorage or smt
+        // TODO validate collaborators
+        const startDateArr = startRef.current?.value.split("-") || [];
+        const endDateArr = endRef.current?.value.split("-") || [];
+        if (startDateArr.length < 3 || endDateArr.length < 3) return;
+        const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1])-1, Number(startDateArr[2])));
+        const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1])-1, Number(endDateArr[2])));
+        const newItinerary: Itinerary = {
+            user_id: new mongoose.Types.ObjectId('60f0fb58f7f17e5f88b1eee1'),
+            name: nameRef.current?.value || "",
+            destination: destination?.label || "",
+            budget: Number(budgetRef.current?.value) || 500,
+            dining_budget: price,
+            restaurant_ratings: rating,
+            max_walking_dist: Number(maxWalkRef.current?.value) || 5,
+            max_driving_dist: Number(maxDriveRef.current?.value) || 15,
+            collaborators: collaborators,
+            comments: descRef.current?.value,
+            tags: tags,
+            start_date: start_date,
+            end_date: end_date,
+            activities: [], // TODO change
+        };
+        createItinerary(newItinerary);
+    }
+
 
     return (
         <sc.newItineraryContainer>
@@ -49,9 +79,11 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
             <sc.FormGrid direction="column">
                 <Grid item xs={12} lg={12}>
                     <sc.inputTags>Name</sc.inputTags>
-                    <sc.textField size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
+                    <sc.textField inputRef={nameRef} size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
                     <sc.inputTags>Destination</sc.inputTags>
                     <Autocomplete
+                        value={destination}
+                        onChange={(e : any, newValue: any) => {setDestination(newValue)}}
                         size="small"
                         options={countryData}
                         autoHighlight
@@ -69,17 +101,19 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                         )}
                     />
                     <sc.inputTags>Description</sc.inputTags>
-                    <sc.textField size="small" variant="outlined" color="secondary" fullWidth />
+                    <sc.textField inputRef={descRef} size="small" variant="outlined" color="secondary" fullWidth />
                 </Grid>
                 <Grid item container spacing={2} direction="row">
                     <Grid item xs={12} md={6} lg={6}>
                         <sc.inputTags>Collaborators</sc.inputTags>
                         <Autocomplete multiple
+                            onChange={(e : any, newValue: any) => {setCollaborators(newValue)}}
+                            freeSolo
+                            value={collaborators}
                             options={collabData}
                             limitTags={6}
-                            getOptionLabel={(option) => option.name}
                             renderOption={(option) => <div>
-                                {option.name} - {option.email}
+                                {option}
                             </div>}
                             renderInput={(params) => (
                                 <TextField {...params} variant="outlined" size="small" />
@@ -88,7 +122,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                                 value.map((option, index) => (
                                     <Chip
                                         icon={<FaceIcon />}
-                                        label={option.name}
+                                        label={option}
                                         {...getTagProps({ index })}
                                     />
                                 ))
@@ -98,6 +132,9 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                     <Grid item xs={12} md={6} lg={6}>
                         <sc.inputTags>Tags</sc.inputTags>
                         <Autocomplete multiple
+                            freeSolo
+                            onChange={(e: any, newValue: any) => { setTags(newValue) }}
+                            value={tags}
                             options={tagsData}
                             limitTags={6}
                             getOptionLabel={(option) => option}
@@ -121,8 +158,20 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                 </Grid>
                 <sc.DateGrid item container spacing={2} direction="row">
                     <Grid item xs={8} lg={3}>
-
                         <TextField
+                            inputRef={budgetRef}
+                            id="outlined-number"
+                            label="Budget"
+                            type="number"
+                            InputLabelProps={{
+                            shrink: true,
+                            }}
+                            variant="outlined"
+                        />
+                    </Grid >
+                    <Grid item xs={8} lg={3}>
+                        <TextField
+                            inputRef={startRef}
                             id="start_date"
                             label="Start date"
                             type="date"
@@ -134,6 +183,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                     </Grid >
                     <Grid item xs={6} lg={3}>
                         <TextField
+                            inputRef={endRef}
                             id="end_date"
                             label="End date"
                             type="date"
@@ -164,7 +214,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                     <Grid container item direction="row" spacing={2} xs={12} md={6} lg={6}>
                         <Grid item xs={6} lg={6}>
                             <sc.inputTags>Restaurant Ratings</sc.inputTags>
-                            <Select value={rating} onChange={handleRating}>
+                            <Select value={rating} onChange={(e: any) => { setRating(e.target.value) }}>
                                 <MenuItem value={1}>1 stars</MenuItem>
                                 <MenuItem value={2}>2 stars</MenuItem>
                                 <MenuItem value={3}>3 stars</MenuItem>
@@ -174,7 +224,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                         </Grid>
                         <Grid item xs={6} lg={6}>
                             <sc.inputTags>Restaurant Prices</sc.inputTags>
-                            <Select value={price} onChange={handlePrice}>
+                            <Select value={price} onChange={(e: any) => { setPrice(e.target.value) }}>
                                 <MenuItem value={1}>$</MenuItem>
                                 <MenuItem value={2}>$$</MenuItem>
                                 <MenuItem value={3}>$$$</MenuItem>
@@ -184,14 +234,14 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                     <Grid container item direction="column" spacing={1} xs={12} md={6} lg={6}>
                         <Grid item lg={10}>
                             <sc.inputTags>Maximum Walking Distance</sc.inputTags>
-                            <sc.textField size="small" variant="outlined" color="secondary"
+                            <sc.textField inputRef={maxWalkRef} size="small" variant="outlined" color="secondary"
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">km</InputAdornment>,
                                 }} fullWidth />
                         </Grid>
                         <Grid item lg={10}>
                             <sc.inputTags>Maximum Driving Distance</sc.inputTags>
-                            <sc.textField size="small" variant="outlined" color="secondary"
+                            <sc.textField inputRef={maxDriveRef} size="small" variant="outlined" color="secondary"
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">km</InputAdornment>,
                                 }} fullWidth />

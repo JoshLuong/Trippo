@@ -8,4 +8,15 @@ router.get('/', async (_req, res, _next) => {
   res.status(200).send(itineraries.map(e => e.toObject()));
 });
 
+router.post('/', (req, res, next) => {
+  const itinerary = new Itinerary({...req.body});
+  itinerary.save()
+    .then(doc => {
+      res.send(doc);
+    })
+    .catch(err => {
+      console.error(err);
+    })
+});
+
 export default router;

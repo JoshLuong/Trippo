@@ -1,9 +1,10 @@
 import { FC, useState, useRef } from 'react';
 import mongoose from 'mongoose';
-import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip } from '@material-ui/core'
+import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
+import Alert from '@material-ui/lab/Alert';
 import FaceIcon from '@material-ui/icons/Face';
-import {useCreateItineraryMutation} from "services/itinerary";
+import { useCreateItineraryMutation } from "services/itinerary";
 import * as sc from './NewItinieraryContainer.styles'
 import { Itinerary } from 'types/models';
 
@@ -14,6 +15,7 @@ interface Props {
 const collabData: any[] = [];
 
 const countryData = [
+    // TODO: replace with get request from some API
     { code: 'AD', label: 'Andorra' },
     { code: 'AE', label: 'United Arab Emirates' },
     { code: 'AF', label: 'Afghanistan' }
@@ -22,7 +24,7 @@ const countryData = [
 const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 
 const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
-
+    const [failSnackBar, setFail] = useState(false);
     const [showPreference, setPreference] = useState(false);
     const [rating, setRating] = useState(3);
     const [price, setPrice] = useState(2);
@@ -40,19 +42,21 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
     const [
         createItinerary, // This is the mutation trigger
         { isLoading: isUpdating }, // This is the destructured mutation result
-      ] = useCreateItineraryMutation()
+    ] = useCreateItineraryMutation()
 
     // const [toAdd, setToAdd] = useState<UseMutationStateOptions<MutationDefinition<Partial<Itinerary>(null);
 
     const handleSubmit = async () => {
-        handleShowNewItinerary(false);
         // TODO: remove mongoose from package.json, and use some objectId taken from localstorage or smt
         // TODO validate collaborators
         const startDateArr = startRef.current?.value.split("-") || [];
         const endDateArr = endRef.current?.value.split("-") || [];
-        if (startDateArr.length < 3 || endDateArr.length < 3) return;
-        const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1])-1, Number(startDateArr[2])));
-        const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1])-1, Number(endDateArr[2])));
+        if (!validate(startDateArr, endDateArr)) {
+            setFail(true);
+            return;
+        }
+        const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
+        const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
         const newItinerary: Itinerary = {
             user_id: new mongoose.Types.ObjectId('60f0fb58f7f17e5f88b1eee1'),
             name: nameRef.current?.value || "",
@@ -70,20 +74,45 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
             activities: [], // TODO change
         };
         createItinerary(newItinerary);
+        handleShowNewItinerary(false);
     }
 
+    const validate = (startDateArr: string[], endDateArr: string[]) => {
+        if (!(typeof nameRef.current?.value === "string" && nameRef.current?.value !== "")) return false;
+        if (!(typeof destination?.label === "string" && destination?.label !== "")) return false;
+        if (startDateArr.length < 3 || endDateArr.length < 3) return false;
+        const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
+        const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
+        if (end_date <= start_date) return false;
+        return true;
+    }
+
+    const handleClose = (event: any, reason: SnackbarCloseReason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setFail(false);
+    }
+
+    const autoCompleteStyles = sc.autoCompleteStyles();
 
     return (
         <sc.newItineraryContainer>
             <sc.header>New Itinerary:</sc.header>
             <sc.FormGrid direction="column">
                 <Grid item xs={12} lg={12}>
+                    <Snackbar open={failSnackBar} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={() => setFail(false)} severity="error">
+                            Please fill in the required fields and ensure end date is after start date
+                        </Alert>
+                    </Snackbar>
                     <sc.inputTags>Name</sc.inputTags>
-                    <sc.textField inputRef={nameRef} size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
+                    <sc.textField required inputRef={nameRef} size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
                     <sc.inputTags>Destination</sc.inputTags>
                     <Autocomplete
+                        classes={autoCompleteStyles}
                         value={destination}
-                        onChange={(e : any, newValue: any) => {setDestination(newValue)}}
+                        onChange={(e: any, newValue: any) => { setDestination(newValue) }}
                         size="small"
                         options={countryData}
                         autoHighlight
@@ -107,7 +136,8 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                     <Grid item xs={12} md={6} lg={6}>
                         <sc.inputTags>Collaborators</sc.inputTags>
                         <Autocomplete multiple
-                            onChange={(e : any, newValue: any) => {setCollaborators(newValue)}}
+                            classes={autoCompleteStyles}
+                            onChange={(e: any, newValue: any) => { setCollaborators(newValue) }}
                             freeSolo
                             value={collaborators}
                             options={collabData}
@@ -132,6 +162,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                     <Grid item xs={12} md={6} lg={6}>
                         <sc.inputTags>Tags</sc.inputTags>
                         <Autocomplete multiple
+                            classes={autoCompleteStyles}
                             freeSolo
                             onChange={(e: any, newValue: any) => { setTags(newValue) }}
                             value={tags}
@@ -158,19 +189,21 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                 </Grid>
                 <sc.DateGrid item container spacing={2} direction="row">
                     <Grid item xs={8} lg={3}>
-                        <TextField
+                        <sc.textField
                             inputRef={budgetRef}
+                            defaultValue={500}
                             id="outlined-number"
                             label="Budget"
                             type="number"
                             InputLabelProps={{
-                            shrink: true,
+                                shrink: true,
                             }}
                             variant="outlined"
                         />
                     </Grid >
                     <Grid item xs={8} lg={3}>
-                        <TextField
+                        <sc.textField
+                            required
                             inputRef={startRef}
                             id="start_date"
                             label="Start date"
@@ -182,7 +215,8 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                         />
                     </Grid >
                     <Grid item xs={6} lg={3}>
-                        <TextField
+                        <sc.textField
+                            required
                             inputRef={endRef}
                             id="end_date"
                             label="End date"
@@ -234,14 +268,14 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                     <Grid container item direction="column" spacing={1} xs={12} md={6} lg={6}>
                         <Grid item lg={10}>
                             <sc.inputTags>Maximum Walking Distance</sc.inputTags>
-                            <sc.textField inputRef={maxWalkRef} size="small" variant="outlined" color="secondary"
+                            <sc.textField defaultValue={5} inputRef={maxWalkRef} size="small" variant="outlined" color="secondary"
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">km</InputAdornment>,
                                 }} fullWidth />
                         </Grid>
                         <Grid item lg={10}>
                             <sc.inputTags>Maximum Driving Distance</sc.inputTags>
-                            <sc.textField inputRef={maxDriveRef} size="small" variant="outlined" color="secondary"
+                            <sc.textField defaultValue={15} inputRef={maxDriveRef} size="small" variant="outlined" color="secondary"
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">km</InputAdornment>,
                                 }} fullWidth />

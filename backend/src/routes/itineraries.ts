@@ -9,13 +9,14 @@ router.get('/', async (_req, res, _next) => {
 });
 
 router.post('/', (req, res, next) => {
-  const itinerary = new Itinerary({...req.body});
+  const itinerary = new Itinerary({ ...req.body });
   itinerary.save()
     .then(doc => {
       res.send(doc);
     })
     .catch(err => {
       console.error(err);
+      return res.status(404).send("Invalid Itinerary")
     })
 });
 

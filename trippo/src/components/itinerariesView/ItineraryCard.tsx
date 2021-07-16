@@ -2,7 +2,14 @@ import { FC } from "react";
 import * as sc from "./ItineraryCard.styles";
 import moment from "moment";
 import { Grid } from "@material-ui/core";
-import { Itinerary } from 'types/models';
+import { Itinerary } from "types/models";
+import React from "react";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 interface Props {
   card: Itinerary;
@@ -12,7 +19,7 @@ interface Props {
 
 const renderNames = (name: string, card: Itinerary) => {
   const { collaborators: users } = card;
-  let names = '';
+  let names = "";
 
   if (users.length === 1) {
     names = users[0].name;
@@ -35,7 +42,19 @@ const renderNames = (name: string, card: Itinerary) => {
   );
 };
 
+
 const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
+  const [open, setOpen] = React.useState(false);  
+  
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+    
   return (
     <sc.Card>
       <Grid container item lg={12}>
@@ -65,9 +84,42 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
         )}
         {showEdit ? (
           <sc.EditGrid container item lg={12}>
-            <sc.EditButton onClick={handleRemove}>
-              <i className="fas fa-minus-circle"></i>
-            </sc.EditButton>
+            <div>
+              <sc.EditButton onClick={handleClickOpen}>
+                <i className="fas fa-minus-circle"></i>
+              </sc.EditButton>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Are you sure you want to delete this itinerary?"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Deleting this itinerary will permanently remove it from your
+                    itineraries list.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      handleRemove();
+                      handleClose();
+                    }}
+                    color="primary"
+                    autoFocus
+                  >
+                    Delete
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
           </sc.EditGrid>
         ) : null}
       </Grid>

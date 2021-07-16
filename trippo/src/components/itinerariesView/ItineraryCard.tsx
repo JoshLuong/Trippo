@@ -2,62 +2,67 @@ import { FC } from "react";
 import * as sc from "./ItineraryCard.styles";
 import moment from "moment";
 import { Grid } from "@material-ui/core";
+import { Itinerary } from 'types/models';
 
 interface Props {
-  card: any;
+  card: Itinerary;
   showEdit: boolean;
   handleRemove: () => void;
 }
 
-const renderNames = (name: string, collaborators: string) => {
+const renderNames = (name: string, card: Itinerary) => {
+  const { collaborators: users } = card;
+  let names = '';
+
+  if (users.length === 1) {
+    names = users[0].name;
+  } else if (users.length === 2) {
+    names = `${users[0].name} and ${users[1].name}`;
+  } else if (users.length === 3) {
+    names = `${users[0].name}, ${users[1].name} + 1 other`;
+  } else if (users.length > 3) {
+    names = `${users[0].name}, ${users[1].name} + ${users.length - 2} others`;
+  }
+
   return (
     <sc.NameGrid container item lg={8} sm={12}>
       <sc.TripName href="./itinerary">{name}</sc.TripName>
       <sc.Collaborators>
         <sc.StyledPeopleIcon />
-        {collaborators}
+        {names}
       </sc.Collaborators>
     </sc.NameGrid>
   );
 };
 
 const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
-  let collaborators = card.collaborators.reduce(
-    (str: string, c: any, index: number) => {
-      if (index === 2) {
-        return str + ` + ${card.collaborators.length - 2} others`;
-      }
-      if (index >= 2) {
-        return str;
-      }
-      return str + ", " + c;
-    }
-  );
   return (
     <sc.Card>
       <Grid container item lg={12}>
         <Grid container item lg={8} sm={12}>
-          {renderNames(card.tripName, collaborators)}
+          {renderNames(card.name, card)}
         </Grid>
         <sc.DateGrid container item lg={4} sm={12}>
           <i className="far fa-calendar-alt"></i>
-          {moment(card.startDate).format("MMM Do YYYY") +
+          {moment(card.start_date).format("MMM Do YYYY") +
             ` - ` +
-            moment(card.endDate).format("MMM Do YYYY")}
+            moment(card.end_date).format("MMM Do YYYY")}
         </sc.DateGrid>
         <sc.CommentGrid container item lg={12}>
-          {card.description}
+          {card.comments}
         </sc.CommentGrid>
-        <sc.LabelGrid container item lg={12}>
-          {card.labels.map((card: any, index: number) => {
-            return (
-              <sc.LabelDiv key={index}>
-                <sc.StyledLabelIcon />
-                {card}
-              </sc.LabelDiv>
-            );
-          })}
-        </sc.LabelGrid>
+        {card.tags && (
+          <sc.LabelGrid container item lg={12}>
+            {card.tags.map((card: any, index: number) => {
+              return (
+                <sc.LabelDiv key={index}>
+                  <sc.StyledLabelIcon />
+                  {card}
+                </sc.LabelDiv>
+              );
+            })}
+          </sc.LabelGrid>
+        )}
         {showEdit ? (
           <sc.EditGrid container item lg={12}>
             <sc.EditButton onClick={handleRemove}>

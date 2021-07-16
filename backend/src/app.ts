@@ -2,7 +2,8 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import express, { NextFunction, Request, Response } from 'express';
 import { HttpError } from 'http-errors';
-import dayRouter from './routes/activities';
+import cors from 'cors';
+import itineraryRouter from './routes/itineraries';
 
 mongoose.connect(process.env.DATABASE_URL!, {
   useNewUrlParser: true,
@@ -13,8 +14,9 @@ mongoose.connect(process.env.DATABASE_URL!, {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cors());
 
-  app.use('/api', dayRouter);
+  app.use('/api/itineraries', itineraryRouter);
 
   app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     res.status(err.statusCode || 500).send(err.message);

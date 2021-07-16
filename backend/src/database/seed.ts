@@ -1,32 +1,21 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import { Activity, User, Itinerary } from './models';
-import { activities, users, itineraries } from './mocks';
+import { User, Itinerary } from './models';
+import { users, itineraries } from './mocks';
 
 const seed = async () => {
   console.log('Seeding started...');
-  let userIds: any = [];
   await mongoose.connect(process.env.DATABASE_URL!, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
 
-  // todo remove
-  /*
-  await Activity.insertMany(activities.map(activity => {
-    return new Activity(activity);
-  }));
-  */
+  const userDocs = users.map(user => new User(user));
 
-  await User.insertMany(users.map(user => {
-    const u = new User(user);
-    // push users with new IDs
-    userIds.push(u);
-    return u;
-  }));
+  await User.insertMany(userDocs);
 
   await Itinerary.insertMany(itineraries.map(itin => {
-    const itinWithUsers = {...itin, user_id: userIds[0]._id, collaborators: [{user_id: userIds[1]._id, name:  userIds[1].name, password: userIds[1].password }]};
+    const itinWithUsers = {...itin, user_id: userDocs[0]._id, collaborators: [{user_id: userDocs[1]._id, name:  userDocs[1].name, password: userDocs[1].password }]};
     return new Itinerary(itinWithUsers);
   }));
 

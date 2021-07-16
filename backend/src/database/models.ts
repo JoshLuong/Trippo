@@ -12,9 +12,9 @@ export interface IActivity {
   type?: string;
   comments: string[];
   suggested?: {
-    destination: string;
-    type: string;
-    comments: string;
+    destination?: string;
+    type?: string;
+    comments?: string;
   }[];
 }
 

@@ -1,24 +1,19 @@
-import qs from 'qs';
-import HttpService from '.';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Itinerary } from 'types/models';
 
-export default class ItineraryService {
-  static list(params: any) {
-    return HttpService.get(`/api/itineraries?${qs.stringify(params)}`);
-  }
+const url = process.env.REACT_APP_BACKEND_URL!;
 
-  static create(data: any) {
-    return HttpService.post('/api/itineraries', data);
-  }
+// Define a service using a base URL and expected endpoints
+export const itineraryApi = createApi({
+  reducerPath: 'itineraryApi',
+  baseQuery: fetchBaseQuery({ baseUrl: `${url}/itineraries` }),
+  endpoints: (builder) => ({
+    getItineraries: builder.query<Itinerary[], void>({
+      query: () => '/',
+    }),
+  }),
+});
 
-  static get(id: string) {
-    return HttpService.get(`/api/itineraries/${id}`);
-  }
-
-  static update(id: string, data: any) {
-    return HttpService.patch(`/api/itineraries/${id}`, data);
-  }
-
-  static delete(id: string) {
-    return HttpService.delete(`/api/itineraries/${id}`);
-  }
-}
+// Export hooks for usage in functional components, which are
+// auto-generated based on the defined endpoints
+export const { useGetItinerariesQuery } = itineraryApi;

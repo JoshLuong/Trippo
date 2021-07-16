@@ -5,7 +5,7 @@ export type Itinerary = {
     name: string;
     budget?: number;
     current_cost?: number;
-    contributers: {
+    collaborators: {
         id: string;
         name: string;
     }[];

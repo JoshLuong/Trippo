@@ -18,12 +18,6 @@ export interface IActivity {
   }[];
 }
 
-export interface IUser {
-  name: string;
-  email: string;
-  password: string;
-}
-
 export const activitySchema = new Schema<IActivity>({
   location: {
     type: {
@@ -55,7 +49,7 @@ export interface IItinerary {
   name: string;
   start_date: Date;
   end_date: Date;
-  contributers: {
+  collaborators: {
     user_id: string;
     name: string;
   }[];
@@ -77,7 +71,7 @@ export const itinerarySchema = new Schema<IItinerary>({
   name: { type: String, required: true },
   budget: Number,
   current_cost: Number,
-  contributers: [new Schema({
+  collaborators: [new Schema({
     user_id: Schema.Types.ObjectId,
     name: { type: String, required: true },
   })],

@@ -6,8 +6,12 @@ export const RESTAURANT = "restaurant";
 export const OTHER = "other";
 
 export enum DestinationType {
-  HOTEL = "hotel",
-  AIRPORT = "airport",
-  RESTAURANT = "restaurant",
-  OTHER = "other",
+  ATTRACTION = "Attraction",
+  HOTEL = "Hotel",
+  AIRPORT = "Airport",
+  RESTAURANT = "Restaurant",
+  PARK = "Park",
+  BEACH = "Beach",
+  OTHER = "Other",
+  SHOPPING = "Shopping",
 }

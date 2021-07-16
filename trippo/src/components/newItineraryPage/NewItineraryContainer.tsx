@@ -39,6 +39,10 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
         setPrice(e.target.value)
     }
 
+    const handleSubmit = (e : any) => {
+        handleShowNewItinerary(false);
+    } 
+
     return (
         <sc.newItineraryContainer>
             <sc.header>New Itinerary:</sc.header>
@@ -197,7 +201,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                 <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
                     <Grid item xs={12} sm={9} md={6} lg={4}>
                         <sc.userButton onClick={() => handleShowNewItinerary(false)} >Cancel</sc.userButton>
-                        <sc.userButton >Submit</sc.userButton>
+                        <sc.userButton onClick={handleSubmit}>Submit</sc.userButton>
                     </Grid>
                 </Grid>
             </sc.FormGrid>

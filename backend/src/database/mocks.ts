@@ -4,6 +4,13 @@ const date1 = new Date(2022, 5, 20);
 const date2 = new Date(2022, 5, 21);
 const date3 = new Date(2022, 5, 22);
 
+
+// need userID?
+export const users = [
+  { name: "Jane Doe", email: 'janedoe@gmail.com', password: "password"},
+  { name: "John Doe", email: 'johndoe@gmail.com', password: "password123"}
+]; 
+
 export const activities = [
   {
     location: {
@@ -18,7 +25,7 @@ export const activities = [
     suggested: [
       {
         destination: "Aquarium",
-        type: DestinationType.OTHER,
+        type: DestinationType.ATTRACTION,
         comments: "3 min away",
       },
       {
@@ -154,12 +161,12 @@ export const activities = [
       time: new Date(date2.setHours(8)),
       destination: "Swimming pool",
       cost: 10,
-      type: DestinationType.HOTEL,
+      type: DestinationType.RESTAURANT,
       comments: ["swim", "eat"],
       suggested: [
         {
           destination: "Aquarium",
-          type: DestinationType.OTHER,
+          type: DestinationType.AIRPORT,
           comments: "3 min away",
         },
         {
@@ -169,7 +176,6 @@ export const activities = [
       ],
     },
     {
-      id: 2,
       location: {
         lat: 49.27165402656802,
         lng: -123.03652478992159,
@@ -296,12 +302,12 @@ export const activities = [
       time: new Date(date3.setHours(8)),
       destination: "English bay",
       cost: 10,
-      type: DestinationType.HOTEL,
+      type: DestinationType.BEACH,
       comments: ["swimming", "tanning"],
       suggested: [
         {
           destination: "Aquarium",
-          type: DestinationType.OTHER,
+          type: DestinationType.BEACH,
           comments: "3 min away",
         },
         {
@@ -318,6 +324,7 @@ export const activities = [
       time: new Date(date3.setHours(8)),
       destination: "Pacific Center",
       cost: 20,
+      type: DestinationType.SHOPPING,
       comments: ["unpack", "rest"],
       suggested: [
         {
@@ -337,6 +344,7 @@ export const activities = [
       },
       time: new Date(date3.setHours(8)),
       destination: "Hotel",
+      type: DestinationType.HOTEL,
       cost: 50,
       comments: ["unpack", "rest"],
       suggested: [
@@ -357,6 +365,7 @@ export const activities = [
       },
       time: new Date(date3.setHours(8)),
       destination: "Hotel",
+      type: DestinationType.ATTRACTION,
       comments: ["unpack", "rest"],
       suggested: [
         {
@@ -376,6 +385,7 @@ export const activities = [
       },
       time: new Date(date3.setHours(8)),
       destination: "Hotel",
+      type: DestinationType.PARK,
       comments: ["unpack", "rest"],
       suggested: [
         {
@@ -430,3 +440,29 @@ export const activities = [
       ],
     },
   ];
+
+
+  export const itineraries = [
+  {
+    name: "Hawaii 2022 Trip",
+    budget: 1000,
+    current_cost: 10,
+    collaborators: [],
+    comments:
+      "Our island-hopping Hawaii Trip planned for 2022; A 10 day adventure for the family",
+    tags: ["Luau", "Surfing", "Shopping"],
+    start_date: new Date(2022, 5, 20),
+    end_date: new Date(2022, 5, 30),
+    activities: activities,
+  },
+  {
+    name: "Alaska 2021 Trip",
+    current_cost: 300,
+    collaborators: [],
+    comments: "Our 7 day Alaskan cruise from Vancouver",
+    tags: ["Cruise", "Sight-seeing"],
+    start_date: new Date(2021, 5, 20),
+    end_date: new Date(2021, 5, 27),
+    activities: activities
+  }
+];

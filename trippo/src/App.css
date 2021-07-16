@@ -12,7 +12,7 @@ html,
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 /* Track */
@@ -23,7 +23,7 @@ html,
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #219ebca3;
+  background: rgb(101,100,100, 0.4);
   border-radius: 20px;
 }
 

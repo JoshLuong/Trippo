@@ -6,11 +6,13 @@ import Map from "../map/Map";
 import "../map/Map.css";
 import { GeocoderContainer } from 'components/map/Map.styles';
 import Searchbar from "components/searchBar/Searchbar";
+import NewSlot from "components/itineraryEdit/NewSlot";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
   const geocoderContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
 
   function handleOpenItinerary() {
     setShowItinerary(!showItinerary);
@@ -18,6 +20,14 @@ function ItineraryPage() {
 
   function handleIsLoading() {
     setIsLoading(!isLoading);
+  }
+
+  function handleNewSlotClick(name: string) { // TODO addd more to here
+    setCanOpenNewSlot(true);
+  }
+
+  function handleNewSlotClose() { 
+    setCanOpenNewSlot(false);
   }
   // TODO: REMOVE INLINE STYLE
 
@@ -50,6 +60,7 @@ function ItineraryPage() {
         <Map
           geocoderContainerRef={geocoderContainerRef}
           handleIsLoading={handleIsLoading}
+          handleNewSlotClick={handleNewSlotClick}
         />
         <sc.SideBar style={{ width: "2em" }}>
           <button onClick={handleOpenItinerary}>
@@ -65,6 +76,10 @@ function ItineraryPage() {
             <Container></Container>
           </sc.Container>
         ) : null}
+        {
+          canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose}/>
+            : null
+        }
       </div>
     </div>
   );

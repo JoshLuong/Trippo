@@ -53,7 +53,6 @@ const LoginPane: FC<Props> = (Props) => {
             </sc.GoogleDiv>
             <FacebookLogin
                 appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}
-                autoLoad={true}
                 size="medium"
                 fields="name,email,picture"
                 callback={responseFacebook}

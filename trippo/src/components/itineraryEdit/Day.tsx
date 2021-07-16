@@ -1,6 +1,5 @@
 import React, { FC, useState } from "react";
 import * as sc from "./Day.styles";
-import * as c from "../../colors/colors";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
@@ -29,6 +28,15 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     setSettings(!settings);
   };
 
+  const timeChange = (date:any, timeRef: any, index: number) => {
+    console.log(date.target.value)
+    const t = date.target.value.split(":");
+    const d = new Date(1995, 11, 17, 3, 24, 0); // TODO remove
+    const newDate = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), t[0], t[1]);
+    console.log(newDate)
+    console.log(timeRef);
+  }
+
   const handleEditView = () => {
     setEdit(!edit);
   };
@@ -36,8 +44,6 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const handleHideCostToggle = (slotCost: number | undefined) => {
     setDayCost(dayCost + (slotCost || 0));
   };
-
-  const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
   return (
     <sc.dayDiv>
@@ -53,21 +59,9 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
             <i className="far fa-calendar-alt"></i>
           </button>
         )}
-        <div>
-          {days.map((d, index) => {
-            if (index === date.getDay()) {
-              return <sc.daysWeek key={index}>{d}</sc.daysWeek>;
-            }
-            return (
-              <sc.daysWeek
-                key={index}
-                style={{ background: "#fff", color: c.BLACK }}
-              >
-                {d}
-              </sc.daysWeek>
-            );
-          })}
-        </div>
+        <sc.daysWeek>
+          {moment(date).format("MMMM Do YYYY")}
+        </sc.daysWeek>
         {/* TODO: REMOVE INLINE STYLE HERE */}
         <button onClick={handleSettingsView} style={{ zIndex: 0 }}>
           <i className="fas fa-cog"></i>
@@ -76,56 +70,49 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
       {settings ? (
         <Settings></Settings>
       ) : (
-        <div style={{ zIndex: 1 }}>
-          {day.map((slot, idx) => {
-            return (
-              <div key={idx}>
-                <TimeSlot
-                  handleHideCostToggle={handleHideCostToggle}
-                  timeSlot={slot}
-                  showEdit={edit}
-                />
+        <div>
+          <sc.TimeSlots>
+            {day.map((slot, idx) => {
+              return (
+                <div key={idx}>
+                  <TimeSlot
+                    handleHideCostToggle={handleHideCostToggle}
+                    timeSlot={slot}
+                    showEdit={edit}
+                    timeChange={timeChange}
+                    index={idx}
+                  />
+                </div>
+              );
+            })}
+          </sc.TimeSlots>
+            <sc.Cost container item lg={12}>
+              <div>Total cost for {moment(date).format("MMM Do YYYY")}:</div>
+              <div>
+                {dayCost > budget ? (
+                  <Tooltip
+                    title={`Warning: You're over the budget by $${
+                      dayCost - budget
+                    }`}
+                  >
+                    <sc.StyledWarningIcon />
+                  </Tooltip>
+                ) : null}
+                <span>${dayCost}</span>
               </div>
-            );
-          })}
-          <sc.Cost container item lg={12}>
-            <div>Total cost for {moment(date).format("MMM Do YYYY")}:</div>
-            <div>
-              {dayCost > budget ? (
-                <Tooltip
-                  title={`Warning: You're over the budget by $${
-                    dayCost - budget
-                  }`}
-                >
-                  <sc.StyledWarningIcon />
-                </Tooltip>
-              ) : null}
-              <span>${dayCost}</span>
-            </div>
-          </sc.Cost>
-          <Grid
-            item
-            style={{ marginTop: "0.65em", textAlign: "center" }}
-            lg={12}
-            md={12}
-            sm={12}
-            xs={12}
-          >
-            {edit ? (
-              <>
-                <sc.EditButton
-                  style={{ marginRight: "2em" }}
-                  onClick={() => alert("TODO")}
-                >
-                  Cancel
-                </sc.EditButton>
-                <sc.Spacer />
-              </>
-            ) : null}
-            <sc.EditButton onClick={handleEditView}>
-              {edit ? "Done" : "Edit"}
-            </sc.EditButton>
-          </Grid>
+            </sc.Cost>
+            <Grid
+              item
+              style={{ marginTop: "0.65em", textAlign: "center" }}
+              lg={12}
+              md={12}
+              sm={12}
+              xs={12}
+            >
+              <sc.EditButton onClick={handleEditView}>
+                {edit ? "Done" : "Edit"}
+              </sc.EditButton>
+            </Grid>
         </div>
       )}
     </sc.dayDiv>

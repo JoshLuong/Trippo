@@ -1,4 +1,5 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useRef } from "react";
+import { TextField } from '@material-ui/core';
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid, Tooltip } from "@material-ui/core";
@@ -21,24 +22,15 @@ interface Props {
     cost?: number;
   };
   showEdit?: boolean;
+  timeChange: (date:any, timeRef:any, index:number) => void;
+  index: number;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
+const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeChange, index }) => {
   const { time, destination, comments, type, suggested } = timeSlot;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
-
-  const renderIcon = (t: string | undefined) => {
-    switch (t) {
-      case d.AIRPORT:
-        return <sc.Icon className="fas fa-plane-departure"></sc.Icon>;
-      case d.HOTEL:
-        return <sc.Icon className="fas fa-hotel"></sc.Icon>;
-      default:
-        return <sc.Icon className="fas fa-map-marker-alt"></sc.Icon>;
-      // code block
-    }
-  };
+  const timeRef = useRef(null);
 
   const handleShowCostToggle = () => {
     !showCost
@@ -51,7 +43,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
     <Grid container item lg={11} md={11} sm={11} xs={11}>
       <sc.Destination>
         <Grid container item lg={1} md={1} sm={1} xs={1}>
-          {renderIcon(type)}
+          {d.renderIcon(type)}
         </Grid>
         <Grid item lg={10} md={10} sm={10} xs={10}>
           {destination}
@@ -83,11 +75,23 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
   const date = time ? new Date(time) : new Date();
 
   return (
-    <sc.Slot>
+    <sc.Slot showSuggestions={showSuggestions} borderColor={d.getIconColor(type)}>
       <Grid container item lg={12}>
         <Grid container item lg={3} md={3} sm={12}>
           <sc.Time>
-            {moment(date, "ddd DD-MMM-YYYY, hh:mm A").format("HH:mm A")}
+          <TextField
+            onChange={(date) => timeChange(date, timeRef, index)}
+            ref={timeRef}
+            id="time"
+            type="time"
+            defaultValue={moment(date, "dd DD-MMM-YYYY, hh:mm").format("HH:mm")}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 300, // 5 min
+            }}
+          />
           </sc.Time>
         </Grid>
         <sc.SlotGrid container item lg={9} md={9} sm={12} xs={12}>
@@ -116,7 +120,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit }) => {
         </sc.SlotGrid>
         {showSuggestions ? (
           <Suggestions
-            renderIcon={renderIcon}
+            renderIcon={d.renderIcon}
             suggested={suggested}
           ></Suggestions>
         ) : null}

@@ -2,14 +2,21 @@ import styled, { css } from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 const darkGrey = c.GREY;
-export const Slot = styled.div`
+export interface StyledTimeSlotProps{
+  showSuggestions: boolean
+  borderColor: string
+}
+
+export const Slot = styled.div<StyledTimeSlotProps>`
   margin-top: 0.5em;
-  border-radius: 5px;
+  border-radius: 0px 7px 7px 0px;
   padding-top: 0.75em;
+  padding-bottom: 0.75em;
   padding-left: 0.25em;
+  border-left: 8px solid ${props => !props.showSuggestions ? props.borderColor : c.DARK_ORANGE};
   padding-right: 0.25em;
   background-color: #fff;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.4);
   position: relative;
   &:hover {
     transform: scale(1.025);
@@ -18,10 +25,24 @@ export const Slot = styled.div`
 
 export const Time = styled.div`
   color: ${c.BLACK};
-  border-right: 2px solid ${c.DARK_GREY};
-  padding-right: 2em;
-  margin-bottom: 0.5em;
-  margin-left: 4px;
+  border-right: 1.5px solid ${c.DARK_GREY};
+  width: 7.5em;
+  padding-bottom: 0.5em;
+  padding-left: 4px;
+
+  div:before, div:after{
+    content: none;
+  }
+
+  .MuiInput-root {
+    font-size: 1em;
+    letter-spacing: 0px;
+
+  }
+
+  @media (max-width: 960px) {
+    border-right: 0px;
+  }
 `;
 
 export const SlotGrid = styled(Grid)`
@@ -37,9 +58,7 @@ export const Destination = styled.div`
   flex-grow: 1;
   font-weight: 550;
   i {
-    text-shadow: 2px 1px #86868694;
     margin-right: 5px;
-    color: ${c.YELLOW};
   }
 
   button {
@@ -109,7 +128,7 @@ export const CommentButton = styled.div`
     background-color: transparent;
     i {
       display: inline;
-      color: ${c.DARK_BLUE};
+      color: ${c.BLUE};
       font-size: 1.75em;
     }
   }

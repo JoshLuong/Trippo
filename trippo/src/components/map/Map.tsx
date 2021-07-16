@@ -11,9 +11,10 @@ import './Map.css';
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
   handleIsLoading: () => void;
+  handleNewSlotClick: (name: string) => void;
 }
 
-const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading }) => {
+const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotClick }) => {
   const mapRef: React.Ref<MapRef> = useRef(null);
   const [viewport, setViewport] = useState<InteractiveMapProps>({
     longitude: 0,
@@ -46,7 +47,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading }) => {
       width="100%"
       height="100%"
       // className doesn't work here, it styles the wrong element
-      style={{ position: 'absolute', minHeight: 700 }}
+      style={{ position: 'absolute', minHeight: "80vh" }}
       onViewportChange={setViewport}
       onLoad={handleIsLoading}
       mapStyle="mapbox://styles/mapbox/streets-v11"
@@ -61,7 +62,10 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading }) => {
           // SVG height + 1px
           offsetTop={-41}
         >
-          <Pin className="marker" onClick={() => dispatch(setHighlighted(slot.id))} />
+          <Pin className="marker" onClick={() => {
+            handleNewSlotClick("TODO add name, lat, lon, etc")
+            dispatch(setHighlighted(slot.id))
+            }} />
         </Marker>
       ))}
       <Geocoder

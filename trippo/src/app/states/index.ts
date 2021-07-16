@@ -36,7 +36,7 @@ const days = [
       suggested: [
         {
           destination: "Aquarium",
-          type: DestinationType.OTHER,
+          type: DestinationType.ATTRACTION,
           comments: "3 min away",
         },
         {
@@ -185,12 +185,12 @@ const days = [
       time: new Date(date2.setHours(8)),
       destination: "Swimming pool",
       cost: 10,
-      type: DestinationType.HOTEL,
+      type: DestinationType.RESTAURANT,
       comments: ["swim", "eat"],
       suggested: [
         {
           destination: "Aquarium",
-          type: DestinationType.OTHER,
+          type: DestinationType.AIRPORT,
           comments: "3 min away",
         },
         {
@@ -339,12 +339,12 @@ const days = [
       time: new Date(date3.setHours(8)),
       destination: "English bay",
       cost: 10,
-      type: DestinationType.HOTEL,
+      type: DestinationType.BEACH,
       comments: ["swimming", "tanning"],
       suggested: [
         {
           destination: "Aquarium",
-          type: DestinationType.OTHER,
+          type: DestinationType.BEACH,
           comments: "3 min away",
         },
         {
@@ -362,6 +362,7 @@ const days = [
       time: new Date(date3.setHours(8)),
       destination: "Pacific Center",
       cost: 20,
+      type: DestinationType.SHOPPING,
       comments: ["unpack", "rest"],
       suggested: [
         {
@@ -382,6 +383,7 @@ const days = [
       },
       time: new Date(date3.setHours(8)),
       destination: "Hotel",
+      type: DestinationType.HOTEL,
       cost: 50,
       comments: ["unpack", "rest"],
       suggested: [
@@ -403,6 +405,7 @@ const days = [
       },
       time: new Date(date3.setHours(8)),
       destination: "Hotel",
+      type: DestinationType.ATTRACTION,
       comments: ["unpack", "rest"],
       suggested: [
         {
@@ -423,6 +426,7 @@ const days = [
       },
       time: new Date(date3.setHours(8)),
       destination: "Hotel",
+      type: DestinationType.PARK,
       comments: ["unpack", "rest"],
       suggested: [
         {

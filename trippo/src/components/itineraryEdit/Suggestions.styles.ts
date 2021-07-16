@@ -14,15 +14,17 @@ export const Destination = styled.div`
   i {
     margin-right: 5px;
     color: ${c.YELLOW};
-    text-shadow: 2px 1px #86868694;
   }
 `;
 
 export const SuggestionTitle = styled.div`
   color: ${c.GREY};
-  border-right: 2px solid ${c.DARK_GREY};
-  padding-right: 0.705em;
-  margin-bottom: 0.5em;
+  border-right: 1.5px solid ${c.DARK_GREY};
+  @media (max-width: 960px) {
+    border-right: 0px;
+  }
+  padding-bottom: 3px;
+  width: 7.5em;
   padding-left: 4px;
 `;
 
@@ -33,7 +35,6 @@ export const Comments = styled.div`
   font-size: 0.85em;
   padding-left: 1.5em;
   padding-right: 1em;
-  padding-bottom: 1em;
   text-align: right;
 `;
 

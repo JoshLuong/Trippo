@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
 import FaceIcon from '@material-ui/icons/Face';
-import {useCreateItineraryMutation} from "services/itinerary";
 import * as sc from './NewItinieraryContainer.styles'
 import { Itinerary } from 'types/models';
 
 interface Props {
     handleShowNewItinerary: (canShow: boolean) => void;
+    createItinerary: (arg: Partial<Itinerary>) => any;
 }
 
 const collabData: any[] = [];
@@ -21,7 +21,7 @@ const countryData = [
 
 const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 
-const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
+const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItinerary }) => {
 
     const [showPreference, setPreference] = useState(false);
     const [rating, setRating] = useState(3);
@@ -36,11 +36,6 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
     const endRef = useRef<HTMLInputElement>();
     const maxWalkRef = useRef<HTMLInputElement>();
     const maxDriveRef = useRef<HTMLInputElement>();
-
-    const [
-        createItinerary, // This is the mutation trigger
-        { isLoading: isUpdating }, // This is the destructured mutation result
-      ] = useCreateItineraryMutation()
 
     // const [toAdd, setToAdd] = useState<UseMutationStateOptions<MutationDefinition<Partial<Itinerary>(null);
 

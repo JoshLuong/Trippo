@@ -1,37 +1,38 @@
 /// <reference path='./ItinerariesView.d.ts' />
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
 import Fade from "react-reveal/Fade";
 import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar"
-import { useGetItinerariesQuery } from 'services/itinerary';
-
-// const data = [
-//   {
-//     tripName: "Hawaii 2022 Trip",
-//     description:
-//       "Our island-hopping Hawaii Trip planned for 2022; A 10 day adventure for the family",
-//     startDate: new Date(2022, 5, 20),
-//     endDate: new Date(2022, 5, 30),
-//     collaborators: ["John Doe", "Jane Doe", "other person"],
-//     labels: ["Luau", "Surfing", "Shopping"],
-//   },
-//   {
-//     tripName: "Alaska 2021 Trip",
-//     description: "Our 7 day Alaskan cruise from Vancouver",
-//     startDate: new Date(2021, 5, 20),
-//     endDate: new Date(2021, 5, 27),
-//     collaborators: ["John Doe", "Jane Doe", "1", "2"],
-//     labels: ["Cruise", "Sight-seeing"],
-//   },
-// ];
+import { useCreateItineraryMutation, useLazyGetItinerariesQuery } from 'services/itinerary';
+import Pagination from '@material-ui/lab/Pagination';
+import { useHistory, useLocation } from 'react-router-dom';
+import qs from 'qs';
 
 const ItinerariesView = () => {
-  const { data } = useGetItinerariesQuery();
+  const [
+    createItinerary, // This is the mutation trigger
+    { isLoading: isUpdating }, // This is the destructured mutation result
+  ] = useCreateItineraryMutation()
+  const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
+  const history = useHistory();
+  const location = useLocation();
+  const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
+
+  useEffect(() => {
+    if (!isUpdating) {
+      triggerGetQuery({
+        offset: 5 * (Number(page || 1) - 1),
+        limit: 5,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUpdating, page]);
 
   const [showEdit, setShowEdit] = useState(false);
   const [showNewItinerary, setShowNewItinerary] = useState(false);
+
   const handleRemove = () => {
     alert("removing");
   };
@@ -39,6 +40,13 @@ const ItinerariesView = () => {
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);
   }
+
+  const handlePageChange = (_event: any, page: number) => {
+    history.push({
+      search: `?page=${page}`
+    });
+  }
+
   // TODO: take out inline style; move to search 
   return (
     <sc.ItinerariesViewGrid>
@@ -58,25 +66,28 @@ const ItinerariesView = () => {
         </button>
         <button onClick={() => setShowNewItinerary(true)}>Plan A New Trip</button>
       </sc.ButtonDiv>
+      <sc.PaginationDiv>
+        <Pagination count={result.data?.count ? Math.ceil(result.data.count / 5) : 1} page={Number(page) || 1} onChange={handlePageChange} />
+      </sc.PaginationDiv>
       {
         showNewItinerary
-          ? <NewItineraryContainer handleShowNewItinerary={handleShowNewItinerary} />
+          ? <NewItineraryContainer handleShowNewItinerary={handleShowNewItinerary} createItinerary={createItinerary} />
           : null
       }
-      {data && (
+      {result.data?.itineraries.length && (
         <sc.Cards>
-          <Fade duration={900} delay={500}>
-            {data.map((card, index) => {
-              return (
+          {result.data.itineraries.map((card, index) => {
+            return (
+              <Fade duration={900} delay={500}>
                 <ItineraryCard
                   card={card}
                   key={index}
                   showEdit={showEdit}
                   handleRemove={handleRemove}
                 />
-              );
-            })}
-          </Fade>
+              </Fade>
+            );
+          })}
         </sc.Cards>
       )}
     </sc.ItinerariesViewGrid>

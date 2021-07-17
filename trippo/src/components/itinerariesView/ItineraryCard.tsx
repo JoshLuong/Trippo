@@ -3,7 +3,7 @@ import * as sc from "./ItineraryCard.styles";
 import moment from "moment";
 import { Grid } from "@material-ui/core";
 import { Itinerary } from "types/models";
-import React from "react";
+import { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -44,8 +44,8 @@ const renderNames = (name: string, card: Itinerary) => {
 
 
 const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
-  const [open, setOpen] = React.useState(false);  
-  
+  const [open, setOpen] = useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -53,7 +53,6 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
   const handleClose = () => {
     setOpen(false);
   };
-
     
   return (
     <sc.Card>
@@ -111,6 +110,9 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
                     onClick={() => {
                       handleRemove();
                       handleClose();
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 100)
                     }}
                     color="primary"
                     autoFocus

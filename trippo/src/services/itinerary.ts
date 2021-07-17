@@ -43,4 +43,5 @@ export const {
   useGetItinerariesQuery,
   useLazyGetItinerariesQuery,
   useCreateItineraryMutation,
+  useDeleteItineraryQuery
 } = itineraryApi;

@@ -5,7 +5,7 @@ import ItineraryCard from "./ItineraryCard";
 import Fade from "react-reveal/Fade";
 import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar"
-import { useCreateItineraryMutation, useLazyGetItinerariesQuery } from 'services/itinerary';
+import { useCreateItineraryMutation, useLazyGetItinerariesQuery} from 'services/itinerary';
 import Pagination from '@material-ui/lab/Pagination';
 import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'qs';
@@ -18,29 +18,30 @@ const ItinerariesView = () => {
     { isLoading: isUpdating }, // This is the destructured mutation result
   ] = useCreateItineraryMutation()
   const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
+
   const history = useHistory();
   const location = useLocation();
   const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
 
+  
+  const handleRemove = () => {
+    fetch(server + "deleteItinerary", {
+      method: "DELETE"
+    })
+  };
+
   useEffect(() => {
-    if (!isUpdating) {
       triggerGetQuery({
         offset: 5 * (Number(page || 1) - 1),
         limit: 5,
       });
-    }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdating, page]);
 
   const [showEdit, setShowEdit] = useState(false);
   const [showNewItinerary, setShowNewItinerary] = useState(false);
 
-  const handleRemove = () => {
-    fetch(server + "deleteItinerary", {
-      method: "DELETE"
-    })
-      .then((res) => res.json())
-  };
 
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);

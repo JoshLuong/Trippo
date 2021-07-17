@@ -22,8 +22,13 @@ export const itineraryApi = createApi({
     getItineraries: builder.query<GetItinerariesResponse, GetItinerariesRequest>({
       query: (req: GetItinerariesRequest) => `/?${qs.stringify(req)}`,
     }),
-    deleteItinerary: builder.query<Itinerary[], void>({
-      query: () => '/deleteItinerary',
+    deleteItinerary: builder.mutation<{ success: boolean; id: number }, number>({
+      query(id) {
+        return {
+          url: `/${id}`,
+          method: 'DELETE',
+        }
+      }
     }),
     createItinerary: builder.mutation<Itinerary, Partial<Itinerary>>({
       query(body) {
@@ -33,7 +38,7 @@ export const itineraryApi = createApi({
           body,
         }
       },
-    }) 
+    })
   }),
 });
 
@@ -43,5 +48,5 @@ export const {
   useGetItinerariesQuery,
   useLazyGetItinerariesQuery,
   useCreateItineraryMutation,
-  useDeleteItineraryQuery
+  useDeleteItineraryMutation,
 } = itineraryApi;

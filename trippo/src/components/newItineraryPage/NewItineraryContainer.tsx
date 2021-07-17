@@ -40,7 +40,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
 
     const search = _.debounce((text: string) => {
         handleCitySearch(text);
-      }, 500);
+    }, 500);
 
     // const [toAdd, setToAdd] = useState<UseMutationStateOptions<MutationDefinition<Partial<Itinerary>(null);
 
@@ -56,6 +56,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
         const newItinerary: Itinerary = {
+            _id: new mongoose.Types.ObjectId(),
             user_id: new mongoose.Types.ObjectId('60f0fb58f7f17e5f88b1eee1'),
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",
@@ -81,22 +82,22 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
 
     const handleCitySearch = (city: string) => {
         fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${city}`, {
-        "method": "GET",
-        "headers": {
-            'Content-Type': 'application/json',
-            "x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY!,
-            "x-rapidapi-host": process.env.REACT_APP_RAPID_API_HOST!
-        }
+            "method": "GET",
+            "headers": {
+                'Content-Type': 'application/json',
+                "x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY!,
+                "x-rapidapi-host": process.env.REACT_APP_RAPID_API_HOST!
+            }
         })
-        .then((response) => {
-            return response.json();
-        })
-        .then(response => {
-            setCityData(response.data);
-        })
-        .catch(err => {
-            console.error(err);
-        });
+            .then((response) => {
+                return response.json();
+            })
+            .then(response => {
+                setCityData(response.data);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
 
     const validate = (startDateArr: string[], endDateArr: string[]) => {
@@ -168,7 +169,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                         size="small"
                         options={cityData || []}
                         autoHighlight
-                        getOptionLabel={(option) =>  option.name +", " + option.region}
+                        getOptionLabel={(option) => option.name + ", " + option.region}
                         renderOption={(option) => (
                             <div>
                                 {option.name}, {option.region}
@@ -190,11 +191,11 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                 <Grid item container spacing={2} direction="row">
                     <Grid item xs={12} md={6} lg={6}>
                         <sc.inputTags>Collaborators
-                        <Tooltip
-                        title={"Please enter valid user emails"}
-                        >
-                        <sc.StyledInfoIcon />
-                        </Tooltip>
+                            <Tooltip
+                                title={"Please enter valid user emails"}
+                            >
+                                <sc.StyledInfoIcon />
+                            </Tooltip>
                         </sc.inputTags>
                         <Autocomplete multiple
                             classes={autoCompleteStyles}
@@ -207,7 +208,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                                 {option}
                             </div>}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" size="small"/>
+                                <TextField {...params} variant="outlined" size="small" />
                             )}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (

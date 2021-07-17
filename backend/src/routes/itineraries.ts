@@ -19,7 +19,7 @@ router.get('/', async (req, res, _next) => {
 });
 
 router.post('/', (req, res, _next) => {
-  const itinerary = new Itinerary({...req.body});
+  const itinerary = new Itinerary({ ...req.body });
   itinerary.save()
     .then(doc => {
       res.send(doc);
@@ -30,15 +30,15 @@ router.post('/', (req, res, _next) => {
     })
 });
 
-router.delete('/deleteItinerary', async (_req, res, _next) => {
-  try {
-    await Itinerary.deleteOne({}), async () => {
-        await Itinerary.find({});
-        res.send("deleted itinerary");
-    }
-  } catch (err) {
-    res.send(err)
-  }
+router.delete('/:id', (req, res, _next) => {
+  console.log(req);
+  Itinerary.findOneAndRemove({ _id: req.params.id })
+    .then(doc => {
+      res.send(doc);
+    }).catch(err => {
+      console.error(err);
+      res.status(404).send('Card with the given id does not exist');
+    });
 });
 
 export default router;

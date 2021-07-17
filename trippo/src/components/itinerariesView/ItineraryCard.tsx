@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import * as sc from "./ItineraryCard.styles";
 import moment from "moment";
 import { Grid } from "@material-ui/core";
@@ -52,7 +52,7 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
   const handleClose = () => {
     setOpen(false);
   };
-    
+
   return (
     <sc.Card>
       <Grid container item lg={12}>

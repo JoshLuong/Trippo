@@ -1,41 +1,35 @@
 /// <reference path='./ItinerariesView.d.ts' />
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
 import Fade from "react-reveal/Fade";
 import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar"
-import { useCreateItineraryMutation, useLazyGetItinerariesQuery} from 'services/itinerary';
+import { useCreateItineraryMutation, useDeleteItineraryMutation, useLazyGetItinerariesQuery } from 'services/itinerary';
 import Pagination from '@material-ui/lab/Pagination';
 import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'qs';
 
 
-const server = "http://localhost:4000/api/itineraries/";
+// const server = "http://localhost:4000/api/itineraries/";
 const ItinerariesView = () => {
   const [
     createItinerary, // This is the mutation trigger
     { isLoading: isUpdating }, // This is the destructured mutation result
   ] = useCreateItineraryMutation()
   const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
+  const [deleteItinerary, { isLoading: isDeleting }] = useDeleteItineraryMutation();
 
   const history = useHistory();
   const location = useLocation();
   const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
 
-  
-  const handleRemove = () => {
-    fetch(server + "deleteItinerary", {
-      method: "DELETE"
-    })
-  };
-
   useEffect(() => {
-      triggerGetQuery({
-        offset: 5 * (Number(page || 1) - 1),
-        limit: 5,
-      });
-    
+    triggerGetQuery({
+      offset: 5 * (Number(page || 1) - 1),
+      limit: 5,
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdating, page]);
 
@@ -89,7 +83,13 @@ const ItinerariesView = () => {
                   card={card}
                   key={index}
                   showEdit={showEdit}
-                  handleRemove={handleRemove}
+                  handleRemove={async () => {
+                    deleteItinerary(card._id)
+                      .then(() => {
+                        // delete should chain get request - right now manual reload required to see changes
+                      })
+                      .catch((e) => { console.log(e) })
+                  }}
                 />
               </Fade>
             );

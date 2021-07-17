@@ -448,6 +448,10 @@ export const itineraries = [
     budget: 1000,
     current_cost: 10,
     destination: "Honolulu, Hawaii",
+    dest_coords: {
+      lat: 49.3667,
+      lng: -123.167,
+    },
     collaborators: [],
     comments:
       "Our island-hopping Hawaii Trip planned for 2022; A 10 day adventure for the family",
@@ -460,6 +464,10 @@ export const itineraries = [
     name: "Alaska 2021 Trip",
     current_cost: 300,
     destination: "Anchorage, Alaska",
+    dest_coords: {
+      lat: 49.3667,
+      lng: -123.167,
+    },
     collaborators: [],
     comments: "Our 7 day Alaskan cruise from Vancouver",
     tags: ["Cruise", "Sight-seeing"],

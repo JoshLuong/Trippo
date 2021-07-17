@@ -1,9 +1,12 @@
+/// <reference path='./NewItineraryContainer.d.ts' />
 import { FC, useState, useRef } from 'react';
 import mongoose from 'mongoose';
-import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip } from '@material-ui/core'
+import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
+import Alert from '@material-ui/lab/Alert';
 import FaceIcon from '@material-ui/icons/Face';
 import * as sc from './NewItinieraryContainer.styles'
+import _ from "lodash";
 import { Itinerary } from 'types/models';
 
 interface Props {
@@ -13,22 +16,20 @@ interface Props {
 
 const collabData: any[] = [];
 
-const countryData = [
-    { code: 'AD', label: 'Andorra' },
-    { code: 'AE', label: 'United Arab Emirates' },
-    { code: 'AF', label: 'Afghanistan' }
-];
-
 const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 
 const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItinerary }) => {
 
+    const [errorMessage, setErrorMessage] = useState("");
+    const [cityData, setCityData] = useState([]);
+    const [failSnackBar, setFail] = useState(false);
     const [showPreference, setPreference] = useState(false);
     const [rating, setRating] = useState(3);
     const [price, setPrice] = useState(2);
     const [collaborators, setCollaborators] = useState<{ user_id: string; name: string; }[]>([]);
     const [tags, setTags] = useState<string[]>([]);
     const [destination, setDestination] = useState<any>(null);
+    const [destError, setDestError] = useState(undefined);
     const nameRef = useRef<HTMLInputElement>();
     const descRef = useRef<HTMLInputElement>();
     const budgetRef = useRef<HTMLInputElement>();
@@ -37,21 +38,31 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
     const maxWalkRef = useRef<HTMLInputElement>();
     const maxDriveRef = useRef<HTMLInputElement>();
 
+    const search = _.debounce((text: string) => {
+        handleCitySearch(text);
+      }, 500);
+
     // const [toAdd, setToAdd] = useState<UseMutationStateOptions<MutationDefinition<Partial<Itinerary>(null);
 
     const handleSubmit = async () => {
-        handleShowNewItinerary(false);
         // TODO: remove mongoose from package.json, and use some objectId taken from localstorage or smt
         // TODO validate collaborators
         const startDateArr = startRef.current?.value.split("-") || [];
         const endDateArr = endRef.current?.value.split("-") || [];
-        if (startDateArr.length < 3 || endDateArr.length < 3) return;
-        const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1])-1, Number(startDateArr[2])));
-        const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1])-1, Number(endDateArr[2])));
+        if (!validate(startDateArr, endDateArr)) {
+            setFail(true);
+            return;
+        }
+        const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
+        const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
         const newItinerary: Itinerary = {
             user_id: new mongoose.Types.ObjectId('60f0fb58f7f17e5f88b1eee1'),
             name: nameRef.current?.value || "",
-            destination: destination?.label || "",
+            destination: destination?.name + ", " + destination?.region || "",
+            dest_coords: {
+                lat: destination.latitude,
+                lng: destination.longitude
+            },
             budget: Number(budgetRef.current?.value) || 500,
             dining_budget: price,
             restaurant_ratings: rating,
@@ -65,32 +76,110 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
             activities: [], // TODO change
         };
         createItinerary(newItinerary);
+        handleShowNewItinerary(false);
     }
 
+    const handleCitySearch = (city: string) => {
+        fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${city}`, {
+        "method": "GET",
+        "headers": {
+            'Content-Type': 'application/json',
+            "x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY!,
+            "x-rapidapi-host": process.env.REACT_APP_RAPID_API_HOST!
+        }
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then(response => {
+            setCityData(response.data);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    }
+
+    const validate = (startDateArr: string[], endDateArr: string[]) => {
+        setErrorMessage(" ");
+        let ret: boolean = true;
+        let emptyFields: string[] = [];
+        if (!(typeof nameRef.current?.value === "string" && nameRef.current?.value !== "")) {
+            ret = false;
+            emptyFields.push("Name");
+        }
+        if (!(typeof destination?.name === "string" && destination?.name !== "")) {
+            ret = false;
+            emptyFields.push("Destination");
+        }
+        if (startDateArr.length < 3 || endDateArr.length < 3) {
+            ret = false;
+            emptyFields.push("Start and End Date");
+        }
+        console.log(emptyFields);
+        if (emptyFields.length > 0) {
+            let msg = "Please fill in these required fields: "
+            for (let i = 0; i < emptyFields.length; i++) {
+                msg += emptyFields[i];
+                if (i !== emptyFields.length - 1) {
+                    msg += ", ";
+                } else msg += ".";
+            }
+            setErrorMessage(msg);
+        }
+        if (!ret) {
+            return ret;
+        }
+        const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
+        const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
+        if (end_date <= start_date) {
+            ret = false;
+            setErrorMessage("Please ensure start date is before end date.");
+        }
+        return ret;
+    }
+
+    const handleClose = (event: any, reason: SnackbarCloseReason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setFail(false);
+    }
+
+    const autoCompleteStyles = sc.autoCompleteStyles();
 
     return (
         <sc.newItineraryContainer>
             <sc.header>New Itinerary:</sc.header>
             <sc.FormGrid direction="column">
                 <Grid item xs={12} lg={12}>
+                    <Snackbar open={failSnackBar} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={() => setFail(false)} severity="error">
+                            {errorMessage}
+                        </Alert>
+                    </Snackbar>
                     <sc.inputTags>Name</sc.inputTags>
-                    <sc.textField inputRef={nameRef} size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
+                    <sc.textField autoFocus error={nameRef.current?.value === ""} helperText={nameRef.current?.value === "" ? 'Required' : ' '} inputRef={nameRef} size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
                     <sc.inputTags>Destination</sc.inputTags>
                     <Autocomplete
+                        classes={autoCompleteStyles}
                         value={destination}
-                        onChange={(e : any, newValue: any) => {setDestination(newValue)}}
+                        onChange={(e: any, newValue: any) => { setDestination(newValue) }}
+                        onBlur={() => setDestError(destination)}
                         size="small"
-                        options={countryData}
+                        options={cityData || []}
                         autoHighlight
-                        getOptionLabel={(option) => option.label}
+                        getOptionLabel={(option) =>  option.name +", " + option.region}
                         renderOption={(option) => (
                             <div>
-                                {option.label} ({option.code})
+                                {option.name}, {option.region}
                             </div>
                         )}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
+                                onChange={(e) => search(e.target.value)}
+                                error={destError === null}
+                                helperText={destError === null ? "Required" : "Enter a city or the first city of your trip"}
                                 variant="outlined"
                             />
                         )}
@@ -102,7 +191,8 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                     <Grid item xs={12} md={6} lg={6}>
                         <sc.inputTags>Collaborators</sc.inputTags>
                         <Autocomplete multiple
-                            onChange={(e : any, newValue: any) => {setCollaborators(newValue)}}
+                            classes={autoCompleteStyles}
+                            onChange={(e: any, newValue: any) => { setCollaborators(newValue) }}
                             freeSolo
                             value={collaborators}
                             options={collabData}
@@ -111,7 +201,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                                 {option}
                             </div>}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" size="small" />
+                                <TextField {...params} variant="outlined" size="small" helperText="Enter a user's email" />
                             )}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
@@ -127,6 +217,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                     <Grid item xs={12} md={6} lg={6}>
                         <sc.inputTags>Tags</sc.inputTags>
                         <Autocomplete multiple
+                            classes={autoCompleteStyles}
                             freeSolo
                             onChange={(e: any, newValue: any) => { setTags(newValue) }}
                             value={tags}
@@ -153,19 +244,24 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                 </Grid>
                 <sc.DateGrid item container spacing={2} direction="row">
                     <Grid item xs={8} lg={3}>
-                        <TextField
+                        <sc.textField
                             inputRef={budgetRef}
+                            defaultValue={500}
                             id="outlined-number"
                             label="Budget"
                             type="number"
                             InputLabelProps={{
-                            shrink: true,
+                                shrink: true,
+                            }}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
                             }}
                             variant="outlined"
                         />
                     </Grid >
                     <Grid item xs={8} lg={3}>
-                        <TextField
+                        <sc.textField
+                            required
                             inputRef={startRef}
                             id="start_date"
                             label="Start date"
@@ -177,7 +273,8 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                         />
                     </Grid >
                     <Grid item xs={6} lg={3}>
-                        <TextField
+                        <sc.textField
+                            required
                             inputRef={endRef}
                             id="end_date"
                             label="End date"
@@ -229,14 +326,14 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                     <Grid container item direction="column" spacing={1} xs={12} md={6} lg={6}>
                         <Grid item lg={10}>
                             <sc.inputTags>Maximum Walking Distance</sc.inputTags>
-                            <sc.textField inputRef={maxWalkRef} size="small" variant="outlined" color="secondary"
+                            <sc.textField defaultValue={5} inputRef={maxWalkRef} size="small" variant="outlined" color="secondary"
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">km</InputAdornment>,
                                 }} fullWidth />
                         </Grid>
                         <Grid item lg={10}>
                             <sc.inputTags>Maximum Driving Distance</sc.inputTags>
-                            <sc.textField inputRef={maxDriveRef} size="small" variant="outlined" color="secondary"
+                            <sc.textField defaultValue={15} inputRef={maxDriveRef} size="small" variant="outlined" color="secondary"
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">km</InputAdornment>,
                                 }} fullWidth />

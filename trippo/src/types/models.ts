@@ -27,6 +27,10 @@ export interface Itinerary {
   start_date: Date;
   end_date: Date;
   destination: string;
+  dest_coords: {
+    lat: number;
+    lng: number;
+  };
   dining_budget?: number;
   restaurant_ratings?: number;
   max_walking_dist?: number;

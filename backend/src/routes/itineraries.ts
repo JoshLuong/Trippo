@@ -26,6 +26,7 @@ router.post('/', (req, res, _next) => {
     })
     .catch(err => {
       console.error(err);
+      return res.status(404).send("Invalid Itinerary")
     })
 });
 

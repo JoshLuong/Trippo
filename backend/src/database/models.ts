@@ -50,6 +50,13 @@ export interface IItinerary {
   start_date: Date;
   end_date: Date;
   destination: string;
+  dest_coords: {
+    type: {
+      lat: Number,
+      lng: Number,
+    },
+    required: true,
+  };
   collaborators: {
     user_id: string;
     name: string;
@@ -75,12 +82,19 @@ export const itinerarySchema = new Schema<IItinerary>({
   user_id: { type: Schema.Types.ObjectId, required: true },
   name: { type: String, required: true },
   destination: { type: String, required: true },
-  budget: Number,
-  current_cost: Number,
-  dining_budget: Number,
-  restaurant_ratings: Number,
-  max_walking_dist: Number,
-  max_driving_dist: Number,
+  dest_coords: {
+    type: {
+      lat: Number,
+      lng: Number,
+    },
+    required: true,
+  },
+  budget: { type: Number, default: 500 },
+  current_cost: { type: Number, default: 0 },
+  dining_budget: { type: Number, default: 2 },
+  restaurant_ratings: { type: Number, default: 3 },
+  max_walking_dist: { type: Number, default: 5 },
+  max_driving_dist: { type: Number, default: 15 },
   collaborators: [new Schema({
     user_id: Schema.Types.ObjectId,
     name: { type: String, required: true },

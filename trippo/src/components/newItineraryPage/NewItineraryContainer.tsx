@@ -1,3 +1,4 @@
+/// <reference path='./NewItineraryContainer.d.ts' />
 import { FC, useState, useRef } from 'react';
 import mongoose from 'mongoose';
 import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
@@ -6,6 +7,7 @@ import Alert from '@material-ui/lab/Alert';
 import FaceIcon from '@material-ui/icons/Face';
 import { useCreateItineraryMutation } from "services/itinerary";
 import * as sc from './NewItinieraryContainer.styles'
+import _ from "lodash";
 import { Itinerary } from 'types/models';
 
 interface Props {
@@ -14,18 +16,12 @@ interface Props {
 
 const collabData: any[] = [];
 
-const countryData = [
-    // TODO: replace with get request from some API
-    { code: 'AD', label: 'Andorra' },
-    { code: 'AE', label: 'United Arab Emirates' },
-    { code: 'AF', label: 'Afghanistan' }
-];
-
 const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 
 const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
 
     const [errorMessage, setErrorMessage] = useState("");
+    const [cityData, setCityData] = useState([]);
     const [failSnackBar, setFail] = useState(false);
     const [showPreference, setPreference] = useState(false);
     const [rating, setRating] = useState(3);
@@ -33,6 +29,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
     const [collaborators, setCollaborators] = useState<{ user_id: string; name: string; }[]>([]);
     const [tags, setTags] = useState<string[]>([]);
     const [destination, setDestination] = useState<any>(null);
+    const [destError, setDestError] = useState(undefined);
     const nameRef = useRef<HTMLInputElement>();
     const descRef = useRef<HTMLInputElement>();
     const budgetRef = useRef<HTMLInputElement>();
@@ -45,6 +42,10 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
         createItinerary, // This is the mutation trigger
         { isLoading: isUpdating }, // This is the destructured mutation result
     ] = useCreateItineraryMutation()
+
+    const search = _.debounce((text: string) => {
+        handleCitySearch(text);
+      }, 500);
 
     // const [toAdd, setToAdd] = useState<UseMutationStateOptions<MutationDefinition<Partial<Itinerary>(null);
 
@@ -62,7 +63,11 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
         const newItinerary: Itinerary = {
             user_id: new mongoose.Types.ObjectId('60f0fb58f7f17e5f88b1eee1'),
             name: nameRef.current?.value || "",
-            destination: destination?.label || "",
+            destination: destination?.name + ", " + destination?.region || "",
+            dest_coords: {
+                lat: destination.latitude,
+                lng: destination.longitude
+            },
             budget: Number(budgetRef.current?.value) || 500,
             dining_budget: price,
             restaurant_ratings: rating,
@@ -79,6 +84,26 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
         handleShowNewItinerary(false);
     }
 
+    const handleCitySearch = (city: string) => {
+        fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${city}`, {
+        "method": "GET",
+        "headers": {
+            'Content-Type': 'application/json',
+            "x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY!,
+            "x-rapidapi-host": process.env.REACT_APP_RAPID_API_HOST!
+        }
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then(response => {
+            setCityData(response.data);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    }
+
     const validate = (startDateArr: string[], endDateArr: string[]) => {
         setErrorMessage(" ");
         let ret: boolean = true;
@@ -87,7 +112,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
             ret = false;
             emptyFields.push("Name");
         }
-        if (!(typeof destination?.label === "string" && destination?.label !== "")) {
+        if (!(typeof destination?.name === "string" && destination?.name !== "")) {
             ret = false;
             emptyFields.push("Destination");
         }
@@ -144,18 +169,22 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                         classes={autoCompleteStyles}
                         value={destination}
                         onChange={(e: any, newValue: any) => { setDestination(newValue) }}
+                        onBlur={() => setDestError(destination)}
                         size="small"
-                        options={countryData}
+                        options={cityData || []}
                         autoHighlight
-                        getOptionLabel={(option) => option.label}
+                        getOptionLabel={(option) =>  option.name +", " + option.region}
                         renderOption={(option) => (
                             <div>
-                                {option.label} ({option.code})
+                                {option.name}, {option.region}
                             </div>
                         )}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
+                                onChange={(e) => search(e.target.value)}
+                                error={destError === null}
+                                helperText={destError === null ? "Required" : "Enter a city or the first city of your trip"}
                                 variant="outlined"
                             />
                         )}
@@ -177,7 +206,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                                 {option}
                             </div>}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" size="small" />
+                                <TextField {...params} variant="outlined" size="small" helperText="Enter a user's email" />
                             )}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (

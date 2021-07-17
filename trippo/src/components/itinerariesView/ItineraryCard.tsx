@@ -109,9 +109,6 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
                     onClick={() => {
                       handleRemove();
                       handleClose();
-                      setTimeout(() => {
-                        window.location.reload();
-                      }, 100)
                     }}
                     color="primary"
                     autoFocus

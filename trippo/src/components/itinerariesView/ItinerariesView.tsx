@@ -24,6 +24,10 @@ const ItinerariesView = () => {
   const location = useLocation();
   const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
 
+  
+  const [showEdit, setShowEdit] = useState(false);
+  const [showNewItinerary, setShowNewItinerary] = useState(false);
+
   useEffect(() => {
     triggerGetQuery({
       offset: 5 * (Number(page || 1) - 1),
@@ -31,10 +35,7 @@ const ItinerariesView = () => {
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUpdating, page]);
-
-  const [showEdit, setShowEdit] = useState(false);
-  const [showNewItinerary, setShowNewItinerary] = useState(false);
+  }, [isUpdating, isDeleting, page]);
 
 
   const handleShowNewItinerary = (canShow: boolean) => {

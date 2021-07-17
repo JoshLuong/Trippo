@@ -30,4 +30,15 @@ router.post('/', (req, res, _next) => {
     })
 });
 
+router.delete('/deleteItinerary', async (_req, res, _next) => {
+  try {
+    await Itinerary.deleteOne({}), async () => {
+        await Itinerary.find({});
+        res.send("deleted itinerary");
+    }
+  } catch (err) {
+    res.send(err)
+  }
+});
+
 export default router;

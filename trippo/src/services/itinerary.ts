@@ -22,6 +22,9 @@ export const itineraryApi = createApi({
     getItineraries: builder.query<GetItinerariesResponse, GetItinerariesRequest>({
       query: (req: GetItinerariesRequest) => `/?${qs.stringify(req)}`,
     }),
+    deleteItinerary: builder.query<Itinerary[], void>({
+      query: () => '/deleteItinerary',
+    }),
     createItinerary: builder.mutation<Itinerary, Partial<Itinerary>>({
       query(body) {
         return {
@@ -40,4 +43,5 @@ export const {
   useGetItinerariesQuery,
   useLazyGetItinerariesQuery,
   useCreateItineraryMutation,
+  useDeleteItineraryQuery
 } = itineraryApi;

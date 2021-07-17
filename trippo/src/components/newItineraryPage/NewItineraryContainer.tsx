@@ -28,6 +28,8 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
     const [showPreference, setPreference] = useState(false);
     const [rating, setRating] = useState(3);
     const [price, setPrice] = useState(2);
+    const [nameError, setNameError] = useState<string | undefined>(undefined);
+    const [destError, setDestError] = useState<string | undefined>(undefined);
     const [collaborators, setCollaborators] = useState<{ user_id: string; name: string; }[]>([]);
     const [tags, setTags] = useState<string[]>([]);
     const [destination, setDestination] = useState<any>(null);
@@ -107,12 +109,29 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                         </Alert>
                     </Snackbar>
                     <sc.inputTags>Name</sc.inputTags>
-                    <sc.textField required inputRef={nameRef} size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
+                    <sc.textField 
+                        error={nameError === ""}
+                        helperText={nameError === "" ? "Required" : null}
+                        inputRef={nameRef} 
+                        onBlur={(e) => {
+                            setNameError(e.target.value);
+                        }}
+                        size="small" 
+                        variant="outlined" 
+                        color="secondary" 
+                        label="My Trip Name" 
+                        fullWidth 
+                    />
                     <sc.inputTags>Destination</sc.inputTags>
                     <Autocomplete
                         classes={autoCompleteStyles}
                         value={destination}
-                        onChange={(e: any, newValue: any) => { setDestination(newValue) }}
+                        onChange={(e: any, newValue: any) => { 
+                            setDestination(newValue);
+                        }}
+                        onBlur={() => {
+                            setDestError(destination)
+                        }}
                         size="small"
                         options={countryData}
                         autoHighlight
@@ -125,6 +144,8 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                         renderInput={(params) => (
                             <TextField
                                 {...params}
+                                error={destError === null}
+                                helperText={destError === null ? "Required" : null}
                                 variant="outlined"
                             />
                         )}

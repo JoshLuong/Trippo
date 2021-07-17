@@ -24,12 +24,12 @@ const countryData = [
 const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 
 const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
+
+    const [errorMessage, setErrorMessage] = useState("");
     const [failSnackBar, setFail] = useState(false);
     const [showPreference, setPreference] = useState(false);
     const [rating, setRating] = useState(3);
     const [price, setPrice] = useState(2);
-    const [nameError, setNameError] = useState<string | undefined>(undefined);
-    const [destError, setDestError] = useState<string | undefined>(undefined);
     const [collaborators, setCollaborators] = useState<{ user_id: string; name: string; }[]>([]);
     const [tags, setTags] = useState<string[]>([]);
     const [destination, setDestination] = useState<any>(null);
@@ -80,13 +80,42 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
     }
 
     const validate = (startDateArr: string[], endDateArr: string[]) => {
-        if (!(typeof nameRef.current?.value === "string" && nameRef.current?.value !== "")) return false;
-        if (!(typeof destination?.label === "string" && destination?.label !== "")) return false;
-        if (startDateArr.length < 3 || endDateArr.length < 3) return false;
+        setErrorMessage(" ");
+        let ret: boolean = true;
+        let emptyFields: string[] = [];
+        if (!(typeof nameRef.current?.value === "string" && nameRef.current?.value !== "")) {
+            ret = false;
+            emptyFields.push("Name");
+        }
+        if (!(typeof destination?.label === "string" && destination?.label !== "")) {
+            ret = false;
+            emptyFields.push("Destination");
+        }
+        if (startDateArr.length < 3 || endDateArr.length < 3) {
+            ret = false;
+            emptyFields.push("Start and End Date");
+        }
+        console.log(emptyFields);
+        if (emptyFields.length > 0) {
+            let msg = "Please fill in these required fields: "
+            for (let i = 0; i < emptyFields.length; i++) {
+                msg += emptyFields[i];
+                if (i !== emptyFields.length - 1) {
+                    msg += ", ";
+                } else msg += ".";
+            }
+            setErrorMessage(msg);
+        }
+        if (!ret) {
+            return ret;
+        }
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
-        if (end_date <= start_date) return false;
-        return true;
+        if (end_date <= start_date) {
+            ret = false;
+            setErrorMessage("Please ensure start date is before end date.");
+        }
+        return ret;
     }
 
     const handleClose = (event: any, reason: SnackbarCloseReason) => {
@@ -105,33 +134,16 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                 <Grid item xs={12} lg={12}>
                     <Snackbar open={failSnackBar} autoHideDuration={6000} onClose={handleClose}>
                         <Alert onClose={() => setFail(false)} severity="error">
-                            Please fill in the required fields and ensure end date is after start date
+                            {errorMessage}
                         </Alert>
                     </Snackbar>
                     <sc.inputTags>Name</sc.inputTags>
-                    <sc.textField 
-                        error={nameError === ""}
-                        helperText={nameError === "" ? "Required" : null}
-                        inputRef={nameRef} 
-                        onBlur={(e) => {
-                            setNameError(e.target.value);
-                        }}
-                        size="small" 
-                        variant="outlined" 
-                        color="secondary" 
-                        label="My Trip Name" 
-                        fullWidth 
-                    />
+                    <sc.textField autoFocus error={nameRef.current?.value === ""} helperText={nameRef.current?.value === "" ? 'Required' : ' '} inputRef={nameRef} size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
                     <sc.inputTags>Destination</sc.inputTags>
                     <Autocomplete
                         classes={autoCompleteStyles}
                         value={destination}
-                        onChange={(e: any, newValue: any) => { 
-                            setDestination(newValue);
-                        }}
-                        onBlur={() => {
-                            setDestError(destination)
-                        }}
+                        onChange={(e: any, newValue: any) => { setDestination(newValue) }}
                         size="small"
                         options={countryData}
                         autoHighlight
@@ -144,8 +156,6 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                error={destError === null}
-                                helperText={destError === null ? "Required" : null}
                                 variant="outlined"
                             />
                         )}
@@ -218,6 +228,9 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary }) => {
                             type="number"
                             InputLabelProps={{
                                 shrink: true,
+                            }}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
                             }}
                             variant="outlined"
                         />

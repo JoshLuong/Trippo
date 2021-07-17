@@ -1,43 +1,53 @@
 /// <reference path='./ItinerariesView.d.ts' />
-import { FC, useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
 import Fade from "react-reveal/Fade";
 import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar"
+import { useCreateItineraryMutation, useDeleteItineraryMutation, useLazyGetItinerariesQuery } from 'services/itinerary';
+import Pagination from '@material-ui/lab/Pagination';
+import { useHistory, useLocation } from 'react-router-dom';
+import qs from 'qs';
 
-interface Props {}
 
-const data = [
-  {
-    tripName: "Hawaii 2022 Trip",
-    description:
-      "Our island-hopping Hawaii Trip planned for 2022; A 10 day adventure for the family",
-    startDate: new Date(2022, 5, 20),
-    endDate: new Date(2022, 5, 30),
-    collaborators: ["John Doe", "Jane Doe", "other person"],
-    labels: ["Luau", "Surfing", "Shopping"],
-  },
-  {
-    tripName: "Alaska 2021 Trip",
-    description: "Our 7 day Alaskan cruise from Vancouver",
-    startDate: new Date(2021, 5, 20),
-    endDate: new Date(2021, 5, 27),
-    collaborators: ["John Doe", "Jane Doe", "1", "2"],
-    labels: ["Cruise", "Sight-seeing"],
-  },
-];
+// const server = "http://localhost:4000/api/itineraries/";
+const ItinerariesView = () => {
+  const [
+    createItinerary, // This is the mutation trigger
+    { isLoading: isUpdating }, // This is the destructured mutation result
+  ] = useCreateItineraryMutation()
+  const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
+  const [deleteItinerary, { isLoading: isDeleting }] = useDeleteItineraryMutation();
 
-const ItinerariesView: FC<Props> = () => {
+  const history = useHistory();
+  const location = useLocation();
+  const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
+
+  
   const [showEdit, setShowEdit] = useState(false);
   const [showNewItinerary, setShowNewItinerary] = useState(false);
-  const handleRemove = () => {
-    alert("removing");
-  };
+
+  useEffect(() => {
+    triggerGetQuery({
+      offset: 5 * (Number(page || 1) - 1),
+      limit: 5,
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUpdating, isDeleting, page]);
+
 
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);
   }
+
+  const handlePageChange = (_event: any, page: number) => {
+    history.push({
+      search: `?page=${page}`
+    });
+  }
+
   // TODO: take out inline style; move to search 
   return (
     <sc.ItinerariesViewGrid>
@@ -49,7 +59,7 @@ const ItinerariesView: FC<Props> = () => {
           textAlign: "center",
         }}
       >
-      <Searchbar />
+        <Searchbar />
       </div>
       <sc.ButtonDiv>
         <button onClick={() => setShowEdit(!showEdit)}>
@@ -57,25 +67,36 @@ const ItinerariesView: FC<Props> = () => {
         </button>
         <button onClick={() => setShowNewItinerary(true)}>Plan A New Trip</button>
       </sc.ButtonDiv>
+      <sc.PaginationDiv>
+        <Pagination count={result.data?.count ? Math.ceil(result.data.count / 5) : 1} page={Number(page) || 1} onChange={handlePageChange} />
+      </sc.PaginationDiv>
       {
         showNewItinerary
-          ? <NewItineraryContainer handleShowNewItinerary={handleShowNewItinerary}/>
+          ? <NewItineraryContainer handleShowNewItinerary={handleShowNewItinerary} createItinerary={createItinerary} />
           : null
       }
-      <sc.Cards>
-        <Fade duration={900} delay={500}>
-          {data.map((card, index) => {
+      {result.data?.itineraries.length && (
+        <sc.Cards>
+          {result.data.itineraries.map((card, index) => {
             return (
-              <ItineraryCard
-                card={card}
-                key={index}
-                showEdit={showEdit}
-                handleRemove={handleRemove}
-              />
+              <Fade duration={900} delay={500}>
+                <ItineraryCard
+                  card={card}
+                  key={index}
+                  showEdit={showEdit}
+                  handleRemove={async () => {
+                    deleteItinerary(card._id)
+                      .then(() => {
+                        // delete should chain get request - right now manual reload required to see changes
+                      })
+                      .catch((e) => { console.log(e) })
+                  }}
+                />
+              </Fade>
             );
           })}
-        </Fade>
-      </sc.Cards>
+        </sc.Cards>
+      )}
     </sc.ItinerariesViewGrid>
   );
 };

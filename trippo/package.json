@@ -14,16 +14,18 @@
     "@testing-library/user-event": "^12.1.10",
     "date-fns": "^2.22.1",
     "i": "^0.3.6",
+    "lodash": "^4.17.21",
     "mapbox-gl": "^2.3.0",
     "moment": "^2.29.1",
+    "mongoose": "^5.13.2",
     "node-sass": "4.14.1",
     "npm": "^7.17.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-map-gl": "^6.1.16",
-    "react-map-gl-geocoder": "^2.1.6",
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.2.2",
+    "react-map-gl": "^6.1.16",
+    "react-map-gl-geocoder": "^2.1.6",
     "react-nice-dates": "^3.1.0",
     "react-redux": "^7.2.4",
     "react-reveal": "^1.2.2",
@@ -60,6 +62,7 @@
     "@types/mapbox-gl": "^2.3.0",
     "@types/mapbox__mapbox-gl-geocoder": "^4.7.0",
     "@types/node": "^15.12.2",
+    "@types/qs": "^6.9.7",
     "@types/react-dom": "^17.0.8",
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.10",
@@ -68,5 +71,6 @@
     "prettier": "^2.3.1",
     "react-router-dom": "^5.2.0",
     "typescript": "^4.3.2"
-  }
+  },
+  "proxy": "http://localhost:4000"
 }

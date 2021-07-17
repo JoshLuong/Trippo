@@ -3,6 +3,7 @@ import LabelIcon from "@material-ui/icons/Label";
 import styled from 'styled-components';
 import * as c from "../../colors/colors";
 import InfoIcon from '@material-ui/icons/Info';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 export const StyledInfoIcon = styled(InfoIcon)`
   margin: auto 0.5em;
@@ -47,8 +48,16 @@ export const header = styled.p`
 `;
 
 export const inputTags = styled.h2`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: small;
     color: ${c.DARK_BLUE};
+
+    svg {
+      height: 0.75em;
+      margin-left: 4px;
+    }
 `
 
 export const userButton = styled(Button)` && {
@@ -71,9 +80,35 @@ export const StyledLabelIcon = styled(LabelIcon)` && {
   }
 `;
 
-export const textField = styled(TextField)`
-  border-radius: 40px;
-`;
+export const textField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '#219EBC',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#219EBC',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&:hover fieldset': {
+        borderColor: '#219EBC',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#219EBC',
+      },
+    },
+  },
+})(TextField);
+
+export const autoCompleteStyles = makeStyles((theme) => ({
+  inputRoot: {
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: '#219EBC'
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: '#219EBC'
+    },
+  }
+}));
 
 export const DateGrid = styled(Grid)`
   margin-top: 1em;

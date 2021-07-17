@@ -93,11 +93,11 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Are you sure you want to delete this itinerary?"}
+                  Are you sure you want to delete {<strong>{card.name}</strong>}?
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Deleting this itinerary will permanently remove it from your
+                    Deleting {<strong>{card.name}</strong>} will permanently remove it from your
                     itineraries list.
                   </DialogContentText>
                 </DialogContent>

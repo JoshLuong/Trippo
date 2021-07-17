@@ -22,7 +22,7 @@ export interface User {
 }
 
 export interface Itinerary {
-  _id: any;
+  _id?: any;
   user_id: any; // should we use mongoose ObjectID type?
   name: string;
   start_date: Date;

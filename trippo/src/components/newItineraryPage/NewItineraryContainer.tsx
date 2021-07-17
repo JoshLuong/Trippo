@@ -30,6 +30,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
     const [tags, setTags] = useState<string[]>([]);
     const [destination, setDestination] = useState<any>(null);
     const [destError, setDestError] = useState(undefined);
+    const [nameError, setNameError] = useState<string | undefined>(undefined);
     const nameRef = useRef<HTMLInputElement>();
     const descRef = useRef<HTMLInputElement>();
     const budgetRef = useRef<HTMLInputElement>();
@@ -56,7 +57,6 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
         const newItinerary: Itinerary = {
-            _id: new mongoose.Types.ObjectId(),
             user_id: new mongoose.Types.ObjectId('60f0fb58f7f17e5f88b1eee1'),
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",
@@ -159,7 +159,19 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                         </Alert>
                     </Snackbar>
                     <sc.inputTags>Name</sc.inputTags>
-                    <sc.textField autoFocus error={nameRef.current?.value === ""} helperText={nameRef.current?.value === "" ? 'Required' : ' '} inputRef={nameRef} size="small" variant="outlined" color="secondary" label="My Trip Name" fullWidth />
+                    <sc.textField 
+                        autoFocus 
+                        error={nameError === ""} 
+                        onBlur={() => {
+                            setNameError(nameRef.current?.value || "");
+                        }}
+                        helperText={nameError === "" ? 'Required' : ' '} 
+                        inputRef={nameRef} 
+                        size="small" 
+                        variant="outlined" 
+                        color="secondary" 
+                        label="My Trip Name" 
+                        fullWidth />
                     <sc.inputTags>Destination</sc.inputTags>
                     <Autocomplete
                         classes={autoCompleteStyles}
@@ -186,7 +198,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                         )}
                     />
                     <sc.inputTags>Description</sc.inputTags>
-                    <sc.textField inputRef={descRef} size="small" variant="outlined" color="secondary" fullWidth defaultValue={`This is my trip to ...`} />
+                    <sc.textField key={destination} inputRef={descRef} size="small" variant="outlined" color="secondary" fullWidth defaultValue={`This is my trip to ${destination ? destination.name : '...'}`} />
                 </Grid>
                 <Grid item container spacing={2} direction="row">
                     <Grid item xs={12} md={6} lg={6}>

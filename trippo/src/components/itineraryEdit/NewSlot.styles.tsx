@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
-import { Grid } from "@material-ui/core";
+import { Grid, TextField } from "@material-ui/core";
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 export const Cancel = styled.button`
   top: 0;
@@ -141,3 +142,37 @@ export const Destination = styled.div`
   }
 
 `;
+
+export const textField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '#219EBC',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#219EBC',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&:hover fieldset': {
+        borderColor: '#219EBC',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#219EBC',
+      },
+    },
+  },
+})(TextField);
+
+export const selectStyles = makeStyles((theme) => ({
+  underline: {
+    color: '#219EBC',
+    '&::after': {
+      borderBottom: '#219EBC'
+    },
+    '&::before': {
+      borderBottom: '#219EBC'
+    }
+  },
+  inputLabelRoot: {
+    color: '#219EBC',
+  }
+}));

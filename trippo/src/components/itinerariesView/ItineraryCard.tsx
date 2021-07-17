@@ -51,7 +51,7 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
         <sc.CommentGrid container item lg={12}>
           {card.comments}
         </sc.CommentGrid>
-        {card.tags.length && (
+        {card.tags && (
           <sc.LabelGrid container item lg={12}>
             {card.tags.map((card: any, index: number) => {
               return (

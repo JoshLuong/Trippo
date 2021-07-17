@@ -82,7 +82,7 @@ export const itinerarySchema = new Schema<IItinerary>({
   user_id: { type: Schema.Types.ObjectId, required: true },
   name: { type: String, required: true },
   destination: { type: String, required: true },
-  dest_coord: {
+  dest_coords: {
     type: {
       lat: Number,
       lng: Number,

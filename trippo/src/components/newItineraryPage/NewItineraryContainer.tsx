@@ -185,11 +185,17 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                         )}
                     />
                     <sc.inputTags>Description</sc.inputTags>
-                    <sc.textField inputRef={descRef} size="small" variant="outlined" color="secondary" fullWidth />
+                    <sc.textField inputRef={descRef} size="small" variant="outlined" color="secondary" fullWidth defaultValue={`This is my trip to ...`} />
                 </Grid>
                 <Grid item container spacing={2} direction="row">
                     <Grid item xs={12} md={6} lg={6}>
-                        <sc.inputTags>Collaborators</sc.inputTags>
+                        <sc.inputTags>Collaborators
+                        <Tooltip
+                        title={"Please enter valid user emails"}
+                        >
+                        <sc.StyledInfoIcon />
+                        </Tooltip>
+                        </sc.inputTags>
                         <Autocomplete multiple
                             classes={autoCompleteStyles}
                             onChange={(e: any, newValue: any) => { setCollaborators(newValue) }}
@@ -201,7 +207,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                                 {option}
                             </div>}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" size="small" helperText="Enter a user's email" />
+                                <TextField {...params} variant="outlined" size="small"/>
                             )}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (

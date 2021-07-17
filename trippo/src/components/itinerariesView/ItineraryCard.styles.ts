@@ -3,6 +3,13 @@ import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 import PeopleIcon from "@material-ui/icons/People";
 import LabelIcon from "@material-ui/icons/Label";
+import Button from "@material-ui/core/Button";
+
+export const StyledButton = styled(Button)`
+  span {
+    color: ${c.DARK_ORANGE};
+  }
+`;
 
 export const Card = styled.div`
   background-color: white;

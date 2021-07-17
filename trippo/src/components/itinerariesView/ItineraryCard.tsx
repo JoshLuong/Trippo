@@ -4,7 +4,6 @@ import moment from "moment";
 import { Grid } from "@material-ui/core";
 import { Itinerary } from "types/models";
 import { useState } from "react";
-import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -103,10 +102,10 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleClose} color="primary">
+                  <sc.StyledButton onClick={handleClose} color="primary">
                     Cancel
-                  </Button>
-                  <Button
+                  </sc.StyledButton>
+                  <sc.StyledButton
                     onClick={() => {
                       handleRemove();
                       handleClose();
@@ -118,7 +117,7 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
                     autoFocus
                   >
                     Delete
-                  </Button>
+                  </sc.StyledButton>
                 </DialogActions>
               </Dialog>
             </div>

@@ -48,8 +48,16 @@ export const header = styled.p`
 `;
 
 export const inputTags = styled.h2`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: small;
     color: ${c.DARK_BLUE};
+
+    svg {
+      height: 0.75em;
+      margin-left: 4px;
+    }
 `
 
 export const userButton = styled(Button)` && {

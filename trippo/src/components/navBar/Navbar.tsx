@@ -12,10 +12,12 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import { setUser } from 'app/reducers/userSlice';
 import ListItem from "@material-ui/core/ListItem";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withRouter } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from 'app/store';
 import { BLACK, GREY, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
 import * as sc from "./Navbar.styles";
@@ -29,6 +31,9 @@ const Navbar = (props: { history: any }) => {
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const user = useAppSelector((state) => state.user.value);
+  const dispatch = useAppDispatch();
+
   const handleDropdownClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -36,6 +41,21 @@ const Navbar = (props: { history: any }) => {
   const handleDropdownClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = async () => {
+    try {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/v1/auth/logout`, {
+          method: "DELETE",
+          credentials: 'include'
+        })
+        const data = await res.json()
+        dispatch(setUser({isLoggedIn: false}));
+        handleMenuClick("/");
+    } catch(e) {
+        console.log(e);
+    }
+    // store returned user somehow
+  }
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -100,7 +120,14 @@ const Navbar = (props: { history: any }) => {
           >
             <MenuItem onClick={handleDropdownClose}>Profile</MenuItem>
             <MenuItem onClick={handleDropdownClose}>My Account</MenuItem>
-            <MenuItem onClick={handleDropdownClose}>Logout</MenuItem>
+            <MenuItem onClick={() => {
+              if (user?.isLoggedIn) {
+                handleLogout(); 
+              } else {
+                handleMenuClick("/");
+              }
+              handleDropdownClose();
+              }}>{user?.isLoggedIn ? 'Logout' : 'Sign In'}</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

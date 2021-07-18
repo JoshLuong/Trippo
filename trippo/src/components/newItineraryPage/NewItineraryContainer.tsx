@@ -3,6 +3,7 @@ import { FC, useState, useRef } from 'react';
 import mongoose from 'mongoose';
 import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
+import { useAppSelector } from 'app/store';
 import Alert from '@material-ui/lab/Alert';
 import FaceIcon from '@material-ui/icons/Face';
 import * as sc from './NewItinieraryContainer.styles'
@@ -19,7 +20,7 @@ const collabData: any[] = [];
 const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 
 const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItinerary }) => {
-
+    const user = useAppSelector((state) => state.user.value);
     const [errorMessage, setErrorMessage] = useState("");
     const [cityData, setCityData] = useState([]);
     const [failSnackBar, setFail] = useState(false);
@@ -48,6 +49,8 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
     const handleSubmit = async () => {
         // TODO: remove mongoose from package.json, and use some objectId taken from localstorage or smt
         // TODO validate collaborators
+        if (!user) return;
+        let { _id, name } = user;
         const startDateArr = startRef.current?.value.split("-") || [];
         const endDateArr = endRef.current?.value.split("-") || [];
         if (!validate(startDateArr, endDateArr)) {
@@ -57,7 +60,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
         const newItinerary: Itinerary = {
-            user_id: new mongoose.Types.ObjectId('60f0fb58f7f17e5f88b1eee1'),
+            user_id: user._id,
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",
             dest_coords: {
@@ -69,7 +72,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
             restaurant_ratings: rating,
             max_walking_dist: Number(maxWalkRef.current?.value) || 5,
             max_driving_dist: Number(maxDriveRef.current?.value) || 15,
-            collaborators: collaborators,
+            collaborators: [{user_id: _id, name},...collaborators],
             comments: descRef.current?.value,
             tags: tags,
             start_date: start_date,

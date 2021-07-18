@@ -7,6 +7,7 @@ const url = process.env.REACT_APP_BACKEND_URL!;
 interface GetItinerariesRequest {
   offset: number;
   limit: number;
+  name?: string;
 }
 
 interface GetItinerariesResponse {
@@ -20,7 +21,15 @@ export const itineraryApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${url}/itineraries` }),
   endpoints: (builder) => ({
     getItineraries: builder.query<GetItinerariesResponse, GetItinerariesRequest>({
-      query: (req: GetItinerariesRequest) => `/?${qs.stringify(req)}`,
+      query: (req: GetItinerariesRequest) => {
+        return {
+          url: `/?${qs.stringify(req)}`,
+          headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:3000'
+          },
+          credentials: 'include'
+        }
+      },
     }),
     deleteItinerary: builder.mutation<{ success: boolean; id: number }, number>({
       query(id) {

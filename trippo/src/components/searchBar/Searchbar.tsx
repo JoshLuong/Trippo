@@ -9,6 +9,7 @@ import {DARK_BLUE} from "../../colors/colors";
 
 interface Props {
   children?: ReactElement<any, any>;
+  onChange?: (e: any) => void;
 }
 // TODO: refactor
 const useStyles = makeStyles(theme => ({
@@ -50,7 +51,7 @@ const ColoredLine = () => (
   />
 );
 
-const Searchbar: FC<Props> = ({children}) => {
+const Searchbar: FC<Props> = ({children, onChange}) => {
   const classes = useStyles();
 // TODO remove inline line 60... do we need this? should just use margins
   return (
@@ -72,12 +73,14 @@ const Searchbar: FC<Props> = ({children}) => {
               <InputBase
                 className={classes.input}
                 placeholder="Search..."
+                onChange={onChange}
                 inputProps={{ "aria-label": "search itineraries" }}
               />
               <IconButton
                 type="submit"
                 className={classes.iconButton}
                 aria-label="search"
+                disabled
               >
                 <SearchIcon />
               </IconButton>

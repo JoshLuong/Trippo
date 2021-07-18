@@ -15,7 +15,7 @@ const seed = async () => {
   await User.insertMany(userDocs);
 
   await Itinerary.insertMany(itineraries.map(itin => {
-    const itinWithUsers = {...itin, user_id: userDocs[0]._id, collaborators: [{user_id: userDocs[1]._id, name:  userDocs[1].name, password: userDocs[1].password }]};
+    const itinWithUsers = {...itin, user_id: userDocs[0]._id, collaborators: [{user_id: userDocs[1]._id, name:  userDocs[1].name }]};
     return new Itinerary(itinWithUsers);
   }));
 

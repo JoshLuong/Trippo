@@ -3,9 +3,10 @@ import { Itinerary } from 'database/models';
 
 const router = express.Router();
 
-router.get('/', async (req, res, _next) => {
-  const { offset, limit } = req.query;
-  const filter = {};
+router.get('/', async (req: any, res, _next) => {
+  const { offset, limit, name } = req.query;
+  const regex = new RegExp(name, 'i') // i for case insensitive
+  const filter = {user_id: req.session.userId, name:  {$regex: regex}};
 
   const [itineraries, count] = await Promise.all([
     Itinerary.find(filter, {}, { skip: Number(offset) || 0, limit: Number(limit) || 100 }),

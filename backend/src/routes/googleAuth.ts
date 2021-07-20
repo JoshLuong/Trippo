@@ -16,9 +16,9 @@ router.post("/google", async (req: any, res: any) => {
             if (!ticket) throw new Error('Timeout on logging in');
           }, 500);
         const { name, email } = ticket.getPayload();
-        const user = await User.findOne({email: email}).exec();
+        let user = await User.findOne({email: email}).exec();
         if (!user) {
-            User.create({name: name, email: email})
+            user = await User.create({name: name, email: email})
         }
         req.session.userId = user?._id;
         res.status(201);

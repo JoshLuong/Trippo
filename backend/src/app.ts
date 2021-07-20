@@ -16,14 +16,14 @@ mongoose.connect(process.env.DATABASE_URL!, {
   const PORT = process.env.PORT || 4000;
 
   // TODO: change to secure https://www.npmjs.com/package/express-session
-  app.use(session({ resave: true ,secret: '123456' , saveUninitialized: true, cookie: { secure: false }}));
+  app.use(session({ resave: true ,secret: process.env.EXPRESS_SESSION_SECRET , saveUninitialized: true, cookie: { secure: false }}));
   app.use(async (req: any, res, next) => {
-    /* block any bad req/ unlogged in users
-    if (req.originalUrl !== "/api/v1/auth/google" && !req.session.userId) {
-      return res.send(404);
-    }
-    */
     const user = await User.findById(req.session.userId).exec();
+    // TODO if user is logged out, response should be 404
+    if (req.originalUrl !== "/api/v1/auth/google" && req.originalUrl !== "/api/v1/auth/logout" && req.method !== "OPTIONS" && !user) {
+      res.status(404).send('User not found')
+      return next('invalid user');
+    }
     req.user = user // you can access req.user anywhere in the API now
     next()
 })
@@ -31,7 +31,8 @@ mongoose.connect(process.env.DATABASE_URL!, {
   app.use(express.urlencoded({ extended: true }));
   const corsOptions = {
     origin: 'http://localhost:3000',
-    credentials: true };
+    credentials: true,
+    preflightContinue: false };
   app.use(cors(corsOptions));
 
   app.use('/api/itineraries', itineraryRouter);

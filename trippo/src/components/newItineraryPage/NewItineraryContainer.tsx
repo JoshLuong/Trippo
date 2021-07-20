@@ -1,6 +1,5 @@
 /// <reference path='./NewItineraryContainer.d.ts' />
 import { FC, useState, useRef } from 'react';
-import mongoose from 'mongoose';
 import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
 import { useAppSelector } from 'app/store';
@@ -50,7 +49,6 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
         // TODO: remove mongoose from package.json, and use some objectId taken from localstorage or smt
         // TODO validate collaborators
         if (!user) return;
-        let { _id, name } = user;
         const startDateArr = startRef.current?.value.split("-") || [];
         const endDateArr = endRef.current?.value.split("-") || [];
         if (!validate(startDateArr, endDateArr)) {
@@ -60,7 +58,6 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
         const newItinerary: Itinerary = {
-            user_id: user._id,
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",
             dest_coords: {
@@ -72,7 +69,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
             restaurant_ratings: rating,
             max_walking_dist: Number(maxWalkRef.current?.value) || 5,
             max_driving_dist: Number(maxDriveRef.current?.value) || 15,
-            collaborators: [{user_id: _id, name},...collaborators],
+            collaborators: [...collaborators],
             comments: descRef.current?.value,
             tags: tags,
             start_date: start_date,
@@ -179,7 +176,10 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                     <Autocomplete
                         classes={autoCompleteStyles}
                         value={destination}
-                        onChange={(e: any, newValue: any) => { setDestination(newValue) }}
+                        onChange={(e: any, newValue: any) => { 
+                            setDestination(newValue);
+                            if (newValue) setTags([newValue.country, ...tags]); 
+                        }}
                         onBlur={() => setDestError(destination)}
                         size="small"
                         options={cityData || []}

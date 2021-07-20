@@ -44,11 +44,10 @@ const Navbar = (props: { history: any }) => {
 
   const handleLogout = async () => {
     try {
-        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/v1/auth/logout`, {
+        await fetch(`${process.env.REACT_APP_BACKEND_URL}/v1/auth/logout`, {
           method: "DELETE",
           credentials: 'include'
         })
-        const data = await res.json()
         dispatch(setUser({isLoggedIn: false}));
         handleMenuClick("/");
     } catch(e) {
@@ -98,7 +97,7 @@ const Navbar = (props: { history: any }) => {
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
           <sc.Logo>
-            <sc.LogoButton onClick={() => handleMenuClick("/home?page=1")}>
+            <sc.LogoButton disabled={!user?.isLoggedIn} onClick={() => handleMenuClick("/home?page=1")}>
               <img alt="Trippo Logo" src="trippo.png" width="120"></img>
             </sc.LogoButton>
           </sc.Logo>
@@ -118,8 +117,7 @@ const Navbar = (props: { history: any }) => {
             open={Boolean(anchorEl)}
             onClose={handleDropdownClose}
           >
-            <MenuItem onClick={handleDropdownClose}>Profile</MenuItem>
-            <MenuItem onClick={handleDropdownClose}>My Account</MenuItem>
+            { user ? <MenuItem disabled>{user.name}</MenuItem> : null}
             <MenuItem onClick={() => {
               if (user?.isLoggedIn) {
                 handleLogout(); 
@@ -156,6 +154,7 @@ const Navbar = (props: { history: any }) => {
             const { menuTitle, pageURL } = menuItem;
             return (
               <ListItem
+                disabled={!user?.isLoggedIn}
                 button
                 onClick={() => handleMenuClick(pageURL)}
                 key={index}

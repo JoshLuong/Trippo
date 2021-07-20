@@ -10,6 +10,7 @@ import { useCreateItineraryMutation, useDeleteItineraryMutation, useLazyGetItine
 import Pagination from '@material-ui/lab/Pagination';
 import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'qs';
+import { useCallback } from "react";
 
 
 // const server = "http://localhost:4000/api/itineraries/";
@@ -28,10 +29,16 @@ const ItinerariesView = () => {
 
   const search = _.debounce((e: any) => {
     setFilterText(e.target.value)
-  }, 300);
+  }, 400);
 
   const [showEdit, setShowEdit] = useState(false);
   const [showNewItinerary, setShowNewItinerary] = useState(false);
+  
+  const handlePageChange = useCallback((_event: any, page: number) => {
+    history.push({
+      search: `?page=${page}`
+    });
+  },[history]);
 
   useEffect(() => {
     triggerGetQuery({
@@ -43,15 +50,15 @@ const ItinerariesView = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterText, isUpdating, isDeleting, page]);
 
+  useEffect(() => {
+    if (Number(page || 1) !== 1 && filterText !== "") { // on filter change, if page > 1, destroy pagination
+      handlePageChange(null, 1);
+    }
+  }, [filterText, page, handlePageChange]);
+
 
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);
-  }
-
-  const handlePageChange = (_event: any, page: number) => {
-    history.push({
-      search: `?page=${page}`
-    });
   }
 
   // TODO: take out inline style; move to search 

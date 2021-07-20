@@ -15,7 +15,7 @@ interface Props {
 }
 
 const LoginPane: FC<Props> = (Props) => {
-    let history = useHistory();
+    const history = useHistory();
     const dispatch = useAppDispatch();
 
     const handleLogin = async (googleData: any) => {

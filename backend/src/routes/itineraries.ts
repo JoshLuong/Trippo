@@ -19,8 +19,8 @@ router.get('/', async (req: any, res, _next) => {
   });
 });
 
-router.post('/', (req, res, _next) => {
-  const itinerary = new Itinerary({ ...req.body });
+router.post('/', (req: any, res, _next) => {
+  const itinerary = new Itinerary({ ...req.body, user_id: req.session.userId, collaborators: [req.user, ...req.body.collaborators]});
   itinerary.save()
     .then(doc => {
       res.send(doc);
@@ -31,9 +31,9 @@ router.post('/', (req, res, _next) => {
     })
 });
 
-router.delete('/:id', (req, res, _next) => {
-  console.log(req);
-  Itinerary.findOneAndRemove({ _id: req.params.id })
+router.delete('/:id', (req: any, res, _next) => {
+  console.log(req.user);
+  Itinerary.findOneAndRemove({ _id: req.params.id, user_id: req.session.userId })
     .then(doc => {
       res.send(doc);
     }).catch(err => {

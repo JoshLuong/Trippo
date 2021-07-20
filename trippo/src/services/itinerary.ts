@@ -19,14 +19,12 @@ interface GetItinerariesResponse {
 export const itineraryApi = createApi({
   reducerPath: 'itineraryApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${url}/itineraries` }),
+  // important: in order to use user cookie within backend, must have credentials and headers (if body present) present
   endpoints: (builder) => ({
     getItineraries: builder.query<GetItinerariesResponse, GetItinerariesRequest>({
       query: (req: GetItinerariesRequest) => {
         return {
           url: `/?${qs.stringify(req)}`,
-          headers: {
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
-          },
           credentials: 'include'
         }
       },
@@ -36,6 +34,10 @@ export const itineraryApi = createApi({
         return {
           url: `/${id}`,
           method: 'DELETE',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json', // need for cookies
+          },
         }
       }
     }),
@@ -43,8 +45,12 @@ export const itineraryApi = createApi({
       query(body) {
         return {
           url: `/`,
+          credentials: 'include',
           method: 'POST',
           body,
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
       },
     })

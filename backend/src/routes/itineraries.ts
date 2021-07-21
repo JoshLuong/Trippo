@@ -18,6 +18,14 @@ router.get('/', async (req, res, _next) => {
   });
 });
 
+router.get('/:id', async (req, res, _next) => {
+  const { id } = req.params;
+
+  const itinerary = await Itinerary.findById(id);
+
+  res.status(200).send(itinerary);
+});
+
 router.post('/', (req, res, _next) => {
   const itinerary = new Itinerary({ ...req.body });
   itinerary.save()

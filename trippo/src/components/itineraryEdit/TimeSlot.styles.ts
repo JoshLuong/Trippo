@@ -37,7 +37,10 @@ export const Time = styled.div`
   .MuiInput-root {
     font-size: 1em;
     letter-spacing: 0px;
+  }
 
+  .MuiInputBase-root.Mui-disabled {
+    color: inherit;
   }
 
   @media (max-width: 960px) {

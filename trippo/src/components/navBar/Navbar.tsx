@@ -79,7 +79,7 @@ const Navbar = (props: { history: any }) => {
           </IconButton>
           <sc.Logo>
             <sc.LogoButton onClick={() => handleMenuClick("/home?page=1")}>
-              <img alt="Trippo Logo" src="trippo.png" width="120"></img>
+              <img alt="Trippo Logo" src="/trippo.png" width="120"></img>
             </sc.LogoButton>
           </sc.Logo>
           <IconButton

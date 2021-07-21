@@ -1,14 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export type Itinerary = {
-  id: number;
-  dates: {
-      day_id: number;
-  }[];
-} | null
+import { Itinerary } from 'types/models';
 
 interface State {
-  value: Itinerary;
+  value: Itinerary | null;
 }
 
 interface Action {
@@ -23,7 +17,7 @@ export const itinerary = createSlice<State, SliceReducers, "itinerary">({
   // reducer uses the actions
   name: "itinerary",
   initialState: {
-    value: null
+    value: null,
   },
   reducers: {
     setItinerary: (state: State, action: Action) => {
@@ -36,7 +30,7 @@ export const itinerary = createSlice<State, SliceReducers, "itinerary">({
 
 // Action creators are generated for each case reducer function
 export const {
-  setItinerary
+  setItinerary,
 } = itinerary.actions;
 
 export default itinerary.reducer;

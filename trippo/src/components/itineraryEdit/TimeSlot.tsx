@@ -6,36 +6,26 @@ import { Grid, Tooltip } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
+import { Activity } from 'types/models';
 
 interface Props {
   handleHideCostToggle: (cost: number | undefined) => void;
-  timeSlot: {
-    time?: Date;
-    destination?: string;
-    comments?: string[];
-    type?: string;
-    suggested?: {
-      destination?: string;
-      comments?: string;
-      type?: string;
-    }[];
-    cost?: number;
-  };
+  activity: Activity;
   showEdit?: boolean;
-  timeChange: (date:any, timeRef:any, index:number) => void;
+  timeChange: (date: any, timeRef: any, index: number) => void;
   index: number;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeChange, index }) => {
-  const { time, destination, comments, type, suggested } = timeSlot;
+const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, timeChange, index }) => {
+  const { time, destination, comments, type, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
   const timeRef = useRef(null);
 
   const handleShowCostToggle = () => {
     !showCost
-      ? handleHideCostToggle(timeSlot.cost)
-      : handleHideCostToggle(-Math.abs(timeSlot.cost || 0));
+      ? handleHideCostToggle(activity.cost)
+      : handleHideCostToggle(-Math.abs(activity.cost || 0));
     setShowCost(!showCost);
   };
 
@@ -49,12 +39,11 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
           {destination}
         </Grid>
         <Grid container item lg={2} md={2} sm={2} xs={2}>
-          <sc.Cost {...costStyling} contentEditable={showEdit ? true : false}>
-            {timeSlot.cost ? (
+          <sc.Cost {...costStyling} contentEditable={showEdit ? true : false} onChange={(e) => console.log(e.currentTarget.nodeValue)}>
+            {activity.cost ? (
               <Tooltip
-                title={`${
-                  showCost ? "Hide from" : "Include in"
-                } the total daily cost`}
+                title={`${showCost ? "Hide from" : "Include in"
+                  } the total daily cost`}
               >
                 <button onClick={handleShowCostToggle}>
                   {showCost ? (
@@ -65,7 +54,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
                 </button>
               </Tooltip>
             ) : null}
-            <div>{timeSlot.cost ? `$${timeSlot.cost}` : ""}</div>
+            <div>{activity.cost ? `$${activity.cost}` : ""}</div>
           </sc.Cost>
         </Grid>
       </sc.Destination>
@@ -79,19 +68,20 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
       <Grid container item lg={12}>
         <Grid container item lg={3} md={3} sm={12}>
           <sc.Time>
-          <TextField
-            onChange={(date) => timeChange(date, timeRef, index)}
-            ref={timeRef}
-            id="time"
-            type="time"
-            defaultValue={moment(date, "dd DD-MMM-YYYY, hh:mm").format("HH:mm")}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 300, // 5 min
-            }}
-          />
+            <TextField
+              disabled={!showEdit}
+              onChange={(date) => timeChange(date, timeRef, index)}
+              ref={timeRef}
+              id="time"
+              type="time"
+              defaultValue={moment(date, "dd DD-MMM-YYYY, hh:mm").format("HH:mm")}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                step: 300, // 5 min
+              }}
+            />
           </sc.Time>
         </Grid>
         <sc.SlotGrid container item lg={9} md={9} sm={12} xs={12}>

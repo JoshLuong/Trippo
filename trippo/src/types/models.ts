@@ -1,4 +1,5 @@
 export interface Activity {
+  _id: string;
   location: {
     lat: number;
     lng: number;
@@ -22,7 +23,7 @@ export interface User {
 }
 
 export interface Itinerary {
-  _id?: any;
+  _id: string;
   user_id: any; // should we use mongoose ObjectID type?
   name: string;
   start_date: Date;

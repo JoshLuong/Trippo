@@ -4,7 +4,7 @@ import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
 import { Grid, Tooltip } from "@material-ui/core";
-import { useAppSelector } from "app/store";
+import { useAppSelector } from 'app/store';
 
 interface Props {
   date: Date;
@@ -12,16 +12,18 @@ interface Props {
 }
 
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
-  const day = useAppSelector((state) => state.day.value);
+  const itinerary = useAppSelector((state) => state.itinerary.value);
 
-  let cost = day
-    .map((slot) => (slot.cost ? slot.cost : 0))
-    .reduce(function (total, cost) {
-      return total + cost;
+  const dayActivities = itinerary?.activities
+    .filter((activity) => moment(date).isSame(moment(activity.time), 'date')) || [];
+
+  let cost = dayActivities
+    .reduce(function (total, activity) {
+      return total + (activity.cost || 0);
     }, 0);
   const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [dayCost, setDayCost] = useState(cost);
+  const [dayCost, setDayCost] = useState(cost || 0);
   const budget = 50;
 
   const handleSettingsView = () => {
@@ -72,12 +74,12 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
       ) : (
         <div>
           <sc.TimeSlots>
-            {day.map((slot, idx) => {
+            {dayActivities.map((activity, idx) => {
               return (
-                <div key={idx}>
+                <div key={activity._id}>
                   <TimeSlot
                     handleHideCostToggle={handleHideCostToggle}
-                    timeSlot={slot}
+                    activity={activity}
                     showEdit={edit}
                     timeChange={timeChange}
                     index={idx}

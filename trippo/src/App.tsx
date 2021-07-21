@@ -13,7 +13,7 @@ function App() {
     <>
       <Navbar />
       <Switch>
-        <Route exact path="/itinerary" component={() => <ItineraryPage />} />
+        <Route exact path="/itinerary/:id" component={() => <ItineraryPage />} />
         <Route exact path="/" component={() => <WelcomePage />} />
         <Route exact path="/home" component={() => <ItinerariesView />} />
       </Switch>

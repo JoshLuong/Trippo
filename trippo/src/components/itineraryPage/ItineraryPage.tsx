@@ -8,11 +8,15 @@ import { GeocoderContainer } from 'components/map/Map.styles';
 import Searchbar from "components/searchBar/Searchbar";
 import NewSlot from "components/itineraryEdit/NewSlot";
 
+let destinationName: string;
+let destinationAddress: string;
+
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
   const geocoderContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
+
 
   function handleOpenItinerary() {
     setShowItinerary(!showItinerary);
@@ -22,7 +26,9 @@ function ItineraryPage() {
     setIsLoading(!isLoading);
   }
 
-  function handleNewSlotClick(name: string) { // TODO addd more to here
+  function handleNewSlotClick(name: string, address: string) { // TODO addd more to here
+    destinationName = name;
+    destinationAddress = address;
     setCanOpenNewSlot(true);
   }
 
@@ -77,7 +83,7 @@ function ItineraryPage() {
           </sc.Container>
         ) : null}
         {
-          canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose}/>
+          canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose} destinationName={destinationName} destinationAddress={destinationAddress}/>
             : null
         }
       </div>

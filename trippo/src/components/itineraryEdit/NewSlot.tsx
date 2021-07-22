@@ -6,9 +6,11 @@ import { Grid } from "@material-ui/core";
 import CancelIcon from '@material-ui/icons/Cancel';
 interface Props {
   handleClose: () => void;
+  destinationName: string;
+  destinationAddress: string;
 }
 
-const NewSlot: FC<Props> = ({ handleClose }) => {
+const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }) => {
   const [type, setType] = useState(d.OTHER);
 
   const handleTypechange = (event: any) => {
@@ -56,8 +58,8 @@ const NewSlot: FC<Props> = ({ handleClose }) => {
   );
   return (
     <sc.NewSlot>
-      <sc.NameDiv>Name</sc.NameDiv>
-      <sc.AdressDiv>Address</sc.AdressDiv>
+      <sc.NameDiv>{destinationName}</sc.NameDiv>
+      <sc.AdressDiv>{destinationAddress}</sc.AdressDiv>
       <sc.Cancel onClick={handleClose}>
         <CancelIcon />
       </sc.Cancel>

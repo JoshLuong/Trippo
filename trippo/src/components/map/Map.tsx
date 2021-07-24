@@ -1,11 +1,11 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import ReactMapGL, { FlyToInterpolator, MapRef, Marker } from 'react-map-gl';
+import ReactMapGL, { FlyToInterpolator, MapRef, Marker, Popup } from 'react-map-gl';
 // @ts-ignore No type declaration for this package
 import Geocoder from 'react-map-gl-geocoder';
 import { Pin } from './Marker';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { InteractiveMapProps } from 'react-map-gl/src/components/interactive-map';
-import { setHighlighted } from 'app/reducers/daySlice';
+import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
 import {DARK_ORANGE} from "../../colors/colors";
 import './Map.css';
 
@@ -25,14 +25,12 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
     latitude: 40,
     zoom: 2,
   });
-  const [searchResult, setSearchResult] = useState<any>(null);
-
-  useEffect(()=> {
-    console.log(searchResult)
-  }, [searchResult]);
 
   const day = useAppSelector((state) => state.day.value);
   const dispatch = useAppDispatch();
+
+  const [searchResult, setSearchResult] = useState<any>(null);
+  const [activityPopup, setActivityPopup] = useState<number[]>([]);
 
   useEffect(() => {
     if (day.length) {
@@ -60,7 +58,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
       onLoad={handleIsLoading}
       mapStyle="mapbox://styles/mapbox/streets-v11"
     >
-      {day.map((slot) => (
+      {day.map((slot, index) => (
         <Marker
           key={slot.id}
           latitude={slot.location.lat}
@@ -71,11 +69,28 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
           offsetTop={-41}
         >
           <Pin className="marker" onClick={() => {
-            handleNewSlotClick("TODO add name, lat, lon, etc")
+            const arrSize = activityPopup.length;
+            const filteredArray = activityPopup.filter((a) => a !== index);
+            const newActivitiyPopup: number[] = filteredArray.length === arrSize ? [...activityPopup, index] : filteredArray;
+            setActivityPopup(newActivitiyPopup);
             dispatch(setHighlighted(slot.id))
             }}/>
         </Marker>
       ))}
+      {
+        activityPopup.map( popupIndex => (
+          <Popup
+            key={popupIndex}
+            latitude={day[popupIndex].location.lat}
+            longitude={day[popupIndex].location.lng}
+            closeButton={false}
+            offsetTop={-47}
+            anchor="bottom" 
+          >
+            <div>Update here with proper destination name and time</div>
+          </Popup>
+        ))
+      }
       {
         searchResult ? (
         <Marker
@@ -94,6 +109,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
       }
       <Geocoder
         mapRef={mapRef}
+        zoom={11}
         containerRef={geocoderContainerRef}
         onViewportChange={setViewport}
         onResult={(e: any) => setSearchResult(e.result)}

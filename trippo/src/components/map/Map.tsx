@@ -3,10 +3,12 @@ import ReactMapGL, { FlyToInterpolator, MapRef, Marker } from 'react-map-gl';
 // @ts-ignore No type declaration for this package
 import Geocoder from 'react-map-gl-geocoder';
 import Pin from './Marker';
-import { useAppDispatch, useAppSelector } from 'app/store';
+// import { useAppDispatch, useAppSelector } from 'app/store';
 import { InteractiveMapProps } from 'react-map-gl/src/components/interactive-map';
-import { setHighlighted } from 'app/reducers/daySlice';
+// import { setHighlighted } from 'app/reducers/daySlice';
 import './Map.css';
+import { useGetItineraryByIdQuery } from 'services/itinerary';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
@@ -22,15 +24,14 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
     zoom: 2,
   });
   const [placeholder, setPlaceholder] = useState('Search');
-
-  const day = useAppSelector((state) => state.day.value);
-  const dispatch = useAppDispatch();
+  const { id } = useParams<{ id: string }>();
+  const { data } = useGetItineraryByIdQuery(id);
 
   useEffect(() => {
-    if (day.length) {
+    if (data?.activities.length) {
       setViewport({
-        longitude: day[0].location.lng,
-        latitude: day[0].location.lat,
+        longitude: data.activities[0].location.lng,
+        latitude: data.activities[0].location.lat,
         zoom: 10,
         transitionDuration: 5000,
         transitionInterpolator: new FlyToInterpolator(),
@@ -38,7 +39,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [day]);
+  }, [data]);
 
   return (
     <ReactMapGL
@@ -52,9 +53,9 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
       onLoad={handleIsLoading}
       mapStyle="mapbox://styles/mapbox/streets-v11"
     >
-      {day.map((slot) => (
+      {data?.activities.map((slot) => (
         <Marker
-          key={slot.id}
+          key={slot._id}
           latitude={slot.location.lat}
           longitude={slot.location.lng}
           // SVG width / 2
@@ -64,7 +65,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
         >
           <Pin className="marker" onClick={() => {
             handleNewSlotClick("TODO add name, lat, lon, etc")
-            dispatch(setHighlighted(slot.id))
+            // dispatch(setHighlighted(slot.id))
             }} />
         </Marker>
       ))}

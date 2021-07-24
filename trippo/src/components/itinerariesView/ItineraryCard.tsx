@@ -32,7 +32,7 @@ const renderNames = (name: string, card: Itinerary) => {
 
   return (
     <sc.NameGrid container item lg={8} sm={12}>
-      <sc.TripName href="./itinerary">{name}</sc.TripName>
+      <sc.TripName href={`./itinerary/${card._id}`}>{name}</sc.TripName>
       <sc.Collaborators>
         <sc.StyledPeopleIcon />
         {names}

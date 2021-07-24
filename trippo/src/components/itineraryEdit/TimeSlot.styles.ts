@@ -2,7 +2,8 @@ import styled, { css } from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
-
+import { TextField, FormControl } from '@material-ui/core';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 const darkGrey = c.GREY;
 export interface StyledTimeSlotProps{
   showSuggestions: boolean
@@ -44,7 +45,10 @@ export const Time = styled.div`
   .MuiInput-root {
     font-size: 1em;
     letter-spacing: 0px;
+  }
 
+  .MuiInputBase-root.Mui-disabled {
+    color: inherit;
   }
 
   @media (max-width: 960px) {
@@ -108,7 +112,6 @@ export const Cost = styled.div`
   div {
     margin-right: 0.5em;
   }
-  ${(props) => props.contentEditable && editStylesUnderline}
 
   button {
     border: none;
@@ -151,7 +154,6 @@ export const Comments = styled.ul`
   width: 100%;
   list-style: none;
   padding-left: 0.5em;
-  ${(props) => props.contentEditable && editStyles}
   @media (max-width: 960px) {
     margin-left: 1em;
   }
@@ -179,3 +181,40 @@ export const EditButton = styled.button`
     cursor: pointer;
   }
 `;
+export const StyledFormControl = styled(FormControl)`
+  input {
+    padding: 0;
+    font-size: 0.75em;
+  }
+  .MuiTypography-body1 {
+    font-size: 0.75em;
+    margin-right: -6px;
+  }
+
+  .MuiInput-underline, .MuiInput-underline:before, .MuiInput-underline:after {
+    transition: none;
+    border-bottom: 0 !important;
+  }
+`;
+export const StyledTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: `${c.DARK_GREY}`,
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: `${c.DARK_GREY}`,
+    },
+    '& .MuiOutlinedInput-root': {
+      '&:hover fieldset': {
+        borderColor: `${c.DARK_GREY}`,
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: `${c.DARK_GREY}`,
+      },
+    },
+    '& .Mui-disabled .Mui-disabled': {
+      opacity: '10',
+      color: 'initial',
+    }
+  },
+})(TextField);

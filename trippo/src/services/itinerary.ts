@@ -29,7 +29,15 @@ export const itineraryApi = createApi({
         }
       },
     }),
-    deleteItinerary: builder.mutation<{ success: boolean; id: number }, number>({
+    getItineraryById: builder.query<Itinerary, string>({
+      query: (id: string) => {
+        return {
+          url: `/${id}`,
+          credentials: 'include'
+        }
+      },
+    }),
+    deleteItinerary: builder.mutation<{ success: boolean; id: string }, string>({
       query(id) {
         return {
           url: `/${id}`,
@@ -62,6 +70,7 @@ export const itineraryApi = createApi({
 export const {
   useGetItinerariesQuery,
   useLazyGetItinerariesQuery,
+  useGetItineraryByIdQuery,
   useCreateItineraryMutation,
   useDeleteItineraryMutation,
 } = itineraryApi;

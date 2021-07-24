@@ -1,10 +1,8 @@
-import {DARK_BLUE} from "../../colors/colors";
+import {DARK_BLUE } from "../../colors/colors";
 
-const Pin = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" height="40" viewBox="96.9 48.742 270.895 404.002" fill={DARK_BLUE} {...props}>
+export const Pin = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg xmlns="http://www.w3.org/2000/svg" height="40" viewBox="96.9 48.742 270.895 404.002" fill={props.fill || DARK_BLUE} {...props}>
     <path d="M 232.386 49.765 C 161.737 49.765 97.749 106.799 97.749 177.176 C 97.749 247.535 156.13 331.537 232.386 452.012 C 308.642 331.537 367.024 247.535 367.024 177.176 C 367.024 106.799 303.054 49.765 232.386 49.765 Z M 232.386 234.13 C 204.501 234.13 181.898 211.62 181.898 183.849 C 181.898 156.077 204.501 133.568 232.386 133.568 C 260.273 133.568 282.876 156.077 282.876 183.849 C 282.876 211.62 260.273 234.13 232.386 234.13 Z" />
     <circle fill="white" cx="232.319" cy="183.619" r="51.004" />
   </svg>
 );
-
-export default Pin;

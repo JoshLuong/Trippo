@@ -2,12 +2,16 @@ import { FC, useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FlyToInterpolator, MapRef, Marker } from 'react-map-gl';
 // @ts-ignore No type declaration for this package
 import Geocoder from 'react-map-gl-geocoder';
-import Pin from './Marker';
+import { Pin } from './Marker';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { InteractiveMapProps } from 'react-map-gl/src/components/interactive-map';
 import { setHighlighted } from 'app/reducers/daySlice';
+import {DARK_ORANGE} from "../../colors/colors";
 import './Map.css';
 
+
+// TODO ROHIT: when user clicks 'X' button on new activity pop-up, you should setSearchResult(null)
+// and update the day and redux store when u send a patch to update activities
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
   handleIsLoading: () => void;
@@ -21,7 +25,11 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
     latitude: 40,
     zoom: 2,
   });
-  const [placeholder, setPlaceholder] = useState('Search');
+  const [searchResult, setSearchResult] = useState<any>(null);
+
+  useEffect(()=> {
+    console.log(searchResult)
+  }, [searchResult]);
 
   const day = useAppSelector((state) => state.day.value);
   const dispatch = useAppDispatch();
@@ -65,17 +73,34 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
           <Pin className="marker" onClick={() => {
             handleNewSlotClick("TODO add name, lat, lon, etc")
             dispatch(setHighlighted(slot.id))
-            }} />
+            }}/>
         </Marker>
       ))}
+      {
+        searchResult ? (
+        <Marker
+          latitude={searchResult.geometry.coordinates[1]}
+          longitude={searchResult.geometry.coordinates[0]}
+          // SVG width / 2
+          offsetLeft={-13.415}
+          // SVG height + 1px
+          offsetTop={-41}
+        >
+          <Pin className="marker" onClick={() => {
+            alert("TODO")
+            }} fill={DARK_ORANGE} />
+        </Marker>
+        ) : null
+      }
       <Geocoder
         mapRef={mapRef}
         containerRef={geocoderContainerRef}
         onViewportChange={setViewport}
-        onResult={(e: any) => setPlaceholder(e.result.place_name)}
+        onResult={(e: any) => setSearchResult(e.result)}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+        onClear={() => setSearchResult(null)}
         style={{ maxWidth: '100%', width: '100%' }}
-        placeholder={placeholder}
+        placeholder={searchResult?.place_name || 'Search'}
         // Resets the input value after a search is made.
         // If this isn't done then Mapbox will keep loading the same query.
         inputValue=""

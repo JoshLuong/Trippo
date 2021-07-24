@@ -10,6 +10,7 @@ import NewSlot from "components/itineraryEdit/NewSlot";
 
 let destinationName: string;
 let destinationAddress: string;
+let destinationTime: any;
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
@@ -26,9 +27,10 @@ function ItineraryPage() {
     setIsLoading(!isLoading);
   }
 
-  function handleNewSlotClick(name: string, address: string) { // TODO addd more to here
+  function handleNewSlotClick(name: string, address: string, time: any) { // TODO addd more to here
     destinationName = name;
     destinationAddress = address;
+    destinationTime = time;
     setCanOpenNewSlot(true);
   }
 
@@ -83,7 +85,7 @@ function ItineraryPage() {
           </sc.Container>
         ) : null}
         {
-          canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose} destinationName={destinationName} destinationAddress={destinationAddress}/>
+          canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose} destinationName={destinationName} destinationAddress={destinationAddress} destinationTime={destinationTime}/>
             : null
         }
       </div>

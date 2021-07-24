@@ -8,11 +8,12 @@ import { InteractiveMapProps } from 'react-map-gl/src/components/interactive-map
 import { setHighlighted } from 'app/reducers/daySlice';
 import axios from 'axios';
 import './Map.css';
+import moment from 'moment';
 
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
   handleIsLoading: () => void;
-  handleNewSlotClick: (name: string, address: string) => any;
+  handleNewSlotClick: (name: string, address: string, time: any) => void;
 }
 
 const MAPBOX_API_URL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
@@ -31,7 +32,6 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
     zoom: 2,
   });
   const [placeholder, setPlaceholder] = useState('Search');
-  const [addressState, setAddressState] = useState('');
 
 
   const day = useAppSelector((state) => state.day.value);
@@ -74,7 +74,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
           offsetTop={-41}
         >
          <Pin className="marker" onClick={ async () => {
-            handleNewSlotClick(slot.destination!, await reverseGeocode(slot.location.lat, slot.location.lng))
+            handleNewSlotClick(slot.destination!, await reverseGeocode(slot.location.lat, slot.location.lng), moment(slot.time, "dd DD-MMM-YYYY, hh:mm").format("HH:mm"))
             dispatch(setHighlighted(slot.id))
             }} />
         </Marker>
@@ -83,11 +83,10 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
         mapRef={mapRef}
         containerRef={geocoderContainerRef}
         onViewportChange={setViewport}
-        onResult={(e: any) => setPlaceholder(e.result.place_name)}
+        onResult={(e: any) => setPlaceholder(e.result.place_name) }
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         style={{ maxWidth: '100%', width: '100%' }}
         placeholder={placeholder}
-        reverseGeocode
         // Resets the input value after a search is made.
         // If this isn't done then Mapbox will keep loading the same query.
         inputValue=""

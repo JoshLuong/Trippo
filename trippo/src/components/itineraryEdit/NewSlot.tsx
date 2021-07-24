@@ -4,17 +4,49 @@ import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid } from "@material-ui/core";
 import CancelIcon from '@material-ui/icons/Cancel';
+import { useAppSelector } from "app/store";
+
 interface Props {
   handleClose: () => void;
   destinationName: string;
   destinationAddress: string;
+  destinationTime: any;
 }
 
-const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }) => {
+const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, destinationTime }) => {
   const [type, setType] = useState(d.OTHER);
+  // const day = useAppSelector((state) => state.day.value);
+  let newTimeslot = {
+    location: {
+      lat: 19.26765379043226,
+      lng: -123.01076355931461,
+    },
+    time: new Date(new Date(2022, 5, 20).setHours(8)),
+    destination: "Executive Suites Hotel Metro Vancouver",
+    cost: 10,
+    type: d.HOTEL,
+    comments: ["unpack", "rest"],
+    suggested: [
+      {
+        destination: "Aquarium",
+        type: d.ATTRACTION,
+        comments: "3 min away",
+      },
+      {
+        destination: "Park",
+        comments: "10 min away",
+      },
+    ],
+  }
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
+  }
+
+  const addToItinerary = (newTimeslot: any) => {
+    if (destinationTime){
+      // signify that destination time needs to be added
+    }
   }
 
   const selectStyles = sc.selectStyles();
@@ -69,12 +101,12 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
             <sc.textField
               id="time"
               type="time"
-              defaultValue="12:00"
+              defaultValue={destinationTime}
               InputLabelProps={{
                 shrink: true,
               }}
               inputProps={{
-                step: 300, // 5 min
+                step: 60, // 1 min
               }}
             />
           </sc.Time>
@@ -90,7 +122,7 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
             />
           </Grid>
         </sc.SlotGrid>
-        <sc.AddButton>Add</sc.AddButton>
+        <sc.AddButton onClick = {() => addToItinerary(newTimeslot)}>Add</sc.AddButton>
       </sc.SlotContainer>
     </sc.NewSlot>
   );

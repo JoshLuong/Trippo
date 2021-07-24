@@ -1,9 +1,16 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
+import Button from "@material-ui/core/Button";
 
 export const fancytext = styled.div`
   text-align: center;
   font-style: italic;
+`;
+
+export const StyledButton = styled(Button)`
+  span {
+    color: ${c.DARK_ORANGE};
+  }
 `;
 
 export const containerDiv = styled.div`
@@ -17,6 +24,13 @@ export const dayDiv = styled.div`
   height: 100%;
 `;
 
+export const StyledReceiptIcon = styled.div`
+  padding: 1em 0;
+  display: flex;
+  justify-content: center;
+  color: ${c.WHITE};
+  background-color: ${c.DARK_BLUE};
+`;
 export const LoadingDiv = styled.div`
   position: absolute;
   font-size: 2.25em;
@@ -37,14 +51,16 @@ export const LoadingDiv = styled.div`
 export const SideBar = styled.div`
   z-index: 1;
   height: 650px;
-  background-color: ${c.DARK_BLUE};
+  width: 2em;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
   button {
     border: none;
+    width: 100%;
     height: 100%;
     padding: 0;
-    padding-left: 0.65em;
-    background-color: transparent;
+    background-color: ${c.DARK_BLUE};
     i {
       display: inline;
       color: ${c.WHITE};
@@ -83,4 +99,12 @@ export const SearchContainer = styled.div`
       outline: none;
     }
   }
+`;
+
+export const ItineraryDiv = styled.div`
+  bottom: 0;
+  position: relative;
+  display: flex;
+  margin-top: 0.6em;
+  height: 80%;
 `;

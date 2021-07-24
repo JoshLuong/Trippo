@@ -18,12 +18,11 @@ export interface Activity {
 export interface User {
   name: string,
   email: string,
-  password: string,
 }
 
 export interface Itinerary {
+  user_id?: any;
   _id?: any;
-  user_id: any; // should we use mongoose ObjectID type?
   name: string;
   start_date: Date;
   end_date: Date;

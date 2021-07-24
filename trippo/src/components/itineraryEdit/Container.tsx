@@ -3,6 +3,7 @@ import Calendar from "./Calendar";
 import * as sc from "./Container.styles";
 import Day from "./Day";
 import { useAppDispatch, useAppSelector } from "../../app/store";
+import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage"
 import { setDayState, clearTimeSlots } from 'app/reducers/daySlice';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 const Container: FC<Props> = ({ children, handleClick }) => {
   // TODO: change this
+  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
   const [day, setDay] = useState<Date | null>(null);
   const dispatch = useAppDispatch();
   const itinerary = useAppSelector((state) => state.itinerary.value);
@@ -25,9 +27,17 @@ const Container: FC<Props> = ({ children, handleClick }) => {
     setDay(date);
   };
 
-  const handleCalendarView = () => {
+  function handleCalendarView() {
+    if (itineraryContext?.unsavedChanges) {
+      itineraryContext?.setShowUnsavedChangesModal(() => handleCalendarViewNoChanges);
+      return;
+    }
+    handleCalendarViewNoChanges();
+  }
+
+  function handleCalendarViewNoChanges() {
     setDay(null);
-  };
+  }
 
   return (
     <sc.containerDiv>

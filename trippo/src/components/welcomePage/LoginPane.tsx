@@ -1,6 +1,9 @@
 /// <reference path='./LoginPane.d.ts' />
 import { FC } from 'react';
 import { AccountCircle, Lock } from '@material-ui/icons';
+import { useHistory } from "react-router-dom";
+import { useAppDispatch } from 'app/store';
+import { setUser } from 'app/reducers/userSlice';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 import { Grid } from '@material-ui/core';
@@ -8,13 +11,35 @@ import FacebookLogin from 'react-facebook-login'
 interface Props {
   onForgotPassword: () => void;
   onSignUp: () => void;
+  handleLoginError: () => void;
 }
 
 const LoginPane: FC<Props> = (Props) => {
-    const handleLogin = (googleData: any) => {
-        console.log("LOGGING IN");
-        console.log(googleData);
-    }
+    const history = useHistory();
+    const dispatch = useAppDispatch();
+
+    const handleLogin = async (googleData: any) => {
+        try {
+            const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/v1/auth/google`, {
+                method: "POST",
+                credentials: 'include',
+                body: JSON.stringify({
+                token: googleData.tokenId
+              }),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            const data = await res.json()
+            //do something...
+            dispatch(setUser({isLoggedIn: true, ...data}));
+            history.push("/home?page=1");
+        } catch(e) {
+            Props.handleLoginError();
+            console.log(e);
+        }
+        // store returned user somehow
+      }
 
     const responseFacebook = (response: any) => {
         console.log(response);

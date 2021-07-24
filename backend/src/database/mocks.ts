@@ -7,8 +7,9 @@ const date3 = new Date(2022, 5, 22);
 
 // need userID?
 export const users = [
-  { name: "Jane Doe", email: 'janedoe@gmail.com', password: "password" },
-  { name: "John Doe", email: 'johndoe@gmail.com', password: "password123" }
+  { name: "Joshua Luong", email: 'joshopolis321@gmail.com' },
+  { name: "Joshua Luong2", email: 'joshualuong99@gmail.com' },
+  { name: "John Doe", email: 'johndoe@gmail.com' }
 ];
 
 export const activities = [

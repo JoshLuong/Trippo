@@ -19,7 +19,6 @@ export interface Activity {
 export interface User {
   name: string,
   email: string,
-  password: string,
 }
 
 export interface Itinerary {

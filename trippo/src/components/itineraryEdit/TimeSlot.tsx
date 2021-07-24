@@ -3,6 +3,7 @@ import { TextField } from '@material-ui/core';
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid, Tooltip } from "@material-ui/core";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
@@ -46,6 +47,24 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   //   setCost(Number(newCost));
   // }
 
+  const getButtons = () => {
+    return showEdit ? (
+      <sc.StyledIconButton>
+        <DeleteOutlineIcon />
+      </sc.StyledIconButton>
+    ) : (
+      <button onClick={() => setShowSuggestions(!showSuggestions)}>
+      {!showSuggestions ? (
+        <i className="fas fa-chevron-down"></i>
+      ) : (
+        <i
+          style={{ color: c.DARK_ORANGE }}
+          className="fas fa-chevron-up"
+        ></i>
+      )}
+    </button>
+    )
+  }
   const handleShowCostToggle = () => {
     !showCost
       ? handleHideCostToggle(activity.cost)
@@ -112,16 +131,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
           {renderHeaderContent()}
           <Grid container item lg={1} md={1} sm={1} xs={1}>
             <sc.CommentButton>
-              <button onClick={() => setShowSuggestions(!showSuggestions)}>
-                {!showSuggestions ? (
-                  <i className="fas fa-chevron-down"></i>
-                ) : (
-                  <i
-                    style={{ color: c.DARK_ORANGE }}
-                    className="fas fa-chevron-up"
-                  ></i>
-                )}
-              </button>
+              {getButtons()}
             </sc.CommentButton>
           </Grid>
           <Grid container item lg={12} md={12} sm={12} xs={12}>
@@ -137,11 +147,6 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
             renderIcon={d.renderIcon}
             suggested={suggested}
           ></Suggestions>
-        ) : null}
-        {showEdit ? (
-          <sc.EditButton>
-            <i className="fas fa-minus-circle"></i>
-          </sc.EditButton>
         ) : null}
       </Grid>
     </sc.Slot>

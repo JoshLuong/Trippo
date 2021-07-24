@@ -7,9 +7,11 @@ import { useGetItineraryByIdQuery } from 'services/itinerary';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { setItinerary } from 'app/reducers/itinerarySlice';
+import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage"
 
 const Container = () => {
   // TODO: change this
+  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
   const [day, setDay] = useState<Date | null>(null);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
@@ -24,9 +26,17 @@ const Container = () => {
     setDay(date);
   };
 
-  const handleCalendarView = () => {
+  function handleCalendarView() {
+    if (itineraryContext?.unsavedChanges) {
+      itineraryContext?.setShowUnsavedChangesModal(() => handleCalendarViewNoChanges);
+      return;
+    }
+    handleCalendarViewNoChanges();
+  }
+
+  function handleCalendarViewNoChanges() {
     setDay(null);
-  };
+  }
 
   return (
     <sc.containerDiv>

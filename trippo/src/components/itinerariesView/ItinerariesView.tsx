@@ -2,13 +2,15 @@
 import React, { useState, useEffect } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
-import Fade from "react-reveal/Fade";
+import FadeIn from 'react-fade-in';
+import _ from "lodash";
 import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar"
 import { useCreateItineraryMutation, useDeleteItineraryMutation, useLazyGetItinerariesQuery } from 'services/itinerary';
 import Pagination from '@material-ui/lab/Pagination';
 import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'qs';
+import { useCallback } from "react";
 
 
 // const server = "http://localhost:4000/api/itineraries/";
@@ -19,33 +21,44 @@ const ItinerariesView = () => {
   ] = useCreateItineraryMutation()
   const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
   const [deleteItinerary, { isLoading: isDeleting }] = useDeleteItineraryMutation();
+  const [filterText, setFilterText] = useState("");
 
   const history = useHistory();
   const location = useLocation();
   const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
 
-  
+  const search = _.debounce((e: any) => {
+    setFilterText(e.target.value)
+  }, 400);
+
   const [showEdit, setShowEdit] = useState(false);
   const [showNewItinerary, setShowNewItinerary] = useState(false);
+  
+  const handlePageChange = useCallback((_event: any, page: number) => {
+    history.push({
+      search: `?page=${page}`
+    });
+  },[history]);
 
   useEffect(() => {
     triggerGetQuery({
       offset: 5 * (Number(page || 1) - 1),
       limit: 5,
+      name: filterText,
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUpdating, isDeleting, page]);
+  }, [filterText, isUpdating, isDeleting, page]);
+
+  useEffect(() => {
+    if (Number(page || 1) !== 1 && filterText !== "") { // on filter change, if page > 1, destroy pagination
+      handlePageChange(null, 1);
+    }
+  }, [filterText, page, handlePageChange]);
 
 
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);
-  }
-
-  const handlePageChange = (_event: any, page: number) => {
-    history.push({
-      search: `?page=${page}`
-    });
   }
 
   // TODO: take out inline style; move to search 
@@ -59,7 +72,7 @@ const ItinerariesView = () => {
           textAlign: "center",
         }}
       >
-        <Searchbar />
+        <Searchbar onChange={search}/>
       </div>
       <sc.ButtonDiv>
         <button onClick={() => setShowEdit(!showEdit)}>
@@ -79,7 +92,7 @@ const ItinerariesView = () => {
         <sc.Cards>
           {result.data.itineraries.map((card, index) => {
             return (
-              <Fade duration={900} delay={500}>
+              <FadeIn transitionDuration={600} delay={500}>
                 <ItineraryCard
                   card={card}
                   key={index}
@@ -92,7 +105,7 @@ const ItinerariesView = () => {
                       .catch((e) => { console.log(e) })
                   }}
                 />
-              </Fade>
+              </FadeIn>
             );
           })}
         </sc.Cards>

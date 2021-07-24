@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import userReducer from "../reducers/userSlice";
 import itineraryReducer from "../reducers/itinerarySlice";
 import { itineraryApi } from 'services/itinerary';
 
@@ -7,6 +8,7 @@ const store = configureStore({
   // add reducers to the store
   reducer: {
     itinerary: itineraryReducer,
+    user: userReducer,
     [itineraryApi.reducerPath]: itineraryApi.reducer,
   },
 

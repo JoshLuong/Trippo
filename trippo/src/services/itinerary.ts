@@ -7,6 +7,7 @@ const url = process.env.REACT_APP_BACKEND_URL!;
 interface GetItinerariesRequest {
   offset: number;
   limit: number;
+  name?: string;
 }
 
 interface GetItinerariesResponse {
@@ -18,9 +19,15 @@ interface GetItinerariesResponse {
 export const itineraryApi = createApi({
   reducerPath: 'itineraryApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${url}/itineraries` }),
+  // important: in order to use user cookie within backend, must have credentials and headers (if body present) present
   endpoints: (builder) => ({
     getItineraries: builder.query<GetItinerariesResponse, GetItinerariesRequest>({
-      query: (req: GetItinerariesRequest) => `/?${qs.stringify(req)}`,
+      query: (req: GetItinerariesRequest) => {
+        return {
+          url: `/?${qs.stringify(req)}`,
+          credentials: 'include'
+        }
+      },
     }),
     getItineraryById: builder.query<Itinerary, string>({
       query: (id: string) => `/${id}`,
@@ -30,6 +37,10 @@ export const itineraryApi = createApi({
         return {
           url: `/${id}`,
           method: 'DELETE',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json', // need for cookies
+          },
         }
       }
     }),
@@ -37,8 +48,12 @@ export const itineraryApi = createApi({
       query(body) {
         return {
           url: `/`,
+          credentials: 'include',
           method: 'POST',
           body,
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
       },
     })

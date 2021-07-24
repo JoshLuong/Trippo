@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import * as sc from "./Day.styles";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
-import Settings from "./Settings";
+import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage"
 import { Grid, Tooltip } from "@material-ui/core";
 import { useAppSelector } from 'app/store';
 import { Activity } from 'types/models';
@@ -15,6 +15,7 @@ interface Props {
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [editedItinerary, setEditedItinerary] = useState(itinerary);
+  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
 
   const editActivity = (activity: Activity) => {
     if (editedItinerary) {
@@ -38,16 +39,12 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     .reduce(function (total, activity) {
       return total + (activity.cost || 0);
     }, 0);
-  const [settings, setSettings] = useState(false);
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(cost || 0);
   const budget = 50;
 
-  const handleSettingsView = () => {
-    setSettings(!settings);
-  };
-
   const handleEditView = () => {
+    edit ? itineraryContext?.setUnsavedChanges(false) : itineraryContext?.setUnsavedChanges(true); // TODO only set unsaved changes when user starts editing
     setEdit(!edit);
   };
 
@@ -58,29 +55,15 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   return (
     <sc.dayDiv>
       <sc.dayDate>
-        {settings ? (
-          <button style={{ float: "left" }} onClick={handleSettingsView}>
-            <i className="fas fa-chevron-left"></i>
-            <i className="fas fa-list"></i>
-          </button>
-        ) : (
           <button style={{ float: "left" }} onClick={handleCalendarView}>
             <i className="fas fa-chevron-left"></i>
             <i className="far fa-calendar-alt"></i>
           </button>
-        )}
         <sc.daysWeek>
           {moment(date).format("MMMM Do YYYY")}
         </sc.daysWeek>
-        {/* TODO: REMOVE INLINE STYLE HERE */}
-        <button onClick={handleSettingsView} style={{ zIndex: 0 }}>
-          <i className="fas fa-cog"></i>
-        </button>
       </sc.dayDate>
-      {settings ? (
-        <Settings></Settings>
-      ) : (
-        <div>
+      <div>
           <sc.TimeSlots>
             {dayActivities.map((activity, idx) => {
               return (
@@ -123,8 +106,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
                 {edit ? "Done" : "Edit"}
               </sc.EditButton>
             </Grid>
-        </div>
-      )}
+      </div>
     </sc.dayDiv>
   );
 };

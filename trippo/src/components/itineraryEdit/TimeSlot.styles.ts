@@ -1,11 +1,18 @@
 import styled, { css } from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+
 const darkGrey = c.GREY;
 export interface StyledTimeSlotProps{
   showSuggestions: boolean
   borderColor: string
 }
+
+export const StyledIconButton = styled(IconButton)`
+  width: 24px !important;
+  height: 24px !important;
+`;
 
 export const Slot = styled.div<StyledTimeSlotProps>`
   margin-top: 0.5em;

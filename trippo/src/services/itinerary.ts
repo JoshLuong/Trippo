@@ -30,7 +30,12 @@ export const itineraryApi = createApi({
       },
     }),
     getItineraryById: builder.query<Itinerary, string>({
-      query: (id: string) => `/${id}`,
+      query: (id: string) => {
+        return {
+          url: `/${id}`,
+          credentials: 'include'
+        }
+      },
     }),
     deleteItinerary: builder.mutation<{ success: boolean; id: string }, string>({
       query(id) {

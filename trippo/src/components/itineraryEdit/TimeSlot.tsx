@@ -2,8 +2,8 @@ import React, { FC, useState, useRef } from "react";
 import { TextField } from '@material-ui/core';
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
-import { Grid, Tooltip } from "@material-ui/core";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import { Grid, Tooltip, InputLabel, Input, InputAdornment } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
@@ -26,6 +26,8 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
 
   const setComments = (value: string) => {
     const comments = value.split('\n').filter(e => Boolean(e));
+    console.log(comments)
+
     editActivity({
       ...activity,
       comments,
@@ -78,11 +80,20 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
         <Grid container item lg={1} md={1} sm={1} xs={1}>
           {d.renderIcon(type)}
         </Grid>
-        <Grid item lg={10} md={10} sm={10} xs={10}>
+        <Grid item lg={9} md={9} sm={9} xs={9}>
           {destination}
         </Grid>
-        <Grid container item lg={2} md={2} sm={2} xs={2}>
+        <Grid container item lg={3} md={3} sm={3} xs={3}>
           <sc.Cost {...costStyling} contentEditable={showEdit ? true : false}>
+              <sc.StyledFormControl fullWidth>
+                {activity.cost || showEdit ? (
+                <Input
+                  value={activity.cost}
+                  onChange={() => alert("TODO")}
+                  startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                />
+                ) : null}
+            </sc.StyledFormControl>
             {activity.cost ? (
               <Tooltip
                 title={`${showCost ? "Hide from" : "Include in"
@@ -97,7 +108,6 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
                 </button>
               </Tooltip>
             ) : null}
-            <div>{activity.cost ? `$${activity.cost}` : ""}</div>
           </sc.Cost>
         </Grid>
       </sc.Destination>
@@ -135,10 +145,19 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
             </sc.CommentButton>
           </Grid>
           <Grid container item lg={12} md={12} sm={12} xs={12}>
-            <sc.Comments contentEditable={showEdit ? true : false} onInput={(e) => setComments(e.currentTarget.innerText)}>
-              {comments?.map((c, index) => {
-                return <li key={index}>{c}</li>;
-              })}
+            <sc.Comments>
+              <sc.StyledTextField
+                fullWidth
+                id="filled-textarea"
+                label="Comments"
+                disabled={!showEdit}
+                multiline
+                variant="outlined"
+                defaultValue={comments.reduce((acc, comment) => {
+                  return acc + "\n" + comment;
+                })}
+                onChange={(e: any) => setComments(e.currentTarget.value)}
+              />
             </sc.Comments>
           </Grid>
         </sc.SlotGrid>

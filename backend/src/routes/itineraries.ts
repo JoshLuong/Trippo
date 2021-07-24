@@ -22,7 +22,7 @@ router.get('/', async (req: any, res, _next) => {
 router.get('/:id', async (req, res, _next) => {
   const { id } = req.params;
 
-  const itinerary = await Itinerary.findById(id);
+  const itinerary = await Itinerary.findById(id); // TODO update to use session user id too
 
   res.status(200).send(itinerary);
 });

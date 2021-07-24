@@ -17,6 +17,13 @@ export const dayDiv = styled.div`
   height: 100%;
 `;
 
+export const StyledReceiptIcon = styled.div`
+  padding: 1em 0;
+  display: flex;
+  justify-content: center;
+  color: ${c.WHITE};
+  background-color: ${c.DARK_BLUE};
+`;
 export const LoadingDiv = styled.div`
   position: absolute;
   font-size: 2.25em;
@@ -37,14 +44,15 @@ export const LoadingDiv = styled.div`
 export const SideBar = styled.div`
   z-index: 1;
   height: 650px;
-  background-color: ${c.DARK_BLUE};
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
   button {
     border: none;
+    width: 100%;
     height: 100%;
     padding: 0;
-    padding-left: 0.65em;
-    background-color: transparent;
+    background-color: ${c.DARK_BLUE};
     i {
       display: inline;
       color: ${c.WHITE};

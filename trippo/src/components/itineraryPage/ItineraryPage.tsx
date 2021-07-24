@@ -6,16 +6,20 @@ import Map from "../map/Map";
 import "../map/Map.css";
 import { GeocoderContainer } from 'components/map/Map.styles';
 import Searchbar from "components/searchBar/Searchbar";
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import NewSlot from "components/itineraryEdit/NewSlot";
+import ExpensePage from "./ExpensePage";
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
+  const [showExpenses, setShowExpenses] = useState(false);
   const geocoderContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
 
   function handleOpenItinerary() {
     setShowItinerary(!showItinerary);
+    setShowExpenses(false);
   }
 
   function handleIsLoading() {
@@ -63,6 +67,12 @@ function ItineraryPage() {
           handleNewSlotClick={handleNewSlotClick}
         />
         <sc.SideBar style={{ width: "2em" }}>
+          <sc.StyledReceiptIcon>
+            <ReceiptIcon onClick={() => {
+              setShowExpenses(!showExpenses);
+              setShowItinerary(false);
+            }}/>
+          </sc.StyledReceiptIcon>
           <button onClick={handleOpenItinerary}>
             {showItinerary ? (
               <i className="fas fa-chevron-left"></i>
@@ -71,10 +81,16 @@ function ItineraryPage() {
             )}
           </button>
         </sc.SideBar>
+        
         {showItinerary ? (
           <sc.Container>
-            <Container></Container>
-          </sc.Container>
+            <Container />
+          </sc.Container> 
+        ) : null}
+        {showExpenses ? (
+          <sc.Container>
+            <ExpensePage />
+         </sc.Container>
         ) : null}
         {
           canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose}/>

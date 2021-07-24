@@ -42,4 +42,17 @@ router.delete('/:id', (req: any, res, _next) => {
     });
 });
 
+router.patch('/:id', async (req: any, res) => {
+  const product = await Itinerary.findOneAndUpdate({ _id: req.params.id, user_id: req.session.userId },
+    {...req.body}, 
+   {new: true,
+    runValidators: true
+  }
+  );
+
+  if (!product) return res.status(404).send('The product with the given ID was not found.');
+
+  res.send(product);
+});
+
 export default router;

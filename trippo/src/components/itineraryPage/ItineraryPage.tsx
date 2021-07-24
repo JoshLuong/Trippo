@@ -67,6 +67,12 @@ function ItineraryPage() {
           handleNewSlotClick={handleNewSlotClick}
         />
         <sc.SideBar style={{ width: "2em" }}>
+          <sc.StyledReceiptIcon>
+            <ReceiptIcon onClick={() => {
+              setShowExpenses(!showExpenses);
+              setShowItinerary(false);
+            }}/>
+          </sc.StyledReceiptIcon>
           <button onClick={handleOpenItinerary}>
             {showItinerary ? (
               <i className="fas fa-chevron-left"></i>
@@ -80,6 +86,11 @@ function ItineraryPage() {
           <sc.Container>
             <Container />
           </sc.Container> 
+        ) : null}
+        {showExpenses ? (
+          <sc.Container>
+            <ExpensePage />
+         </sc.Container>
         ) : null}
         {
           canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose}/>

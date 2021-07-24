@@ -13,6 +13,7 @@ export interface StyledTimeSlotProps{
 export const StyledIconButton = styled(IconButton)`
   width: 24px !important;
   height: 24px !important;
+  margin-top: -6px;
 `;
 
 export const Slot = styled.div<StyledTimeSlotProps>`
@@ -169,6 +170,10 @@ export const EditButton = styled.button`
     cursor: pointer;
   }
 `;
+
+export const HeaderGrid = styled(Grid)`
+  align-items: flex-start;
+`;
 export const StyledFormControl = styled(FormControl)`
   input {
     padding: 0;
@@ -203,8 +208,12 @@ export const StyledTextField = withStyles({
     },
     '& .Mui-disabled .Mui-disabled': {
       opacity: '10',
+      color: 'initial'
+    },
+    '& .MuiInputBase-formControl': {
+      opacity: '10',
       color: 'initial',
-      fontSize: '0.85em'
+      fontSize: '0.90em'
     }
   },
 })(TextField);

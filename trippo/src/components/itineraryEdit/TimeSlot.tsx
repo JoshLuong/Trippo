@@ -75,7 +75,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   };
 
   const renderHeaderContent = () => (
-    <Grid container item lg={11} md={11} sm={11} xs={11}>
+    <sc.HeaderGrid container item lg={11} md={11} sm={11} xs={11}>
       <sc.Destination>
         <Grid container item lg={1} md={1} sm={1} xs={1}>
           {d.renderIcon(type)}
@@ -95,7 +95,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
                 />
                 ) : null}
             </sc.StyledFormControl>
-            {activity.cost ? (
+            {activity.cost && !showEdit ? (
               <Tooltip
                 title={`${showCost ? "Hide from" : "Include in"
                   } the total daily cost`}
@@ -112,7 +112,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
           </sc.Cost>
         </Grid>
       </sc.Destination>
-    </Grid>
+    </sc.HeaderGrid>
   );
   const costStyling = !showCost ? { style: { color: "#24272b85" } } : {};
   const date = time ? new Date(time) : new Date();

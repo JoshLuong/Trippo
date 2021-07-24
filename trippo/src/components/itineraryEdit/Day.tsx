@@ -2,7 +2,6 @@ import React, { FC, useState } from "react";
 import * as sc from "./Day.styles";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
-import Settings from "./Settings";
 import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage"
 import { Grid, Tooltip } from "@material-ui/core";
 import { useAppSelector } from "app/store";

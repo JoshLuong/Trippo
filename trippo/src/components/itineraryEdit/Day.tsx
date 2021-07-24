@@ -1,10 +1,11 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import * as sc from "./Day.styles";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
 import Settings from "./Settings";
 import { Grid, Tooltip } from "@material-ui/core";
 import { useAppSelector } from 'app/store';
+import { Activity } from 'types/models';
 
 interface Props {
   date: Date;
@@ -13,6 +14,22 @@ interface Props {
 
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
+  const [editedItinerary, setEditedItinerary] = useState(itinerary);
+
+  const editActivity = (activity: Activity) => {
+    if (editedItinerary) {
+      setEditedItinerary({
+        ...editedItinerary,
+        activities: editedItinerary.activities.map((e) => e._id === activity._id ? activity : e),
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (itinerary) {
+      setEditedItinerary(itinerary);
+    }
+  }, [itinerary]);
 
   const dayActivities = itinerary?.activities
     .filter((activity) => moment(date).isSame(moment(activity.time), 'date')) || [];
@@ -29,15 +46,6 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const handleSettingsView = () => {
     setSettings(!settings);
   };
-
-  const timeChange = (date:any, timeRef: any, index: number) => {
-    console.log(date.target.value)
-    const t = date.target.value.split(":");
-    const d = new Date(1995, 11, 17, 3, 24, 0); // TODO remove
-    const newDate = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), t[0], t[1]);
-    console.log(newDate)
-    console.log(timeRef);
-  }
 
   const handleEditView = () => {
     setEdit(!edit);
@@ -81,8 +89,8 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
                     handleHideCostToggle={handleHideCostToggle}
                     activity={activity}
                     showEdit={edit}
-                    timeChange={timeChange}
                     index={idx}
+                    editActivity={editActivity}
                   />
                 </div>
               );

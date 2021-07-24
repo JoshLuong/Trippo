@@ -12,15 +12,39 @@ interface Props {
   handleHideCostToggle: (cost: number | undefined) => void;
   activity: Activity;
   showEdit?: boolean;
-  timeChange: (date: any, timeRef: any, index: number) => void;
   index: number;
+  editActivity: (activity: Activity) => void;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, timeChange, index }) => {
+const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity }) => {
   const { time, destination, comments, type, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
+  // const [cost, setCost] = useState(activity.cost || 0);
   const timeRef = useRef(null);
+
+  const setComments = (value: string) => {
+    const comments = value.split('\n').filter(e => Boolean(e));
+    editActivity({
+      ...activity,
+      comments,
+    });
+  }
+
+  const setTime = (e: any) => {
+    const t = e.target.value.split(":");
+    const time = moment(date).set({ hour: t[0], minute: t[1] }).toDate();
+    editActivity({
+      ...activity,
+      time,
+    });
+  }
+
+  // TODO: Fix cost input
+  // const editCost = (costString: string) => {
+  //   const newCost = costString.slice(1);
+  //   setCost(Number(newCost));
+  // }
 
   const handleShowCostToggle = () => {
     !showCost
@@ -39,7 +63,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, timeCha
           {destination}
         </Grid>
         <Grid container item lg={2} md={2} sm={2} xs={2}>
-          <sc.Cost {...costStyling} contentEditable={showEdit ? true : false} onChange={(e) => console.log(e.currentTarget.nodeValue)}>
+          <sc.Cost {...costStyling} contentEditable={showEdit ? true : false}>
             {activity.cost ? (
               <Tooltip
                 title={`${showCost ? "Hide from" : "Include in"
@@ -70,7 +94,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, timeCha
           <sc.Time>
             <TextField
               disabled={!showEdit}
-              onChange={(date) => timeChange(date, timeRef, index)}
+              onChange={(e) => setTime(e)}
               ref={timeRef}
               id="time"
               type="time"
@@ -101,7 +125,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, timeCha
             </sc.CommentButton>
           </Grid>
           <Grid container item lg={12} md={12} sm={12} xs={12}>
-            <sc.Comments contentEditable={showEdit ? true : false}>
+            <sc.Comments contentEditable={showEdit ? true : false} onInput={(e) => setComments(e.currentTarget.innerText)}>
               {comments?.map((c, index) => {
                 return <li key={index}>{c}</li>;
               })}

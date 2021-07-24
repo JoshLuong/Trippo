@@ -84,7 +84,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
           {destination}
         </Grid>
         <Grid container item lg={2} md={2} sm={3} xs={3}>
-          <sc.Cost {...costStyling} contentEditable={showEdit ? true : false}>
+          <sc.Cost {...costStyling}>
               <sc.StyledFormControl fullWidth>
                 {activity.cost || showEdit ? (
                 <Input

@@ -17,6 +17,8 @@ import ListItem from "@material-ui/core/ListItem";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withRouter } from "react-router-dom";
+import moment from "moment";
+import FadeIn from "react-fade-in";
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { BLACK, GREY, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
@@ -32,6 +34,7 @@ const Navbar = (props: { history: any }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const user = useAppSelector((state) => state.user.value);
+  const itinerary = useAppSelector((state) => state.itinerary.value);
   const dispatch = useAppDispatch();
 
   const handleDropdownClick = (event: any) => {
@@ -101,6 +104,21 @@ const Navbar = (props: { history: any }) => {
               <img alt="Trippo Logo" src="/trippo.png" width="120"></img>
             </sc.LogoButton>
           </sc.Logo>
+          {
+            history.location.pathname.includes("itinerary") && itinerary ? (
+            <sc.ItineraryTitle >
+              <FadeIn transitionDuration={600} delay={500}>
+                {itinerary?.name}
+                <sc.DateGrid container item lg={12} sm={12}>
+                <i className="far fa-calendar-alt"></i>
+                {moment(itinerary?.start_date).format("MMM Do YYYY") +
+                  ` - ` +
+                  moment(itinerary?.end_date).format("MMM Do YYYY")}
+                </sc.DateGrid>
+              </FadeIn>
+            </sc.ItineraryTitle>
+            ) : null
+          }
           <IconButton
             style={{ position: "absolute", right: 20 }}
             onClick={handleDropdownClick}

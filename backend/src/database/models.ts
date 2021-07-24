@@ -41,7 +41,6 @@ export const activitySchema = new Schema<IActivity>({
 export interface IUser {
   name: string,
   email: string,
-  password: string,
 }
 
 export interface IItinerary {
@@ -75,7 +74,6 @@ export interface IItinerary {
 export const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true },
-  password: { type: String, required: true },
 }, { toObject: { versionKey: false } });
 
 export const itinerarySchema = new Schema<IItinerary>({

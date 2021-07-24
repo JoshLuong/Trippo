@@ -1,24 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export type Itinerary = {
-    itinerary_id: string;
-    name: string;
-    budget?: number;
-    current_cost?: number;
-    collaborators: {
-        id: string;
-        name: string;
-    }[];
-    comments?: string;
-    tags?: [];
-    start_date: Date;
-    end_date: Date;
-}
 export type User = {
-  id: string;
-  name: string;
-  password: string;
-  itineraries: Itinerary[];
+  isLoggedIn: boolean,
+  name: string,
+  email: string,
+  _id: string,
 } | null
 
 interface State {

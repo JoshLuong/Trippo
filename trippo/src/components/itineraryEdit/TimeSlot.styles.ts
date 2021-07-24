@@ -89,25 +89,13 @@ export const Destination = styled.div`
   }
 `;
 
-const editStyles = css`
-  border: 1.25px solid ${c.BLACK};
-  border-radius: 7px;
-  outline: none;
-`;
-
-const editStylesUnderline = css`
-  border-bottom: 1.25px solid ${c.BLACK};
-  border-radius: 2px;
-  margin-bottom: 0.5em;
-  outline: none;
-`;
-
 export const Cost = styled.div`
   font-weight: 500;
   float: right;
   font-size: 0.75em;
-  justify-content: center;
   display: flex;
+  flex-direction: row;
+  align-self: flex-start;
   align-items: center;
   div {
     margin-right: 0.5em;
@@ -194,6 +182,7 @@ export const StyledFormControl = styled(FormControl)`
   .MuiInput-underline, .MuiInput-underline:before, .MuiInput-underline:after {
     transition: none;
     border-bottom: 0 !important;
+    margin-right: 0;
   }
 `;
 export const StyledTextField = withStyles({
@@ -215,6 +204,7 @@ export const StyledTextField = withStyles({
     '& .Mui-disabled .Mui-disabled': {
       opacity: '10',
       color: 'initial',
+      fontSize: '0.85em'
     }
   },
 })(TextField);

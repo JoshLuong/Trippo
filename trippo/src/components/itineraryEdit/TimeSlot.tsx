@@ -80,14 +80,15 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
         <Grid container item lg={1} md={1} sm={1} xs={1}>
           {d.renderIcon(type)}
         </Grid>
-        <Grid item lg={9} md={9} sm={9} xs={9}>
+        <Grid container item lg={9} md={9} sm={10} xs={10}>
           {destination}
         </Grid>
-        <Grid container item lg={3} md={3} sm={3} xs={3}>
+        <Grid container item lg={2} md={2} sm={3} xs={3}>
           <sc.Cost {...costStyling} contentEditable={showEdit ? true : false}>
               <sc.StyledFormControl fullWidth>
                 {activity.cost || showEdit ? (
                 <Input
+                  disabled={!showEdit}
                   value={activity.cost}
                   onChange={() => alert("TODO")}
                   startAdornment={<InputAdornment position="start">$</InputAdornment>}

@@ -1,10 +1,8 @@
 /// <reference path='./LoginPane.d.ts' />
 import { FC } from 'react';
-import { AccountCircle, Lock } from '@material-ui/icons';
 import { useHistory } from "react-router-dom";
 import { useAppDispatch } from 'app/store';
 import { setUser } from 'app/reducers/userSlice';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import * as sc from './Pane.styles';
 import { Grid } from '@material-ui/core';
 import FacebookLogin from 'react-facebook-login'
@@ -46,6 +44,23 @@ const LoginPane: FC<Props> = (Props) => {
     }
 
     return (
+        <Grid container spacing={2} direction="column">
+            <sc.GoogleDiv container item xs={12} lg={12}>
+                <sc.StyledGoogleLogin
+                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
+                    buttonText="Sign in with Google"
+                    onSuccess={handleLogin}
+                    onFailure={handleLogin}
+                    cookiePolicy={'single_host_origin'}
+                />
+            </sc.GoogleDiv>
+        </Grid>
+    )
+}
+
+export default LoginPane
+
+/*
         <Grid container spacing={2} direction="column">
             <Grid item xs={12}>
                 <h1>Log in to your account</h1>
@@ -89,7 +104,5 @@ const LoginPane: FC<Props> = (Props) => {
                 </Grid>
             </Grid >
         </Grid>
-    )
-}
 
-export default LoginPane
+*/

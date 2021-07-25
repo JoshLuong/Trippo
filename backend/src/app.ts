@@ -6,6 +6,7 @@ import { User } from 'database/models';
 import cors from 'cors';
 import itineraryRouter from './routes/itineraries';
 import googleAuthRouter from './routes/googleAuth';
+import yelpFusionRouter from './routes/yelpFusion';
 
 mongoose.connect(process.env.DATABASE_URL!, {
   useNewUrlParser: true,
@@ -28,6 +29,7 @@ mongoose.connect(process.env.DATABASE_URL!, {
     req.user = user // you can access req.user anywhere in the API now
     next()
 })
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   const corsOptions = {
@@ -38,6 +40,7 @@ mongoose.connect(process.env.DATABASE_URL!, {
 
   app.use('/api/itineraries', itineraryRouter);
   app.use('/api/v1/auth', googleAuthRouter)
+  app.use('/api/yelp', yelpFusionRouter);
 
   app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     res.status(err.statusCode || 500).send(err.message);

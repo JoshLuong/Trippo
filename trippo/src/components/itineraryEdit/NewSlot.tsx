@@ -4,6 +4,11 @@ import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid } from "@material-ui/core";
 import CancelIcon from '@material-ui/icons/Cancel';
+import { useAppSelector } from "app/store";
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+
 
 interface Props {
   handleClose: () => void;
@@ -12,10 +17,12 @@ interface Props {
 }
 
 const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }) => {
+  const itinerary = useAppSelector((state) => state.itinerary.value);
   const [type, setType] = useState(d.OTHER);
   const [cost, setCost] = useState(0);
   const [comments, setComments] = useState("");
   const [time, setTime] = useState("12:00");
+  const [selectedDate, setSelectedDate] = useState(itinerary?.start_date);
 
   let newTimeslot = {
     location: {
@@ -53,8 +60,12 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
   }
 
   const handleTimeChange = (event: any) => {
-    setTime(event.target.value);
+      setTime(event.target.value);
   }
+
+  const handleDateChange = (event: any) => {
+    setSelectedDate(event);
+  };
 
   const addToItinerary = (newTimeslot: any) => {
     
@@ -108,8 +119,26 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
       <sc.Cancel onClick={handleClose}>
         <CancelIcon />
       </sc.Cancel>
-      <sc.SlotContainer container item lg={12}>
-        <Grid container item lg={3} md={3} sm={12}>
+      <sc.SlotContainer container item md={12}>
+        <Grid container item lg={8} md={4} sm={6}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <KeyboardDatePicker
+          disableToolbar
+          variant="inline"
+          format="MM/dd/yyyy"
+          margin="normal"
+          id="date-picker-inline"
+          label="Select a Date"
+          value={selectedDate}
+          onChange={handleDateChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+          minDate={itinerary?.start_date}
+          // not sure why but the end date doesn't seem to match up
+          maxDate={itinerary?.end_date}
+        />
+      </MuiPickersUtilsProvider>
           <sc.Time>
             <sc.textField
               id="time"

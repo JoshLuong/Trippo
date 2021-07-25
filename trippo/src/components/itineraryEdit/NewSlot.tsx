@@ -4,7 +4,6 @@ import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid } from "@material-ui/core";
 import CancelIcon from '@material-ui/icons/Cancel';
-import { useAppSelector } from "app/store";
 
 interface Props {
   handleClose: () => void;
@@ -14,7 +13,10 @@ interface Props {
 
 const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }) => {
   const [type, setType] = useState(d.OTHER);
-  // const day = useAppSelector((state) => state.day.value);
+  const [cost, setCost] = useState(0);
+  const [comments, setComments] = useState("");
+  const [time, setTime] = useState("12:00");
+
   let newTimeslot = {
     location: {
       lat: 19.26765379043226,
@@ -40,6 +42,18 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
+  }
+
+  const handleCostChange = (event: any) => {
+    setCost(event.target.value);
+  }
+
+  const handleCommentsChange = (event: any) => {
+    setComments(event.target.value);
+  }
+
+  const handleTimeChange = (event: any) => {
+    setTime(event.target.value);
   }
 
   const addToItinerary = (newTimeslot: any) => {
@@ -76,6 +90,8 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
             id="outlined-number"
             label="Cost"
             type="number"
+            value={cost}
+            onChange={handleCostChange}
             InputLabelProps={{
               shrink: true,
             }}
@@ -98,7 +114,8 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
             <sc.textField
               id="time"
               type="time"
-              defaultValue="12:00"
+              value={time}
+              onChange={handleTimeChange}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -116,6 +133,8 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
               multiline
               rows={3}
               variant="outlined"
+              value={comments}
+              onChange={handleCommentsChange}
             />
           </Grid>
         </sc.SlotGrid>

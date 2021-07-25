@@ -1,5 +1,5 @@
 import express from 'express';
-import { Itinerary } from 'database/models';
+import { Itinerary, IActivity } from 'database/models';
 
 const router = express.Router();
 
@@ -25,6 +25,30 @@ router.get('/:id', async (req, res, _next) => {
   const itinerary = await Itinerary.findById(id); // TODO update to use session user id too
 
   res.status(200).send(itinerary);
+});
+
+router.get('/expenses/:id', async (req, res, _next) => {
+  const { id } = req.params;
+
+  const itinerary = await Itinerary.findById(id); // TODO update to use session user id too
+  let expenses: any = {};
+  itinerary?.activities.map((activity: IActivity) => {
+    if (activity?.time) {
+      const timeIndex = activity.time.getMonth() + '-' + activity.time.getDate() + '-' + activity.time.getFullYear();
+      if (!expenses[timeIndex]) {
+        expenses[timeIndex] = [];
+      }
+      if (activity.cost) {
+        expenses[timeIndex].push({
+          destination: activity.destination,
+          time: activity.time,
+          cost: activity.cost,
+          debtors: activity.debtors
+        })
+      }
+    }
+  })
+  res.status(200).send(expenses);
 });
 
 router.post('/', (req: any, res, _next) => {

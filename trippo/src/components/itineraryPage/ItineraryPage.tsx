@@ -8,7 +8,7 @@ import { GeocoderContainer } from 'components/map/Map.styles';
 import Searchbar from "components/searchBar/Searchbar";
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import NewSlot from "components/itineraryEdit/NewSlot";
-import ExpensePage from "./ExpensePage";
+import ExpensePage from "../expensePage/ExpensePage";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 
 export type ContextInterface = {

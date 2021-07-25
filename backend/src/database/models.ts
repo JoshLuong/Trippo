@@ -1,6 +1,15 @@
 import 'dotenv/config';
 import { Schema, model, ObjectId } from 'mongoose';
 
+export interface IUser {
+  name: string,
+  email: string,
+}
+
+export const userSchema = new Schema<IUser>({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+}, { toObject: { versionKey: false } });
 export interface IActivity {
   location: {
     lat: number;
@@ -9,6 +18,7 @@ export interface IActivity {
   time?: Date;
   destination?: string;
   cost?: number;
+  debtors?: IUser[];
   type?: string;
   comments: string[];
   suggested?: {
@@ -29,6 +39,7 @@ export const activitySchema = new Schema<IActivity>({
   time: Date,
   destination: String,
   cost: Number,
+  debtors: [userSchema],
   type: String,
   comments: [String],
   suggested: [new Schema({
@@ -37,12 +48,6 @@ export const activitySchema = new Schema<IActivity>({
     comments: String,
   })],
 }, { toObject: { versionKey: false } });
-
-export interface IUser {
-  name: string,
-  email: string,
-}
-
 export interface IItinerary {
   user_id: ObjectId;
   name: string;
@@ -70,11 +75,6 @@ export interface IItinerary {
   tags: string[];
   activities: IActivity[];
 }
-
-export const userSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-}, { toObject: { versionKey: false } });
 
 export const itinerarySchema = new Schema<IItinerary>({
   user_id: { type: Schema.Types.ObjectId, required: true },

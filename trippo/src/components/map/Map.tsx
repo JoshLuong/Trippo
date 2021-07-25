@@ -88,8 +88,8 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
           <Pin className="marker" onClick={() => {
             const arrSize = activityPopup.length;
             const filteredArray = activityPopup.filter((a) => a !== index);
-            const newActivitiyPopup: number[] = filteredArray.length === arrSize ? [...activityPopup, index] : filteredArray;
-            setActivityPopup(newActivitiyPopup);
+            const newActivityPopup: number[] = filteredArray.length === arrSize ? [...activityPopup, index] : filteredArray;
+            setActivityPopup(newActivityPopup);
             // dispatch(setHighlighted(slot.id))
           }}
           />
@@ -103,9 +103,10 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
             longitude={data?.activities[popupIndex].location.lng}
             closeButton={false}
             offsetTop={-47}
-            anchor="bottom" 
+            anchor="bottom"
           >
-            <div>Update here with proper destination name and time</div>
+              <div>{data?.activities[popupIndex].destination}</div>
+              <div>{data?.activities[popupIndex].time}</div>
           </Popup>
         ))
       }

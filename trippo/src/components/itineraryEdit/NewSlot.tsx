@@ -8,6 +8,7 @@ import { useAppSelector } from "app/store";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
+import TimeSlot from './TimeSlot'
 
 
 interface Props {
@@ -67,7 +68,7 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
     setSelectedDate(event);
   };
 
-  const addToItinerary = (newTimeslot: any) => {
+  const addToItinerary = () => {
     
   }
 
@@ -106,6 +107,7 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
             InputLabelProps={{
               shrink: true,
             }}
+            InputProps={{ inputProps: { min: 0 } }}
             variant="outlined"
           />
         </Grid>
@@ -148,9 +150,8 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
               InputLabelProps={{
                 shrink: true,
               }}
-              inputProps={{
-                step: 60, // 1 min
-              }}
+              InputProps={{ inputProps: {  step: 60, // 1 min
+                required: true } }}
             />
           </sc.Time>
         </Grid>
@@ -167,7 +168,7 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }
             />
           </Grid>
         </sc.SlotGrid>
-        <sc.AddButton onClick = {() => addToItinerary(newTimeslot)}>Add</sc.AddButton>
+        <sc.AddButton onClick = {() => addToItinerary()}>Add</sc.AddButton>
       </sc.SlotContainer>
     </sc.NewSlot>
   );

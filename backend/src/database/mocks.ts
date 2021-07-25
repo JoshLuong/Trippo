@@ -9,7 +9,8 @@ const date3 = new Date(2022, 5, 22);
 export const users = [
   { name: "Joshua Luong", email: 'joshopolis321@gmail.com' },
   { name: "Joshua Luong2", email: 'joshualuong99@gmail.com' },
-  { name: "John Doe", email: 'johndoe@gmail.com' }
+  { name: "John Doe", email: 'johndoe@gmail.com' },
+  { name: "Andre R", email: 'iramkairsingh@gmail.com' }
 ];
 
 export const activities = [

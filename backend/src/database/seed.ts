@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import { User, Itinerary } from './models';
-import { users, itineraries } from './mocks';
+import { users, itineraries, activities } from './mocks';
 
 const seed = async () => {
   console.log('Seeding started...');
@@ -16,7 +16,7 @@ const seed = async () => {
 
   for (let user of userDocs) {
     await Itinerary.insertMany(itineraries.map(itin => {
-      const itinWithUsers = {...itin, user_id: user._id, collaborators: [{user_id: user._id, name:  user.name }]};
+      const itinWithUsers = {...itin, user_id: user._id, collaborators: [{user_id: user._id, name:  user.name }], activities: [...activities]};
       return new Itinerary(itinWithUsers);
     }));
   }

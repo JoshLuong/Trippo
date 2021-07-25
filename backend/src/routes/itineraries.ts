@@ -19,6 +19,14 @@ router.get('/', async (req: any, res, _next) => {
   });
 });
 
+router.get('/:id', async (req, res, _next) => {
+  const { id } = req.params;
+
+  const itinerary = await Itinerary.findById(id);
+
+  res.status(200).send(itinerary);
+});
+
 router.post('/', (req: any, res, _next) => {
   const itinerary = new Itinerary({ ...req.body, user_id: req.session.userId, collaborators: [req.user, ...req.body.collaborators]});
   itinerary.save()

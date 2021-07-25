@@ -5,17 +5,26 @@ import * as d from "../../app/destinations/destinationTypes";
 import { Grid } from "@material-ui/core";
 import CancelIcon from '@material-ui/icons/Cancel';
 import { useAppSelector } from "app/store";
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import TimeSlot from './TimeSlot'
+
 
 interface Props {
   handleClose: () => void;
   destinationName: string;
   destinationAddress: string;
-  destinationTime: any;
 }
 
-const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, destinationTime }) => {
+const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }) => {
+  const itinerary = useAppSelector((state) => state.itinerary.value);
   const [type, setType] = useState(d.OTHER);
-  // const day = useAppSelector((state) => state.day.value);
+  const [cost, setCost] = useState(0);
+  const [comments, setComments] = useState("");
+  const [time, setTime] = useState("12:00");
+  const [selectedDate, setSelectedDate] = useState(itinerary?.start_date);
+
   let newTimeslot = {
     location: {
       lat: 19.26765379043226,
@@ -43,10 +52,24 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, 
     setType(event.target.value);
   }
 
-  const addToItinerary = (newTimeslot: any) => {
-    if (destinationTime){
-      // signify that destination time needs to be added
-    }
+  const handleCostChange = (event: any) => {
+    setCost(event.target.value);
+  }
+
+  const handleCommentsChange = (event: any) => {
+    setComments(event.target.value);
+  }
+
+  const handleTimeChange = (event: any) => {
+      setTime(event.target.value);
+  }
+
+  const handleDateChange = (event: any) => {
+    setSelectedDate(event);
+  };
+
+  const addToItinerary = () => {
+    
   }
 
   const selectStyles = sc.selectStyles();
@@ -79,9 +102,12 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, 
             id="outlined-number"
             label="Cost"
             type="number"
+            value={cost}
+            onChange={handleCostChange}
             InputLabelProps={{
               shrink: true,
             }}
+            InputProps={{ inputProps: { min: 0 } }}
             variant="outlined"
           />
         </Grid>
@@ -95,19 +121,37 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, 
       <sc.Cancel onClick={handleClose}>
         <CancelIcon />
       </sc.Cancel>
-      <sc.SlotContainer container item lg={12}>
-        <Grid container item lg={3} md={3} sm={12}>
+      <sc.SlotContainer container item md={12}>
+        <Grid container item lg={8} md={4} sm={6}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <KeyboardDatePicker
+          disableToolbar
+          variant="inline"
+          format="MM/dd/yyyy"
+          margin="normal"
+          id="date-picker-inline"
+          label="Select a Date"
+          value={selectedDate}
+          onChange={handleDateChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+          minDate={itinerary?.start_date}
+          // not sure why but the end date doesn't seem to match up
+          maxDate={itinerary?.end_date}
+        />
+      </MuiPickersUtilsProvider>
           <sc.Time>
             <sc.textField
               id="time"
               type="time"
-              defaultValue={destinationTime}
+              value={time}
+              onChange={handleTimeChange}
               InputLabelProps={{
                 shrink: true,
               }}
-              inputProps={{
-                step: 60, // 1 min
-              }}
+              InputProps={{ inputProps: {  step: 60, // 1 min
+                required: true } }}
             />
           </sc.Time>
         </Grid>
@@ -119,10 +163,12 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, 
               multiline
               rows={3}
               variant="outlined"
+              value={comments}
+              onChange={handleCommentsChange}
             />
           </Grid>
         </sc.SlotGrid>
-        <sc.AddButton onClick = {() => addToItinerary(newTimeslot)}>Add</sc.AddButton>
+        <sc.AddButton onClick = {() => addToItinerary()}>Add</sc.AddButton>
       </sc.SlotContainer>
     </sc.NewSlot>
   );

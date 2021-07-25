@@ -2,14 +2,15 @@ import { FC, useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FlyToInterpolator, MapRef, Marker, Popup } from 'react-map-gl';
 // @ts-ignore No type declaration for this package
 import Geocoder from 'react-map-gl-geocoder';
-import { Pin } from './Marker';
-import { useAppDispatch, useAppSelector } from 'app/store';
 import { InteractiveMapProps } from 'react-map-gl/src/components/interactive-map';
 import axios from 'axios';
-import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
+// import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
 import {DARK_ORANGE} from "../../colors/colors";
+import { Pin } from './Marker';
+// import { useAppDispatch, useAppSelector } from 'app/store';
 import './Map.css';
-import moment from 'moment';
+import { useGetItineraryByIdQuery } from 'services/itinerary';
+import { useParams } from 'react-router-dom';
 
 
 // TODO ROHIT: when user clicks 'X' button on new activity pop-up, you should setSearchResult(null)
@@ -17,15 +18,22 @@ import moment from 'moment';
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
   handleIsLoading: () => void;
-  handleNewSlotClick: (name: string, address: string, time: any) => void;
+  handleNewSlotClick: (name: string, address: string) => void;
 }
 
 const MAPBOX_API_URL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
-const reverseGeocode = async (lat: number, lng: number) => {
+const reverseGeocodeAddress = async (lat: number, lng: number) => {
   //the service call returns place at the coordinates passed.
   let address = await axios.get(MAPBOX_API_URL + lng + ',' + lat + '.json?access_token='+ process.env.REACT_APP_MAPBOX_ACCESS_TOKEN);
   let exactAddress = address.data.features[0].place_name;
   return exactAddress;
+}
+
+const reverseGeocodeName = async (lat: number, lng: number) => {
+  //the service call returns place at the coordinates passed.
+  let address = await axios.get(MAPBOX_API_URL + lng + ',' + lat + '.json?access_token='+ process.env.REACT_APP_MAPBOX_ACCESS_TOKEN);
+  let exactName = address.data.features[0].text;
+  return exactName;
 }
 
 const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotClick }) => {
@@ -36,25 +44,24 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
     zoom: 2,
   });
 
-
-  const day = useAppSelector((state) => state.day.value);
-  const dispatch = useAppDispatch();
+  const { id } = useParams<{ id: string }>();
+  const { data } = useGetItineraryByIdQuery(id);
 
   const [searchResult, setSearchResult] = useState<any>(null);
   const [activityPopup, setActivityPopup] = useState<number[]>([]);
 
   useEffect(() => {
-    if (day.length) {
+    if (data?.activities.length) {
       setViewport({
-        longitude: day[0].location.lng,
-        latitude: day[0].location.lat,
+        longitude: data.activities[0].location.lng,
+        latitude: data.activities[0].location.lat,
         zoom: 10,
         transitionDuration: 1000,
         transitionInterpolator: new FlyToInterpolator(),
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [day]);
+  }, [data]);
 
   return (
     <ReactMapGL
@@ -68,9 +75,9 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
       onLoad={handleIsLoading}
       mapStyle="mapbox://styles/mapbox/streets-v11"
     >
-      {day.map((slot, index) => (
+      {data?.activities.map((slot, index) => (
         <Marker
-          key={slot.id}
+          key={slot._id}
           latitude={slot.location.lat}
           longitude={slot.location.lng}
           // SVG width / 2
@@ -83,16 +90,17 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
             const filteredArray = activityPopup.filter((a) => a !== index);
             const newActivitiyPopup: number[] = filteredArray.length === arrSize ? [...activityPopup, index] : filteredArray;
             setActivityPopup(newActivitiyPopup);
-            dispatch(setHighlighted(slot.id))
-            }}/>
+            // dispatch(setHighlighted(slot.id))
+          }}
+          />
         </Marker>
       ))}
-      {
-        activityPopup.map( popupIndex => (
+      { data?.activities &&
+        activityPopup.map(popupIndex => (
           <Popup
             key={popupIndex}
-            latitude={day[popupIndex].location.lat}
-            longitude={day[popupIndex].location.lng}
+            latitude={data?.activities[popupIndex].location.lat}
+            longitude={data?.activities[popupIndex].location.lng}
             closeButton={false}
             offsetTop={-47}
             anchor="bottom" 
@@ -111,8 +119,9 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
           // SVG height + 1px
           offsetTop={-41}
         >
-          <Pin className="marker" onClick={() => {
-            alert("TODO")
+          <Pin className="marker" onClick={async () => {
+            handleNewSlotClick(await reverseGeocodeName(searchResult.geometry.coordinates[1], searchResult.geometry.coordinates[0]), 
+            await reverseGeocodeAddress(searchResult.geometry.coordinates[1], searchResult.geometry.coordinates[0]))
             }} fill={DARK_ORANGE} />
         </Marker>
         ) : null

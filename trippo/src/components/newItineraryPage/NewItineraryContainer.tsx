@@ -57,7 +57,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
         }
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
-        const newItinerary: Itinerary = {
+        const newItinerary: Omit<Itinerary, "_id" | "user_id"> = {
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",
             dest_coords: {

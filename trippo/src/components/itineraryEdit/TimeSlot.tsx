@@ -3,39 +3,72 @@ import { TextField } from '@material-ui/core';
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid, Tooltip } from "@material-ui/core";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
+import { Activity } from 'types/models';
 
 interface Props {
   handleHideCostToggle: (cost: number | undefined) => void;
-  timeSlot: {
-    time?: Date;
-    destination?: string;
-    comments?: string[];
-    type?: string;
-    suggested?: {
-      destination?: string;
-      comments?: string;
-      type?: string;
-    }[];
-    cost?: number;
-  };
+  activity: Activity;
   showEdit?: boolean;
-  timeChange: (date:any, timeRef:any, index:number) => void;
   index: number;
+  editActivity: (activity: Activity) => void;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeChange, index }) => {
-  const { time, destination, comments, type, suggested } = timeSlot;
+const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity }) => {
+  const { time, destination, comments, type, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
+  // const [cost, setCost] = useState(activity.cost || 0);
   const timeRef = useRef(null);
 
+  const setComments = (value: string) => {
+    const comments = value.split('\n').filter(e => Boolean(e));
+    editActivity({
+      ...activity,
+      comments,
+    });
+  }
+
+  const setTime = (e: any) => {
+    const t = e.target.value.split(":");
+    const time = moment(date).set({ hour: t[0], minute: t[1] }).toDate();
+    editActivity({
+      ...activity,
+      time,
+    });
+  }
+
+  // TODO: Fix cost input
+  // const editCost = (costString: string) => {
+  //   const newCost = costString.slice(1);
+  //   setCost(Number(newCost));
+  // }
+
+  const getButtons = () => {
+    return showEdit ? (
+      <sc.StyledIconButton>
+        <DeleteOutlineIcon />
+      </sc.StyledIconButton>
+    ) : (
+      <button onClick={() => setShowSuggestions(!showSuggestions)}>
+      {!showSuggestions ? (
+        <i className="fas fa-chevron-down"></i>
+      ) : (
+        <i
+          style={{ color: c.DARK_ORANGE }}
+          className="fas fa-chevron-up"
+        ></i>
+      )}
+    </button>
+    )
+  }
   const handleShowCostToggle = () => {
     !showCost
-      ? handleHideCostToggle(timeSlot.cost)
-      : handleHideCostToggle(-Math.abs(timeSlot.cost || 0));
+      ? handleHideCostToggle(activity.cost)
+      : handleHideCostToggle(-Math.abs(activity.cost || 0));
     setShowCost(!showCost);
   };
 
@@ -50,11 +83,10 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
         </Grid>
         <Grid container item lg={2} md={2} sm={2} xs={2}>
           <sc.Cost {...costStyling} contentEditable={showEdit ? true : false}>
-            {timeSlot.cost ? (
+            {activity.cost ? (
               <Tooltip
-                title={`${
-                  showCost ? "Hide from" : "Include in"
-                } the total daily cost`}
+                title={`${showCost ? "Hide from" : "Include in"
+                  } the total daily cost`}
               >
                 <button onClick={handleShowCostToggle}>
                   {showCost ? (
@@ -65,7 +97,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
                 </button>
               </Tooltip>
             ) : null}
-            <div>{timeSlot.cost ? `$${timeSlot.cost}` : ""}</div>
+            <div>{activity.cost ? `$${activity.cost}` : ""}</div>
           </sc.Cost>
         </Grid>
       </sc.Destination>
@@ -79,39 +111,31 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
       <Grid container item lg={12}>
         <Grid container item lg={3} md={3} sm={12}>
           <sc.Time>
-          <TextField
-            onChange={(date) => timeChange(date, timeRef, index)}
-            ref={timeRef}
-            id="time"
-            type="time"
-            defaultValue={moment(date, "dd DD-MMM-YYYY, hh:mm").format("HH:mm")}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 300, // 5 min
-            }}
-          />
+            <TextField
+              disabled={!showEdit}
+              onChange={(e) => setTime(e)}
+              ref={timeRef}
+              id="time"
+              type="time"
+              defaultValue={moment(date, "dd DD-MMM-YYYY, hh:mm").format("HH:mm")}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                step: 300, // 5 min
+              }}
+            />
           </sc.Time>
         </Grid>
         <sc.SlotGrid container item lg={9} md={9} sm={12} xs={12}>
           {renderHeaderContent()}
           <Grid container item lg={1} md={1} sm={1} xs={1}>
             <sc.CommentButton>
-              <button onClick={() => setShowSuggestions(!showSuggestions)}>
-                {!showSuggestions ? (
-                  <i className="fas fa-chevron-down"></i>
-                ) : (
-                  <i
-                    style={{ color: c.DARK_ORANGE }}
-                    className="fas fa-chevron-up"
-                  ></i>
-                )}
-              </button>
+              {getButtons()}
             </sc.CommentButton>
           </Grid>
           <Grid container item lg={12} md={12} sm={12} xs={12}>
-            <sc.Comments contentEditable={showEdit ? true : false}>
+            <sc.Comments contentEditable={showEdit ? true : false} onInput={(e) => setComments(e.currentTarget.innerText)}>
               {comments?.map((c, index) => {
                 return <li key={index}>{c}</li>;
               })}
@@ -123,11 +147,6 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, timeSlot, showEdit, timeCha
             renderIcon={d.renderIcon}
             suggested={suggested}
           ></Suggestions>
-        ) : null}
-        {showEdit ? (
-          <sc.EditButton>
-            <i className="fas fa-minus-circle"></i>
-          </sc.EditButton>
         ) : null}
       </Grid>
     </sc.Slot>

@@ -10,10 +10,9 @@ interface Props {
   handleClose: () => void;
   destinationName: string;
   destinationAddress: string;
-  destinationTime: any;
 }
 
-const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, destinationTime }) => {
+const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress }) => {
   const [type, setType] = useState(d.OTHER);
   // const day = useAppSelector((state) => state.day.value);
   let newTimeslot = {
@@ -44,9 +43,7 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, 
   }
 
   const addToItinerary = (newTimeslot: any) => {
-    if (destinationTime){
-      // signify that destination time needs to be added
-    }
+    
   }
 
   const selectStyles = sc.selectStyles();
@@ -101,7 +98,7 @@ const NewSlot: FC<Props> = ({ handleClose, destinationName, destinationAddress, 
             <sc.textField
               id="time"
               type="time"
-              defaultValue={destinationTime}
+              defaultValue="12:00"
               InputLabelProps={{
                 shrink: true,
               }}

@@ -1,9 +1,16 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
+import Button from "@material-ui/core/Button";
 
 export const fancytext = styled.div`
   text-align: center;
   font-style: italic;
+`;
+
+export const StyledButton = styled(Button)`
+  span {
+    color: ${c.DARK_ORANGE};
+  }
 `;
 
 export const containerDiv = styled.div`
@@ -44,6 +51,7 @@ export const LoadingDiv = styled.div`
 export const SideBar = styled.div`
   z-index: 1;
   height: 650px;
+  width: 2em;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
   display: flex;
   flex-direction: column;
@@ -91,4 +99,12 @@ export const SearchContainer = styled.div`
       outline: none;
     }
   }
+`;
+
+export const ItineraryDiv = styled.div`
+  bottom: 0;
+  position: relative;
+  display: flex;
+  margin-top: 0.6em;
+  height: 80%;
 `;

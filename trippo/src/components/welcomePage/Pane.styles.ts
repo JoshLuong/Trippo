@@ -2,6 +2,7 @@ import { Button, TextField } from "@material-ui/core";
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login'
 import { Grid } from '@material-ui/core';
 
 export const loginHeader = styled.h1`
@@ -67,11 +68,37 @@ export const loginPane = styled.div`
 `;
 
 export const StyledGoogleLogin = styled(GoogleLogin)`
-  width: 50%;
+  width: 80%;
+  justify-content:center;
+  box-shadow: 4px 4.5px 4.5px 0 rgba(0, 0, 0, 0.8);
+  opacity: 1 !important;
+
+  span {
+    color: ${c.BLACK};
+  }
+`;
+
+export const StyledFacebookLogin = styled(FacebookLogin)`
+  margin-top: 2em;
+  width: 80%;
+  justify-content:center;
+
+  span {
+    width: 100%;
+  }
+  button {
+    width: 80%;
+  }
+`;
+
+export const LogoImg = styled.img`
+  margin: auto;
 `;
 
 export const GoogleDiv = styled(Grid)`
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  span {
+    width: 100%;
+  }
 `;
 

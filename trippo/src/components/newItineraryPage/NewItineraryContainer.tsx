@@ -8,6 +8,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import * as sc from './NewItinieraryContainer.styles'
 import _ from "lodash";
 import { Itinerary } from 'types/models';
+import moment from 'moment';
 
 interface Props {
     handleShowNewItinerary: (canShow: boolean) => void;
@@ -55,8 +56,10 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
             setFail(true);
             return;
         }
-        const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
-        const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
+
+        // Start and end dates are in midnight local time
+        const start_date = moment(startRef.current!.value).toDate();
+        const end_date = moment(endRef.current!.value).toDate();
         const newItinerary: Omit<Itinerary, "_id" | "user_id"> = {
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",

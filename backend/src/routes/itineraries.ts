@@ -19,10 +19,10 @@ router.get('/', async (req: any, res, _next) => {
   });
 });
 
-router.get('/:id', async (req, res, _next) => {
+router.get('/:id', async (req: any, res, _next) => {
   const { id } = req.params;
 
-  const itinerary = await Itinerary.findById(id);
+  const itinerary = await Itinerary.findOne({_id: id, user_id: req.session.userId}); // TODO update to use session user id too
 
   res.status(200).send(itinerary);
 });

@@ -51,10 +51,10 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
   const [activityPopup, setActivityPopup] = useState<number[]>([]);
 
   useEffect(() => {
-    if (data?.activities.length) {
+    if (data) {
       setViewport({
-        longitude: data.activities[0].location.lng,
-        latitude: data.activities[0].location.lat,
+        longitude: data.dest_coords.lng,
+        latitude: data.dest_coords.lat,
         zoom: 10,
         transitionDuration: 1000,
         transitionInterpolator: new FlyToInterpolator(),

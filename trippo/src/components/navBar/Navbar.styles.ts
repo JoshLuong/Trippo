@@ -1,11 +1,40 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { Grid } from "@material-ui/core";
 import styled from "styled-components";
+import * as c from "../../colors/colors";
 
 const drawerWidth = 240;
 
 export const Logo = styled.div`
+  position: absolute;
+  left: 64px;
+`;
+
+export const DateGrid = styled(Grid)`
+  font-size: 0.65em;
   display: flex;
-  justify-content: center;
+  color: ${c.DARK_GREY};
+  i {
+    color: ${c.DARK_ORANGE};
+    margin-top: 0.2em;
+    margin-right: 0.35em;
+  }
+  @media (max-width: 660px) {
+    font-size: 0.5em;
+  }
+`;
+
+export const ItineraryTitle = styled.div`
+  margin: auto;
+  text-align: center;
+  color: ${c.DARK_BLUE};
+  font-size: 1.5em;
+  
+  @media (max-width: 660px) {
+    max-width: 160px;
+    overflow: hidden;
+    font-size: 1.25em;
+  }
 `;
 
 export const LogoButton = styled.button`

@@ -106,7 +106,8 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
             anchor="bottom"
           >
               <div>{data?.activities[popupIndex].destination}</div>
-              <div>{data?.activities[popupIndex].time}</div>
+              <div>{new Date(data?.activities[popupIndex].time!).toDateString()}</div>
+              <div>{new Date(data?.activities[popupIndex].time!).toTimeString()}</div>
           </Popup>
         ))
       }

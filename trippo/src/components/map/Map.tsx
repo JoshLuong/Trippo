@@ -28,10 +28,10 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
   const { data } = useGetItineraryByIdQuery(id);
 
   useEffect(() => {
-    if (data?.activities.length) {
+    if (data) {
       setViewport({
-        longitude: data.activities[0].location.lng,
-        latitude: data.activities[0].location.lat,
+        longitude: data.dest_coords.lng,
+        latitude: data.dest_coords.lat,
         zoom: 10,
         transitionDuration: 5000,
         transitionInterpolator: new FlyToInterpolator(),

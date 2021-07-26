@@ -6,33 +6,31 @@ import {
   Modifiers,
 } from "react-nice-dates";
 import "./Calendar.scss";
+import { useAppSelector } from 'app/store';
 
 interface Props {
   handleDayClick: (date: Date | null) => void;
-  startDay: Date;
-  endDay: Date;
 }
 
-const Calendar: FC<Props> = ({ handleDayClick, startDay, endDay }) => {
-  const [startDate] = useState(startDay);
-  const [endDate] = useState(endDay);
+const Calendar: FC<Props> = ({ handleDayClick }) => {
+  const itinerary = useAppSelector((state) => state.itinerary.value);
   const [focus, setFocus] = useState<DateRangeFocus>("startDate");
   const handleFocusChange = (newFocus: DateRangeFocus) => {
     setFocus(newFocus || "startDate");
   };
   const modifiers: Modifiers = {
     disabled: (date) => {
-      return date < startDate || date > endDate ? true : false;
+      return !itinerary || date < new Date(itinerary.start_date) || date > new Date(itinerary.end_date);
     }, // Disables Saturdays
   };
   const modifiersClassNames = {
     highlight: "-highlight",
   };
-  return (
+  return itinerary ? (
     <div>
       <DateRangePickerCalendar
-        startDate={startDate}
-        endDate={endDate}
+        startDate={new Date(itinerary.start_date)}
+        endDate={new Date(itinerary.end_date)}
         focus={focus}
         onStartDateChange={handleDayClick}
         onEndDateChange={handleDayClick}
@@ -44,7 +42,7 @@ const Calendar: FC<Props> = ({ handleDayClick, startDay, endDay }) => {
         onDayClick={handleDayClick}
       />
     </div>
-  );
+  ) : null;
 };
 
 export default Calendar;

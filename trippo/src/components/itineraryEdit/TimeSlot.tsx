@@ -1,13 +1,15 @@
-import React, { FC, useState, useRef } from "react";
+import React, { FC, useState, useRef, useCallback } from "react";
 import { TextField } from '@material-ui/core';
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import { Grid, Tooltip, InputLabel, Input, InputAdornment } from "@material-ui/core";
+import { Grid, Tooltip, Input, InputAdornment } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
 import { Activity } from 'types/models';
+import { useEffect } from 'react';
+import { debounce } from 'lodash';
 
 interface Props {
   handleHideCostToggle: (cost: number | undefined) => void;
@@ -15,28 +17,37 @@ interface Props {
   showEdit?: boolean;
   index: number;
   editActivity: (activity: Activity) => void;
+  deleteActivity: (activity: Activity) => void;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity }) => {
+const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity, deleteActivity }) => {
   const { time, destination, comments, type, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
-  // const [cost, setCost] = useState(activity.cost || 0);
+  const [commentsString, setCommentsString] = useState(comments.join('\n'));
   const timeRef = useRef(null);
+  const isMounted = useRef(false);
 
-  const setComments = (value: string) => {
-    const comments = value.split('\n').filter(e => Boolean(e));
-    console.log(comments)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const edit = useCallback(debounce(editActivity, 400), []);
 
-    editActivity({
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    const comments = commentsString.split('\n').filter(e => Boolean(e));
+
+    edit({
       ...activity,
       comments,
     });
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commentsString]);
 
   const setTime = (e: any) => {
     const t = e.target.value.split(":");
-    const time = moment(date).set({ hour: t[0], minute: t[1] }).toDate();
+    const time = moment(date).set({ hour: t[0], minute: t[1] }).toISOString();
     editActivity({
       ...activity,
       time,
@@ -51,7 +62,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
 
   const getButtons = () => {
     return showEdit ? (
-      <sc.StyledIconButton>
+      <sc.StyledIconButton onClick={() => deleteActivity(activity)}>
         <DeleteOutlineIcon />
       </sc.StyledIconButton>
     ) : (
@@ -154,10 +165,8 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
                 disabled={!showEdit}
                 multiline
                 variant="outlined"
-                defaultValue={comments.reduce((acc, comment) => {
-                  return acc + "\n" + comment;
-                })}
-                onChange={(e: any) => setComments(e.currentTarget.value)}
+                value={commentsString}
+                onChange={(e: any) => setCommentsString(e.currentTarget.value)}
               />
             </sc.Comments>
           </Grid>

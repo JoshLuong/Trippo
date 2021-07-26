@@ -4,7 +4,7 @@ export interface Activity {
     lat: number;
     lng: number;
   };
-  time?: Date;
+  time: string;
   destination?: string;
   cost?: number;
   type?: string;

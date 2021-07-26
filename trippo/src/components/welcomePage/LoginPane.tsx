@@ -5,7 +5,7 @@ import { useAppDispatch } from 'app/store';
 import { setUser } from 'app/reducers/userSlice';
 import * as sc from './Pane.styles';
 import { Grid } from '@material-ui/core';
-import FacebookLogin from 'react-facebook-login'
+
 interface Props {
   onForgotPassword: () => void;
   onSignUp: () => void;
@@ -38,10 +38,6 @@ const LoginPane: FC<Props> = (Props) => {
         }
         // store returned user somehow
       }
-
-    const responseFacebook = (response: any) => {
-        console.log(response);
-    }
 
     return (
         <Grid container spacing={2} direction="column">

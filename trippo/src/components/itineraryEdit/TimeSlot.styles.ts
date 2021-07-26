@@ -1,9 +1,9 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { TextField, FormControl } from '@material-ui/core';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 const darkGrey = c.GREY;
 export interface StyledTimeSlotProps{
   showSuggestions: boolean

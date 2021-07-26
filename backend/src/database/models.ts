@@ -14,6 +14,10 @@ export interface IActivity {
   suggested?: {
     destination: string;
     type: string;
+    url: string;
+    rating: number;
+    price?: string;
+    distance: number;
     comments: string;
   }[];
 }
@@ -35,6 +39,10 @@ export const activitySchema = new Schema<IActivity>({
     destination: String,
     type: String,
     comments: String,
+    url: String,
+    rating: Number,
+    price: String,
+    distance: Number,
   })],
 }, { toObject: { versionKey: false } });
 

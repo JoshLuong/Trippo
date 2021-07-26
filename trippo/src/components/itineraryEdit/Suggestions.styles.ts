@@ -7,6 +7,7 @@ export const Time = styled.div`
 
 export const Destination = styled.div`
   padding-top: 5px;
+  overflow: hidden;
   color: rgba(71, 71, 71, 0.65);
   @media (max-width: 960px) {
     margin-left: 1em;
@@ -30,12 +31,30 @@ export const SuggestionTitle = styled.div`
 
 export const Comments = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
   color: rgba(71, 71, 71, 0.55);
   padding-top: 5px;
   font-size: 0.85em;
   padding-left: 1.5em;
   padding-right: 1em;
   text-align: right;
+
+  img {
+    margin-left: 8px;
+  }
+`;
+
+
+export const Distance = styled.div`
+  width: 100%;
+  color: rgba(71, 71, 71, 0.55);
+  font-size: 0.85em;
+  @media (max-width: 960px) {
+    margin-left: 1em;
+  }
 `;
 
 export const Icon = styled.i`

@@ -1,5 +1,5 @@
 /// <reference path='./NewItineraryContainer.d.ts' />
-import { FC, useState, useRef } from 'react';
+import { FC, useState, useRef, useCallback, useEffect } from 'react';
 import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
 import { useAppSelector } from 'app/store';
@@ -8,9 +8,12 @@ import FaceIcon from '@material-ui/icons/Face';
 import * as sc from './NewItinieraryContainer.styles'
 import _ from "lodash";
 import { Itinerary } from 'types/models';
+import { useLazyGetUserByEmailQuery } from 'services/user';
 
+// TODO :: add state props for edit itin + refactor
 interface Props {
     handleShowNewItinerary: (canShow: boolean) => void;
+    setSuccess: (isSuccessful: boolean) => void;
     createItinerary: (arg: Partial<Itinerary>) => any;
 }
 
@@ -18,7 +21,7 @@ const collabData: any[] = [];
 
 const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 
-const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItinerary }) => {
+const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, createItinerary }) => {
     const user = useAppSelector((state) => state.user.value);
     const [errorMessage, setErrorMessage] = useState("");
     const [cityData, setCityData] = useState([]);
@@ -26,7 +29,7 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
     const [showPreference, setPreference] = useState(false);
     const [rating, setRating] = useState(3);
     const [price, setPrice] = useState(2);
-    const [collaborators, setCollaborators] = useState<{ user_id: string; name: string; }[]>([]);
+    const [collaborators, setCollaborators] = useState<string[]>([]);
     const [tags, setTags] = useState<string[]>([]);
     const [destination, setDestination] = useState<any>(null);
     const [destError, setDestError] = useState(undefined);
@@ -43,11 +46,84 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
         handleCitySearch(text);
     }, 500);
 
-    // const [toAdd, setToAdd] = useState<UseMutationStateOptions<MutationDefinition<Partial<Itinerary>(null);
+    const [trigger, result] = useLazyGetUserByEmailQuery();
+
+
+    // SOLUTION #1 :: infinitely does get requests bc of result dependency 
+
+    // const [validatedCollabs, setValidatedCollabs] = useState<any[]>([]);
+    // const processCollaborators = useCallback((_event: any) => {
+    //     console.log(result);
+    //     // let newValue = collaborators[collaborators.length - 1];
+    //     if (result.status !== "fulfilled") {
+    //         // console.log("failed");
+    //         // setErrorMessage("Invalid email: " + newValue);
+    //         setFail(true);
+    //     } else {
+    //         if (result.data) {
+    //             setValidatedCollabs([...validatedCollabs, {
+    //                 _id: result.data?._id,
+    //                 name: result.data?.name,
+    //                 email: result.data?.email
+    //             }]);
+    //         }
+    //     }
+    //     // console.log(collaborators[collaborators.length - 1]);
+    //     console.log(validatedCollabs);
+    // }, [validatedCollabs, result]);
+
+    // useEffect(() => {
+    //     trigger(collaborators[collaborators.length - 1]);
+    // }, [trigger, collaborators]);
+
+    // useEffect(() => {
+    //     processCollaborators(null);
+    // }, [result, processCollaborators]);
+
+
+    // SOLUTION #2 :: 
+
+    let collab: any[] = [];
+
+    const processCollaborators = (newValue: string[]) => {
+        console.log(result);
+        if (result.status !== "fulfilled") {
+            setErrorMessage("Invalid email: " + newValue[newValue.length - 1]);
+            setFail(true);
+        } else {
+            collab.push({
+                _id: result.data?._id,
+                name: result.data?.name,
+                email: result.data?.email
+            });
+            setCollaborators(newValue);
+        }
+        console.log(newValue);
+        console.log(collab);
+    }
+
+    const onAutocompleteChange = async (e: any, newValue: any, reason: string) => {
+        console.log(newValue);
+        if (reason === "create-option") {
+            console.log(newValue[newValue.length - 1]);
+            await trigger(newValue[newValue.length - 1]);
+            // console.log(result);
+            // BUG :: triggers needs to callback process collabs - tries to process results before it is ready 
+            processCollaborators(newValue);
+        }
+
+        else if (reason === "remove-option") {
+            setCollaborators(newValue);
+            collab.filter((c) => c.email !== newValue[newValue.length - 1]);
+            console.log(collab);
+        }
+
+        // setCollaborators(newValue);
+
+    }
 
     const handleSubmit = async () => {
         // TODO: remove mongoose from package.json, and use some objectId taken from localstorage or smt
-        // TODO validate collaborators
         if (!user) return;
         const startDateArr = startRef.current?.value.split("-") || [];
         const endDateArr = endRef.current?.value.split("-") || [];
@@ -57,6 +133,8 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
         }
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
+        collab.forEach((c: any) => delete c["email"]);
+        // validatedCollabs.forEach((c: any) => delete c["email"]);
         const newItinerary: Omit<Itinerary, "_id" | "user_id"> = {
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",
@@ -69,15 +147,22 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
             restaurant_ratings: rating,
             max_walking_dist: Number(maxWalkRef.current?.value) || 5,
             max_driving_dist: Number(maxDriveRef.current?.value) || 15,
-            collaborators: [...collaborators],
+            collaborators: [...collab],
             comments: descRef.current?.value,
             tags: tags,
             start_date: start_date,
             end_date: end_date,
             activities: [], // TODO change
         };
-        createItinerary(newItinerary);
-        handleShowNewItinerary(false);
+        await createItinerary(newItinerary).unwrap()
+            .then((payload: any) => {
+                setSuccess(true);
+                handleShowNewItinerary(false);
+            })
+            .catch((error: any) => {
+                setErrorMessage("Something went wrong. Try again later.")
+                setFail(true);
+            });
     }
 
     const handleCitySearch = (city: string) => {
@@ -116,7 +201,6 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
             ret = false;
             emptyFields.push("Start and End Date");
         }
-        console.log(emptyFields);
         if (emptyFields.length > 0) {
             let msg = "Please fill in these required fields: "
             for (let i = 0; i < emptyFields.length; i++) {
@@ -126,9 +210,6 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                 } else msg += ".";
             }
             setErrorMessage(msg);
-        }
-        if (!ret) {
-            return ret;
         }
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
@@ -159,26 +240,26 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                         </Alert>
                     </Snackbar>
                     <sc.inputTags>Name</sc.inputTags>
-                    <sc.textField 
-                        autoFocus 
-                        error={nameError === ""} 
+                    <sc.textField
+                        autoFocus
+                        error={nameError === ""}
                         onBlur={() => {
                             setNameError(nameRef.current?.value || "");
                         }}
-                        helperText={nameError === "" ? 'Required' : ' '} 
-                        inputRef={nameRef} 
-                        size="small" 
-                        variant="outlined" 
-                        color="secondary" 
-                        label="My Trip Name" 
+                        helperText={nameError === "" ? 'Required' : ' '}
+                        inputRef={nameRef}
+                        size="small"
+                        variant="outlined"
+                        color="secondary"
+                        label="My Trip Name"
                         fullWidth />
                     <sc.inputTags>Destination</sc.inputTags>
                     <Autocomplete
                         classes={autoCompleteStyles}
                         value={destination}
-                        onChange={(e: any, newValue: any) => { 
+                        onChange={(e: any, newValue: any) => {
                             setDestination(newValue);
-                            if (newValue) setTags([newValue.country, ...tags]); 
+                            if (newValue) setTags([newValue.country, ...tags]);
                         }}
                         onBlur={() => setDestError(destination)}
                         size="small"
@@ -214,14 +295,11 @@ const NewItineraryContainer: FC<Props> = ({ handleShowNewItinerary, createItiner
                         </sc.inputTags>
                         <Autocomplete multiple
                             classes={autoCompleteStyles}
-                            onChange={(e: any, newValue: any) => { setCollaborators(newValue) }}
+                            onChange={onAutocompleteChange}
                             freeSolo
                             value={collaborators}
                             options={collabData}
                             limitTags={6}
-                            renderOption={(option) => <div>
-                                {option}
-                            </div>}
                             renderInput={(params) => (
                                 <TextField {...params} variant="outlined" size="small" />
                             )}

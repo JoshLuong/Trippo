@@ -8,6 +8,8 @@ import NewItineraryContainer from "components/newItineraryPage/NewItineraryConta
 import Searchbar from "../searchBar/Searchbar"
 import { useCreateItineraryMutation, useDeleteItineraryMutation, useLazyGetItinerariesQuery } from 'services/itinerary';
 import Pagination from '@material-ui/lab/Pagination';
+import Alert from '@material-ui/lab/Alert';
+import { Snackbar, SnackbarCloseReason } from '@material-ui/core'
 import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'qs';
 import { useCallback } from "react";
@@ -33,12 +35,14 @@ const ItinerariesView = () => {
 
   const [showEdit, setShowEdit] = useState(false);
   const [showNewItinerary, setShowNewItinerary] = useState(false);
-  
+
+  const [successSnackbar, setSuccess] = useState(false);
+
   const handlePageChange = useCallback((_event: any, page: number) => {
     history.push({
       search: `?page=${page}`
     });
-  },[history]);
+  }, [history]);
 
   useEffect(() => {
     triggerGetQuery({
@@ -61,9 +65,21 @@ const ItinerariesView = () => {
     setShowNewItinerary(canShow);
   }
 
+  const handleClose = (event: any, reason: SnackbarCloseReason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccess(false);
+  }
+
   // TODO: take out inline style; move to search 
   return (
     <sc.ItinerariesViewGrid>
+      <Snackbar open={successSnackbar} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={() => setSuccess(false)} severity="success">
+          Successfully Added
+        </Alert>
+      </Snackbar>
       <div
         style={{
           height: "7em",
@@ -72,7 +88,7 @@ const ItinerariesView = () => {
           textAlign: "center",
         }}
       >
-        <Searchbar onChange={search}/>
+        <Searchbar onChange={search} />
       </div>
       <sc.ButtonDiv>
         <button onClick={() => setShowEdit(!showEdit)}>
@@ -85,7 +101,7 @@ const ItinerariesView = () => {
       </sc.PaginationDiv>
       {
         showNewItinerary
-          ? <NewItineraryContainer handleShowNewItinerary={handleShowNewItinerary} createItinerary={createItinerary} />
+          ? <NewItineraryContainer handleShowNewItinerary={handleShowNewItinerary} createItinerary={createItinerary} setSuccess={setSuccess} />
           : null
       }
       {result.data?.itineraries.length && (
@@ -100,7 +116,7 @@ const ItinerariesView = () => {
                   handleRemove={async () => {
                     deleteItinerary(card._id)
                       .then(() => {
-                        // delete should chain get request - right now manual reload required to see changes
+                        // do nothing
                       })
                       .catch((e) => { console.log(e) })
                   }}

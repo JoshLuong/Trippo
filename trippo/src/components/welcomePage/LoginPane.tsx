@@ -18,7 +18,7 @@ const LoginPane: FC<Props> = (Props) => {
 
     const handleLogin = async (googleData: any) => {
         try {
-            const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/v1/auth/google`, {
+            const res = await fetch(`/api/v1/auth/google`, {
                 method: "POST",
                 credentials: 'include',
                 body: JSON.stringify({

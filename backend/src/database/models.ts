@@ -59,6 +59,7 @@ export interface IItinerary {
   collaborators: {
     user_id: string;
     name: string;
+    email: string;
   }[];
   budget?: number;
   dining_budget?: number;
@@ -96,6 +97,7 @@ export const itinerarySchema = new Schema<IItinerary>({
   collaborators: [new Schema({
     user_id: Schema.Types.ObjectId,
     name: { type: String, required: true },
+    email: { type: String, required: true }
   })],
   comments: String,
   tags: [String],

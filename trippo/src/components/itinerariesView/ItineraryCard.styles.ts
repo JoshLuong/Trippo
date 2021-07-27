@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
-import { Grid } from "@material-ui/core";
+import { Grid, IconButton } from "@material-ui/core";
 import PeopleIcon from "@material-ui/icons/People";
 import LabelIcon from "@material-ui/icons/Label";
 import Button from "@material-ui/core/Button";
@@ -11,9 +11,19 @@ export const StyledButton = styled(Button)`
   }
 `;
 
+export const StyledIconButton = styled(IconButton)`
+  position: absolute;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  margin: 0.40em;
+  color: ${c.GREY};
+`;
+
 export const Card = styled.div`
   background-color: white;
   margin: auto;
+  position: relative;
   margin-bottom: 7em;
   min-height: 14em;
   width: 705px;
@@ -24,7 +34,7 @@ export const Card = styled.div`
     transform: scale(1.025);
   }
   padding-left: 2em;
-  padding-right: 2em;
+  padding-right: 2.75em;
   padding-bottom: 2em;
 
   @media (max-width: 960px) {
@@ -44,6 +54,7 @@ export const TripName = styled.a`
   font-weight: 600;
   font-size: 1.75em;
   margin-bottom: 0.35em;
+  overflow: hidden;
 `;
 
 export const StyledPeopleIcon = styled(PeopleIcon)`

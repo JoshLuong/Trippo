@@ -91,9 +91,6 @@ const ItinerariesView = () => {
         <Searchbar onChange={search} />
       </div>
       <sc.ButtonDiv>
-        <button onClick={() => setShowEdit(!showEdit)}>
-          {!showEdit ? "Edit Itineraries" : "Done"}
-        </button>
         <button onClick={() => setShowNewItinerary(true)}>Plan A New Trip</button>
       </sc.ButtonDiv>
       <sc.PaginationDiv>

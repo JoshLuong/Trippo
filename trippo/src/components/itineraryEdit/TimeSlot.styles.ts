@@ -1,9 +1,9 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { TextField, FormControl } from '@material-ui/core';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 const darkGrey = c.GREY;
 export interface StyledTimeSlotProps{
   showSuggestions: boolean
@@ -13,6 +13,7 @@ export interface StyledTimeSlotProps{
 export const StyledIconButton = styled(IconButton)`
   width: 24px !important;
   height: 24px !important;
+  margin-top: -6px;
 `;
 
 export const Slot = styled.div<StyledTimeSlotProps>`
@@ -89,25 +90,13 @@ export const Destination = styled.div`
   }
 `;
 
-const editStyles = css`
-  border: 1.25px solid ${c.BLACK};
-  border-radius: 7px;
-  outline: none;
-`;
-
-const editStylesUnderline = css`
-  border-bottom: 1.25px solid ${c.BLACK};
-  border-radius: 2px;
-  margin-bottom: 0.5em;
-  outline: none;
-`;
-
 export const Cost = styled.div`
   font-weight: 500;
   float: right;
   font-size: 0.75em;
-  justify-content: center;
   display: flex;
+  flex-direction: row;
+  align-self: flex-start;
   align-items: center;
   div {
     margin-right: 0.5em;
@@ -181,6 +170,10 @@ export const EditButton = styled.button`
     cursor: pointer;
   }
 `;
+
+export const HeaderGrid = styled(Grid)`
+  align-items: flex-start;
+`;
 export const StyledFormControl = styled(FormControl)`
   input {
     padding: 0;
@@ -194,6 +187,7 @@ export const StyledFormControl = styled(FormControl)`
   .MuiInput-underline, .MuiInput-underline:before, .MuiInput-underline:after {
     transition: none;
     border-bottom: 0 !important;
+    margin-right: 0;
   }
 `;
 export const StyledTextField = withStyles({
@@ -214,7 +208,12 @@ export const StyledTextField = withStyles({
     },
     '& .Mui-disabled .Mui-disabled': {
       opacity: '10',
+      color: 'initial'
+    },
+    '& .MuiInputBase-formControl': {
+      opacity: '10',
       color: 'initial',
+      fontSize: '0.90em'
     }
   },
 })(TextField);

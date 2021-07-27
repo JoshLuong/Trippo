@@ -32,10 +32,6 @@ export const ButtonDiv = styled.div`
   justify-content: center;
   margin-top: 3em;
 
-  button:nth-child(1) {
-    margin-right: 8em;
-  }
-
   button {
     width: 10em;
     line-heght: 1.5em;
@@ -52,13 +48,6 @@ export const ButtonDiv = styled.div`
     cursor: pointer;
   }
 
-  @media (max-width: 960px) {
-    flex-direction: column;
-    align-items: center;
-    button:nth-child(1) {
-      margin-right: 0em;
-      margin-bottom: 2em;
-    }
   }
 `;
 

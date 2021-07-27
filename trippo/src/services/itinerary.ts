@@ -61,6 +61,19 @@ export const itineraryApi = createApi({
           },
         }
       },
+    }),
+    updateItinerary: builder.mutation<Itinerary, Itinerary>({
+      query(body) {
+        return {
+          url: `/${body._id}`,
+          credentials: 'include',
+          method: 'PATCH',
+          body,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      },
     })
   }),
 });
@@ -73,4 +86,5 @@ export const {
   useGetItineraryByIdQuery,
   useCreateItineraryMutation,
   useDeleteItineraryMutation,
+  useUpdateItineraryMutation,
 } = itineraryApi;

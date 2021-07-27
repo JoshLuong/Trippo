@@ -1,7 +1,9 @@
 import React, { FC } from "react";
 import * as sc from "./ItineraryCard.styles";
+import * as c from "../../colors/colors";
 import moment from "moment";
 import { Grid } from "@material-ui/core";
+import EditIcon from '@material-ui/icons/Edit';
 import { Itinerary } from "types/models";
 import { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
@@ -65,6 +67,13 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
             ` - ` +
             moment(card.end_date).format("MMM Do YYYY")}
         </sc.DateGrid>
+        <sc.StyledIconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+          >
+            <EditIcon style={{ color: c.BLACK }} />
+        </sc.StyledIconButton>
         <sc.CommentGrid container item lg={12}>
           {card.comments}
         </sc.CommentGrid>

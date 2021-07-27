@@ -4,7 +4,7 @@ export interface Activity {
     lat: number;
     lng: number;
   };
-  time?: Date;
+  time: string;
   destination?: string;
   cost?: number;
   type?: string;
@@ -40,6 +40,7 @@ export interface Itinerary {
   collaborators: {
     user_id: string;
     name: string;
+    email: string;
   }[];
   budget?: number;
   comments?: string;

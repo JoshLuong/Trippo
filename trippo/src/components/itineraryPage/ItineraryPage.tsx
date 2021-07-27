@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./loading.css";
 import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
@@ -10,11 +10,19 @@ import ReceiptIcon from '@material-ui/icons/Receipt';
 import NewSlot from "components/itineraryEdit/NewSlot";
 import ExpensePage from "./ExpensePage";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import { useAppDispatch } from 'app/store';
+import { useParams } from 'react-router-dom';
+import { useGetItineraryByIdQuery, useUpdateItineraryMutation } from 'services/itinerary';
+import { setItinerary } from 'app/reducers/itinerarySlice';
+import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+import { Itinerary } from 'types/models';
 
 export type ContextInterface = {
   setUnsavedChanges: (value: any) => void;
   unsavedChanges: boolean;
   setShowUnsavedChangesModal: (value: any) => void;
+  updateItinerary: (value: Itinerary) => void;
 } | null
 
 export const ItineraryContext = React.createContext<ContextInterface>(null);
@@ -22,12 +30,28 @@ export const ItineraryContext = React.createContext<ContextInterface>(null);
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
   const [showExpenses, setShowExpenses] = useState(false);
+  const [showEditFeedback, setShowEditFeedback] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   // populate with the handler the user wants to execute
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<any>(null);
   const geocoderContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
+  const dispatch = useAppDispatch();
+  const { id } = useParams<{ id: string }>();
+  const { data: itinerary } = useGetItineraryByIdQuery(id);
+  const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] = useUpdateItineraryMutation();
+
+  useEffect(() => {
+    if (updatedItinerary) {
+      console.log(updatedItinerary);
+      dispatch(setItinerary(updatedItinerary));
+      setShowEditFeedback(true);
+    } else if (!isUpdating) {
+      dispatch(setItinerary(itinerary));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itinerary, updatedItinerary, isUpdating]);
 
   // tip: to use showUnsavedChangesModal, pass in handler function the user wants to execute when there are unsaved changes,
   // but the function should not handle any unsavedChanges state, as it will reference the old state from when the function
@@ -74,6 +98,12 @@ function ItineraryPage() {
     setCanOpenNewSlot(false);
   }
 
+  const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {
+    if (reason !== 'clickaway') {
+      setShowEditFeedback(false);
+    }
+  }
+
   function getDialogContainer() {
     return (
     <Dialog
@@ -113,11 +143,17 @@ function ItineraryPage() {
   const contextValue = {
     setUnsavedChanges,
     unsavedChanges,
-    setShowUnsavedChangesModal
+    setShowUnsavedChangesModal,
+    updateItinerary,
   }  
 
   return (
     <ItineraryContext.Provider value={contextValue}>
+      <Snackbar transitionDuration={1000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={showEditFeedback} autoHideDuration={5000} onClose={handleFeedbackClose}>
+        <Alert severity="success">
+          Your itinerary has been updated
+        </Alert>
+      </Snackbar>
       <div>
         {isLoading ? (
           <sc.LoadingDiv>

@@ -13,7 +13,6 @@ import qs from 'qs';
 import { useCallback } from "react";
 
 
-// const server = "http://localhost:4000/api/itineraries/";
 const ItinerariesView = () => {
   const [
     createItinerary, // This is the mutation trigger

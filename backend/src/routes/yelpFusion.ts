@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { User } from 'database/models';
+import { Yelp, Itinerary } from 'database/models';
 
 const router = express.Router();
 const yelp = require('yelp-fusion');
@@ -8,7 +8,8 @@ const apiKey = '_QD5PLIiaaZPpX8HmvKCf-3Wr4J7HJ5e7KRNmxXe4OEgMAw-lRfsIGuFigACboB7
 
 // use this endpoint when the user creates an activity with time between 6:00am - 11:00am
 router.post('/restaurants/breakfast_brunch', async (req, res, _next) => {
-    const {latitude, longitude, rating, price, distance, time} = req.body;
+    // TODO make secure
+    const {latitude, longitude, rating, price, distance, time, itineraryId, activityId} = req.body;
     const searchRequest = {
         categories: 'breakfast_brunch',
         latitude: latitude,
@@ -16,24 +17,39 @@ router.post('/restaurants/breakfast_brunch', async (req, res, _next) => {
         price: price,
         radius: distance, // meters
         open_at: Date.now, // TODO: test purposing, should use the time from req.body
-        limit: 50
+        limit: 25
       };
     
     const client = yelp.client(apiKey);
 
-    client.search(searchRequest).then((response: any) => {
+    client.search(searchRequest).then(async (response: any) => {
         const results = response.jsonBody.businesses;
         const filteredResults = results.filter((restaurant: any) => restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1);
-        res.status(200).send(filteredResults);
+        const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
+        let businessIds: string[] = [];
+        await Yelp.insertMany(savedResults.map((result: any) => {
+            const yelpData = {...result, business_id: result.alias};
+            businessIds.push(result.alias);
+            return new Yelp(yelpData);
+          }));
+
+        const itinerary = await Itinerary.findOne({_id: itineraryId });
+        const activity = itinerary?.activities.filter((activity: any) => {
+            return activity._id == activityId;
+        });
+        if (activity && activity.length >=1 ) activity[0]?.business_ids.push(...businessIds);
+        itinerary?.save();
+
+        res.status(200).send(savedResults);
     }).catch((e: string) => {
     console.log(e);
         res.status(500);
     });
 });
 
-// default restaurants
+// default restaurants (when time is 11am-2pm; 5pm-9pm)
 router.post('/restaurants', async (req, res, _next) => {
-    const {latitude, longitude, rating, price, distance, time} = req.body;
+    const {latitude, longitude, rating, price, distance, time, itineraryId, activityId} = req.body;
     const searchRequest = {
         categories: 'restaurants',
         latitude: latitude,
@@ -41,15 +57,29 @@ router.post('/restaurants', async (req, res, _next) => {
         price: price,
         radius: distance, // meters
         open_at: Date.now, // TODO: test purposing, should use the time from req.body (accepts unix int (use time.now if time is Date))
-        limit: 50
+        limit: 25
       };
     
     const client = yelp.client(apiKey);
 
-    client.search(searchRequest).then((response: any) => {
+    client.search(searchRequest).then(async (response: any) => {
         const results = response.jsonBody.businesses;
         const filteredResults = results.filter((restaurant: any) => restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1);
-        res.status(200).send(filteredResults);
+        const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
+        let businessIds: string[] = [];
+        await Yelp.insertMany(savedResults.map((result: any) => {
+            const yelpData = {...result, business_id: result.alias};
+            businessIds.push(result.alias);
+            return new Yelp(yelpData);
+          }));
+
+        const itinerary = await Itinerary.findOne({_id: itineraryId });
+        const activity = itinerary?.activities.filter((activity: any) => {
+            return activity._id == activityId;
+        });
+        if (activity && activity.length >=1 ) activity[0]?.business_ids.push(...businessIds);
+        itinerary?.save();
+        res.status(200).send(savedResults);
     }).catch((e: string) => {
     console.log(e);
         res.status(500);
@@ -58,31 +88,45 @@ router.post('/restaurants', async (req, res, _next) => {
 
 // use this endpoint when the user creates an activity with time between 8:00pm - 3:00am
 router.post('/nightlife', async (req, res, _next) => {
-    const {latitude, longitude, distance, rating, time} = req.body;
+    const {latitude, longitude, distance, rating, time, itineraryId, activityId} = req.body;
     const searchRequest = {
         categories: 'bars,beergardens,comedyclubs,danceclubs,karaoke,poolhalls',
         latitude: latitude,
         longitude: longitude,
         open_at: Date.now,
         radius: distance, // meters
-        limit: 50
+        limit: 25
       };
     
     const client = yelp.client(apiKey);
 
-    client.search(searchRequest).then((response: any) => {
+    client.search(searchRequest).then(async(response: any) => {
         const results = response.jsonBody.businesses;
         const filteredResults = results.filter((attraction: any) => attraction.rating >= rating - 1 && attraction.rating <= rating + 1);
-        res.status(200).send(filteredResults);
+        const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
+        let businessIds: string[] = [];
+        await Yelp.insertMany(savedResults.map((result: any) => {
+            const yelpData = {...result, business_id: result.alias};
+            businessIds.push(result.alias);
+            return new Yelp(yelpData);
+          }));
+
+        const itinerary = await Itinerary.findOne({_id: itineraryId });
+        const activity = itinerary?.activities.filter((activity: any) => {
+            return activity._id == activityId;
+        });
+        if (activity && activity.length >=1 ) activity[0]?.business_ids.push(...businessIds);
+        itinerary?.save();
+        res.status(200).send(savedResults);
     }).catch((e: string) => {
     console.log(e);
         res.status(500);
     });
 });
 
-
+// always use this
 router.post('/attractions', async (req, res, _next) => {
-    const {latitude, longitude, distance, rating, time} = req.body;
+    const {latitude, longitude, distance, rating, time, itineraryId, activityId} = req.body;
     const activeLife = 'amusementparks,aquariums,beaches,bikerentals,experiences,hiking,jetskis,lakes,parks,snorkeling,zoos';
     const artsAndEntertainment = `arcades,casinos,movietheaters,culturalcenter,festivals,museums,wineries`;
     const shopping = `cannabisdispensaries,publicmarkets,shoppingcenters,souvenirs`;
@@ -92,20 +136,67 @@ router.post('/attractions', async (req, res, _next) => {
         longitude: longitude,
         open_at: Date.now,
         radius: distance, // meters
-        limit: 50
+        limit: 25
       };
     
     const client = yelp.client(apiKey);
 
-    client.search(searchRequest).then((response: any) => {
+    client.search(searchRequest).then(async(response: any) => {
         const results = response.jsonBody.businesses;
         const filteredResults = results.filter((attraction: any) => attraction.rating >= rating - 1 && attraction.rating <= rating + 1);
-        res.status(200).send(filteredResults);
+        const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
+        let businessIds: string[] = [];
+        await Yelp.insertMany(savedResults.map((result: any) => {
+            const yelpData = {...result, business_id: result.alias};
+            businessIds.push(result.alias);
+            return new Yelp(yelpData);
+          }));
+
+        const itinerary = await Itinerary.findOne({_id: itineraryId });
+        const activity = itinerary?.activities.filter((activity: any) => {
+            return activity._id == activityId;
+        });
+        if (activity && activity.length >=1 ) activity[0]?.business_ids.push(...businessIds);
+        itinerary?.save();
+        res.status(200).send(savedResults);
     }).catch((e: string) => {
     console.log(e);
         res.status(500);
     });
 });
+
+// use this when displaying suggestions
+router.post('/businesses', async (req, res, _next) => {
+    const {itineraryId, activityId} = req.body;
+    const client = yelp.client(apiKey);
+
+    let businessIds: string[] = []
+    const itinerary = await Itinerary.findOne({_id: itineraryId });
+    const activity = itinerary?.activities.filter((activity: any) => {
+        return activity._id == activityId;
+    });
+    if (activity && activity.length >=1 ){
+        businessIds = activity[0]?.business_ids;
+    }
+
+    let businesses = await Yelp.find({'business_id': { $in: [...businessIds]}})
+    let cachedBusinessIds = businesses.map((b) => b.business_id);
+
+    if (businessIds.length != businesses.length) { // some aren't in DB
+        for (const id of businessIds) {
+            if (!cachedBusinessIds.includes(id)) {
+                console.log(id)
+                const yelpBusiness = await client.business(id);
+                const business = await Yelp.create({...yelpBusiness.jsonBody, business_id: yelpBusiness.jsonBody.alias});
+                businesses.push(business);
+            }
+        }
+    }
+
+    res.status(200).send(businesses);
+
+});
+
 
 export default router;
 

@@ -1,6 +1,29 @@
 import 'dotenv/config';
 import { Schema, model, ObjectId } from 'mongoose';
 
+export interface IYelp {
+  name: string;
+  business_id: string;
+  url: string;
+  rating: number;
+  price?: string;
+  distance: number;
+  comments: string;
+}
+
+export const yelpSchema = new Schema<IYelp>({
+  expire_at: {type: Date, default: Date.now, expires: '24h'} ,
+  name: String,
+  business_id: {
+    type: String,
+    unique: true // `email` must be unique
+  },
+  url:String,
+  rating: Number,
+  price: String,
+  distance: Number,
+  comments: String,
+}, { toObject: { versionKey: false } });
 export interface IActivity {
   location: {
     lat: number;
@@ -11,7 +34,9 @@ export interface IActivity {
   cost?: number;
   type?: string;
   comments: string[];
+  business_ids: string[]
   suggested?: {
+    // TODO DELETE
     destination: string;
     type: string;
     url: string;
@@ -35,6 +60,7 @@ export const activitySchema = new Schema<IActivity>({
   cost: Number,
   type: String,
   comments: [String],
+  business_ids: [String],
   suggested: [new Schema({
     destination: String,
     type: String,
@@ -113,5 +139,6 @@ export const itinerarySchema = new Schema<IItinerary>({
 }, { toObject: { versionKey: false } });
 
 export const User = model<IUser>('User', userSchema);
+export const Yelp = model<IYelp>('Yelp', yelpSchema);
 export const Itinerary = model<IItinerary>('Itinerary', itinerarySchema);
 export const Activity = model<IActivity>('Activity', activitySchema);

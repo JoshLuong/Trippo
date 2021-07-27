@@ -2,6 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FlyToInterpolator, MapRef, Marker, Popup } from 'react-map-gl';
 // @ts-ignore No type declaration for this package
 import Geocoder from 'react-map-gl-geocoder';
+import moment from "moment";
 import { InteractiveMapProps } from 'react-map-gl/src/components/interactive-map';
 import axios from 'axios';
 // import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
@@ -107,7 +108,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
           >
               <div>{data?.activities[popupIndex].destination}</div>
               <div>{new Date(data?.activities[popupIndex].time!).toDateString()}</div>
-              <div>{new Date(data?.activities[popupIndex].time!).toTimeString()}</div>
+              <div>{moment(new Date(data?.activities[popupIndex].time!), "hh:mm A").format("hh:mm A")}</div>
           </Popup>
         ))
       }

@@ -105,7 +105,7 @@ export const AdressDiv = styled.h2`
 
 export const NameDiv = styled.h1`
   display: inline-block;
-  margin: 0.5em 1em 0 10px;
+  margin: 0.5em 1.25em 0 10px;
   font-weight: bold;
   font-size: 1.5em;
 `;

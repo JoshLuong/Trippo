@@ -12,7 +12,7 @@ export interface IYelp {
 }
 
 export const yelpSchema = new Schema<IYelp>({
-  expire_at: {type: Date, default: Date.now, expires: '24h'} ,
+  createdAt: { type: Date, expires: '24h', default: Date.now },
   name: String,
   business_id: {
     type: String,

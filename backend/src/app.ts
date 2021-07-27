@@ -18,7 +18,7 @@ mongoose.connect(process.env.DATABASE_URL!, {
 
   // TODO: change to secure https://www.npmjs.com/package/express-session
   app.use(session({ resave: true, secret: process.env.EXPRESS_SESSION_SECRET!, saveUninitialized: true, cookie: { secure: false }}));
-/*
+
   app.use(async (req: any, res, next) => {
     const user = await User.findById(req.session.userId).exec();
     // TODO if user is logged out, response should be 404
@@ -29,7 +29,6 @@ mongoose.connect(process.env.DATABASE_URL!, {
     req.user = user // you can access req.user anywhere in the API now
     next()
 })
-*/
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));

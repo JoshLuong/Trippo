@@ -29,7 +29,8 @@ export const ItineraryContext = React.createContext<ContextInterface>(null);
 
 let destinationName: string;
 let destinationAddress: string;
-let destinationTime: any;
+let destinationLat: number;
+let destinationLng: number;
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
@@ -94,9 +95,11 @@ function ItineraryPage() {
     setIsLoading(!isLoading);
   }
 
-  function handleNewSlotClick(name: string, address: string) {
+  function handleNewSlotClick(name: string, address: string, lat: number, lng: number) {
     destinationName = name;
     destinationAddress = address;
+    destinationLat = lat;
+    destinationLng = lng;
     setCanOpenNewSlot(true);
   }
 
@@ -202,7 +205,12 @@ function ItineraryPage() {
           </sc.Container>
           ) : null}
           {
-            canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose} destinationName = {destinationName} destinationAddress={destinationAddress}/>
+            canOpenNewSlot ? <NewSlot 
+            handleClose={handleNewSlotClose} 
+            destinationName = {destinationName} 
+            destinationAddress={destinationAddress} 
+            destinationLat={destinationLat} 
+            destinationLng={destinationLng}/>
               : null
           }
         </sc.ItineraryDiv>

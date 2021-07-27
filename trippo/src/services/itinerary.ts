@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
-import { Itinerary } from 'types/models';
+import { Itinerary, Activity } from 'types/models';
+
 
 const url = process.env.REACT_APP_BACKEND_URL!;
 
@@ -74,7 +75,20 @@ export const itineraryApi = createApi({
           },
         }
       },
-    })
+    }),
+    createActivity: builder.mutation<Activity, Partial<Activity>>({
+      query(body) {
+        return {
+          url: `/new-activity`,
+          credentials: 'include',
+          method: 'POST',
+          body,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      },
+    }),
   }),
 });
 
@@ -87,4 +101,5 @@ export const {
   useCreateItineraryMutation,
   useDeleteItineraryMutation,
   useUpdateItineraryMutation,
+  useCreateActivityMutation,
 } = itineraryApi;

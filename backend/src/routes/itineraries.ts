@@ -1,5 +1,5 @@
 import express from 'express';
-import { Itinerary } from 'database/models';
+import { Itinerary, Activity } from 'database/models';
 
 const router = express.Router();
 
@@ -36,6 +36,21 @@ router.post('/', (req: any, res, _next) => {
     .catch(err => {
       console.error(err);
       return res.status(404).send("Invalid Itinerary")
+    })
+});
+
+router.post('/new-activity', async (req: any, res, _next) => {
+  const product = await Itinerary.findOne({ _id: req.body.itinerary_id });
+  new Date(req.body.time);
+  const activity = new Activity(req.body);
+  product?.activities.push(activity);
+  product?.save()
+    .then((doc) => {
+      res.send(doc);
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(404).send("Invalid Activity")
     })
 });
 

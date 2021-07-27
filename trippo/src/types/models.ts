@@ -1,4 +1,5 @@
 export interface Activity {
+  itinerary_id?: string;
   _id: string;
   location: {
     lat: number;

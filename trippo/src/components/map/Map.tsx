@@ -18,7 +18,7 @@ import { useParams } from 'react-router-dom';
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
   handleIsLoading: () => void;
-  handleNewSlotClick: (name: string, address: string) => void;
+  handleNewSlotClick: (name: string, address: string, lat: number, lng: number) => void;
 }
 
 const MAPBOX_API_URL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
@@ -123,7 +123,9 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
         >
           <Pin className="marker" onClick={async () => {
             handleNewSlotClick(await reverseGeocodeName(searchResult.geometry.coordinates[1], searchResult.geometry.coordinates[0]), 
-            await reverseGeocodeAddress(searchResult.geometry.coordinates[1], searchResult.geometry.coordinates[0]))
+            await reverseGeocodeAddress(searchResult.geometry.coordinates[1], searchResult.geometry.coordinates[0]),
+            searchResult.geometry.coordinates[1],
+            searchResult.geometry.coordinates[0])
             }} fill={DARK_ORANGE} />
         </Marker>
         ) : null

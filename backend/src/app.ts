@@ -6,6 +6,7 @@ import { User } from 'database/models';
 import cors from 'cors';
 import session from 'express-session';
 import itineraryRouter from './routes/itineraries';
+import userRouter from './routes/users';
 import googleAuthRouter from './routes/googleAuth';
 
 mongoose.connect(process.env.DATABASE_URL!, {
@@ -37,6 +38,7 @@ mongoose.connect(process.env.DATABASE_URL!, {
   app.use(cors(corsOptions));
 
   app.use('/api/itineraries', itineraryRouter);
+  app.use('/api/users', userRouter);
   app.use('/api/v1/auth', googleAuthRouter)
 
   app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {

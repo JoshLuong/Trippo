@@ -1,5 +1,5 @@
 /// <reference path='./NewItineraryContainer.d.ts' />
-import { FC, useState, useRef, useCallback, useEffect } from 'react';
+import { FC, useState, useRef, useEffect } from 'react';
 import { TextField, Grid, Select, MenuItem, InputAdornment, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
 import { useAppSelector } from 'app/store';
@@ -9,6 +9,8 @@ import * as sc from './NewItinieraryContainer.styles'
 import _ from "lodash";
 import { Itinerary } from 'types/models';
 import { useLazyGetUserByEmailQuery } from 'services/user';
+import { debounce } from 'lodash';
+import { useCallback } from 'react';
 
 // TODO :: add state props for edit itin + refactor
 interface Props {
@@ -34,6 +36,7 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
     const [destination, setDestination] = useState<any>(null);
     const [destError, setDestError] = useState(undefined);
     const [nameError, setNameError] = useState<string | undefined>(undefined);
+    const [value, setValue] = useState<string[]>([]);
     const nameRef = useRef<HTMLInputElement>();
     const descRef = useRef<HTMLInputElement>();
     const budgetRef = useRef<HTMLInputElement>();
@@ -76,46 +79,53 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
     //     trigger(collaborators[collaborators.length - 1]);
     // }, [trigger, collaborators]);
 
-    // useEffect(() => {
-    //     processCollaborators(null);
-    // }, [result, processCollaborators]);
+    useEffect(() => {
+        if (!result.isFetching && result.data) {
+            processCollaborators(result.data!.email);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [result, value]);
 
 
     // SOLUTION #2 :: 
 
     let collab: any[] = [];
 
-    const processCollaborators = (newValue: string[]) => {
+    const processCollaborators = (newValue: string) => {
         console.log(result);
         if (result.status !== "fulfilled") {
             setErrorMessage("Invalid email: " + newValue[newValue.length - 1]);
             setFail(true);
         } else {
-            collab.push({
-                _id: result.data?._id,
-                name: result.data?.name,
-                email: result.data?.email
-            });
-            setCollaborators(newValue);
+            // collab.push({
+            //     _id: result.data?._id,
+            //     name: result.data?.name,
+            //     email: result.data?.email
+            // });
+            setCollaborators([...collaborators, newValue]);
         }
         console.log(newValue);
         console.log(collab);
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const collaboratorInputChange = useCallback(debounce((e: any) => trigger(e.target.value), 400), []);
+
     const onAutocompleteChange = async (e: any, newValue: any, reason: string) => {
         console.log(newValue);
         if (reason === "create-option") {
             console.log(newValue[newValue.length - 1]);
-            await trigger(newValue[newValue.length - 1]);
+            // trigger(newValue[newValue.length - 1]);
+            // setValue(newValue);
             // console.log(result);
             // BUG :: triggers needs to callback process collabs - tries to process results before it is ready 
-            processCollaborators(newValue);
+            // processCollaborators(newValue);
         }
 
         else if (reason === "remove-option") {
             setCollaborators(newValue);
-            collab.filter((c) => c.email !== newValue[newValue.length - 1]);
-            console.log(collab);
+            // collab.filter((c) => c.email !== newValue[newValue.length - 1]);
+            // console.log(collab);
         }
 
         // setCollaborators(newValue);
@@ -295,13 +305,13 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
                         </sc.inputTags>
                         <Autocomplete multiple
                             classes={autoCompleteStyles}
-                            onChange={onAutocompleteChange}
+                            // onChange={onAutocompleteChange}
                             freeSolo
                             value={collaborators}
                             options={collabData}
                             limitTags={6}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" size="small" />
+                                <TextField {...params} variant="outlined" size="small" onChange={collaboratorInputChange} />
                             )}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (

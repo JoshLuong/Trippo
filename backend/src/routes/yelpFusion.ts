@@ -27,11 +27,12 @@ router.post('/restaurants/breakfast_brunch', async (req, res, _next) => {
         const filteredResults = results.filter((restaurant: any) => restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1);
         const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
         let businessIds: string[] = [];
-        await Yelp.insertMany(savedResults.map((result: any) => {
+        for (let res of savedResults) {
+            const result: any = res;
             const yelpData = {...result, business_id: result.alias};
             businessIds.push(result.alias);
-            return new Yelp(yelpData);
-          }));
+            await Yelp.findOneAndUpdate({business_id: result.alias}, yelpData, { upsert: true, new: true, setDefaultsOnInsert: true });
+        }
 
         const itinerary = await Itinerary.findOne({_id: itineraryId });
         const activity = itinerary?.activities.filter((activity: any) => {
@@ -67,12 +68,12 @@ router.post('/restaurants', async (req, res, _next) => {
         const filteredResults = results.filter((restaurant: any) => restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1);
         const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
         let businessIds: string[] = [];
-        await Yelp.insertMany(savedResults.map((result: any) => {
+        for (let res of savedResults) {
+            const result: any = res;
             const yelpData = {...result, business_id: result.alias};
             businessIds.push(result.alias);
-            return new Yelp(yelpData);
-          }));
-
+            await Yelp.findOneAndUpdate({business_id: result.alias}, yelpData, { upsert: true, new: true, setDefaultsOnInsert: true });
+        }
         const itinerary = await Itinerary.findOne({_id: itineraryId });
         const activity = itinerary?.activities.filter((activity: any) => {
             return activity._id == activityId;
@@ -105,11 +106,12 @@ router.post('/nightlife', async (req, res, _next) => {
         const filteredResults = results.filter((attraction: any) => attraction.rating >= rating - 1 && attraction.rating <= rating + 1);
         const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
         let businessIds: string[] = [];
-        await Yelp.insertMany(savedResults.map((result: any) => {
+        for (let res of savedResults) {
+            const result: any = res;
             const yelpData = {...result, business_id: result.alias};
             businessIds.push(result.alias);
-            return new Yelp(yelpData);
-          }));
+            await Yelp.findOneAndUpdate({business_id: result.alias}, yelpData, { upsert: true, new: true, setDefaultsOnInsert: true });
+        }
 
         const itinerary = await Itinerary.findOne({_id: itineraryId });
         const activity = itinerary?.activities.filter((activity: any) => {
@@ -146,12 +148,12 @@ router.post('/attractions', async (req, res, _next) => {
         const filteredResults = results.filter((attraction: any) => attraction.rating >= rating - 1 && attraction.rating <= rating + 1);
         const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
         let businessIds: string[] = [];
-        await Yelp.insertMany(savedResults.map((result: any) => {
+        for (let res of savedResults) {
+            const result: any = res;
             const yelpData = {...result, business_id: result.alias};
             businessIds.push(result.alias);
-            return new Yelp(yelpData);
-          }));
-
+            await Yelp.findOneAndUpdate({business_id: result.alias}, yelpData, { upsert: true, new: true, setDefaultsOnInsert: true });
+        }
         const itinerary = await Itinerary.findOne({_id: itineraryId });
         const activity = itinerary?.activities.filter((activity: any) => {
             return activity._id == activityId;

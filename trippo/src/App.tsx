@@ -20,7 +20,7 @@ function App() {
   const user = useAppSelector((state) => state.user.value);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/v1/auth/current/user`, {
+    fetch(`/api/v1/auth/current/user`, {
       method: "GET",
       credentials: 'include'
     })

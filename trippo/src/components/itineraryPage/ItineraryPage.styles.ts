@@ -38,13 +38,13 @@ export const LoadingDiv = styled.div`
   background-color: ${c.WHITE};
   z-index: 2000;
   display: flex;
-  height: 715px;
+  height: 750px;
   margin-top: 3em;
   width: 100%;
   justify-content: center;
   align-items: center;
-  @media (max-width: 960px) {
-    font-size: 1.5em;
+  @media (max-width: 560px) {
+    display: none;
   }
 `;
 

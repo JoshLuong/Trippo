@@ -23,6 +23,17 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
         ...editedItinerary,
         activities: editedItinerary.activities.map((e) => e._id === activity._id ? activity : e),
       });
+      itineraryContext?.setUnsavedChanges(true);
+    }
+  }
+
+  const deleteActivity = (activity: Activity) => {
+    if (editedItinerary) {
+      setEditedItinerary({
+        ...editedItinerary,
+        activities: editedItinerary.activities.filter((e) => e._id !== activity._id),
+      });
+      itineraryContext?.setUnsavedChanges(true);
     }
   }
 
@@ -32,7 +43,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     }
   }, [itinerary]);
 
-  const dayActivities = itinerary?.activities
+  const dayActivities = editedItinerary?.activities
     .filter((activity) => moment(date).isSame(moment(activity.time), 'date')) || [];
 
   let cost = dayActivities
@@ -44,7 +55,10 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const budget = 50;
 
   const handleEditView = () => {
-    edit ? itineraryContext?.setUnsavedChanges(false) : itineraryContext?.setUnsavedChanges(true); // TODO only set unsaved changes when user starts editing
+    if (edit && itineraryContext?.unsavedChanges) {
+      itineraryContext.updateItinerary(editedItinerary!);
+      itineraryContext.setUnsavedChanges(false);
+    }
     setEdit(!edit);
   };
 
@@ -65,7 +79,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
       </sc.dayDate>
       <div>
           <sc.TimeSlots>
-            {dayActivities.map((activity, idx) => {
+            {dayActivities.sort((a, b) => a.time.localeCompare(b.time)).map((activity, idx) => {
               return (
                 <div key={activity._id}>
                   <TimeSlot
@@ -74,6 +88,7 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
                     showEdit={edit}
                     index={idx}
                     editActivity={editActivity}
+                    deleteActivity={deleteActivity}
                   />
                 </div>
               );

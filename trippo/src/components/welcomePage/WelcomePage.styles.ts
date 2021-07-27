@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors"
 
 export const containerDiv = styled.div`
   display: flex;
@@ -66,18 +65,14 @@ export const descHeader = styled.h2`
 
 export const loginDiv = styled.div`
     text-align: center;
-    border-radius: 10px;
-    background-color: white;
-    border-top: 10px solid ${c.DARK_BLUE};
-    padding-bottom: 2em;
-    max-width: 500px;
-    min-height: 400px;
+    position: relative;
+    justify-content: center;
+    border-radius: 0 0 10px 10px;
+    padding: 2em;
+    width: 400px;
     height: 60%;
-    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
     order: 2;
     margin: 0 4em 4em 4em;
     flex-grow: 2;
-    flex-shrink: 80%;
-    flex-basis: 40%;
 
 `;

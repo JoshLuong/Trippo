@@ -1,13 +1,15 @@
-import React, { FC, useState, useRef } from "react";
+import React, { FC, useState, useRef, useCallback } from "react";
 import { TextField } from '@material-ui/core';
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
-import { Grid, Tooltip } from "@material-ui/core";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import { Grid, Tooltip, Input, InputAdornment } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
 import { Activity } from 'types/models';
+import { useEffect } from 'react';
+import { debounce } from 'lodash';
 
 interface Props {
   handleHideCostToggle: (cost: number | undefined) => void;
@@ -15,26 +17,37 @@ interface Props {
   showEdit?: boolean;
   index: number;
   editActivity: (activity: Activity) => void;
+  deleteActivity: (activity: Activity) => void;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity }) => {
+const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity, deleteActivity }) => {
   const { time, destination, comments, type, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
-  // const [cost, setCost] = useState(activity.cost || 0);
+  const [commentsString, setCommentsString] = useState(comments.join('\n'));
   const timeRef = useRef(null);
+  const isMounted = useRef(false);
 
-  const setComments = (value: string) => {
-    const comments = value.split('\n').filter(e => Boolean(e));
-    editActivity({
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const edit = useCallback(debounce(editActivity, 400), []);
+
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    const comments = commentsString.split('\n').filter(e => Boolean(e));
+
+    edit({
       ...activity,
       comments,
     });
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commentsString]);
 
   const setTime = (e: any) => {
     const t = e.target.value.split(":");
-    const time = moment(date).set({ hour: t[0], minute: t[1] }).toDate();
+    const time = moment(date).set({ hour: t[0], minute: t[1] }).toISOString();
     editActivity({
       ...activity,
       time,
@@ -49,7 +62,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
 
   const getButtons = () => {
     return showEdit ? (
-      <sc.StyledIconButton>
+      <sc.StyledIconButton onClick={() => deleteActivity(activity)}>
         <DeleteOutlineIcon />
       </sc.StyledIconButton>
     ) : (
@@ -73,17 +86,27 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   };
 
   const renderHeaderContent = () => (
-    <Grid container item lg={11} md={11} sm={11} xs={11}>
+    <sc.HeaderGrid container item lg={11} md={11} sm={11} xs={11}>
       <sc.Destination>
         <Grid container item lg={1} md={1} sm={1} xs={1}>
           {d.renderIcon(type)}
         </Grid>
-        <Grid item lg={10} md={10} sm={10} xs={10}>
+        <Grid container item lg={9} md={9} sm={10} xs={10}>
           {destination}
         </Grid>
-        <Grid container item lg={2} md={2} sm={2} xs={2}>
-          <sc.Cost {...costStyling} contentEditable={showEdit ? true : false}>
-            {activity.cost ? (
+        <Grid container item lg={2} md={2} sm={3} xs={3}>
+          <sc.Cost {...costStyling}>
+              <sc.StyledFormControl fullWidth>
+                {activity.cost || showEdit ? (
+                <Input
+                  disabled={!showEdit}
+                  value={activity.cost}
+                  onChange={() => alert("TODO")}
+                  startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                />
+                ) : null}
+            </sc.StyledFormControl>
+            {activity.cost && !showEdit ? (
               <Tooltip
                 title={`${showCost ? "Hide from" : "Include in"
                   } the total daily cost`}
@@ -97,11 +120,10 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
                 </button>
               </Tooltip>
             ) : null}
-            <div>{activity.cost ? `$${activity.cost}` : ""}</div>
           </sc.Cost>
         </Grid>
       </sc.Destination>
-    </Grid>
+    </sc.HeaderGrid>
   );
   const costStyling = !showCost ? { style: { color: "#24272b85" } } : {};
   const date = time ? new Date(time) : new Date();
@@ -135,10 +157,17 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
             </sc.CommentButton>
           </Grid>
           <Grid container item lg={12} md={12} sm={12} xs={12}>
-            <sc.Comments contentEditable={showEdit ? true : false} onInput={(e) => setComments(e.currentTarget.innerText)}>
-              {comments?.map((c, index) => {
-                return <li key={index}>{c}</li>;
-              })}
+            <sc.Comments>
+              <sc.StyledTextField
+                fullWidth
+                id="filled-textarea"
+                label="Comments"
+                disabled={!showEdit}
+                multiline
+                variant="outlined"
+                value={commentsString}
+                onChange={(e: any) => setCommentsString(e.currentTarget.value)}
+              />
             </sc.Comments>
           </Grid>
         </sc.SlotGrid>

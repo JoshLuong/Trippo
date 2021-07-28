@@ -60,7 +60,7 @@ export const itineraryApi = createApi({
         }
       },
     }),
-    updateItinerary: builder.mutation<Itinerary, Itinerary>({
+    updateItinerary: builder.mutation<Itinerary, Partial<Itinerary>>({
       query(body) {
         return {
           url: `/${body._id}`,

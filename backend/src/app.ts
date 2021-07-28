@@ -29,6 +29,7 @@ mongoose.connect(process.env.DATABASE_URL!, {
     req.user = user // you can access req.user anywhere in the API now
     next()
   })
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   const corsOptions = {

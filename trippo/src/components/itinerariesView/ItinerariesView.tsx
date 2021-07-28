@@ -2,11 +2,10 @@
 import React, { useState, useEffect } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
-import FadeIn from 'react-fade-in';
 import _ from "lodash";
 import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar"
-import { useCreateItineraryMutation, useDeleteItineraryMutation, useLazyGetItinerariesQuery } from 'services/itinerary';
+import { useCreateItineraryMutation, useDeleteItineraryMutation, useLazyGetItinerariesQuery, useUpdateItineraryMutation } from 'services/itinerary';
 import Pagination from '@material-ui/lab/Pagination';
 import Alert from '@material-ui/lab/Alert';
 import { Snackbar, SnackbarCloseReason } from '@material-ui/core'
@@ -18,10 +17,12 @@ import { useCallback } from "react";
 const ItinerariesView = () => {
   const [
     createItinerary, // This is the mutation trigger
-    { isLoading: isUpdating }, // This is the destructured mutation result
+    { isLoading: isCreating }, // This is the destructured mutation result
   ] = useCreateItineraryMutation()
-  const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
+
+  const [updateItinerary, { isLoading: isUpdating }] = useUpdateItineraryMutation();
   const [deleteItinerary, { isLoading: isDeleting }] = useDeleteItineraryMutation();
+  const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
   const [filterText, setFilterText] = useState("");
 
   const history = useHistory();
@@ -32,7 +33,6 @@ const ItinerariesView = () => {
     setFilterText(e.target.value)
   }, 400);
 
-  const [showEdit, setShowEdit] = useState(false);
   const [showNewItinerary, setShowNewItinerary] = useState(false);
 
   const [successSnackbar, setSuccess] = useState(false);
@@ -51,7 +51,7 @@ const ItinerariesView = () => {
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterText, isUpdating, isDeleting, page]);
+  }, [filterText, isUpdating, isCreating, isDeleting, page]);
 
   useEffect(() => {
     if (Number(page || 1) !== 1 && filterText !== "") { // on filter change, if page > 1, destroy pagination
@@ -76,7 +76,7 @@ const ItinerariesView = () => {
     <sc.ItinerariesViewGrid>
       <Snackbar open={successSnackbar} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={() => setSuccess(false)} severity="success">
-          Successfully Added
+          Success
         </Alert>
       </Snackbar>
       <div
@@ -104,20 +104,19 @@ const ItinerariesView = () => {
         <sc.Cards>
           {result.data.itineraries.map((card, index) => {
             return (
-              <FadeIn transitionDuration={600} delay={500}>
-                <ItineraryCard
-                  card={card}
-                  key={index}
-                  showEdit={showEdit}
-                  handleRemove={async () => {
-                    deleteItinerary(card._id)
-                      .then(() => {
-                        // do nothing
-                      })
-                      .catch((e) => { console.log(e) })
-                  }}
-                />
-              </FadeIn>
+              <ItineraryCard
+                card={card}
+                key={index}
+                setSuccess={setSuccess}
+                updateItinerary={updateItinerary}
+                handleRemove={async () => {
+                  deleteItinerary(card._id)
+                    .then(() => {
+                      setSuccess(true);
+                    })
+                    .catch((e) => { console.log(e) })
+                }}
+              />
             );
           })}
         </sc.Cards>

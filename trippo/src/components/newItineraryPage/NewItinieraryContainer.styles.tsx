@@ -1,4 +1,4 @@
-import { Button, TextField, Grid } from '@material-ui/core';
+import { Button, TextField, Grid, IconButton } from '@material-ui/core';
 import LabelIcon from "@material-ui/icons/Label";
 import styled from 'styled-components';
 import * as c from "../../colors/colors";
@@ -8,6 +8,16 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 export const StyledInfoIcon = styled(InfoIcon)`
   margin: auto 0.5em;
   color: ${c.DARK_GREY};
+`;
+
+export const StyledIconButton = styled(IconButton)`
+  position: absolute;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  margin-right: 0.4em;
+  color: ${c.GREY};
+  z-index: 1;
 `;
 
 export const FormGrid = styled(Grid)`
@@ -73,6 +83,7 @@ export const userButton = styled(Button)` && {
   border-radius: 20px;
 }
 `;
+
 
 export const StyledLabelIcon = styled(LabelIcon)` && {
   color: ${c.DARK_ORANGE};

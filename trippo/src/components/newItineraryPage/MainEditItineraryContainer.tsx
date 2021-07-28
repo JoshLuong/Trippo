@@ -1,29 +1,29 @@
-/// <reference path='./NewItineraryContainer.d.ts' />
 import { FC, useState, useRef } from 'react';
 import { Grid } from '@material-ui/core'
 import { useAppSelector } from 'app/store';
 import * as sc from './NewItinieraryContainer.styles'
-import _ from "lodash";
 import { Itinerary } from 'types/models';
 import moment from 'moment';
-import CloseIcon from '@material-ui/icons/Close';
 import PreferencesContainer from './PreferencesContainer';
 import DateGrid from './DateGrid';
 import ItineraryOptionsContainer from "./ItineraryOptionsContainer"
+import CloseIcon from '@material-ui/icons/Close';
 import * as c from "../../colors/colors";
 
 interface Props {
-    handleShowNewItinerary: (canShow: boolean) => void;
+    card: any;
+    handleShowEditItinerary: () => void;
     setSuccess: (isSuccessful: boolean) => void;
-    createItinerary: (arg: Partial<Itinerary>) => any;
+    updateItinerary: (arg: Partial<Itinerary>) => any;
+    openDialog: () => void;
 }
 
-const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, createItinerary }) => {
+const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEditItinerary, updateItinerary, openDialog }) => {
 
     // Itinerary Options state
-    const [collaborators, setCollaborators] = useState<any[]>([]);
-    const [tags, setTags] = useState<string[]>([]);
-    const [destination, setDestination] = useState<any>(null);
+    const [collaborators, setCollaborators] = useState<any[]>(card.collaborators.slice(1));
+    const [tags, setTags] = useState<string[]>(card.tags);
+    const [destination, setDestination] = useState<any>({ name: card.destination, ...card.dest_coords });
     const nameRef = useRef<HTMLInputElement>();
     const descRef = useRef<HTMLInputElement>();
     const [errorMessage, setErrorMessage] = useState("");
@@ -35,30 +35,28 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
     const endRef = useRef<HTMLInputElement>();
 
     // Preference Grid state
-    const [rating, setRating] = useState(3);
-    const [price, setPrice] = useState(2);
+    const [rating, setRating] = useState(card.restaurant_ratings || 3);
+    const [price, setPrice] = useState(card.dining_budget || 2);
     const maxWalkRef = useRef<HTMLInputElement>();
     const maxDriveRef = useRef<HTMLInputElement>();
-
 
     const user = useAppSelector((state) => state.user.value);
 
     const handleSubmit = async () => {
         if (!user) return;
-        console.log(startRef.current?.value);
         const startDateArr = startRef.current?.value.split("-") || [];
         const endDateArr = endRef.current?.value.split("-") || [];
         if (!validate(startDateArr, endDateArr)) {
             setFail(true);
             return;
         }
+
         // Start and end dates are in midnight local time
         const start_date = moment(startRef.current!.value).toDate();
         const end_date = moment(endRef.current!.value).toDate();
 
-        console.log(maxWalkRef.current?.value);
-        console.log(Number(maxWalkRef.current?.value));
-        const newItinerary: Omit<Itinerary, "_id" | "user_id"> = {
+        const newItinerary: Omit<Itinerary, "user_id"> = {
+            _id: card._id,
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",
             dest_coords: {
@@ -77,10 +75,10 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
             end_date: end_date,
             activities: [], // TODO change
         };
-        await createItinerary(newItinerary).unwrap()
+        await updateItinerary(newItinerary).unwrap()
             .then((payload: any) => {
                 setSuccess(true);
-                handleShowNewItinerary(false);
+                handleShowEditItinerary();
             })
             .catch((error: any) => {
                 setErrorMessage("Something went wrong. Try again later.")
@@ -123,28 +121,40 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
         return ret;
     }
 
+    const parseDate = (s: string) => {
+        let momentDate = moment(s);
+        return momentDate.format("YYYY-MM-DD");
+    }
+
     return (
         <sc.newItineraryContainer>
             <sc.StyledIconButton
-                onClick={() => handleShowNewItinerary(false)}
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={() => handleShowEditItinerary()}
             >
                 <CloseIcon style={{ color: c.BLACK }} />
             </sc.StyledIconButton>
-            <sc.header>New Itinerary:</sc.header>
+            <sc.header>Edit Itinerary:</sc.header>
             <sc.FormGrid direction="column">
                 <ItineraryOptionsContainer
                     collabSetter={setCollaborators} destinationSetter={setDestination} tagSetter={setTags}
                     descRef={descRef} nameRef={nameRef} errorMessage={errorMessage} setFail={setFail} failSnackbar={failSnackBar}
-                    defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={""} defaultName={""} />
-                <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={500} defaultEnd={""} defaultStart={""} />
+                    defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={card.comments || ""} defaultName={card.name} />
+                <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={card.budget || 500}
+                    defaultEnd={parseDate(card.end_date)} defaultStart={parseDate(card.start_date)} />
                 <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}
-                    defaultMaxDrive={15} defaultMaxWalk={5} maxDriveRef={maxDriveRef} maxWalkRef={maxWalkRef} />
-                <Grid container item direction="row" justify="flex-end">
-                    <sc.userButton onClick={() => handleSubmit()}>Submit</sc.userButton>
+                    defaultMaxDrive={card.max_driving_dist || 15} defaultMaxWalk={card.max_walking_dist || 5} maxDriveRef={maxDriveRef} maxWalkRef={maxWalkRef} />
+                <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
+                    <Grid item xs={12} sm={9} md={7} lg={5}>
+                        <sc.userButton onClick={() => openDialog()} >Delete</sc.userButton>
+                        <sc.userButton onClick={() => handleSubmit()} >Update</sc.userButton>
+                    </Grid>
                 </Grid>
             </sc.FormGrid>
         </sc.newItineraryContainer>
     )
 }
 
-export default NewItineraryContainer
+export default MainEditItineraryContainer

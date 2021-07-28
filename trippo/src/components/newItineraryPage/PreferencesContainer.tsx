@@ -14,12 +14,8 @@ interface Props {
     maxDriveRef: MutableRefObject<HTMLInputElement | undefined>;
 }
 
-const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultMaxWalk, defaultMaxDrive }) => {
+const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultMaxWalk, defaultMaxDrive, setRating, setPrice, maxWalkRef, maxDriveRef }) => {
 
-    const [rating, setRating] = useState(defaultRating);
-    const [price, setPrice] = useState(defaultPrice);
-    const maxWalkRef = useRef<HTMLInputElement>();
-    const maxDriveRef = useRef<HTMLInputElement>();
     const [showPreference, setPreference] = useState(false);
 
     return (
@@ -44,7 +40,7 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
                 <Grid container item direction="row" spacing={2} xs={12} md={6} lg={6}>
                     <Grid item xs={6} lg={6}>
                         <sc.inputTags>Restaurant Ratings</sc.inputTags>
-                        <Select value={rating} onChange={(e: any) => { setRating(e.target.value) }}>
+                        <Select value={defaultRating} onChange={(e: any) => { setRating(e.target.value) }}>
                             <MenuItem value={1}>1 stars</MenuItem>
                             <MenuItem value={2}>2 stars</MenuItem>
                             <MenuItem value={3}>3 stars</MenuItem>
@@ -54,7 +50,7 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
                     </Grid>
                     <Grid item xs={6} lg={6}>
                         <sc.inputTags>Restaurant Prices</sc.inputTags>
-                        <Select value={price} onChange={(e: any) => { setPrice(e.target.value) }}>
+                        <Select value={defaultPrice} onChange={(e: any) => { setPrice(e.target.value) }}>
                             <MenuItem value={1}>$</MenuItem>
                             <MenuItem value={2}>$$</MenuItem>
                             <MenuItem value={3}>$$$</MenuItem>
@@ -71,7 +67,7 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
                     </Grid>
                     <Grid item lg={10}>
                         <sc.inputTags>Maximum Driving Distance</sc.inputTags>
-                        <sc.textField defaultValue={defaultMaxDrive} inputRef={maxDriveRef} size="small" variant="outlined" color="secondary"
+                        <sc.textField defaultValue={defaultMaxDrive || 15} inputRef={maxDriveRef} size="small" variant="outlined" color="secondary"
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">km</InputAdornment>,
                             }} fullWidth />

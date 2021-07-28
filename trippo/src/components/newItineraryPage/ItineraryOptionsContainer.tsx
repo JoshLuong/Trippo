@@ -144,7 +144,13 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
                     size="small"
                     options={cityData || []}
                     autoHighlight
-                    getOptionLabel={(option) => option.name + ", " + option.region}
+                    getOptionLabel={(option) => {
+                        if (option.name && option.region) {
+                            return option.name + ", " + option.region;
+                        } else {
+                            return option.name;
+                        }
+                    }}
                     renderOption={(option) => (
                         <div>
                             {option.name}, {option.region}

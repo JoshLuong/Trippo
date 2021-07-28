@@ -2,5 +2,5 @@ cd trippo
 npm i
 npm run build
 cd ../backend
-npm i
+npm i tsc
 tsc

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
 import _ from "lodash";
-import NewItineraryContainer from "components/newItineraryPage/NewItineraryContainer";
+import NewItineraryContainer from "components/itineraryForm/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar"
 import { useCreateItineraryMutation, useDeleteItineraryMutation, useLazyGetItinerariesQuery, useUpdateItineraryMutation } from 'services/itinerary';
 import Pagination from '@material-ui/lab/Pagination';

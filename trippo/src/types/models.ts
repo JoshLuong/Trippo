@@ -42,7 +42,7 @@ export interface Itinerary {
     name: string;
     email: string;
   }[];
-  budget?: number;
+  budget?: number | undefined;
   comments?: string;
   tags: string[];
   activities: Activity[];

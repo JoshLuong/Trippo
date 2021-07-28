@@ -1,5 +1,5 @@
 
-import { FC, useState, useRef, Fragment, Dispatch, SetStateAction, MutableRefObject } from 'react';
+import { FC, useState, Fragment, Dispatch, SetStateAction } from 'react';
 import { Grid, Select, MenuItem, InputAdornment, Tooltip } from '@material-ui/core'
 import * as sc from './NewItinieraryContainer.styles'
 
@@ -10,11 +10,11 @@ interface Props {
     defaultMaxDrive: number;
     setPrice: Dispatch<SetStateAction<number>>;
     setRating: Dispatch<SetStateAction<number>>;
-    maxWalkRef: MutableRefObject<HTMLInputElement | undefined>;
-    maxDriveRef: MutableRefObject<HTMLInputElement | undefined>;
+    setMaxWalk: Dispatch<SetStateAction<number>>;
+    setMaxDrive: Dispatch<SetStateAction<number>>;
 }
 
-const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultMaxWalk, defaultMaxDrive, setRating, setPrice, maxWalkRef, maxDriveRef }) => {
+const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultMaxWalk, defaultMaxDrive, setRating, setPrice, setMaxWalk, setMaxDrive }) => {
 
     const [showPreference, setPreference] = useState(false);
 
@@ -60,14 +60,14 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
                 <Grid container item direction="column" spacing={1} xs={12} md={6} lg={6}>
                     <Grid item lg={10}>
                         <sc.inputTags>Maximum Walking Distance</sc.inputTags>
-                        <sc.textField defaultValue={defaultMaxWalk || 5} inputRef={maxWalkRef} size="small" variant="outlined" color="secondary"
+                        <sc.textField defaultValue={defaultMaxWalk} onChange={(event: any) => setMaxWalk(event.target.value)} size="small" variant="outlined" color="secondary"
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">km</InputAdornment>,
                             }} fullWidth />
                     </Grid>
                     <Grid item lg={10}>
                         <sc.inputTags>Maximum Driving Distance</sc.inputTags>
-                        <sc.textField defaultValue={defaultMaxDrive || 15} inputRef={maxDriveRef} size="small" variant="outlined" color="secondary"
+                        <sc.textField defaultValue={defaultMaxDrive} onChange={(event: any) => setMaxDrive(event.target.value)} size="small" variant="outlined" color="secondary"
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">km</InputAdornment>,
                             }} fullWidth />

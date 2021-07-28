@@ -130,6 +130,7 @@ const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItiner
                     onClick={() => {
                       handleRemove();
                       handleClose();
+                      handleEdit();
                     }}
                     color="primary"
                     autoFocus

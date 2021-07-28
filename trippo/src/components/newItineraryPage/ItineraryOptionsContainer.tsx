@@ -51,8 +51,6 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result, value]);
 
-    let collab: any[] = [];
-
     // change to newValue any
     const processCollaborators = (newValue: any) => {
         console.log(result);
@@ -61,23 +59,13 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
         } else {
             collabSetter([...defaultCollaborators, newValue]);
         }
-        console.log(newValue);
-        console.log(collab);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const collaboratorInputChange = useCallback(debounce((e: any) => trigger(e.target.value), 600), []);
 
     const onAutocompleteChange = async (e: any, newValue: any, reason: string) => {
-        if (reason === "create-option") {
-            console.log(newValue[newValue.length - 1]);
-            trigger(newValue[newValue.length - 1])
-        }
-
-        else if (reason === "remove-option") {
-            collabSetter(newValue);
-        }
-
+        collabSetter(newValue);
     }
 
     const handleCitySearch = (city: string) => {
@@ -186,7 +174,7 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
                         options={collabData}
                         limitTags={6}
                         renderInput={(params) => (
-                            <TextField {...params} variant="outlined" size="small" />
+                            <TextField {...params} variant="outlined" size="small" onChange={collaboratorInputChange} />
                         )}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (

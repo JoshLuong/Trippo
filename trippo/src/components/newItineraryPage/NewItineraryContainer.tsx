@@ -6,7 +6,6 @@ import * as sc from './NewItinieraryContainer.styles'
 import _ from "lodash";
 import { Itinerary } from 'types/models';
 import moment from 'moment';
-import CloseIcon from '@material-ui/icons/Close';
 import PreferencesContainer from './PreferencesContainer';
 import DateGrid from './DateGrid';
 import ItineraryOptionsContainer from "./ItineraryOptionsContainer"
@@ -37,8 +36,8 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
     // Preference Grid state
     const [rating, setRating] = useState(3);
     const [price, setPrice] = useState(2);
-    const maxWalkRef = useRef<HTMLInputElement>();
-    const maxDriveRef = useRef<HTMLInputElement>();
+    const [maxWalk, setMaxWalk] = useState(5);
+    const [maxDrive, setMaxDrive] = useState(15);
 
 
     const user = useAppSelector((state) => state.user.value);
@@ -52,12 +51,10 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
             setFail(true);
             return;
         }
+        console.log(destination);
         // Start and end dates are in midnight local time
         const start_date = moment(startRef.current!.value).toDate();
         const end_date = moment(endRef.current!.value).toDate();
-
-        console.log(maxWalkRef.current?.value);
-        console.log(Number(maxWalkRef.current?.value));
         const newItinerary: Omit<Itinerary, "_id" | "user_id"> = {
             name: nameRef.current?.value || "",
             destination: destination?.name + ", " + destination?.region || "",
@@ -65,11 +62,11 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
                 lat: destination.latitude,
                 lng: destination.longitude
             },
-            budget: Number(budgetRef.current?.value),
+            budget: Number(budgetRef.current?.value) || undefined,
             dining_budget: price,
             restaurant_ratings: rating,
-            max_walking_dist: Number(maxWalkRef.current?.value),
-            max_driving_dist: Number(maxDriveRef.current?.value),
+            max_walking_dist: maxWalk,
+            max_driving_dist: maxDrive,
             collaborators: [...collaborators],
             comments: descRef.current?.value,
             tags: tags,
@@ -77,6 +74,7 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
             end_date: end_date,
             activities: [], // TODO change
         };
+        console.log(newItinerary);
         await createItinerary(newItinerary).unwrap()
             .then((payload: any) => {
                 setSuccess(true);
@@ -125,22 +123,20 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
 
     return (
         <sc.newItineraryContainer>
-            <sc.StyledIconButton
-                onClick={() => handleShowNewItinerary(false)}
-            >
-                <CloseIcon style={{ color: c.BLACK }} />
-            </sc.StyledIconButton>
             <sc.header>New Itinerary:</sc.header>
             <sc.FormGrid direction="column">
                 <ItineraryOptionsContainer
                     collabSetter={setCollaborators} destinationSetter={setDestination} tagSetter={setTags}
                     descRef={descRef} nameRef={nameRef} errorMessage={errorMessage} setFail={setFail} failSnackbar={failSnackBar}
                     defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={""} defaultName={""} />
-                <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={500} defaultEnd={""} defaultStart={""} />
+                <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={undefined} defaultEnd={""} defaultStart={""} />
                 <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}
-                    defaultMaxDrive={15} defaultMaxWalk={5} maxDriveRef={maxDriveRef} maxWalkRef={maxWalkRef} />
-                <Grid container item direction="row" justify="flex-end">
-                    <sc.userButton onClick={() => handleSubmit()}>Submit</sc.userButton>
+                    defaultMaxDrive={maxDrive} defaultMaxWalk={maxWalk} setMaxDrive={setMaxDrive} setMaxWalk={setMaxWalk} />
+                <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
+                    <Grid item xs={12} sm={9} md={6} lg={4}>
+                        <sc.userButton onClick={() => handleShowNewItinerary(false)} >Cancel</sc.userButton>
+                        <sc.userButton onClick={handleSubmit}>Submit</sc.userButton>
+                    </Grid>
                 </Grid>
             </sc.FormGrid>
         </sc.newItineraryContainer>

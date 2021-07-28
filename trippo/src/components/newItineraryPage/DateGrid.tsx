@@ -5,7 +5,7 @@ import * as sc from './NewItinieraryContainer.styles'
 
 
 interface Props {
-    defaultBudget: number;
+    defaultBudget: any;
     defaultStart: string;
     defaultEnd: string;
     budgetRef: MutableRefObject<HTMLInputElement | undefined>;

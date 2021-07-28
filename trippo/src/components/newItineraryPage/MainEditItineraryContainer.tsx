@@ -1,4 +1,4 @@
-import { FC, useState, useRef } from 'react';
+import { FC, useState, useRef, useEffect } from 'react';
 import { Grid } from '@material-ui/core'
 import { useAppSelector } from 'app/store';
 import * as sc from './NewItinieraryContainer.styles'
@@ -7,7 +7,7 @@ import moment from 'moment';
 import PreferencesContainer from './PreferencesContainer';
 import DateGrid from './DateGrid';
 import ItineraryOptionsContainer from "./ItineraryOptionsContainer"
-import CloseIcon from '@material-ui/icons/Close';
+import CancelIcon from '@material-ui/icons/Close';
 import * as c from "../../colors/colors";
 
 interface Props {
@@ -35,10 +35,10 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
     const endRef = useRef<HTMLInputElement>();
 
     // Preference Grid state
-    const [rating, setRating] = useState(card.restaurant_ratings || 3);
-    const [price, setPrice] = useState(card.dining_budget || 2);
-    const maxWalkRef = useRef<HTMLInputElement>();
-    const maxDriveRef = useRef<HTMLInputElement>();
+    const [rating, setRating] = useState(card.restaurant_ratings);
+    const [price, setPrice] = useState(card.dining_budget);
+    const [maxWalk, setMaxWalk] = useState(card.max_walking_dist);
+    const [maxDrive, setMaxDrive] = useState(card.max_driving_dist);
 
     const user = useAppSelector((state) => state.user.value);
 
@@ -51,23 +51,32 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
             return;
         }
 
+        let dest = { ...destination }
+
+        // has wikiDataId if destination was updated
+        if (destination.wikiDataId) {
+            dest.name = destination?.name + ", " + destination?.region;
+            dest.lat = destination.latitude;
+            dest.lng = destination.longitude;
+        }
+
+
         // Start and end dates are in midnight local time
         const start_date = moment(startRef.current!.value).toDate();
         const end_date = moment(endRef.current!.value).toDate();
-
         const newItinerary: Omit<Itinerary, "user_id"> = {
             _id: card._id,
             name: nameRef.current?.value || "",
-            destination: destination?.name + ", " + destination?.region || "",
+            destination: dest?.name,
             dest_coords: {
-                lat: destination.latitude,
-                lng: destination.longitude
+                lat: dest.lat,
+                lng: dest.lng
             },
-            budget: Number(budgetRef.current?.value),
+            budget: Number(budgetRef.current?.value) || undefined,
             dining_budget: price,
             restaurant_ratings: rating,
-            max_walking_dist: Number(maxWalkRef.current?.value),
-            max_driving_dist: Number(maxDriveRef.current?.value),
+            max_walking_dist: maxWalk,
+            max_driving_dist: maxDrive,
             collaborators: [...collaborators],
             comments: descRef.current?.value,
             tags: tags,
@@ -75,6 +84,7 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
             end_date: end_date,
             activities: [], // TODO change
         };
+        console.log(newItinerary)
         await updateItinerary(newItinerary).unwrap()
             .then((payload: any) => {
                 setSuccess(true);
@@ -130,11 +140,10 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
         <sc.newItineraryContainer>
             <sc.StyledIconButton
                 color="inherit"
-                aria-label="open drawer"
                 edge="start"
                 onClick={() => handleShowEditItinerary()}
             >
-                <CloseIcon style={{ color: c.BLACK }} />
+                <CancelIcon style={{ color: c.WHITE }} />
             </sc.StyledIconButton>
             <sc.header>Edit Itinerary:</sc.header>
             <sc.FormGrid direction="column">
@@ -142,10 +151,10 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
                     collabSetter={setCollaborators} destinationSetter={setDestination} tagSetter={setTags}
                     descRef={descRef} nameRef={nameRef} errorMessage={errorMessage} setFail={setFail} failSnackbar={failSnackBar}
                     defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={card.comments || ""} defaultName={card.name} />
-                <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={card.budget || 500}
+                <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={card.budget || undefined}
                     defaultEnd={parseDate(card.end_date)} defaultStart={parseDate(card.start_date)} />
                 <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}
-                    defaultMaxDrive={card.max_driving_dist || 15} defaultMaxWalk={card.max_walking_dist || 5} maxDriveRef={maxDriveRef} maxWalkRef={maxWalkRef} />
+                    defaultMaxDrive={maxDrive} defaultMaxWalk={maxWalk} setMaxDrive={setMaxDrive} setMaxWalk={setMaxWalk} />
                 <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
                     <Grid item xs={12} sm={9} md={7} lg={5}>
                         <sc.userButton onClick={() => openDialog()} >Delete</sc.userButton>

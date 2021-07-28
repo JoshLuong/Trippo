@@ -7,8 +7,7 @@
     "target": "es6",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "src",
-    "noEmit": true,
+    "baseUrl": "src"
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]

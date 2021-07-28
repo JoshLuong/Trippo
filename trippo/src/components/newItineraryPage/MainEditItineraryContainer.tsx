@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from 'react';
+import { FC, useState, useRef } from 'react';
 import { Grid } from '@material-ui/core'
 import { useAppSelector } from 'app/store';
 import * as sc from './NewItinieraryContainer.styles'

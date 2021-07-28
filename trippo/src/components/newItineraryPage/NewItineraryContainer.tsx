@@ -9,7 +9,6 @@ import moment from 'moment';
 import PreferencesContainer from './PreferencesContainer';
 import DateGrid from './DateGrid';
 import ItineraryOptionsContainer from "./ItineraryOptionsContainer"
-import * as c from "../../colors/colors";
 
 interface Props {
     handleShowNewItinerary: (canShow: boolean) => void;

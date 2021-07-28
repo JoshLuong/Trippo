@@ -3,11 +3,14 @@
     "version": "1.0.0",
     "description": "Trippo, a travel itinerary application",
     "main": "index.js",
-    "dependencies": {},
+    "dependencies": {
+        "typescript": "^4.3.5"
+    },
     "devDependencies": {},
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "cd backend && npm install && npm start",
+      "postinstall":"tsc",
       "heroku-postbuild": "cd trippo && npm install && npm run build"
     },
     "repository": {

@@ -18,6 +18,8 @@ import { useParams } from 'react-router-dom';
 // and update the day and redux store when u send a patch to update activities
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
+  searchResult: any;
+  setSearchResult: any;
   handleIsLoading: () => void;
   handleNewSlotClick: (name: string, address: string, lat: number, lng: number) => void;
 }
@@ -37,7 +39,7 @@ const reverseGeocodeName = async (lat: number, lng: number) => {
   return exactName;
 }
 
-const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotClick }) => {
+const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotClick, searchResult, setSearchResult }) => {
   const mapRef: React.Ref<MapRef> = useRef(null);
   const [viewport, setViewport] = useState<InteractiveMapProps>({
     longitude: 0,
@@ -48,7 +50,6 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
   const { id } = useParams<{ id: string }>();
   const { data } = useGetItineraryByIdQuery(id);
 
-  const [searchResult, setSearchResult] = useState<any>(null);
   const [activityPopup, setActivityPopup] = useState<number[]>([]);
 
   useEffect(() => {

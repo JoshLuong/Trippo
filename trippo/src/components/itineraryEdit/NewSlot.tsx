@@ -10,6 +10,8 @@ import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { useCreateActivityMutation } from "services/itinerary";
 import { Activity } from "types/models";
+import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage"
+
 
 interface Props {
   handleClose: () => void;
@@ -17,6 +19,7 @@ interface Props {
   destinationAddress: string;
   destinationLat: number;
   destinationLng: number;
+  setSearchResult: any;
 }
 
 const NewSlot: FC<Props> = ({
@@ -25,6 +28,7 @@ const NewSlot: FC<Props> = ({
   destinationAddress,
   destinationLat,
   destinationLng,
+  setSearchResult,
 }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [type, setType] = useState(d.OTHER);
@@ -35,6 +39,8 @@ const NewSlot: FC<Props> = ({
   const [createActivity, // This is the mutation trigger
     { isLoading: isUpdating }, // This is the destructured mutation result
   ] = useCreateActivityMutation();
+  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
+
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
@@ -54,7 +60,6 @@ const NewSlot: FC<Props> = ({
 
   const handleDateChange = (event: any) => {
     setSelectedDate(event);
-    // console.log((selectedDate!.setHours(Number(time.split(":")[0]), Number(time.split(":")[1]))).toString());
   };
 
   const addToItinerary = () => {
@@ -64,18 +69,22 @@ const NewSlot: FC<Props> = ({
         lat: destinationLat,
         lng: destinationLng,
       },
-      time: ((selectedDate!.setHours(Number(time.split(":")[0]), Number(time.split(":")[1]))).toString()),
+      address: destinationAddress,
+      time: (((new Date(selectedDate!)).setHours(Number(time.split(":")[0]), Number(time.split(":")[1]))).toString()),
       destination: destinationName,
-      cost: cost,
+      cost: cost || undefined,
       type: type,
       comments: comments.split("\n"),
       suggested: [{
+        // TODO: yelp suggestions from fusion api
         // destination: destinationName,
         // type: type,
         // comments: comments,
       }],
     };
+    
     createActivity(newActivity);
+    setSearchResult(null);
     handleClose();
   };
 
@@ -216,3 +225,4 @@ const NewSlot: FC<Props> = ({
 };
 
 export default NewSlot;
+

@@ -46,6 +46,8 @@ function ItineraryPage() {
   const { id } = useParams<{ id: string }>();
   const { data: itinerary } = useGetItineraryByIdQuery(id);
   const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] = useUpdateItineraryMutation();
+  const [searchResult, setSearchResult] = useState<any>(null);
+
 
   useEffect(() => {
     if (updatedItinerary) {
@@ -105,6 +107,7 @@ function ItineraryPage() {
 
   function handleNewSlotClose() { 
     setCanOpenNewSlot(false);
+    setShowUnsavedChangesModal(null);
   }
 
   const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {
@@ -180,6 +183,8 @@ function ItineraryPage() {
             geocoderContainerRef={geocoderContainerRef}
             handleIsLoading={handleIsLoading}
             handleNewSlotClick={handleNewSlotClick}
+            searchResult={searchResult}
+            setSearchResult={setSearchResult}
           />
           <sc.SideBar>
             <sc.StyledReceiptIcon>
@@ -210,7 +215,8 @@ function ItineraryPage() {
             destinationName = {destinationName} 
             destinationAddress={destinationAddress} 
             destinationLat={destinationLat} 
-            destinationLng={destinationLng}/>
+            destinationLng={destinationLng}
+            setSearchResult={setSearchResult}/>
               : null
           }
         </sc.ItineraryDiv>

@@ -5,6 +5,7 @@ export interface Activity {
     lat: number;
     lng: number;
   };
+  address: string;
   time: string;
   destination?: string;
   cost?: number;

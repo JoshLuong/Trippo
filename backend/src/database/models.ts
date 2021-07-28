@@ -29,6 +29,7 @@ export interface IActivity {
     lat: number;
     lng: number;
   };
+  address?: string;
   time?: Date;
   destination?: string;
   cost?: number;
@@ -55,6 +56,7 @@ export const activitySchema = new Schema<IActivity>({
     },
     required: true,
   },
+  address: String,
   time: Date,
   destination: String,
   cost: Number,

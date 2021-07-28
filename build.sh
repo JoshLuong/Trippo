@@ -1,6 +1,6 @@
 cd trippo
-npm run ci
+npm ci
 npm run build
 cd ../backend
-npm run ci
+npm ci
 tsc

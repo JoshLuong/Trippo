@@ -17,9 +17,9 @@ mongoose.connect(process.env.DATABASE_URL!, {
   const PORT = process.env.PORT || 4000;
 
   // Serve React app from express
-  app.use(express.static(path.join(__dirname, 'trippo', 'build')));
+  app.use(express.static(path.join(__dirname, '..', '..', 'trippo', 'build')));
   app.get('/*', (_req, res) => {
-    res.sendFile(path.join(__dirname, 'trippo', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', '..', 'trippo', 'build', 'index.html'));
   });
 
   // TODO: change to secure https://www.npmjs.com/package/express-session

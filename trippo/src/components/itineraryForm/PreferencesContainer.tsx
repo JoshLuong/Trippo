@@ -3,6 +3,7 @@ import { FC, useState, Fragment, Dispatch, SetStateAction } from 'react';
 import { Grid, Select, MenuItem, InputAdornment, Tooltip } from '@material-ui/core'
 import * as sc from './NewItinieraryContainer.styles'
 
+
 interface Props {
     defaultRating: number;
     defaultPrice: number;
@@ -15,7 +16,6 @@ interface Props {
 }
 
 const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultMaxWalk, defaultMaxDrive, setRating, setPrice, setMaxWalk, setMaxDrive }) => {
-
     const [showPreference, setPreference] = useState(false);
 
     return (

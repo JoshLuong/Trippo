@@ -82,7 +82,7 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
             tags: tags,
             start_date: start_date,
             end_date: end_date,
-            activities: [], // TODO change
+            activities: card.activities,
         };
         console.log(newItinerary)
         await updateItinerary(newItinerary).unwrap()
@@ -148,7 +148,8 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
             <sc.header>Edit Itinerary:</sc.header>
             <sc.FormGrid direction="column">
                 <ItineraryOptionsContainer
-                    collabSetter={setCollaborators} destinationSetter={setDestination} tagSetter={setTags}
+                    user={user}
+                    collabSetter={setCollaborators} destinationSetter={setDestination} tagSetter={setTags} setErrorMessage={setErrorMessage}
                     descRef={descRef} nameRef={nameRef} errorMessage={errorMessage} setFail={setFail} failSnackbar={failSnackBar}
                     defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={card.comments || ""} defaultName={card.name} />
                 <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={card.budget || undefined}

@@ -1,14 +1,13 @@
-import { FC, useState, useCallback, useEffect, Fragment, Dispatch, SetStateAction, MutableRefObject } from 'react';
+import { FC, useState, useEffect, Fragment, Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { TextField, Grid, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
 import Alert from '@material-ui/lab/Alert';
 import FaceIcon from '@material-ui/icons/Face';
 import * as sc from './NewItinieraryContainer.styles'
 import _ from "lodash";
-import { debounce } from 'lodash';
 import { useLazyGetUserByEmailQuery } from 'services/user';
-
 interface Props {
+    user: any;
     defaultCollaborators: any[];
     defaultDestination: any;
     defaultTags: string[];
@@ -19,6 +18,7 @@ interface Props {
     tagSetter: Dispatch<SetStateAction<string[]>>;
     nameRef: MutableRefObject<HTMLInputElement | undefined>;
     descRef: MutableRefObject<HTMLInputElement | undefined>;
+    setErrorMessage: Dispatch<SetStateAction<string>>;
     errorMessage: string;
     setFail: Dispatch<SetStateAction<boolean>>;
     failSnackbar: boolean;
@@ -29,7 +29,7 @@ const collabData: any[] = [];
 const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
 
 const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDesc, defaultDestination, defaultName, defaultTags,
-    collabSetter, destinationSetter, tagSetter, nameRef, descRef, errorMessage, setFail, failSnackbar }) => {
+    collabSetter, destinationSetter, tagSetter, nameRef, descRef, errorMessage, setFail, failSnackbar, setErrorMessage, user }) => {
 
 
     const [cityData, setCityData] = useState([]);
@@ -45,29 +45,46 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
 
     useEffect(() => {
         if (!result.isFetching && result.data) {
-            // change to result.data
             processCollaborators(result.data);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result, value]);
 
-    // change to newValue any
+
     const processCollaborators = (newValue: any) => {
-        console.log(result);
-        if (result.status !== "fulfilled") {
-            // trigger error
-        } else {
+        if (result.status === "fulfilled") {
             collabSetter([...defaultCollaborators, newValue]);
+        } else {
+            setErrorMessage(result.originalArgs + " is an invalid email");
+            setFail(true);
         }
     }
 
     const onAutocompleteChange = async (e: any, newValue: any, reason: string) => {
         if (reason === "create-option") {
-            trigger(newValue[newValue.length - 1])
-        } 
+            let email = newValue[newValue.length - 1];
+            if (preventDupeCollab(email)) {
+                trigger(email);
+            } else {
+                setErrorMessage(email + " has already been added");
+                setFail(true);
+            }
+        }
         else if (reason === "remove-option") {
             collabSetter(newValue);
+        } else if (reason === "clear") {
+            collabSetter([]);
         }
+    }
+
+    const preventDupeCollab = (email: string) => {
+        if (email === user.email) return false;
+        for (let collab of defaultCollaborators) {
+            if (collab.email === email) {
+                return false;
+            }
+        }
+        return true;
     }
 
     const handleCitySearch = (city: string) => {

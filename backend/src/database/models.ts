@@ -97,7 +97,7 @@ export const itinerarySchema = new Schema<IItinerary>({
   collaborators: [new Schema({
     user_id: Schema.Types.ObjectId,
     name: { type: String, required: true },
-    email: { type: String, required: true }
+    email: { type: String, required: true, unique: true }
   })],
   comments: String,
   tags: [String],

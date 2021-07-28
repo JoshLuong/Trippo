@@ -3,7 +3,6 @@ import { FC, useState, useRef } from 'react';
 import { Grid } from '@material-ui/core'
 import { useAppSelector } from 'app/store';
 import * as sc from './NewItinieraryContainer.styles'
-import _ from "lodash";
 import { Itinerary } from 'types/models';
 import moment from 'moment';
 import PreferencesContainer from './PreferencesContainer';
@@ -125,8 +124,9 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
             <sc.header>New Itinerary:</sc.header>
             <sc.FormGrid direction="column">
                 <ItineraryOptionsContainer
-                    collabSetter={setCollaborators} destinationSetter={setDestination} tagSetter={setTags}
-                    descRef={descRef} nameRef={nameRef} errorMessage={errorMessage} setFail={setFail} failSnackbar={failSnackBar}
+                    user={user} collabSetter={setCollaborators} destinationSetter={setDestination}
+                    tagSetter={setTags} setErrorMessage={setErrorMessage} descRef={descRef} nameRef={nameRef} errorMessage={errorMessage}
+                    setFail={setFail} failSnackbar={failSnackBar}
                     defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={""} defaultName={""} />
                 <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={undefined} defaultEnd={""} defaultStart={""} />
                 <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}

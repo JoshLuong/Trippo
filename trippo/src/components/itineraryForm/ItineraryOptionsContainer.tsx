@@ -61,11 +61,13 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
         }
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const collaboratorInputChange = useCallback(debounce((e: any) => trigger(e.target.value), 600), []);
-
     const onAutocompleteChange = async (e: any, newValue: any, reason: string) => {
-        collabSetter(newValue);
+        if (reason === "create-option") {
+            trigger(newValue[newValue.length - 1])
+        } 
+        else if (reason === "remove-option") {
+            collabSetter(newValue);
+        }
     }
 
     const handleCitySearch = (city: string) => {
@@ -174,7 +176,7 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
                         options={collabData}
                         limitTags={6}
                         renderInput={(params) => (
-                            <TextField {...params} variant="outlined" size="small" onChange={collaboratorInputChange} />
+                            <TextField {...params} variant="outlined" size="small" />
                         )}
                         renderTags={(value, getTagProps) =>
                             value.map((option, index) => (

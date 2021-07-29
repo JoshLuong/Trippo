@@ -3,8 +3,6 @@ import qs from 'qs';
 import { Itinerary, Activity } from 'types/models';
 
 
-const url = process.env.REACT_APP_BACKEND_URL!;
-
 interface GetItinerariesRequest {
   offset: number;
   limit: number;
@@ -19,7 +17,7 @@ interface GetItinerariesResponse {
 // Define a service using a base URL and expected endpoints
 export const itineraryApi = createApi({
   reducerPath: 'itineraryApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${url}/itineraries` }),
+  baseQuery: fetchBaseQuery({ baseUrl: `/api/itineraries` }),
   // important: in order to use user cookie within backend, must have credentials and headers (if body present) present
   endpoints: (builder) => ({
     getItineraries: builder.query<GetItinerariesResponse, GetItinerariesRequest>({

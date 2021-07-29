@@ -47,7 +47,7 @@ const Navbar = (props: { history: any }) => {
 
   const handleLogout = async () => {
     try {
-        await fetch(`${process.env.REACT_APP_BACKEND_URL}/v1/auth/logout`, {
+        await fetch(`/api/v1/auth/logout`, {
           method: "DELETE",
           credentials: 'include'
         })

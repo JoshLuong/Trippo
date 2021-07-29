@@ -5,6 +5,7 @@ import { HttpError } from 'http-errors';
 import { User } from 'database/models';
 import cors from 'cors';
 import session from 'express-session';
+import path from 'path';
 import itineraryRouter from './routes/itineraries';
 import userRouter from './routes/users';
 import googleAuthRouter from './routes/googleAuth';
@@ -15,6 +16,15 @@ mongoose.connect(process.env.DATABASE_URL!, {
 }).then(() => {
   const app = express();
   const PORT = process.env.PORT || 4000;
+
+  // Serve React app from express
+  app.use(express.static(path.join(__dirname, '..', '..', 'trippo', 'build')));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(__dirname, '..', '..', 'trippo', 'build', 'index.html'));
+  });
 
   // TODO: change to secure https://www.npmjs.com/package/express-session
   app.use(session({ resave: true, secret: process.env.EXPRESS_SESSION_SECRET!, saveUninitialized: true, cookie: { secure: false } }));

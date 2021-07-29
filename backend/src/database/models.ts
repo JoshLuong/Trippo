@@ -8,6 +8,10 @@ export interface IYelp {
   rating: number;
   price?: string;
   distance: number;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
   comments: string;
 }
 
@@ -21,6 +25,10 @@ export const yelpSchema = new Schema<IYelp>({
   url:String,
   rating: Number,
   price: String,
+  coordinates: {
+    latitude: Number,
+    longitude: Number,
+  },
   distance: Number,
   comments: String,
 }, { toObject: { versionKey: false } });

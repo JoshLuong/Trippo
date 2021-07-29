@@ -11,6 +11,8 @@ export interface Activity {
   cost?: number;
   type?: string;
   comments: string[];
+  business_ids?: string[];
+  // TODO DELETE
   suggested?: {
     destination?: string;
     type?: string;
@@ -22,6 +24,20 @@ export interface User {
   name: string,
   email: string,
 }
+export interface Yelp {
+  name: string;
+  business_id: string;
+  url: string;
+  rating: number;
+  price?: string;
+  distance: number;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  comments: string;
+}
+
 
 export interface Itinerary {
   _id: string;

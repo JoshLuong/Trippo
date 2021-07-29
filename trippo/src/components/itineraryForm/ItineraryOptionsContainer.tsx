@@ -47,6 +47,10 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
         if (!result.isFetching && result.data) {
             processCollaborators(result.data);
         }
+        if (result.isError) {
+            setErrorMessage(result.originalArgs + " is an invalid email");
+            setFail(true);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result, value]);
 
@@ -54,9 +58,6 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
     const processCollaborators = (newValue: any) => {
         if (result.status === "fulfilled") {
             collabSetter([...defaultCollaborators, newValue]);
-        } else {
-            setErrorMessage(result.originalArgs + " is an invalid email");
-            setFail(true);
         }
     }
 

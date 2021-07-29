@@ -59,6 +59,7 @@ export interface IItinerary {
   collaborators: {
     user_id: string;
     name: string;
+    email: string;
   }[];
   budget?: number;
   dining_budget?: number;
@@ -73,7 +74,7 @@ export interface IItinerary {
 
 export const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
 }, { toObject: { versionKey: false } });
 
 export const itinerarySchema = new Schema<IItinerary>({
@@ -87,7 +88,7 @@ export const itinerarySchema = new Schema<IItinerary>({
     },
     required: true,
   },
-  budget: { type: Number, default: 500 },
+  budget: { type: Number, default: null },
   current_cost: { type: Number, default: 0 },
   dining_budget: { type: Number, default: 2 },
   restaurant_ratings: { type: Number, default: 3 },
@@ -96,6 +97,7 @@ export const itinerarySchema = new Schema<IItinerary>({
   collaborators: [new Schema({
     user_id: Schema.Types.ObjectId,
     name: { type: String, required: true },
+    email: { type: String, required: true, unique: true }
   })],
   comments: String,
   tags: [String],
@@ -103,6 +105,16 @@ export const itinerarySchema = new Schema<IItinerary>({
   end_date: { type: Date, required: true },
   activities: [activitySchema],
 }, { toObject: { versionKey: false } });
+
+itinerarySchema.index({ user_id: 1, name: 1 }, { unique: true });
+
+itinerarySchema.pre('validate', function (next) {
+  if (this.start_date > this.end_date) {
+    next(new Error('End Date must be greater than Start Date'));
+  } else {
+    next();
+  }
+});
 
 export const User = model<IUser>('User', userSchema);
 export const Itinerary = model<IItinerary>('Itinerary', itinerarySchema);

@@ -17,6 +17,7 @@ export interface Activity {
 }
 
 export interface User {
+  _id: string;
   name: string,
   email: string,
 }
@@ -39,8 +40,9 @@ export interface Itinerary {
   collaborators: {
     user_id: string;
     name: string;
+    email: string;
   }[];
-  budget?: number;
+  budget?: number | null;
   comments?: string;
   tags: string[];
   activities: Activity[];

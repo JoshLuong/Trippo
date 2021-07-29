@@ -16,12 +16,6 @@ mongoose.connect(process.env.DATABASE_URL!, {
   const app = express();
   const PORT = process.env.PORT || 4000;
 
-  // Serve React app from express
-  app.use(express.static(path.join(__dirname, '..', '..', 'trippo', 'build')));
-  app.get('/*', (_req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', 'trippo', 'build', 'index.html'));
-  });
-
   // TODO: change to secure https://www.npmjs.com/package/express-session
   app.use(session({ resave: true, secret: process.env.EXPRESS_SESSION_SECRET!, saveUninitialized: true, cookie: { secure: false }}));
 
@@ -45,6 +39,12 @@ mongoose.connect(process.env.DATABASE_URL!, {
 
   app.use('/api/itineraries', itineraryRouter);
   app.use('/api/v1/auth', googleAuthRouter)
+
+  // Serve React app from express
+  app.use(express.static(path.join(__dirname, '..', '..', 'trippo', 'build')));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', 'trippo', 'build', 'index.html'));
+  });
 
   app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     res.status(err.statusCode || 500).send(err.message);

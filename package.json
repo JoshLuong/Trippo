@@ -1,14 +1,14 @@
 {
-    "name": "Trippo",
+    "name": "trippo",
     "version": "1.0.0",
     "description": "Trippo, a travel itinerary application",
-    "main": "index.js",
+    "main": "backend/dist/app.js",
     "dependencies": {},
     "devDependencies": {},
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "cd backend && npm install && npm start",
-      "heroku-postbuild": "cd trippo && npm install && npm run build"
+      "heroku-postbuild": "bash build.sh"
     },
     "repository": {
       "type": "git",

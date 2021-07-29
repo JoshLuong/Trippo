@@ -1,3 +1,4 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import "./App.css";
 import { useEffect } from 'react'
 import ItineraryPage from "components/itineraryPage/ItineraryPage";
@@ -12,6 +13,9 @@ import { Snackbar } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import ItinerariesView from "components/itinerariesView/ItinerariesView";
 
+// Mapbox issue fix: https://github.com/mapbox/mapbox-gl-js/issues/10173#issuecomment-750489778
+// @ts-ignore
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN!;
 
 function App() {

@@ -49,7 +49,9 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
             setFail(true);
             return;
         }
-        console.log(destination);
+
+        let bud = Number(budgetRef.current?.value)
+        if (bud < 0) bud = 0;
         // Start and end dates are in midnight local time
         const start_date = moment(startRef.current!.value).toDate();
         const end_date = moment(endRef.current!.value).toDate();
@@ -60,7 +62,7 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
                 lat: destination.latitude,
                 lng: destination.longitude
             },
-            budget: Number(budgetRef.current?.value) || undefined,
+            budget: bud || null,
             dining_budget: price,
             restaurant_ratings: rating,
             max_walking_dist: maxWalk,

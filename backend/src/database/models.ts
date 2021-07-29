@@ -88,7 +88,7 @@ export const itinerarySchema = new Schema<IItinerary>({
     },
     required: true,
   },
-  budget: { type: Number, default: undefined },
+  budget: { type: Number, default: null },
   current_cost: { type: Number, default: 0 },
   dining_budget: { type: Number, default: 2 },
   restaurant_ratings: { type: Number, default: 3 },

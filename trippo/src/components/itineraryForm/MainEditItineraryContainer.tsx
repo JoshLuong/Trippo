@@ -60,6 +60,8 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
             dest.lng = destination.longitude;
         }
 
+        let bud = Number(budgetRef.current?.value)
+        if (bud < 0) bud = 0;
 
         // Start and end dates are in midnight local time
         const start_date = moment(startRef.current!.value).toDate();
@@ -72,7 +74,7 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
                 lat: dest.lat,
                 lng: dest.lng
             },
-            budget: Number(budgetRef.current?.value) || undefined,
+            budget: bud || null,
             dining_budget: price,
             restaurant_ratings: rating,
             max_walking_dist: maxWalk,

@@ -45,8 +45,8 @@ router.post('/new-activity', async (req: any, res, _next) => {
   const activity = new Activity(req.body);
   product?.activities.push(activity);
   product?.save()
-    .then((doc) => {
-      res.send(doc);
+    .then(() => {
+      res.send(activity._id);
     })
     .catch((err) => {
       console.error(err);

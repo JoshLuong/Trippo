@@ -16,6 +16,10 @@ export interface Activity {
   suggested?: {
     destination?: string;
     type?: string;
+    url?: string;
+    rating?: number;
+    price?: string;
+    distance?: number;
     comments?: string;
   }[];
 }

@@ -4,7 +4,7 @@ import { Yelp, Itinerary } from 'database/models';
 
 const router = express.Router();
 const yelp = require('yelp-fusion');
-const apiKey = '_QD5PLIiaaZPpX8HmvKCf-3Wr4J7HJ5e7KRNmxXe4OEgMAw-lRfsIGuFigACboB7194feK745rnMZ0XB9Fwo81opM-iKGJC_Ib8YBPOmfLL1x5NvxAMFMixmu6r9YHYx';
+const apiKey = 'gpiujEUL6xRxguPmZsGwZqXqE2SBRjDVPtuLeWZg2he767IOkfXt2yZHFkxnhcmCkL_jQJREJtNYe08jR84HCppQJ8OHTDrEuPEzWYXfwXuBdIvmZO4IuTC2OrrvYHYx';
 
 // use this endpoint when the user creates an activity with time between 6:00am - 11:00am
 router.post('/restaurants/breakfast_brunch', async (req, res, _next) => {
@@ -16,7 +16,7 @@ router.post('/restaurants/breakfast_brunch', async (req, res, _next) => {
         longitude: longitude,
         price: price,
         radius: distance, // meters
-        open_at: Date.now, // TODO: test purposing, should use the time from req.body
+        open_at: time.now,
         limit: 25
       };
     
@@ -25,7 +25,9 @@ router.post('/restaurants/breakfast_brunch', async (req, res, _next) => {
     client.search(searchRequest).then(async (response: any) => {
         const results = response.jsonBody.businesses;
         const filteredResults = results.filter((restaurant: any) => restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1);
+        console.log(JSON.stringify(filteredResults));
         const savedResults = filteredResults.length >= 2 ? filteredResults.slice(0, 2) : filteredResults;
+        console.log(savedResults);
         let businessIds: string[] = [];
         for (let res of savedResults) {
             const result: any = res;
@@ -39,12 +41,12 @@ router.post('/restaurants/breakfast_brunch', async (req, res, _next) => {
             return activity._id == activityId;
         });
         if (activity && activity.length >=1 ) activity[0]?.business_ids.push(...businessIds);
-        itinerary?.save();
-
-        res.status(200).send(savedResults);
-    }).catch((e: string) => {
+        itinerary?.save()
+        .then(() => {
+        res.status(200).send(savedResults)});
+    }).catch((e: any) => {
     console.log(e);
-        res.status(500);
+        res.send(e);
     });
 });
 
@@ -83,7 +85,7 @@ router.post('/restaurants', async (req, res, _next) => {
         res.status(200).send(savedResults);
     }).catch((e: string) => {
     console.log(e);
-        res.status(500);
+        res.send(e);
     });
 });
 

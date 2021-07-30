@@ -25,6 +25,7 @@ interface Props {
 const Suggestions: FC<Props> = ({ activity }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [suggested, setSuggested] = useState<Yelp[]>([]);
+  
 
   // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
   function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -45,7 +46,31 @@ const Suggestions: FC<Props> = ({ activity }) => {
     return deg * (Math.PI/180)
   }
 
+  
+  // async function setDBSuggestions(name: any, url: any, rating: any, price: any, distance: any, comments: any) {
+  //   await fetch(`/itineraries/suggestions`, {
+  //     method: "POST",
+  //     credentials: 'include',
+  //     body: JSON.stringify({
+  //       itineraryId: itinerary?._id,
+  //       activityId: activity._id,
+  //       destination: name,
+  //       url: url,
+  //       rating: rating,
+  //       price: price,
+  //       distance: distance,
+  //       comments: comments,
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //   .then(res => console.log(res.json()));
+  // }
+
   useEffect(() => {
+    // removes console mounting error
+    let isMounted = true;
     fetch(`/api/yelp/businesses`, {
       method: "POST",
       credentials: 'include',
@@ -59,9 +84,13 @@ const Suggestions: FC<Props> = ({ activity }) => {
     })
     .then(res => res.json())
     .then(suggested => {
-      setSuggested(suggested);
-    });
-  })
+      if (isMounted){
+        setSuggested(suggested);
+      }
+    })
+    return () => { isMounted = false };
+  }, [])
+
   return (
     <Grid container item lg={12}>
       <Grid container item lg={3} md={3} sm={12} xs={12}>
@@ -69,6 +98,7 @@ const Suggestions: FC<Props> = ({ activity }) => {
       </Grid>
       <Grid container item lg={9} md={9} sm={12} xs={12}>
         {suggested?.map((s: Yelp, index) => {
+          // setDBSuggestions(s.name, s.url, s.rating, s.price, Math.round((getDistanceFromLatLonInKm(s.coordinates.latitude, s.coordinates.longitude, activity.location.lat, activity.location.lng)) * 10)/ 10, s.comments)
           const starString = Math.ceil(s.rating || 0) === s.rating ? `/yelp/regular_${s.rating}.png` : `/yelp/regular_${Math.floor(s.rating || 0)}_half.png`;
           return (
             <Grid container item lg={12} key={index}>
@@ -93,7 +123,8 @@ const Suggestions: FC<Props> = ({ activity }) => {
               </Grid>
             </Grid>
           );
-        })}
+        })
+        }
       </Grid>
     </Grid>
   );

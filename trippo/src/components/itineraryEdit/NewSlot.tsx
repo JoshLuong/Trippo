@@ -1,5 +1,5 @@
-import React, { FC, useState } from "react";
-import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import React, { FC, useState, useEffect } from "react";
+import { FormControl, InputLabel, Select, MenuItem, Snackbar, SnackbarCloseReason } from "@material-ui/core";
 import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid } from "@material-ui/core";
@@ -11,6 +11,8 @@ import DateFnsUtils from "@date-io/date-fns";
 import { useCreateActivityMutation } from "services/itinerary";
 import { Activity } from "types/models";
 import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage"
+import Alert from "@material-ui/lab/Alert";
+import Suggestions from "./Suggestions"
 
 
 interface Props {
@@ -39,8 +41,8 @@ const NewSlot: FC<Props> = ({
   const [createActivity, // This is the mutation trigger
     { isLoading: isUpdating }, // This is the destructured mutation result
   ] = useCreateActivityMutation();
-  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
-
+  // const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
+  // const [addActivityFeedback, setAddActivityFeedback] = useState(false);
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
@@ -62,6 +64,94 @@ const NewSlot: FC<Props> = ({
     setSelectedDate(event);
   };
 
+  
+  const getSuggestedBusinesses = async (activityId: any) => {
+    await fetch(`/api/yelp/attractions`, {
+      method: "POST",
+      credentials: 'include',
+      body: JSON.stringify({
+        latitude: destinationLat,
+        longitude: destinationLng,
+        rating: 3, // TODO: change to user input
+        price: "1, 2, 3", // TODO: change to user input
+        distance: 20000, // TODO: change to user input
+        time: new Date(selectedDate!).setHours(Number(time.split(":")[0]), Number(time.split(":")[1])),
+        itineraryId: itinerary?._id,
+        activityId: activityId
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(res => res.json());
+
+    if (Number(time.split(":")[0]) >= 6 && Number(time.split(":")[0]) <= 11) {
+      await fetch(`/api/yelp/restaurants/breakfast_brunch`, {
+        method: "POST",
+        credentials: 'include',
+        body: JSON.stringify({
+          latitude: destinationLat,
+          longitude: destinationLng,
+          rating: 3, // TODO: change to user input
+          price: "1, 2, 3", // TODO: change to user input
+          distance: 20000, // TODO: change to user input
+          time: new Date(selectedDate!).setHours(Number(time.split(":")[0]), Number(time.split(":")[1])),
+          itineraryId: itinerary?._id,
+          activityId: activityId
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+    }
+
+    if ((Number(time.split(":")[0]) >= 11 && Number(time.split(":")[0]) <= 14)
+        || (Number(time.split(":")[0]) >= 17 && Number(time.split(":")[0]) <= 21)){
+      await fetch(`/api/yelp/restaurants`, {
+        method: "POST",
+        credentials: 'include',
+        body: JSON.stringify({
+          latitude: destinationLat,
+          longitude: destinationLng,
+          rating: 3, // TODO: change to user input
+          price: "1, 2, 3", // TODO: change to user input
+          distance: 20000, // TODO: change to user input
+          time: new Date(selectedDate!).setHours(Number(time.split(":")[0]), Number(time.split(":")[1])),
+          itineraryId: itinerary?._id,
+          activityId: activityId
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json());
+    }
+
+    if (Number(time.split(":")[0]) >= 20 || Number(time.split(":")[0]) <= 3){
+      await fetch(`/api/yelp/nightlife`, {
+        method: "POST",
+        credentials: 'include',
+        body: JSON.stringify({
+          latitude: destinationLat,
+          longitude: destinationLng,
+          rating: 3, // TODO: change to user input
+          price: "1, 2, 3", // TODO: change to user input
+          distance: 20000, // TODO: change to user input
+          time: new Date(selectedDate!).setHours(Number(time.split(":")[0]), Number(time.split(":")[1])),
+          itineraryId: itinerary?._id,
+          activityId: activityId
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json());
+    }
+
+
+  }
+
   const addToItinerary = () => {
     const newActivity: Omit<Activity, "_id"> = {
       itinerary_id: itinerary?._id!,
@@ -75,18 +165,15 @@ const NewSlot: FC<Props> = ({
       cost: cost || undefined,
       type: type,
       comments: comments.split("\n"),
-      suggested: [{
-        // TODO: yelp suggestions from fusion api
-        // destination: destinationName,
-        // type: type,
-        // comments: comments,
-      }],
     };
-    
-    createActivity(newActivity);
+    console.log(new Date(selectedDate!).setHours(Number(time.split(":")[0]), Number(time.split(":")[1])));
+    createActivity(newActivity).then((res: any) => {
+      getSuggestedBusinesses(res.data);
+  })
     setSearchResult(null);
     handleClose();
   };
+
 
   const selectStyles = sc.selectStyles();
 
@@ -156,8 +243,9 @@ const NewSlot: FC<Props> = ({
       </sc.Destination>
     </Grid>
   );
-  
+
   return (
+    <>
     <sc.NewSlot>
       <sc.NameDiv>{destinationName}</sc.NameDiv>
       <sc.AdressDiv>{destinationAddress}</sc.AdressDiv>
@@ -181,7 +269,6 @@ const NewSlot: FC<Props> = ({
                   "aria-label": "change date",
                 }}
                 minDate={itinerary?.start_date.toString()}
-                // not sure why but the end date doesn't seem to match up
                 maxDate={itinerary?.end_date.toString()}
               />
             </sc.Time>
@@ -221,6 +308,12 @@ const NewSlot: FC<Props> = ({
         <sc.AddButton onClick={() => addToItinerary()}>Add</sc.AddButton>
       </sc.SlotContainer>
     </sc.NewSlot>
+    {/* <Snackbar transitionDuration={1000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={addActivityFeedback} autoHideDuration={5000} onClose={handleFeedbackClose}>
+      <Alert severity="success">
+        Your activities have been updated
+      </Alert>
+    </Snackbar> */}
+    </>
   );
 };
 

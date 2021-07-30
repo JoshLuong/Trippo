@@ -50,15 +50,18 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
   const { id } = useParams<{ id: string }>();
   const { data } = useGetItineraryByIdQuery(id);
 
+  const bbox = viewport.longitude && viewport.latitude ? [viewport.longitude - 1, viewport.latitude - 1, viewport.longitude + 1, viewport.latitude + 1] : [];
+
   const [activityPopup, setActivityPopup] = useState<number[]>([]);
 
   useEffect(() => {
     if (data) {
       setViewport({
         longitude: data.dest_coords.lng,
-        latitude: data.dest_coords.lat,
+        latitude: data.dest_coords.lat - 0.1,
         zoom: 10,
-        transitionDuration: 1000,
+        transitionDuration: 700,
+        pitch: 30,
         transitionInterpolator: new FlyToInterpolator(),
       });
     }
@@ -134,7 +137,8 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
       }
       <Geocoder
         mapRef={mapRef}
-        zoom={11}
+        zoom={10}
+        bbox={bbox}
         containerRef={geocoderContainerRef}
         onViewportChange={setViewport}
         onResult={(e: any) => setSearchResult(e.result)}

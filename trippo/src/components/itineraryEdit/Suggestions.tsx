@@ -3,6 +3,7 @@ import * as sc from "./Suggestions.styles";
 import { Activity, Yelp } from 'types/models';
 import { useAppSelector } from 'app/store';
 import { Grid } from "@material-ui/core";
+import { getDistanceFromLatLonInKm } from './utils';
 
 interface Props {
   renderIcon: (icon: string) => JSX.Element;
@@ -25,27 +26,6 @@ interface Props {
 const Suggestions: FC<Props> = ({ activity }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [suggested, setSuggested] = useState<Yelp[]>([]);
-  
-
-  // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
-  function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
-    var R = 6371; // Radius of the earth in km
-    var dLat = deg2rad(lat2-lat1);  // deg2rad below
-    var dLon = deg2rad(lon2-lon1); 
-    var a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2)
-      ; 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    var d = R * c; // Distance in km
-    return d;
-  }
-  
-  function deg2rad(deg: number) {
-    return deg * (Math.PI/180)
-  }
-
   
   // async function setDBSuggestions(name: any, url: any, rating: any, price: any, distance: any, comments: any) {
   //   await fetch(`/itineraries/suggestions`, {
@@ -107,7 +87,7 @@ const Suggestions: FC<Props> = ({ activity }) => {
                   {s.name}
                 </sc.Destination>
                 <sc.Distance>
-                  {Math.round((getDistanceFromLatLonInKm(s.coordinates.latitude, s.coordinates.longitude, activity.location.lat, activity.location.lng)) * 10)/ 10} kms away
+                  {getDistanceFromLatLonInKm(s.coordinates.latitude, s.coordinates.longitude, activity.location.lat, activity.location.lng)} kms away
                 </sc.Distance>
               </Grid>
               <Grid container item lg={4} md={4} sm={4} xs={4}>

@@ -23,7 +23,6 @@ export const AddressSpan = styled.span`
 `;
 
 export const Slot = styled.div<StyledTimeSlotProps>`
-  margin-top: 0.5em;
   border-radius: 0px 7px 7px 0px;
   padding-top: 0.75em;
   padding-bottom: 0.75em;

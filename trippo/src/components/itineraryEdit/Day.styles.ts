@@ -71,6 +71,12 @@ export const dayDate = styled.div`
   }
 `;
 
+export const Distance = styled.div`
+  border-left: 1.25px dashed ${c.DARK_GREY};
+  padding-left: 6px;
+  margin: 0.75em 3px;
+`;
+
 export const daysWeek = styled.div`
   display: inline-block;
   font-size: 1.25em;

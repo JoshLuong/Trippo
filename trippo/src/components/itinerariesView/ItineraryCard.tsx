@@ -1,7 +1,10 @@
 import React, { FC } from "react";
+import FadeIn from 'react-fade-in';
 import * as sc from "./ItineraryCard.styles";
+import * as c from "../../colors/colors";
 import moment from "moment";
 import { Grid } from "@material-ui/core";
+import EditIcon from '@material-ui/icons/Edit';
 import { Itinerary } from "types/models";
 import { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
@@ -9,11 +12,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import MainEditItineraryContainer from "components/itineraryForm/MainEditItineraryContainer"
 
 interface Props {
+  updateItinerary: (arg: Partial<Itinerary>) => any;
   card: Itinerary;
-  showEdit: boolean;
   handleRemove: () => void;
+  setSuccess: (isSuccessful: boolean) => void;
 }
 
 const renderNames = (name: string, card: Itinerary) => {
@@ -42,8 +47,9 @@ const renderNames = (name: string, card: Itinerary) => {
 };
 
 
-const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
+const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItinerary }) => {
   const [open, setOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -53,39 +59,54 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
     setOpen(false);
   };
 
+  const handleEdit = () => {
+    console.log(card);
+    setEdit(!edit);
+  }
+
+
   return (
-    <sc.Card>
-      <Grid container item lg={12}>
-        <Grid container item lg={8} sm={12}>
-          {renderNames(card.name, card)}
-        </Grid>
-        <sc.DateGrid container item lg={4} sm={12}>
-          <i className="far fa-calendar-alt"></i>
-          {moment(card.start_date).format("MMM Do YYYY") +
-            ` - ` +
-            moment(card.end_date).format("MMM Do YYYY")}
-        </sc.DateGrid>
-        <sc.CommentGrid container item lg={12}>
-          {card.comments}
-        </sc.CommentGrid>
-        {card.tags && (
-          <sc.LabelGrid container item lg={12}>
-            {card.tags.map((card: any, index: number) => {
-              return (
-                <sc.LabelDiv key={index}>
-                  <sc.StyledLabelIcon />
-                  {card}
-                </sc.LabelDiv>
-              );
-            })}
-          </sc.LabelGrid>
-        )}
-        {showEdit ? (
-          <sc.EditGrid container item lg={12}>
+    <React.Fragment>
+      {edit &&
+        <MainEditItineraryContainer card={card} openDialog={handleClickOpen} handleShowEditItinerary={handleEdit}
+          setSuccess={setSuccess} updateItinerary={updateItinerary} />
+      }
+      <FadeIn transitionDuration={600} delay={500}>
+        <sc.Card>
+          <Grid container item lg={12}>
+            <Grid container item lg={8} sm={12}>
+              {renderNames(card.name, card)}
+            </Grid>
+            <sc.DateGrid container item lg={4} sm={12}>
+              <i className="far fa-calendar-alt"></i>
+              {moment(card.start_date).format("MMM Do YYYY") +
+                ` - ` +
+                moment(card.end_date).format("MMM Do YYYY")}
+            </sc.DateGrid>
+            <sc.StyledIconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleEdit}
+            >
+              <EditIcon style={{ color: c.BLACK }} />
+            </sc.StyledIconButton>
+            <sc.CommentGrid container item lg={12}>
+              {card.comments}
+            </sc.CommentGrid>
+            {card.tags && (
+              <sc.LabelGrid container item lg={12}>
+                {card.tags.map((card: any, index: number) => {
+                  return (
+                    <sc.LabelDiv key={index}>
+                      <sc.StyledLabelIcon />
+                      {card}
+                    </sc.LabelDiv>
+                  );
+                })}
+              </sc.LabelGrid>
+            )}
             <div>
-              <sc.EditButton onClick={handleClickOpen}>
-                <i className="fas fa-minus-circle"></i>
-              </sc.EditButton>
               <Dialog
                 open={open}
                 onClose={handleClose}
@@ -109,6 +130,7 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
                     onClick={() => {
                       handleRemove();
                       handleClose();
+                      handleEdit();
                     }}
                     color="primary"
                     autoFocus
@@ -118,10 +140,10 @@ const ItineraryCard: FC<Props> = ({ card, showEdit, handleRemove }) => {
                 </DialogActions>
               </Dialog>
             </div>
-          </sc.EditGrid>
-        ) : null}
-      </Grid>
-    </sc.Card>
+          </Grid>
+        </sc.Card>
+      </FadeIn>
+    </React.Fragment>
   );
 };
 

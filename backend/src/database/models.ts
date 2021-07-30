@@ -22,7 +22,7 @@ export const yelpSchema = new Schema<IYelp>({
     type: String,
     unique: true // `email` must be unique
   },
-  url:String,
+  url: String,
   rating: Number,
   price: String,
   coordinates: {
@@ -103,12 +103,12 @@ export interface IItinerary {
   collaborators: {
     user_id: string;
     name: string;
+    email: string;
   }[];
   budget?: number;
   dining_budget?: number;
   restaurant_ratings?: number;
-  max_walking_dist?: number;
-  max_driving_dist?: number;
+  max_traveling_dist?: number;
   current_cost?: number;
   comments?: string;
   tags: string[];
@@ -117,7 +117,7 @@ export interface IItinerary {
 
 export const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
 }, { toObject: { versionKey: false } });
 
 export const itinerarySchema = new Schema<IItinerary>({
@@ -131,15 +131,15 @@ export const itinerarySchema = new Schema<IItinerary>({
     },
     required: true,
   },
-  budget: { type: Number, default: 500 },
+  budget: { type: Number, default: null },
   current_cost: { type: Number, default: 0 },
   dining_budget: { type: Number, default: 2 },
   restaurant_ratings: { type: Number, default: 3 },
-  max_walking_dist: { type: Number, default: 5 },
-  max_driving_dist: { type: Number, default: 15 },
+  max_traveling_dist: { type: Number, default: 10 },
   collaborators: [new Schema({
     user_id: Schema.Types.ObjectId,
     name: { type: String, required: true },
+    email: { type: String, required: true, unique: true }
   })],
   comments: String,
   tags: [String],
@@ -147,6 +147,16 @@ export const itinerarySchema = new Schema<IItinerary>({
   end_date: { type: Date, required: true },
   activities: [activitySchema],
 }, { toObject: { versionKey: false } });
+
+itinerarySchema.index({ user_id: 1, name: 1 }, { unique: true });
+
+itinerarySchema.pre('validate', function (next) {
+  if (this.start_date > this.end_date) {
+    next(new Error('End Date must be greater than Start Date'));
+  } else {
+    next();
+  }
+});
 
 export const User = model<IUser>('User', userSchema);
 export const Yelp = model<IYelp>('Yelp', yelpSchema);

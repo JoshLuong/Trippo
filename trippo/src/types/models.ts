@@ -25,6 +25,7 @@ export interface Activity {
 }
 
 export interface User {
+  _id: string;
   name: string,
   email: string,
 }
@@ -56,13 +57,13 @@ export interface Itinerary {
   };
   dining_budget?: number;
   restaurant_ratings?: number;
-  max_walking_dist?: number;
-  max_driving_dist?: number;
+  max_traveling_dist: number;
   collaborators: {
     user_id: string;
     name: string;
+    email: string;
   }[];
-  budget?: number;
+  budget?: number | null;
   comments?: string;
   tags: string[];
   activities: Activity[];

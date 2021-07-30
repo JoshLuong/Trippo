@@ -4,7 +4,7 @@ export const containerDiv = styled.div`
   display: flex;
   position: sticky;
   min-height: 100%;
-  background: url(welcome.png) no-repeat fixed center;
+  background: url(/welcome.png) no-repeat fixed center;
   background-size: cover;
   flex-direction: row-reverse;
   flex-wrap: wrap;

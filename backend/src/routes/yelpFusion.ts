@@ -89,7 +89,7 @@ router.post("/restaurants", async (req, res, _next) => {
     longitude: longitude,
     price: price,
     radius: distance, // meters
-    open_at: Date.now, // TODO: test purposing, should use the time from req.body (accepts unix int (use time.now if time is Date))
+    open_at: time.now, // TODO: test purposing, should use the time from req.body (accepts unix int (use time.now if time is Date))
     limit: 25,
   };
 
@@ -148,7 +148,7 @@ router.post("/nightlife", async (req, res, _next) => {
     categories: "bars,beergardens,comedyclubs,danceclubs,karaoke,poolhalls",
     latitude: latitude,
     longitude: longitude,
-    open_at: Date.now,
+    open_at: time.now,
     radius: distance, // meters
     limit: 25,
   };
@@ -213,7 +213,7 @@ router.post("/attractions", async (req, res, _next) => {
     categories: activeLife + "," + artsAndEntertainment + "," + shopping,
     latitude: latitude,
     longitude: longitude,
-    open_at: Date.now,
+    open_at: time.now,
     radius: distance, // meters
     limit: 25,
   };

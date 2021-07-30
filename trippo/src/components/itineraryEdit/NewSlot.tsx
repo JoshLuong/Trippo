@@ -83,7 +83,7 @@ const NewSlot: FC<Props> = ({
         longitude: destinationLng,
         rating: 3, // TODO: change to user input
         price: "1, 2, 3", // TODO: change to user input
-        distance: 20000, // TODO: change to user input
+        distance: 10000, // TODO: change to user input
         time: new Date(selectedDate!).setHours(
           Number(time.split(":")[0]),
           Number(time.split(":")[1])
@@ -105,7 +105,7 @@ const NewSlot: FC<Props> = ({
           longitude: destinationLng,
           rating: 3, // TODO: change to user input
           price: "1, 2, 3", // TODO: change to user input
-          distance: 20000, // TODO: change to user input
+          distance: 10000, // TODO: change to user input
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])
@@ -131,7 +131,7 @@ const NewSlot: FC<Props> = ({
           longitude: destinationLng,
           rating: 3, // TODO: change to user input
           price: "1, 2, 3", // TODO: change to user input
-          distance: 20000, // TODO: change to user input
+          distance: 10000, // TODO: change to user input
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])
@@ -153,8 +153,8 @@ const NewSlot: FC<Props> = ({
           latitude: destinationLat,
           longitude: destinationLng,
           rating: 3, // TODO: change to user input
-          price: "1, 2, 3", // TODO: change to user input
-          distance: 20000, // TODO: change to user input
+          price: "3, 4", // TODO: change to user input
+          distance: 10000, // TODO: change to user input
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])

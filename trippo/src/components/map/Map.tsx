@@ -54,6 +54,10 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
 
   const [activityPopup, setActivityPopup] = useState<number[]>([]);
 
+  const handleViewportChange = (viewport: any) => {
+    setViewport({...viewport, pitch: 30});
+  }
+
   useEffect(() => {
     if (data) {
       setViewport({
@@ -140,7 +144,7 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
         zoom={10}
         bbox={bbox}
         containerRef={geocoderContainerRef}
-        onViewportChange={setViewport}
+        onViewportChange={handleViewportChange}
         onResult={(e: any) => setSearchResult(e.result)}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         onClear={() => setSearchResult(null)}

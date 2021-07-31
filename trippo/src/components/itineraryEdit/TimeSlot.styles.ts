@@ -16,8 +16,13 @@ export const StyledIconButton = styled(IconButton)`
   margin-top: -6px;
 `;
 
+export const AddressSpan = styled.span`
+  font-weight: 100;
+  font-size: 0.85em;
+  margin-bottom: 0.45em;
+`;
+
 export const Slot = styled.div<StyledTimeSlotProps>`
-  margin-top: 0.5em;
   border-radius: 0px 7px 7px 0px;
   padding-top: 0.75em;
   padding-bottom: 0.75em;

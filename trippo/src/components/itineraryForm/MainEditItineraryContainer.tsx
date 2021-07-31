@@ -37,8 +37,7 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
     // Preference Grid state
     const [rating, setRating] = useState(card.restaurant_ratings);
     const [price, setPrice] = useState(card.dining_budget);
-    const [maxWalk, setMaxWalk] = useState(card.max_walking_dist);
-    const [maxDrive, setMaxDrive] = useState(card.max_driving_dist);
+    const [maxTravel, setMaxTravel] = useState(card.max_traveling_dist);
 
     const user = useAppSelector((state) => state.user.value);
 
@@ -77,8 +76,7 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
             budget: bud || null,
             dining_budget: price,
             restaurant_ratings: rating,
-            max_walking_dist: maxWalk,
-            max_driving_dist: maxDrive,
+            max_traveling_dist: maxTravel,
             collaborators: [...collaborators],
             comments: descRef.current?.value,
             tags: tags,
@@ -157,7 +155,7 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
                 <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={card.budget || undefined}
                     defaultEnd={parseDate(card.end_date)} defaultStart={parseDate(card.start_date)} />
                 <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}
-                    defaultMaxDrive={maxDrive} defaultMaxWalk={maxWalk} setMaxDrive={setMaxDrive} setMaxWalk={setMaxWalk} />
+                    defaultMaxTravel={maxTravel} setMaxTravel={setMaxTravel} />
                 <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
                     <Grid item xs={12} sm={9} md={7} lg={5}>
                         <sc.userButton onClick={() => openDialog()} >Delete</sc.userButton>

@@ -21,7 +21,7 @@ interface Props {
 }
 
 const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity, deleteActivity }) => {
-  const { time, destination, comments, type, suggested } = activity;
+  const { time, destination, comments, type, address, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
   const [commentsString, setCommentsString] = useState(comments.join('\n'));
@@ -88,11 +88,14 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   const renderHeaderContent = () => (
     <sc.HeaderGrid container item lg={11} md={11} sm={11} xs={11}>
       <sc.Destination>
+        <Grid container item lg={9} md={9} sm={10} xs={10}>
         <Grid container item lg={1} md={1} sm={1} xs={1}>
           {d.renderIcon(type)}
         </Grid>
         <Grid container item lg={9} md={9} sm={10} xs={10}>
-          {destination}
+          <span>{destination}</span>
+        </Grid>
+        <sc.AddressSpan>{address}</sc.AddressSpan>
         </Grid>
         <Grid container item lg={2} md={2} sm={3} xs={3}>
           <sc.Cost {...costStyling}>
@@ -173,6 +176,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
         </sc.SlotGrid>
         {showSuggestions ? (
           <Suggestions
+            activity={activity}
             renderIcon={d.renderIcon}
             suggested={suggested}
           ></Suggestions>

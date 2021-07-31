@@ -1,19 +1,57 @@
 import 'dotenv/config';
 import { Schema, model, ObjectId } from 'mongoose';
 
+export interface IYelp {
+  name: string;
+  business_id: string;
+  url: string;
+  rating: number;
+  price?: string;
+  distance: number;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  comments: string;
+}
+
+export const yelpSchema = new Schema<IYelp>({
+  createdAt: { type: Date, expires: '24h', default: Date.now },
+  name: String,
+  business_id: {
+    type: String,
+    unique: true // `email` must be unique
+  },
+  url: String,
+  rating: Number,
+  price: String,
+  coordinates: {
+    latitude: Number,
+    longitude: Number,
+  },
+  distance: Number,
+  comments: String,
+}, { toObject: { versionKey: false } });
 export interface IActivity {
   location: {
     lat: number;
     lng: number;
   };
+  address?: string;
   time?: Date;
   destination?: string;
   cost?: number;
   type?: string;
   comments: string[];
+  business_ids: string[]
   suggested?: {
+    // TODO DELETE
     destination: string;
     type: string;
+    url: string;
+    rating: number;
+    price?: string;
+    distance: number;
     comments: string;
   }[];
 }
@@ -26,15 +64,21 @@ export const activitySchema = new Schema<IActivity>({
     },
     required: true,
   },
+  address: String,
   time: Date,
   destination: String,
   cost: Number,
   type: String,
   comments: [String],
+  business_ids: [String],
   suggested: [new Schema({
     destination: String,
     type: String,
     comments: String,
+    url: String,
+    rating: Number,
+    price: String,
+    distance: Number,
   })],
 }, { toObject: { versionKey: false } });
 
@@ -64,8 +108,7 @@ export interface IItinerary {
   budget?: number;
   dining_budget?: number;
   restaurant_ratings?: number;
-  max_walking_dist?: number;
-  max_driving_dist?: number;
+  max_traveling_dist?: number;
   current_cost?: number;
   comments?: string;
   tags: string[];
@@ -92,8 +135,7 @@ export const itinerarySchema = new Schema<IItinerary>({
   current_cost: { type: Number, default: 0 },
   dining_budget: { type: Number, default: 2 },
   restaurant_ratings: { type: Number, default: 3 },
-  max_walking_dist: { type: Number, default: 5 },
-  max_driving_dist: { type: Number, default: 15 },
+  max_traveling_dist: { type: Number, default: 10 },
   collaborators: [new Schema({
     user_id: Schema.Types.ObjectId,
     name: { type: String, required: true },
@@ -117,5 +159,6 @@ itinerarySchema.pre('validate', function (next) {
 });
 
 export const User = model<IUser>('User', userSchema);
+export const Yelp = model<IYelp>('Yelp', yelpSchema);
 export const Itinerary = model<IItinerary>('Itinerary', itinerarySchema);
 export const Activity = model<IActivity>('Activity', activitySchema);

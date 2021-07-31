@@ -6,6 +6,7 @@ import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage
 import { Grid, Tooltip } from "@material-ui/core";
 import { useAppSelector } from 'app/store';
 import { Activity } from 'types/models';
+import { getDistanceFromLatLonInKm } from './utils';
 
 interface Props {
   date: Date;
@@ -15,6 +16,7 @@ interface Props {
 const Day: FC<Props> = ({ date, handleCalendarView }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [editedItinerary, setEditedItinerary] = useState(itinerary);
+  let prevActivity: Activity | null = null;
   const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
 
   const editActivity = (activity: Activity) => {
@@ -80,8 +82,15 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
       <div>
           <sc.TimeSlots>
             {dayActivities.sort((a, b) => a.time.localeCompare(b.time)).map((activity, idx) => {
+              const prevDistance = prevActivity ? getDistanceFromLatLonInKm(prevActivity.location?.lat, prevActivity.location?.lng, activity.location.lat, activity.location.lng) : null;
+              prevActivity = activity;
               return (
                 <div key={activity._id}>
+                  {
+                    prevDistance ? (
+                      <sc.Distance>{prevDistance} kms away</sc.Distance>
+                    ) : null
+                  }
                   <TimeSlot
                     handleHideCostToggle={handleHideCostToggle}
                     activity={activity}

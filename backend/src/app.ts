@@ -9,6 +9,7 @@ import path from 'path';
 import itineraryRouter from './routes/itineraries';
 import userRouter from './routes/users';
 import googleAuthRouter from './routes/googleAuth';
+import yelpFusionRouter from './routes/yelpFusion';
 
 mongoose.connect(process.env.DATABASE_URL!, {
   useNewUrlParser: true,
@@ -52,6 +53,7 @@ mongoose.connect(process.env.DATABASE_URL!, {
   app.use('/api/itineraries', itineraryRouter);
   app.use('/api/users', userRouter);
   app.use('/api/v1/auth', googleAuthRouter)
+  app.use('/api/yelp', yelpFusionRouter);
 
   app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     res.status(err.statusCode || 500).send(err.message);

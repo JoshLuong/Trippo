@@ -13,7 +13,8 @@
     "express-session": "^1.17.2",
     "google-auth-library": "^7.3.0",
     "http-errors": "~1.6.3",
-    "mongoose": "^5.13.2"
+    "mongoose": "^5.13.2",
+    "yelp-fusion": "^3.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

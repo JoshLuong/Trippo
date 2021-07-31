@@ -34,8 +34,7 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
     // Preference Grid state
     const [rating, setRating] = useState(3);
     const [price, setPrice] = useState(2);
-    const [maxWalk, setMaxWalk] = useState(5);
-    const [maxDrive, setMaxDrive] = useState(15);
+    const [maxTravel, setMaxTravel] = useState(10);
 
 
     const user = useAppSelector((state) => state.user.value);
@@ -65,8 +64,7 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
             budget: bud || null,
             dining_budget: price,
             restaurant_ratings: rating,
-            max_walking_dist: maxWalk,
-            max_driving_dist: maxDrive,
+            max_traveling_dist: maxTravel,
             collaborators: [...collaborators],
             comments: descRef.current?.value,
             tags: tags,
@@ -132,7 +130,7 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
                     defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={""} defaultName={""} />
                 <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={undefined} defaultEnd={""} defaultStart={""} />
                 <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}
-                    defaultMaxDrive={maxDrive} defaultMaxWalk={maxWalk} setMaxDrive={setMaxDrive} setMaxWalk={setMaxWalk} />
+                    defaultMaxTravel={maxTravel} setMaxTravel={setMaxTravel} />
                 <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
                     <Grid item xs={12} sm={9} md={6} lg={4}>
                         <sc.userButton onClick={() => handleShowNewItinerary(false)} >Cancel</sc.userButton>

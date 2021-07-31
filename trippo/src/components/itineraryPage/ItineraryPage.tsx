@@ -27,6 +27,11 @@ export type ContextInterface = {
 
 export const ItineraryContext = React.createContext<ContextInterface>(null);
 
+let destinationName: string;
+let destinationAddress: string;
+let destinationLat: number;
+let destinationLng: number;
+
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
   const [showExpenses, setShowExpenses] = useState(false);
@@ -37,21 +42,23 @@ function ItineraryPage() {
   const geocoderContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
+  const [closeSlotNewActivity, setCloseSlotNewActivity] = useState(false);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { data: itinerary } = useGetItineraryByIdQuery(id);
   const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] = useUpdateItineraryMutation();
+  const [searchResult, setSearchResult] = useState<any>(null);
+
 
   useEffect(() => {
-    if (updatedItinerary) {
-      console.log(updatedItinerary);
+    if (updatedItinerary || closeSlotNewActivity) {
       dispatch(setItinerary(updatedItinerary));
       setShowEditFeedback(true);
     } else if (!isUpdating) {
       dispatch(setItinerary(itinerary));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itinerary, updatedItinerary, isUpdating]);
+  }, [itinerary, updatedItinerary, isUpdating, closeSlotNewActivity]);
 
   // tip: to use showUnsavedChangesModal, pass in handler function the user wants to execute when there are unsaved changes,
   // but the function should not handle any unsavedChanges state, as it will reference the old state from when the function
@@ -90,12 +97,17 @@ function ItineraryPage() {
     setIsLoading(!isLoading);
   }
 
-  function handleNewSlotClick(name: string) { // TODO addd more to here
+  function handleNewSlotClick(name: string, address: string, lat: number, lng: number) {
+    destinationName = name;
+    destinationAddress = address;
+    destinationLat = lat;
+    destinationLng = lng;
     setCanOpenNewSlot(true);
   }
 
   function handleNewSlotClose() { 
     setCanOpenNewSlot(false);
+    setCloseSlotNewActivity(true);
   }
 
   const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {
@@ -171,6 +183,8 @@ function ItineraryPage() {
             geocoderContainerRef={geocoderContainerRef}
             handleIsLoading={handleIsLoading}
             handleNewSlotClick={handleNewSlotClick}
+            searchResult={searchResult}
+            setSearchResult={setSearchResult}
           />
           <sc.SideBar>
             <sc.StyledReceiptIcon>
@@ -196,7 +210,13 @@ function ItineraryPage() {
           </sc.Container>
           ) : null}
           {
-            canOpenNewSlot ? <NewSlot handleClose={handleNewSlotClose}/>
+            canOpenNewSlot ? <NewSlot 
+            handleClose={handleNewSlotClose} 
+            destinationName = {destinationName} 
+            destinationAddress={destinationAddress} 
+            destinationLat={destinationLat} 
+            destinationLng={destinationLng}
+            setSearchResult={setSearchResult}/>
               : null
           }
         </sc.ItineraryDiv>

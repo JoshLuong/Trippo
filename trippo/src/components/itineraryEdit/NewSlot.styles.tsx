@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
-import { Grid, TextField } from "@material-ui/core";
+import { Grid, TextField, FormControl } from "@material-ui/core";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 
 export const Cancel = styled.button`
   top: 0;
@@ -17,6 +18,14 @@ export const Cancel = styled.button`
   }
 `;
 
+export const StyledDatePicker = styled(KeyboardDatePicker)`
+  margin-top: 0;
+  button {
+    width: 5px;
+    height: 5px;
+    padding: 0;
+  }
+`;
 export const SlotContainer = styled(Grid)`
   margin: 0.5em 0;
 `;
@@ -90,13 +99,13 @@ export const Comments = styled.ul`
 export const AdressDiv = styled.h2`
   display: block;
   margin: 0 0 0 10px;
-  font-weight: bold;
+  font-weight: 100;
   font-size: 1em;
 `;
 
 export const NameDiv = styled.h1`
   display: inline-block;
-  margin: 0.5em 1em 0 10px;
+  margin: 0.5em 1.25em 0 10px;
   font-weight: bold;
   font-size: 1.5em;
 `;
@@ -142,6 +151,25 @@ export const Destination = styled.div`
   }
 
 `;
+
+export const StyledFormControl = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: 'initial',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#219EBC',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&:hover fieldset': {
+        borderColor: '#219EBC',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#219EBC',
+      },
+    },
+  },
+})(FormControl);
 
 export const textField = withStyles({
   root: {

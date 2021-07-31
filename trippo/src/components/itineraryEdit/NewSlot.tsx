@@ -12,13 +12,13 @@ import { useAppDispatch, useAppSelector } from "app/store";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+import { setItinerary } from 'app/reducers/itinerarySlice';
 import { useCreateActivityMutation } from "services/itinerary";
 import { Activity } from "types/models";
 import {
   ContextInterface,
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
-import { setItinerary } from "app/reducers/itinerarySlice";
 
 interface Props {
   handleClose: () => void;
@@ -37,6 +37,7 @@ const NewSlot: FC<Props> = ({
   destinationLng,
   setSearchResult,
 }) => {
+  const dispatch = useAppDispatch();
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [type, setType] = useState(d.OTHER);
   const [cost, setCost] = useState(0);
@@ -48,7 +49,6 @@ const NewSlot: FC<Props> = ({
     { isLoading: isUpdating, data: updatedItinerary }, // This is the destructured mutation result
   ] = useCreateActivityMutation();
   const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
-  const dispatch = useAppDispatch();
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
@@ -189,7 +189,11 @@ const NewSlot: FC<Props> = ({
       comments: comments.split("\n"),
     };
     createActivity(newActivity).then((res: any) => {
-      getSuggestedBusinesses(res.data);
+      dispatch(setItinerary({
+        ...itinerary,
+        activities: itinerary?.activities ? [...itinerary?.activities, res.data] : [res.data],
+      }));
+      getSuggestedBusinesses(res.data._id);
     });
     setSearchResult(null);
     handleClose();

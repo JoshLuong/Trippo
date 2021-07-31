@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import userReducer from "../reducers/userSlice";
 import itineraryReducer from "../reducers/itinerarySlice";
 import { itineraryApi } from 'services/itinerary';
+import { userApi } from 'services/user';
 
 const store = configureStore({
   // add reducers to the store
@@ -10,9 +11,10 @@ const store = configureStore({
     itinerary: itineraryReducer,
     user: userReducer,
     [itineraryApi.reducerPath]: itineraryApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
   },
 
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(itineraryApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(itineraryApi.middleware, userApi.middleware)
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

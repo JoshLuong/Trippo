@@ -3,12 +3,11 @@
     "sourceMap": true,
     "outDir": "dist",
     "strict": true,
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom"],
     "target": "es6",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "src",
-    "noEmit": true,
+    "baseUrl": "src"
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]

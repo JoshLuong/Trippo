@@ -1,17 +1,14 @@
 import React, { FC, useState, useEffect } from "react";
 import {
-  FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Snackbar,
-  SnackbarCloseReason,
 } from "@material-ui/core";
 import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
-import { useAppSelector } from "app/store";
+import { useAppDispatch, useAppSelector } from "app/store";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -21,8 +18,7 @@ import {
   ContextInterface,
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
-import Alert from "@material-ui/lab/Alert";
-import Suggestions from "./Suggestions";
+import { setItinerary } from "app/reducers/itinerarySlice";
 
 interface Props {
   handleClose: () => void;
@@ -49,10 +45,10 @@ const NewSlot: FC<Props> = ({
   const [selectedDate, setSelectedDate] = useState(itinerary?.start_date);
   const [
     createActivity, // This is the mutation trigger
-    { isLoading: isUpdating }, // This is the destructured mutation result
+    { isLoading: isUpdating, data: updatedItinerary }, // This is the destructured mutation result
   ] = useCreateActivityMutation();
-  // const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
-  // const [addActivityFeedback, setAddActivityFeedback] = useState(false);
+  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
+  const dispatch = useAppDispatch();
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
@@ -73,6 +69,13 @@ const NewSlot: FC<Props> = ({
   const handleDateChange = (event: any) => {
     setSelectedDate(event);
   };
+
+  useEffect(() => {
+    if (updatedItinerary) {
+      dispatch(setItinerary(updatedItinerary));
+      console.log("useffect1")
+    }
+  }, [itinerary, updatedItinerary, isUpdating, handleClose]);
 
   const getSuggestedBusinesses = async (activityId: any) => {
     await fetch(`/api/yelp/attractions`, {
@@ -325,11 +328,6 @@ const NewSlot: FC<Props> = ({
           <sc.AddButton onClick={() => addToItinerary()}>Add</sc.AddButton>
         </sc.SlotContainer>
       </sc.NewSlot>
-      {/* <Snackbar transitionDuration={1000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={addActivityFeedback} autoHideDuration={5000} onClose={handleFeedbackClose}>
-      <Alert severity="success">
-        Your activities have been updated
-      </Alert>
-    </Snackbar> */}
     </>
   );
 };

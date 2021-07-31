@@ -26,27 +26,6 @@ interface Props {
 const Suggestions: FC<Props> = ({ activity }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [suggested, setSuggested] = useState<Yelp[]>([]);
-  
-  // async function setDBSuggestions(name: any, url: any, rating: any, price: any, distance: any, comments: any) {
-  //   await fetch(`/itineraries/suggestions`, {
-  //     method: "POST",
-  //     credentials: 'include',
-  //     body: JSON.stringify({
-  //       itineraryId: itinerary?._id,
-  //       activityId: activity._id,
-  //       destination: name,
-  //       url: url,
-  //       rating: rating,
-  //       price: price,
-  //       distance: distance,
-  //       comments: comments,
-  //     }),
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //   .then(res => console.log(res.json()));
-  // }
 
   useEffect(() => {
     // removes console mounting error

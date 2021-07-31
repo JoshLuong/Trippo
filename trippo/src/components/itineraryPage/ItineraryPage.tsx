@@ -42,6 +42,7 @@ function ItineraryPage() {
   const geocoderContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
+  const [closeSlotNewActivity, setCloseSlotNewActivity] = useState(false);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { data: itinerary } = useGetItineraryByIdQuery(id);
@@ -50,15 +51,14 @@ function ItineraryPage() {
 
 
   useEffect(() => {
-    if (updatedItinerary) {
-      console.log(updatedItinerary);
+    if (updatedItinerary || closeSlotNewActivity) {
       dispatch(setItinerary(updatedItinerary));
       setShowEditFeedback(true);
     } else if (!isUpdating) {
       dispatch(setItinerary(itinerary));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itinerary, updatedItinerary, isUpdating]);
+  }, [itinerary, updatedItinerary, isUpdating, closeSlotNewActivity]);
 
   // tip: to use showUnsavedChangesModal, pass in handler function the user wants to execute when there are unsaved changes,
   // but the function should not handle any unsavedChanges state, as it will reference the old state from when the function
@@ -107,7 +107,7 @@ function ItineraryPage() {
 
   function handleNewSlotClose() { 
     setCanOpenNewSlot(false);
-    setShowUnsavedChangesModal(null);
+    setCloseSlotNewActivity(true);
   }
 
   const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {

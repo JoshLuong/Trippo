@@ -39,9 +39,13 @@ export const Spacer = styled.div`
   width: 2em;
 `;
 
+export const StickyDiv = styled.div`
+  position: sticky;
+  top: 0;
+`;
+
 export const dayDate = styled.div`
   margin-bottom: 0.5em;
-  position: relative;
   display: flex;
   color: ${c.WHITE};
   font-weight: 545;

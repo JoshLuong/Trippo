@@ -12,6 +12,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { useAppSelector } from 'app/store';
+import { User } from 'types/models';
 import MainEditItineraryContainer from "components/itineraryForm/MainEditItineraryContainer"
 
 interface Props {
@@ -21,18 +23,22 @@ interface Props {
   setSuccess: (isSuccessful: boolean) => void;
 }
 
-const renderNames = (name: string, card: Itinerary) => {
-  const { collaborators: users } = card;
+const renderNames = (name: string, card: Itinerary, user: User) => {
+  const { collaborators } = card;
+  const users = collaborators.slice();
   let names = "";
 
+  if (card.user_id === user._id ) names = `${user.name} (owner)`;
+  if (names !== "" && users.length >=1) names += ", ";
+
   if (users.length === 1) {
-    names = users[0].name;
+    names += `${users[0].name}`;
   } else if (users.length === 2) {
-    names = `${users[0].name} and ${users[1].name}`;
+    names += `${users[0].name} and ${users[1].name}`;
   } else if (users.length === 3) {
-    names = `${users[0].name}, ${users[1].name} + 1 other`;
+    names += `${users[0].name}, ${users[1].name} + 1 other`;
   } else if (users.length > 3) {
-    names = `${users[0].name}, ${users[1].name} + ${users.length - 2} others`;
+    names += `${users[0].name}, ${users[1].name} + ${users.length - 2} others`;
   }
 
   return (
@@ -48,6 +54,7 @@ const renderNames = (name: string, card: Itinerary) => {
 
 
 const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItinerary }) => {
+  const user = useAppSelector((state) => state.user.value);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
 
@@ -60,7 +67,6 @@ const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItiner
   };
 
   const handleEdit = () => {
-    console.log(card);
     setEdit(!edit);
   }
 
@@ -72,12 +78,12 @@ const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItiner
           setSuccess={setSuccess} updateItinerary={updateItinerary} />
       }
       <FadeIn transitionDuration={600} delay={500}>
-        <sc.Card>
-          <Grid container item lg={12}>
-            <Grid container item lg={8} sm={12}>
-              {renderNames(card.name, card)}
+        <sc.Card color={card.user_id === user?._id ? c.DARK_BLUE : c.DARK_ORANGE }>
+          <Grid item container lg={12}>
+            <Grid container item lg={7} sm={12}>
+              {user && renderNames(card.name, card, user)}
             </Grid>
-            <sc.DateGrid container item lg={4} sm={12}>
+            <sc.DateGrid container item lg={5} sm={12}>
               <i className="far fa-calendar-alt"></i>
               {moment(card.start_date).format("MMM Do YYYY") +
                 ` - ` +

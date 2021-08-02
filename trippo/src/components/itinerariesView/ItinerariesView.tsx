@@ -36,6 +36,7 @@ const ItinerariesView = () => {
   const [showNewItinerary, setShowNewItinerary] = useState(false);
 
   const [successSnackbar, setSuccess] = useState(false);
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
 
   const handlePageChange = useCallback((_event: any, page: number) => {
     history.push({
@@ -64,19 +65,31 @@ const ItinerariesView = () => {
     setShowNewItinerary(canShow);
   }
 
-  const handleClose = (event: any, reason: SnackbarCloseReason) => {
+  const handleSuccessClose = (event: any, reason: SnackbarCloseReason) => {
     if (reason === 'clickaway') {
       return;
     }
     setSuccess(false);
   }
 
+  const handleErrorClose = (event: any, reason: SnackbarCloseReason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorSnackbar(false);
+  }
+
   // TODO: take out inline style; move to search 
   return (
     <sc.ItinerariesViewGrid>
-      <Snackbar open={successSnackbar} autoHideDuration={5000} onClose={handleClose}>
+      <Snackbar open={successSnackbar} autoHideDuration={3000} onClose={handleSuccessClose}>
         <Alert onClose={() => setSuccess(false)} severity="success">
           Success
+        </Alert>
+      </Snackbar>
+      <Snackbar open={errorSnackbar} autoHideDuration={3000} onClose={handleErrorClose}>
+        <Alert onClose={() => setErrorSnackbar(false)} severity="error">
+          Unable to process request, please check that you have proper user priveleges.
         </Alert>
       </Snackbar>
       <div
@@ -111,8 +124,12 @@ const ItinerariesView = () => {
                 updateItinerary={updateItinerary}
                 handleRemove={async () => {
                   deleteItinerary(card._id)
-                    .then(() => {
-                      setSuccess(true);
+                    .then((res: any) => {
+                      if (res.error) {
+                        setErrorSnackbar(true);
+                      } else {
+                        setSuccess(true);
+                      }
                     })
                     .catch((e) => { console.log(e) })
                 }}

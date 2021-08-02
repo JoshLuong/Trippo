@@ -197,6 +197,10 @@ export const StyledFormControl = styled(FormControl)`
 `;
 export const StyledTextField = withStyles({
   root: {
+    '& label': {
+      paddingRight: `7px`,
+      backgroundColor: 'white',
+    },
     '& label.Mui-focused': {
       color: `${c.DARK_GREY}`,
     },

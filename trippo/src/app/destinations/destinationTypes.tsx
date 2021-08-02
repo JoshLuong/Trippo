@@ -51,24 +51,24 @@ export function renderIcon(t: string | undefined) {
   }
 };
 
-export function getIconColor(t: string | undefined): string {
+export function getIconColor(t: string | undefined, opacity: string): string {
   switch (t) {
     case RESTAURANT:
-      return "rgba(7,59,76,0.73)";
+      return `rgba(7,59,76,${opacity})`;
     case AIRPORT:
-      return "rgba(39,125,161,0.73)";
+      return `rgba(39,125,161,${opacity})`;
     case HOTEL:
-      return "rgba(46,196,182,0.73)";
+      return `rgba(46,196,182,${opacity})`;
     case PARK:
-      return "rgba(109,190,115,0.73)";
+      return `rgba(109,190,115,${opacity})`;
     case BEACH:
-      return "rgba(0,187,249,0.73)";
+      return `rgba(0,187,249,${opacity})`;
     case SHOPPING: 
-      return "rgba(255,213,0,0.73)";
+      return `rgba(255,213,0,${opacity})`;
     case ATTRACTION:
-      return "rgba(239,71,111,0.73)";
+      return `rgba(239,71,111,${opacity})`;
     default:
-      return "rgba(255,183,3,0.73)";
+      return `rgba(255,183,3,${opacity})`;
     // code block
   }
 };

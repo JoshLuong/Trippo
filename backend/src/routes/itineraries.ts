@@ -6,10 +6,10 @@ const router = express.Router();
 router.get('/', async (req: any, res, _next) => {
   const { offset, limit, name } = req.query;
   const regex = new RegExp(name, 'i') // i for case insensitive
-  const filter = { user_id: req.session.userId, name: { $regex: regex } };
+  const filter: any = { $or:[{user_id: req.session.userId, name: { $regex: regex }}, {collaborators: { $elemMatch:{ _id: req.session.userId }}, name: { $regex: regex }}] };
 
   const [itineraries, count] = await Promise.all([
-    Itinerary.find(filter, {}, { skip: Number(offset) || 0, limit: Number(limit) || 100 }),
+    Itinerary.find(filter, {}, { skip: Number(offset) || 0, limit: Number(limit) || 100, sort: {updatedAt: -1} }),
     Itinerary.countDocuments(filter),
   ]);
 
@@ -21,14 +21,13 @@ router.get('/', async (req: any, res, _next) => {
 
 router.get('/:id', async (req: any, res, _next) => {
   const { id } = req.params;
-
-  const itinerary = await Itinerary.findOne({ _id: id, user_id: req.session.userId }); // TODO update to use session user id too
+  const itinerary = await Itinerary.findOne({ $or:[{ _id: id, user_id: req.session.userId }, { _id: id, collaborators: { $elemMatch:{ _id: req.session.userId }}}]}); // TODO update to use session user id too
 
   res.status(200).send(itinerary);
 });
 
 router.post('/', (req: any, res, _next) => {
-  const itinerary = new Itinerary({ ...req.body, user_id: req.session.userId, collaborators: [req.user, ...req.body.collaborators] });
+  const itinerary = new Itinerary({ ...req.body, user_id: req.session.userId, collaborators: [...req.body.collaborators] });
   itinerary.save()
     .then(doc => {
       res.send(doc);
@@ -40,10 +39,13 @@ router.post('/', (req: any, res, _next) => {
 });
 
 router.post('/new-activity', async (req: any, res, _next) => {
-  const product = await Itinerary.findOne({ _id: req.body.itinerary_id });
+  const product = await Itinerary.findOne({ $or:[{ _id: req.body.itinerary_id, user_id: req.session.userId }, { _id: req.body.itinerary_id, collaborators: { $elemMatch:{ _id: req.session.userId }}}]});
   new Date(req.body.time);
   const activity = new Activity(req.body);
   product?.activities.push(activity);
+  if (product && typeof product.current_cost !== 'undefined') { 
+    product.current_cost += (activity.cost || 0);
+  }
   product?.save()
     .then(() => {
       res.send(activity);
@@ -55,9 +57,9 @@ router.post('/new-activity', async (req: any, res, _next) => {
 });
 
 router.delete('/:id', (req: any, res, _next) => {
-  console.log(req.user);
   Itinerary.findOneAndRemove({ _id: req.params.id, user_id: req.session.userId })
     .then(doc => {
+      if (!doc) return res.status(500).send('Unable to delete itinerary');
       res.send(doc);
     }).catch(err => {
       console.error(err);
@@ -66,8 +68,11 @@ router.delete('/:id', (req: any, res, _next) => {
 });
 
 router.patch('/:id', async (req: any, res) => {
-  const product = await Itinerary.findOneAndUpdate({ _id: req.params.id, user_id: req.session.userId },
-    { ...req.body, collaborators: [req.user, ...req.body.collaborators] },
+  const newCost = req.body.activities.reduce((cost: number, activity: any) => {
+    return cost += (activity.cost || 0);
+  }, 0)
+  const product = await Itinerary.findOneAndUpdate({ $or:[{ _id: req.params.id, user_id: req.session.userId }, { _id: req.params.id, collaborators: { $elemMatch:{ _id: req.session.userId }}}]},
+    { ...req.body, current_cost: newCost },
     {
       new: true,
       runValidators: true

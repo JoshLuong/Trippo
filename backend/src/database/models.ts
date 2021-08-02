@@ -146,7 +146,7 @@ export const itinerarySchema = new Schema<IItinerary>({
   start_date: { type: Date, required: true },
   end_date: { type: Date, required: true },
   activities: [activitySchema],
-}, { toObject: { versionKey: false } });
+}, { toObject: { versionKey: false }, timestamps: true  });
 
 itinerarySchema.index({ user_id: 1, name: 1 }, { unique: true });
 

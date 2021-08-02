@@ -23,6 +23,8 @@ export type ContextInterface = {
   unsavedChanges: boolean;
   setShowUnsavedChangesModal: (value: any) => void;
   updateItinerary: (value: Itinerary) => void;
+  activeDay: Date | null;
+  setActiveDay: (date: Date | null) => void;
 } | null
 
 export const ItineraryContext = React.createContext<ContextInterface>(null);
@@ -46,6 +48,7 @@ function ItineraryPage() {
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { data: itinerary } = useGetItineraryByIdQuery(id);
+  const [activeDay, setActiveDay] = useState<Date | null>(itinerary?.start_date || null);
   const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] = useUpdateItineraryMutation();
   const [searchResult, setSearchResult] = useState<any>(null);
 
@@ -157,6 +160,8 @@ function ItineraryPage() {
     unsavedChanges,
     setShowUnsavedChangesModal,
     updateItinerary,
+    activeDay,
+    setActiveDay,
   }  
 
   return (

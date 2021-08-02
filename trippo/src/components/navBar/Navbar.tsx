@@ -101,7 +101,10 @@ const Navbar = (props: { history: any }) => {
           </IconButton>
           <sc.Logo>
             <sc.LogoButton disabled={!user?.isLoggedIn} onClick={() => handleMenuClick("/home?page=1")}>
-              <img alt="Trippo Logo" src="/trippo.png" width="120"></img>
+              <>
+              <img id="full-logo" alt="Trippo Logo" src="/trippo.png" width="120"></img>
+              <img id="icon-logo" alt="Trippo Logo" src="/trippo-icon.png" width="25"></img>
+              </>
             </sc.LogoButton>
           </sc.Logo>
           {

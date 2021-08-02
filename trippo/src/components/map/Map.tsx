@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState, useContext } from 'react';
 import ReactMapGL, { FlyToInterpolator, MapRef, Marker, Popup } from 'react-map-gl';
 // @ts-ignore No type declaration for this package
 import Geocoder from 'react-map-gl-geocoder';
@@ -8,7 +8,8 @@ import axios from 'axios';
 // import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
 import {DARK_ORANGE} from "../../colors/colors";
 import { Pin } from './Marker';
-// import { useAppDispatch, useAppSelector } from 'app/store';
+import * as t from 'app/destinations/destinationTypes';
+import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage";
 import './Map.css';
 import { useGetItineraryByIdQuery } from 'services/itinerary';
 import { useParams } from 'react-router-dom';
@@ -40,6 +41,7 @@ const reverseGeocodeName = async (lat: number, lng: number) => {
 }
 
 const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotClick, searchResult, setSearchResult }) => {
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
   const mapRef: React.Ref<MapRef> = useRef(null);
   const [viewport, setViewport] = useState<InteractiveMapProps>({
     longitude: 0,
@@ -61,10 +63,10 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
   useEffect(() => {
     if (data) {
       setViewport({
-        longitude: data.dest_coords.lng,
+        longitude: data.dest_coords.lng - 0.2,
         latitude: data.dest_coords.lat - 0.1,
         zoom: 10,
-        transitionDuration: 700,
+        transitionDuration: 300,
         pitch: 30,
         transitionInterpolator: new FlyToInterpolator(),
       });
@@ -94,13 +96,16 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
           // SVG height + 1px
           offsetTop={-41}
         >
-          <Pin className="marker" onClick={() => {
-            const arrSize = activityPopup.length;
-            const filteredArray = activityPopup.filter((a) => a !== index);
-            const newActivityPopup: number[] = filteredArray.length === arrSize ? [...activityPopup, index] : filteredArray;
-            setActivityPopup(newActivityPopup);
-            // dispatch(setHighlighted(slot.id))
-          }}
+          <Pin 
+            className="marker" 
+            onClick={() => {
+              const arrSize = activityPopup.length;
+              const filteredArray = activityPopup.filter((a) => a !== index);
+              const newActivityPopup: number[] = filteredArray.length === arrSize ? [...activityPopup, index] : filteredArray;
+              setActivityPopup(newActivityPopup);
+              // dispatch(setHighlighted(slot.id))
+            }}
+            fill={moment(itineraryContext?.activeDay).format("MMM Do YYYY") === moment(new Date(slot.time)).format("MMM Do YYYY") ? t.getIconColor(slot.type, '0.95') : t.getIconColor(slot.type, '0.25')}
           />
         </Marker>
       ))}
@@ -141,7 +146,6 @@ const Map: FC<Props> = ({ geocoderContainerRef, handleIsLoading, handleNewSlotCl
       }
       <Geocoder
         mapRef={mapRef}
-        zoom={10}
         bbox={bbox}
         containerRef={geocoderContainerRef}
         onViewportChange={handleViewportChange}

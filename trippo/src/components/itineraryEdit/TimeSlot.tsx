@@ -54,12 +54,6 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
     });
   }
 
-  // TODO: Fix cost input
-  // const editCost = (costString: string) => {
-  //   const newCost = costString.slice(1);
-  //   setCost(Number(newCost));
-  // }
-
   const getButtons = () => {
     return showEdit ? (
       <sc.StyledIconButton onClick={() => deleteActivity(activity)}>
@@ -132,7 +126,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   const date = time ? new Date(time) : new Date();
 
   return (
-    <sc.Slot showSuggestions={showSuggestions} borderColor={d.getIconColor(type)}>
+    <sc.Slot showSuggestions={showSuggestions} borderColor={d.getIconColor(type, '0.73')}>
       <Grid container item lg={12}>
         <Grid container item lg={3} md={3} sm={12}>
           <sc.Time>
@@ -164,7 +158,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
               <sc.StyledTextField
                 fullWidth
                 id="filled-textarea"
-                label="Comments"
+                label="Notes"
                 disabled={!showEdit}
                 multiline
                 variant="outlined"

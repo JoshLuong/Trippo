@@ -33,7 +33,6 @@ export const ItineraryTitle = styled.div`
   @media (max-width: 660px) {
     max-width: 160px;
     overflow: hidden;
-    font-size: 1.25em;
   }
 `;
 
@@ -44,6 +43,19 @@ export const LogoButton = styled.button`
 
   border: none;
   background: transparent;
+
+  #icon-logo {
+    display: none;
+  }
+
+  @media (max-width: 800px) {
+    #full-logo {
+      display: none;
+    }
+    #icon-logo {
+      display: block;
+    }
+  }
 `;
 
 export const useStyles = makeStyles((theme) => ({
@@ -65,7 +77,6 @@ export const useStyles = makeStyles((theme) => ({
     }),
   },
   menuButton: {
-    marginRight: theme.spacing(2),
   },
   hide: {
     display: "none",

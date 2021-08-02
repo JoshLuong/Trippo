@@ -21,7 +21,7 @@ interface Props {
 const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEditItinerary, updateItinerary, openDialog }) => {
 
     // Itinerary Options state
-    const [collaborators, setCollaborators] = useState<any[]>(card.collaborators.slice(1));
+    const [collaborators, setCollaborators] = useState<any[]>(card.collaborators);
     const [tags, setTags] = useState<string[]>(card.tags);
     const [destination, setDestination] = useState<any>({ name: card.destination, ...card.dest_coords });
     const nameRef = useRef<HTMLInputElement>();

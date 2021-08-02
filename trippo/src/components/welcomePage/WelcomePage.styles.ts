@@ -50,8 +50,8 @@ export const homeHeader = styled.h1`
 
 export const descHeader = styled.h2`
   color: #ffffff;
-  font-size: 36px;
-  font-weight: bold;
+  font-size: 28px;
+  font-weight: normal;
 
   @media(max-width: 1130px){
     margin-bottom: 0;

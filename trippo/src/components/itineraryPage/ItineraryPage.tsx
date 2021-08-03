@@ -6,10 +6,9 @@ import Map from "../map/Map";
 import "../map/Map.css";
 import { GeocoderContainer } from 'components/map/Map.styles';
 import Searchbar from "components/searchBar/Searchbar";
-import ReceiptIcon from '@material-ui/icons/Receipt';
+import ViewListIcon from '@material-ui/icons/ViewList';
 import NewSlot from "components/itineraryEdit/NewSlot";
-import ExpensePage from "./ExpensePage";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from "@material-ui/core";
 import { useAppDispatch } from 'app/store';
 import { useParams } from 'react-router-dom';
 import { useGetItineraryByIdQuery, useUpdateItineraryMutation } from 'services/itinerary';
@@ -17,6 +16,7 @@ import { setItinerary } from 'app/reducers/itinerarySlice';
 import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import { Itinerary } from 'types/models';
+import ItineraryReadOnlyView from "components/itineraryReadOnlyView/ItineraryReadOnlyView";
 
 export type ContextInterface = {
   setUnsavedChanges: (value: any) => void;
@@ -36,7 +36,7 @@ let destinationLng: number;
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
-  const [showExpenses, setShowExpenses] = useState(false);
+  const [showItineraryReadOnlyView, setShowItineraryReadOnlyView] = useState(false);
   const [showEditFeedback, setShowEditFeedback] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   // populate with the handler the user wants to execute
@@ -76,23 +76,23 @@ function ItineraryPage() {
 
   function handleOpenItineraryNoChanges() {
     setShowItinerary(!showItinerary);
-    setShowExpenses(false);
+    setShowItineraryReadOnlyView(false);
   }
 
   function handleClose() {
     setShowUnsavedChangesModal(null);
   };
 
-  function handleShowExpenses() {
+  function handleReadOnlyView() {
     if (unsavedChanges) {
-      setShowUnsavedChangesModal(() => handleShowExpensesNoChanges);
+      setShowUnsavedChangesModal(() => handleReadOnlyViewNoChanges);
       return;
     }
-    handleShowExpensesNoChanges();
+    handleReadOnlyViewNoChanges();
   }
 
-  function handleShowExpensesNoChanges() {
-    setShowExpenses(!showExpenses);
+  function handleReadOnlyViewNoChanges() {
+    setShowItineraryReadOnlyView(!showItineraryReadOnlyView);
     setShowItinerary(false);
   }
 
@@ -192,9 +192,11 @@ function ItineraryPage() {
             setSearchResult={setSearchResult}
           />
           <sc.SideBar>
-            <sc.StyledReceiptIcon>
-              <ReceiptIcon onClick={handleShowExpenses}/>
-            </sc.StyledReceiptIcon>
+            <sc.StyledViewListIcon>
+            <Tooltip title="Itinerary master plan" aria-label="Itinerary master plan">
+            <ViewListIcon onClick={handleReadOnlyView}/>
+            </Tooltip>
+            </sc.StyledViewListIcon>
             <button onClick={handleOpenItinerary}>
               {showItinerary ? (
                 <i className="fas fa-chevron-left"></i>
@@ -209,9 +211,9 @@ function ItineraryPage() {
               <Container />
             </sc.Container> 
           ) : null}
-          {showExpenses ? (
+          {showItineraryReadOnlyView ? (
             <sc.Container>
-              <ExpensePage />
+              <ItineraryReadOnlyView />
           </sc.Container>
           ) : null}
           {

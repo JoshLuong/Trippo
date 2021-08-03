@@ -14,6 +14,14 @@ export const userApi = createApi({
                 }
             },
         }),
+        getUserById: builder.query<User, string>({
+            query: (id: string) => {
+                return {
+                    url: `/${id}`,
+                    credentials: 'include'
+                }
+            },
+        }),
     }),
 });
 
@@ -21,4 +29,5 @@ export const userApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
     useLazyGetUserByEmailQuery,
+    useGetUserByIdQuery,
 } = userApi;

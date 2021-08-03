@@ -18,9 +18,11 @@ interface Props {
   index: number;
   editActivity: (activity: Activity) => void;
   deleteActivity: (activity: Activity) => void;
+  isReadOnly?: boolean;
+  size?: string;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity, deleteActivity }) => {
+const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity, deleteActivity, size, isReadOnly }) => {
   const { time, destination, comments, type, address, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
@@ -82,16 +84,16 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   const renderHeaderContent = () => (
     <sc.HeaderGrid container item lg={11} md={11} sm={11} xs={11}>
       <sc.Destination>
-        <Grid container item lg={9} md={9} sm={10} xs={10}>
+        <Grid container item lg={size === "small" ? 10 : 9} md={9} sm={10} xs={10}>
         <Grid container item lg={1} md={1} sm={1} xs={1}>
           {d.renderIcon(type)}
         </Grid>
-        <Grid container item lg={9} md={9} sm={10} xs={10}>
+        <Grid container item lg={size === "small" ? 10 : 9} md={size === "small" ? 10: 9} sm={10} xs={10}>
           <span>{destination}</span>
         </Grid>
         <sc.AddressSpan>{address}</sc.AddressSpan>
         </Grid>
-        <Grid container item lg={2} md={2} sm={3} xs={3}>
+        <Grid container item lg={size === "small" ? 3 : 2} md={size === "small" ? 3 : 2} sm={3} xs={3}>
           <sc.Cost {...costStyling}>
               <sc.StyledFormControl fullWidth>
                 {activity.cost || showEdit ? (
@@ -128,8 +130,8 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   return (
     <sc.Slot showSuggestions={showSuggestions} borderColor={d.getIconColor(type, '0.73')}>
       <Grid container item lg={12}>
-        <Grid container item lg={3} md={3} sm={12}>
-          <sc.Time>
+        <Grid container item lg={size === "small" ? 12 :3} md={size === "small" ? 12 :3} sm={12}>
+          <sc.Time  small={size === "small"}>
             <TextField
               disabled={!showEdit}
               onChange={(e) => setTime(e)}
@@ -146,15 +148,15 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
             />
           </sc.Time>
         </Grid>
-        <sc.SlotGrid container item lg={9} md={9} sm={12} xs={12}>
+        <sc.SlotGrid container item lg={size === "small" ? 12: 9} md={size === "small" ? 12 : 9} sm={12} xs={12} small={size=== "small"}>
           {renderHeaderContent()}
           <Grid container item lg={1} md={1} sm={1} xs={1}>
             <sc.CommentButton>
-              {getButtons()}
+              {!isReadOnly && getButtons()}
             </sc.CommentButton>
           </Grid>
           <Grid container item lg={12} md={12} sm={12} xs={12}>
-            <sc.Comments>
+            <sc.Comments  small={size=== "small"}>
               <sc.StyledTextField
                 fullWidth
                 id="filled-textarea"

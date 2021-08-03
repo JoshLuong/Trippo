@@ -14,7 +14,9 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { useAppSelector } from 'app/store';
 import { User } from 'types/models';
+import { useGetUserByIdQuery } from 'services/user';
 import MainEditItineraryContainer from "components/itineraryForm/MainEditItineraryContainer"
+import { useEffect } from "react";
 
 interface Props {
   updateItinerary: (arg: Partial<Itinerary>) => any;
@@ -23,13 +25,12 @@ interface Props {
   setSuccess: (isSuccessful: boolean) => void;
 }
 
-const renderNames = (name: string, card: Itinerary, user: User) => {
+const renderNames = (name: string, card: Itinerary, user: User, result: User) => {
   const { collaborators } = card;
   const users = collaborators.slice();
   let names = "";
 
-  if (card.user_id === user._id ) names = `${user.name} (owner)`;
-  if (names !== "" && users.length >=1) names += ", ";
+  names = `${result.name} (owner), `;
 
   if (users.length === 1) {
     names += `${users[0].name}`;
@@ -55,6 +56,7 @@ const renderNames = (name: string, card: Itinerary, user: User) => {
 
 const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItinerary }) => {
   const user = useAppSelector((state) => state.user.value);
+  const { data: result } = useGetUserByIdQuery(card.user_id);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
 
@@ -81,7 +83,7 @@ const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItiner
         <sc.Card color={card.user_id === user?._id ? c.DARK_BLUE : c.DARK_ORANGE }>
           <Grid item container lg={12}>
             <Grid container item lg={7} sm={12}>
-              {user && renderNames(card.name, card, user)}
+              {user && result && renderNames(card.name, card, user, result)}
             </Grid>
             <sc.DateGrid container item lg={5} sm={12}>
               <i className="far fa-calendar-alt"></i>

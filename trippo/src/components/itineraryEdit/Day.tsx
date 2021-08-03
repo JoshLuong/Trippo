@@ -10,10 +10,12 @@ import { getDistanceFromLatLonInKm } from './utils';
 
 interface Props {
   date: Date;
+  size?: string;
+  isReadOnly?: boolean;
   handleCalendarView: () => void;
 }
 
-const Day: FC<Props> = ({ date, handleCalendarView }) => {
+const Day: FC<Props> = ({ date, handleCalendarView, size="regular", isReadOnly=false }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [editedItinerary, setEditedItinerary] = useState(itinerary);
   let prevActivity: Activity | null = null;
@@ -76,10 +78,14 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
     <sc.dayDiv>
       <sc.StickyDiv>
       <sc.dayDate>
-          <button style={{ float: "left" }} onClick={handleCalendarView}>
+        {
+          !isReadOnly ? (
+            <button style={{ float: "left" }} onClick={handleCalendarView}>
             <i className="fas fa-chevron-left"></i>
             <i className="far fa-calendar-alt"></i>
           </button>
+          ) : null
+        }
         <sc.daysWeek>
           {moment(date).format("MMMM Do YYYY")}
         </sc.daysWeek>
@@ -98,6 +104,8 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
                     ) : null
                   }
                   <TimeSlot
+                    isReadOnly={isReadOnly}
+                    size={size}
                     handleHideCostToggle={handleHideCostToggle}
                     activity={activity}
                     showEdit={edit}
@@ -109,10 +117,12 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
               );
             })}
           </sc.TimeSlots>
-            <sc.Cost container item lg={12}>
+          {
+            dayCost > 0 ? (
+              <sc.Cost container item lg={12}>
               <div>Total cost for {moment(date).format("MMM Do YYYY")}:</div>
               <div>
-                {itinerary && itinerary.budget && currentCostOffset > itinerary.budget ? (
+                { itinerary && itinerary.budget && currentCostOffset > itinerary.budget ? (
                   <Tooltip
                     title={`Warning: You're over the total trip budget of $${itinerary.budget} by $${
                       currentCostOffset - itinerary.budget
@@ -124,6 +134,8 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
                 <span>${dayCost}</span>
               </div>
             </sc.Cost>
+            ) : null
+          }
             <Grid
               item
               style={{ marginTop: "0.65em", textAlign: "center" }}
@@ -132,9 +144,14 @@ const Day: FC<Props> = ({ date, handleCalendarView }) => {
               sm={12}
               xs={12}
             >
-              <sc.EditButton onClick={handleEditView}>
-                {edit ? "Done" : "Edit"}
-              </sc.EditButton>
+              {
+                !isReadOnly ? (
+                  <sc.EditButton onClick={handleEditView}>
+                  {edit ? "Done" : "Edit"}
+                </sc.EditButton>
+                ) : null
+              }
+
             </Grid>
       </div>
     </sc.dayDiv>

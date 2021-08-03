@@ -10,7 +10,7 @@ export const Container = styled.div`
   flex-shrink: 0;
   ::-webkit-scrollbar {
     height: 0px;
-    width: 0px; 
+    width: 0px;
   }
 `;
 

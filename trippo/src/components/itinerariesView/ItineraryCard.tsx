@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import FadeIn from 'react-fade-in';
+import FadeIn from "react-fade-in";
 import * as sc from "./ItineraryCard.styles";
 import * as c from "../../colors/colors";
 import moment from "moment";
 import { Grid } from "@material-ui/core";
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from "@material-ui/icons/Edit";
 import { Itinerary } from "types/models";
 import { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
@@ -12,10 +12,10 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { useAppSelector } from 'app/store';
-import { User } from 'types/models';
-import { useGetUserByIdQuery } from 'services/user';
-import MainEditItineraryContainer from "components/itineraryForm/MainEditItineraryContainer"
+import { useAppSelector } from "app/store";
+import { User } from "types/models";
+import { useGetUserByIdQuery } from "services/user";
+import MainEditItineraryContainer from "components/itineraryForm/MainEditItineraryContainer";
 import { useEffect } from "react";
 
 interface Props {
@@ -25,7 +25,12 @@ interface Props {
   setSuccess: (isSuccessful: boolean) => void;
 }
 
-const renderNames = (name: string, card: Itinerary, user: User, result: User) => {
+const renderNames = (
+  name: string,
+  card: Itinerary,
+  user: User,
+  result: User
+) => {
   const { collaborators } = card;
   const users = collaborators.slice();
   let names = "";
@@ -53,8 +58,12 @@ const renderNames = (name: string, card: Itinerary, user: User, result: User) =>
   );
 };
 
-
-const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItinerary }) => {
+const ItineraryCard: FC<Props> = ({
+  setSuccess,
+  card,
+  handleRemove,
+  updateItinerary,
+}) => {
   const user = useAppSelector((state) => state.user.value);
   const { data: result } = useGetUserByIdQuery(card.user_id);
   const [open, setOpen] = useState(false);
@@ -70,17 +79,23 @@ const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItiner
 
   const handleEdit = () => {
     setEdit(!edit);
-  }
-
+  };
 
   return (
     <React.Fragment>
-      {edit &&
-        <MainEditItineraryContainer card={card} openDialog={handleClickOpen} handleShowEditItinerary={handleEdit}
-          setSuccess={setSuccess} updateItinerary={updateItinerary} />
-      }
+      {edit && (
+        <MainEditItineraryContainer
+          card={card}
+          openDialog={handleClickOpen}
+          handleShowEditItinerary={handleEdit}
+          setSuccess={setSuccess}
+          updateItinerary={updateItinerary}
+        />
+      )}
       <FadeIn transitionDuration={600} delay={500}>
-        <sc.Card color={card.user_id === user?._id ? c.DARK_BLUE : c.DARK_ORANGE }>
+        <sc.Card
+          color={card.user_id === user?._id ? c.DARK_BLUE : c.DARK_ORANGE}
+        >
           <Grid item container lg={12}>
             <Grid container item lg={7} sm={12}>
               {user && result && renderNames(card.name, card, user, result)}
@@ -122,12 +137,13 @@ const ItineraryCard: FC<Props> = ({ setSuccess, card, handleRemove, updateItiner
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  Are you sure you want to delete {<strong>{card.name}</strong>}?
+                  Are you sure you want to delete {<strong>{card.name}</strong>}
+                  ?
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Deleting {<strong>{card.name}</strong>} will permanently remove it from your
-                    itineraries list.
+                    Deleting {<strong>{card.name}</strong>} will permanently
+                    remove it from your itineraries list.
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

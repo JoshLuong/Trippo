@@ -12,14 +12,14 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { setUser } from 'app/reducers/userSlice';
+import { setUser } from "app/reducers/userSlice";
 import ListItem from "@material-ui/core/ListItem";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
 import FadeIn from "react-fade-in";
-import { useAppDispatch, useAppSelector } from 'app/store';
+import { useAppDispatch, useAppSelector } from "app/store";
 import { BLACK, GREY, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
 import * as sc from "./Navbar.styles";
@@ -47,17 +47,17 @@ const Navbar = (props: { history: any }) => {
 
   const handleLogout = async () => {
     try {
-        await fetch(`/api/v1/auth/logout`, {
-          method: "DELETE",
-          credentials: 'include'
-        })
-        dispatch(setUser({isLoggedIn: false}));
-        handleMenuClick("/");
-    } catch(e) {
-        console.log(e);
+      await fetch(`/api/v1/auth/logout`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      dispatch(setUser({ isLoggedIn: false }));
+      handleMenuClick("/");
+    } catch (e) {
+      console.log(e);
     }
     // store returned user somehow
-  }
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -76,7 +76,7 @@ const Navbar = (props: { history: any }) => {
     {
       menuTitle: "Home",
       pageURL: "/home?page=1",
-    }
+    },
   ];
 
   return (
@@ -100,28 +100,39 @@ const Navbar = (props: { history: any }) => {
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
           <sc.Logo>
-            <sc.LogoButton disabled={!user?.isLoggedIn} onClick={() => handleMenuClick("/home?page=1")}>
+            <sc.LogoButton
+              disabled={!user?.isLoggedIn}
+              onClick={() => handleMenuClick("/home?page=1")}
+            >
               <>
-              <img id="full-logo" alt="Trippo Logo" src="/trippo.png" width="120"></img>
-              <img id="icon-logo" alt="Trippo Logo" src="/trippo-icon.png" width="25"></img>
+                <img
+                  id="full-logo"
+                  alt="Trippo Logo"
+                  src="/trippo.png"
+                  width="120"
+                ></img>
+                <img
+                  id="icon-logo"
+                  alt="Trippo Logo"
+                  src="/trippo-icon.png"
+                  width="25"
+                ></img>
               </>
             </sc.LogoButton>
           </sc.Logo>
-          {
-            history.location.pathname.includes("itinerary") && itinerary ? (
-            <sc.ItineraryTitle >
+          {history.location.pathname.includes("itinerary") && itinerary ? (
+            <sc.ItineraryTitle>
               <FadeIn transitionDuration={600} delay={500}>
                 {itinerary?.name}
                 <sc.DateGrid container item lg={12} sm={12}>
-                <i className="far fa-calendar-alt"></i>
-                {moment(itinerary?.start_date).format("MMM Do YYYY") +
-                  ` - ` +
-                  moment(itinerary?.end_date).format("MMM Do YYYY")}
+                  <i className="far fa-calendar-alt"></i>
+                  {moment(itinerary?.start_date).format("MMM Do YYYY") +
+                    ` - ` +
+                    moment(itinerary?.end_date).format("MMM Do YYYY")}
                 </sc.DateGrid>
               </FadeIn>
             </sc.ItineraryTitle>
-            ) : null
-          }
+          ) : null}
           <IconButton
             style={{ position: "absolute", right: 20 }}
             onClick={handleDropdownClick}
@@ -138,15 +149,19 @@ const Navbar = (props: { history: any }) => {
             open={Boolean(anchorEl)}
             onClose={handleDropdownClose}
           >
-            { user ? <MenuItem disabled>{user.name}</MenuItem> : null}
-            <MenuItem onClick={() => {
-              if (user?.isLoggedIn) {
-                handleLogout(); 
-              } else {
-                handleMenuClick("/");
-              }
-              handleDropdownClose();
-              }}>{user?.isLoggedIn ? 'Logout' : 'Sign In'}</MenuItem>
+            {user ? <MenuItem disabled>{user.name}</MenuItem> : null}
+            <MenuItem
+              onClick={() => {
+                if (user?.isLoggedIn) {
+                  handleLogout();
+                } else {
+                  handleMenuClick("/");
+                }
+                handleDropdownClose();
+              }}
+            >
+              {user?.isLoggedIn ? "Logout" : "Sign In"}
+            </MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

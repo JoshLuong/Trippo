@@ -29,7 +29,7 @@ export const ItineraryTitle = styled.div`
   text-align: center;
   color: ${c.DARK_BLUE};
   font-size: 1.5em;
-  
+
   @media (max-width: 660px) {
     max-width: 160px;
     overflow: hidden;
@@ -76,8 +76,7 @@ export const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
-  },
+  menuButton: {},
   hide: {
     display: "none",
   },

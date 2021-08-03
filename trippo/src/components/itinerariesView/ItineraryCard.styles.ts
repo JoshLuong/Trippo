@@ -16,7 +16,7 @@ export const StyledIconButton = styled(IconButton)`
   right: 0;
   width: 16px;
   height: 16px;
-  margin: 0.40em;
+  margin: 0.4em;
   color: ${c.GREY};
 `;
 
@@ -29,7 +29,7 @@ export const Card = styled.div`
   width: 705px;
   box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
   border-radius: 8px;
-  border-top: 16px solid  ${props => props.color};
+  border-top: 16px solid ${(props) => props.color};
   &:hover {
     transform: scale(1.025);
   }

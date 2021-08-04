@@ -26,7 +26,7 @@ interface Props {
 
 const collabData: any[] = [];
 
-const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
+const tagsData: any[] = [];
 
 const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDesc, defaultDestination, defaultName, defaultTags,
     collabSetter, destinationSetter, tagSetter, nameRef, descRef, errorMessage, setFail, failSnackbar, setErrorMessage, user }) => {

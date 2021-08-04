@@ -1,6 +1,18 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 
+export const SearchbarDiv = styled.div`
+  height: 7em;
+  width: 100%;
+  box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
+  text-align: center;
+
+  @media (max-width: 1030px){
+    height: 6em;
+  }
+  
+`;
+
 export const FooterImage = styled.div`
   z-index: -100;
   left: 0;

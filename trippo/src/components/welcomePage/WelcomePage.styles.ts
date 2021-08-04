@@ -37,6 +37,7 @@ export const headerDiv = styled.div`
 
 export const homeHeader = styled.h1`
   color: #ffffff;
+  text-shadow: 2px 1px 5px  #000;  
   font-size: 48px;
   font-weight: extra bold;
   @media(max-width: 1130px){
@@ -50,6 +51,7 @@ export const homeHeader = styled.h1`
 
 export const descHeader = styled.h2`
   color: #ffffff;
+  text-shadow: 2px 0px 5px  #000;  
   font-size: 28px;
   font-weight: normal;
 

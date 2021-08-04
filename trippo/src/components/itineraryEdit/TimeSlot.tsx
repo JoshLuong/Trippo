@@ -72,9 +72,16 @@ const TimeSlot: FC<Props> = ({
     ) : (
       <button onClick={() => setShowSuggestions(!showSuggestions)}>
         {!showSuggestions ? (
-          <i className="fas fa-chevron-down"></i>
+          <Tooltip title="Show suggestions" aria-label="Show suggestions">
+            <i className="fas fa-chevron-down"></i>
+          </Tooltip>
         ) : (
-          <i style={{ color: c.DARK_ORANGE }} className="fas fa-chevron-up"></i>
+          <Tooltip title="Hide suggestions" aria-label="Hide suggestions">
+            <i
+              style={{ color: c.DARK_ORANGE }}
+              className="fas fa-chevron-up"
+            ></i>
+          </Tooltip>
         )}
       </button>
     );

@@ -35,16 +35,16 @@ const renderNames = (
   const users = collaborators.slice();
   let names = "";
 
-  names = `${result.name} (owner), `;
+  names = `${result.name} (owner)`;
 
   if (users.length === 1) {
-    names += `${users[0].name}`;
+    names += `, ${users[0].name}`;
   } else if (users.length === 2) {
-    names += `${users[0].name} and ${users[1].name}`;
+    names += `, ${users[0].name} and ${users[1].name}`;
   } else if (users.length === 3) {
-    names += `${users[0].name}, ${users[1].name} + 1 other`;
+    names += `, ${users[0].name}, ${users[1].name} + 1 other`;
   } else if (users.length > 3) {
-    names += `${users[0].name}, ${users[1].name} + ${users.length - 2} others`;
+    names += `, ${users[0].name}, ${users[1].name} + ${users.length - 2} others`;
   }
 
   return (

@@ -199,6 +199,9 @@ const Navbar = (props: { history: any }) => {
               </ListItem>
             );
           })}
+          <ListItem button onClick={() => handleMenuClick('/about')}>
+            {'About'}
+          </ListItem>
         </List>
       </Drawer>
     </div>

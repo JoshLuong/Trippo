@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import WelcomePage from "components/welcomePage/WelcomePage";
+import AboutPage from "components/aboutPage/AboutPage";
 import { setUser } from 'app/reducers/userSlice';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { Snackbar } from '@material-ui/core';
@@ -50,6 +51,7 @@ function App() {
       <Switch>
         <Route exact path="/itinerary/:id" component={() => <ItineraryPage />} />
         <Route exact path="/" component={() => <WelcomePage />} />
+        <Route exact path="/about" component={() => <AboutPage />} />
         <Route exact path="/home" component={() => <ItinerariesView />} />
       </Switch>
     </>

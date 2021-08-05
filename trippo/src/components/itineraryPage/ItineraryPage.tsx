@@ -212,7 +212,7 @@ function ItineraryPage() {
       >
         <Alert severity="warning">Your itinerary was not changed</Alert>
       </Snackbar>
-      <div>
+      <sc.ItineraryPage>
         {isLoading ? (
           <sc.LoadingDiv>
             <div className="loader"></div>
@@ -272,7 +272,7 @@ function ItineraryPage() {
             />
           ) : null}
         </sc.ItineraryDiv>
-       </div>
+       </sc.ItineraryPage>
       {getDialogContainer()}
     </ItineraryContext.Provider>
   );

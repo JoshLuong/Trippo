@@ -195,19 +195,19 @@ function ItineraryPage() {
   return (
     <ItineraryContext.Provider value={contextValue}>
       <Snackbar
-        transitionDuration={1200}
+        transitionDuration={700}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={showEditFeedback}
-        autoHideDuration={2700}
+        autoHideDuration={1300}
         onClose={handleFeedbackClose}
       >
         <Alert severity="success">Your itinerary has been updated</Alert>
       </Snackbar>
       <Snackbar
-        transitionDuration={1200}
+        transitionDuration={700}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={closeSlotNoActivity}
-        autoHideDuration={2700}
+        autoHideDuration={1300}
         onClose={handleFeedbackClose}
       >
         <Alert severity="warning">Your itinerary was not changed</Alert>

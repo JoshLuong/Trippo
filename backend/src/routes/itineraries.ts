@@ -87,7 +87,7 @@ router.post("/new-activity", async (req: any, res, _next) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.status(404).send("Invalid Activity");
+      return res.status(404).send({message: 'Invalid Activity'});
     });
 });
 

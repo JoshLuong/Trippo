@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import * as c from "../../colors/colors";
 
 export const containerDiv = styled.div`
   display: flex;
@@ -37,7 +38,7 @@ export const headerDiv = styled.div`
 
 export const homeHeader = styled.h1`
   color: #ffffff;
-  text-shadow: 2px 1px 5px  #000;  
+  text-shadow: 2px 0px 7px ${c.DARK_GREY};  
   font-size: 48px;
   font-weight: extra bold;
   @media(max-width: 1130px){
@@ -49,10 +50,14 @@ export const homeHeader = styled.h1`
   }
 `;
 
+export const Divider = styled.div`
+  height: 0.35em;
+`;
+
 export const descHeader = styled.h2`
   color: #ffffff;
-  text-shadow: 2px 0px 5px  #000;  
-  font-size: 28px;
+  text-shadow: 1px 0px 6px ${c.DARK_GREY};  
+  font-size: 26px;
   font-weight: normal;
 
   @media(max-width: 1130px){

@@ -53,7 +53,7 @@ export const LoadingDiv = styled.div`
 
 export const SideBar = styled.div`
   z-index: 1;
-  height: 95%;
+  height: 650px;
   width: 2em;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
   display: flex;
@@ -80,7 +80,7 @@ export const Container = styled.div`
   // z-index: 1;
   display: inline-block;
   background-color: #fff;
-  height: 95%;
+  height: 650px;
   flex: 0 0 585px;
   position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
@@ -109,10 +109,5 @@ export const ItineraryDiv = styled.div`
   position: relative;
   display: flex;
   margin-top: 0.6em;
-  overflow-x: hidden;
-  height: 100%;
-`;
-
-export const ItineraryPage = styled.div`
   height: 80%;
 `;

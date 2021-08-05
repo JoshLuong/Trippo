@@ -35,6 +35,7 @@ function WelcomePage() {
                 <sc.descHeader>
                     <span>Sick of planning your trips with spread sheets and documents?</span>
                     <br/>
+                    <sc.Divider />
                     <span>Watch your travel ideas come to life with our collaborative, map-based, suggestive itinerary planner.</span>
                 </sc.descHeader>
             </sc.headerDiv>

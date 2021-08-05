@@ -57,6 +57,7 @@ function ItineraryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
   const [closeSlotNewActivity, setCloseSlotNewActivity] = useState(false);
+  const [closeSlotNoActivity, setCloseSlotNoActivity] = useState(false);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { data: itinerary } = useGetItineraryByIdQuery(id);
@@ -71,6 +72,7 @@ function ItineraryPage() {
     if (updatedItinerary || closeSlotNewActivity) {
       dispatch(setItinerary(updatedItinerary));
       setShowEditFeedback(true);
+      setCloseSlotNewActivity(false);
     } else if (!isUpdating) {
       dispatch(setItinerary(itinerary));
     }
@@ -129,12 +131,18 @@ function ItineraryPage() {
 
   function handleNewSlotClose() {
     setCanOpenNewSlot(false);
+    setCloseSlotNoActivity(true);
+  }
+
+  function handleNewSlotSubmitAndClose() {
+    setCanOpenNewSlot(false);
     setCloseSlotNewActivity(true);
   }
 
   const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {
     if (reason !== "clickaway") {
       setShowEditFeedback(false);
+      setCloseSlotNoActivity(false);
     }
   };
 
@@ -187,15 +195,24 @@ function ItineraryPage() {
   return (
     <ItineraryContext.Provider value={contextValue}>
       <Snackbar
-        transitionDuration={1000}
+        transitionDuration={700}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={showEditFeedback}
-        autoHideDuration={5000}
+        autoHideDuration={1300}
         onClose={handleFeedbackClose}
       >
         <Alert severity="success">Your itinerary has been updated</Alert>
       </Snackbar>
-      <sc.ItineraryPage>
+      <Snackbar
+        transitionDuration={700}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={closeSlotNoActivity}
+        autoHideDuration={1300}
+        onClose={handleFeedbackClose}
+      >
+        <Alert severity="warning">Your itinerary was not changed</Alert>
+      </Snackbar>
+      <div>
         {isLoading ? (
           <sc.LoadingDiv>
             <div className="loader"></div>
@@ -246,6 +263,7 @@ function ItineraryPage() {
           {canOpenNewSlot ? (
             <NewSlot
               handleClose={handleNewSlotClose}
+              handleSubmitAndClose={handleNewSlotSubmitAndClose}
               destinationName={destinationName}
               destinationAddress={destinationAddress}
               destinationLat={destinationLat}
@@ -254,7 +272,7 @@ function ItineraryPage() {
             />
           ) : null}
         </sc.ItineraryDiv>
-      </sc.ItineraryPage>
+       </div>
       {getDialogContainer()}
     </ItineraryContext.Provider>
   );

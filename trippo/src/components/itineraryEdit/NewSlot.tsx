@@ -190,18 +190,20 @@ const NewSlot: FC<Props> = ({
       comments: comments.split("\n"),
     };
     createActivity(newActivity).then((res: any) => {
-      if (res.error) {
-        handleClose();
-        return;
-      }
+    // uncomment after fixing rendering issue below
+      // if (res.error) {
+      //   handleClose();
+      //   return;
+      // }
       dispatch(setItinerary({
         ...itinerary,
         activities: itinerary?.activities ? [...itinerary?.activities, res.data] : [res.data],
       }));
       getSuggestedBusinesses(res.data._id);
-      setSearchResult(null);
-      handleSubmitAndClose();
     });
+    // these should go inside createActivity but it creates a rendering issue for the activities.
+    setSearchResult(null);
+    handleSubmitAndClose();
   };
 
   const selectStyles = sc.selectStyles();

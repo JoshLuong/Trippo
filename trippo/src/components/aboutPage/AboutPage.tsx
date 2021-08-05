@@ -1,5 +1,4 @@
 import * as sc from './AboutPage.styles';
-
 // TODO: link to user documentation
 function AboutPage() {
     return (
@@ -22,10 +21,12 @@ function AboutPage() {
                     
                     <span>
                     For questions or concerns regarding Trippo, please see the user documentation "here", or contact us at:&nbsp;
+                    <br/>
                     <a href="mailto: tripposupport@protonmail.com">tripposupport@protonmail.com</a>
                     </span>
                 </sc.descHeader>
             </sc.leftHeaderDiv>
+            <sc.rightHeaderImg/>
         </sc.containerDiv>
     )
 }

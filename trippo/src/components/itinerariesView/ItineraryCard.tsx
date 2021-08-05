@@ -92,7 +92,7 @@ const ItineraryCard: FC<Props> = ({
           updateItinerary={updateItinerary}
         />
       )}
-      <FadeIn transitionDuration={600} delay={500}>
+      <FadeIn transitionDuration={800} delay={500}>
         <sc.Card
           color={card.user_id === user?._id ? c.DARK_BLUE : c.DARK_ORANGE}
         >

@@ -9,7 +9,6 @@ import ReactMapGL, {
 import Geocoder from "react-map-gl-geocoder";
 import moment from "moment";
 import { InteractiveMapProps } from "react-map-gl/src/components/interactive-map";
-import axios from "axios";
 // import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
 import { DARK_ORANGE } from "../../colors/colors";
 import { Pin } from "./Marker";
@@ -22,8 +21,6 @@ import "./Map.css";
 import { useGetItineraryByIdQuery } from "services/itinerary";
 import { useParams } from "react-router-dom";
 
-// TODO ROHIT: when user clicks 'X' button on new activity pop-up, you should setSearchResult(null)
-// and update the day and redux store when u send a patch to update activities
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
   searchResult: any;
@@ -40,30 +37,37 @@ interface Props {
 const MAPBOX_API_URL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 const reverseGeocodeAddress = async (lat: number, lng: number) => {
   //the service call returns place at the coordinates passed.
-  let address = await axios.get(
+  let address: any;
+  await fetch(
     MAPBOX_API_URL +
       lng +
       "," +
       lat +
       ".json?access_token=" +
-      process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
-  );
-  let exactAddress = address.data.features[0].place_name;
-  return exactAddress;
+      process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
+      {method: "GET",
+    }
+  ).then((res: any) => res.json())
+  .then((data: any) => address = data.features[0].place_name);
+  // let exactAddress = address.data.features[0].place_name;
+  return address;
 };
 
 const reverseGeocodeName = async (lat: number, lng: number) => {
   //the service call returns place at the coordinates passed.
-  let address = await axios.get(
+  let name: any;
+  await fetch(
     MAPBOX_API_URL +
       lng +
       "," +
       lat +
       ".json?access_token=" +
-      process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
-  );
-  let exactName = address.data.features[0].text;
-  return exactName;
+      process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
+      {method: "GET",
+    }
+  ).then((res: any) => res.json())
+  .then((data: any) => name = data.features[0].text);
+  return name;
 };
 
 const Map: FC<Props> = ({

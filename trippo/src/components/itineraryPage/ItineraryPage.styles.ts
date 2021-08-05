@@ -73,6 +73,10 @@ export const SideBar = styled.div`
   button:hover {
     cursor: pointer;
   }
+
+  @media (max-width: 668px) {
+    height: 90%;
+  }
 `;
 
 export const Container = styled.div`
@@ -87,6 +91,7 @@ export const Container = styled.div`
 
   @media (max-width: 668px) {
     flex: 0 0 80%;
+    height: 90%;
   }
 `;
 
@@ -96,11 +101,19 @@ export const SearchContainer = styled.div`
   width: 100%;
   box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
   text-align: center;
+  background: transparent;
+  display: flex;
+  justify-content: center;
 
   input {
     &:focus {
       outline: none;
     }
+  }
+
+  @media (max-width: 650px) {
+    height: 5em;
+    margin-top: 4em;
   }
 `;
 

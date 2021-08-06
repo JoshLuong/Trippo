@@ -149,7 +149,6 @@ const TimeSlot: FC<Props> = ({
                   disabled={!showEdit}
                   value={activity.cost}
                   onChange={(e) => {
-                    console.log(Number.isInteger(Number(e.target.value)));
                     if (Number.isInteger(Number(e.target.value)) || e.target.value === "") {
                       editActivity({
                         ...activity,

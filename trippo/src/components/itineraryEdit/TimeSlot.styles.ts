@@ -86,6 +86,7 @@ export const SlotGrid = styled(Grid)<StyledCardSize>`
 export const Destination = styled.div`
   color: ${c.BLACK};
   display: flex;
+  justify-content: space-around;
   flex-grow: 1;
   font-weight: 550;
   i {
@@ -199,6 +200,7 @@ export const HeaderGrid = styled(Grid)`
   align-items: flex-start;
 `;
 export const StyledFormControl = styled(FormControl)`
+  padding-left: 2px;
   input {
     padding: 0;
     font-size: 0.75em;

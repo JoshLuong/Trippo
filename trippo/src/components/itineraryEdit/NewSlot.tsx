@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
-import { Grid } from "@material-ui/core";
+import { Grid, CircularProgress } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { useAppDispatch, useAppSelector } from "app/store";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -48,6 +48,7 @@ const NewSlot: FC<Props> = ({
   const [comments, setComments] = useState("");
   const [time, setTime] = useState("12:00");
   const [selectedDate, setSelectedDate] = useState(itineraryContext?.activeDay || itinerary?.start_date);
+  const [addDisabled, setAddDisabled] = useState(false);
   const [createActivity] = useCreateActivityMutation();
   const [triggerGetQuery, result] = useLazyGetItineraryByIdQuery();
   const { id } = useParams<{ id: string }>();
@@ -198,18 +199,13 @@ const NewSlot: FC<Props> = ({
       type: type,
       comments: comments.split("\n"),
     };
-    createActivity(newActivity).then(async (res: any) => {
-    // uncomment after fixing rendering issue below
-      // if (res.error) {
-      //   handleClose();
-      //   return;
-      // }
-      await getSuggestedBusinesses(res.data._id);
-      triggerGetQuery(id);
-    });
-    // these should go inside createActivity but it creates a rendering issue for the activities.
-    // setSearchResult(null);
-    // handleSubmitAndClose();
+    setAddDisabled(true);
+    createActivity(newActivity)
+      .then(async (res: any) => {
+        await getSuggestedBusinesses(res.data._id);
+        triggerGetQuery(id);
+      })
+      .catch(() => handleClose());
   };
 
   const selectStyles = sc.selectStyles();
@@ -342,7 +338,9 @@ const NewSlot: FC<Props> = ({
               />
             </Grid>
           </sc.SlotGrid>
-          <sc.AddButton onClick={() => addToItinerary()}>Add</sc.AddButton>
+          <sc.AddButton disabled={addDisabled} onClick={() => addToItinerary()}>
+            {!addDisabled ? "Add" : <CircularProgress size="1.25em" color="inherit" />}
+          </sc.AddButton>
         </sc.SlotContainer>
       </sc.NewSlot>
     </>

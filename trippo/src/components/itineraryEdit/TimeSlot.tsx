@@ -104,9 +104,9 @@ const TimeSlot: FC<Props> = ({
           sm={10}
           xs={10}
         >
-          <Grid container item lg={1} md={1} sm={1} xs={2}>
+          <sc.IconGrid container item lg={1} md={1} sm={1} xs={2}>
             {d.renderIcon(type)}
-          </Grid>
+          </sc.IconGrid>
           <Grid
             container
             item
@@ -119,7 +119,7 @@ const TimeSlot: FC<Props> = ({
           </Grid>
           <sc.AddressSpan>{address}</sc.AddressSpan>
         </Grid>
-        <Grid
+        <sc.CostGrid
           container
           item
           lg={size === "small" ? 3 : 2}
@@ -163,7 +163,7 @@ const TimeSlot: FC<Props> = ({
               ) : null}
             </sc.StyledFormControl>
           </sc.Cost>
-        </Grid>
+        </sc.CostGrid>
       </sc.Destination>
     </sc.HeaderGrid>
   );

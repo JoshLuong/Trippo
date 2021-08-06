@@ -77,6 +77,7 @@ const Map: FC<Props> = ({
   setSearchResult,
 }) => {
   const itineraryContext = useContext<ContextInterface>(ItineraryContext);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const mapRef: React.Ref<MapRef> = useRef(null);
   const [viewport, setViewport] = useState<InteractiveMapProps>({
     longitude: 0,
@@ -99,20 +100,21 @@ const Map: FC<Props> = ({
   const [activityPopup, setActivityPopup] = useState<number[]>([]);
 
   const handleViewportChange = (viewport: any) => {
-    setViewport({ ...viewport, pitch: 30 });
+    setViewport({ ...viewport, zoom: 11, pitch: 30 });
   };
 
   useEffect(() => {
-    if (data) {
-      const longitude = window.innerWidth <= 700 ? data.dest_coords.lng : data.dest_coords.lng - 0.2;
+    if (itinerary) {
+      const longitude = window.innerWidth <= 700 ? itinerary.dest_coords.lng : itinerary.dest_coords.lng - 0.2;
       setViewport({
-        longitude: longitude,
-        latitude: data.dest_coords.lat - 0.1,
+        longitude: !isFirstLoad ? viewport.longitude : longitude,
+        latitude: !isFirstLoad ? viewport.latitude : itinerary.dest_coords.lat ,
         zoom: 10,
-        transitionDuration: 300,
+        transitionDuration: 400,
         pitch: 30,
         transitionInterpolator: new FlyToInterpolator(),
       });
+      if (isFirstLoad) setIsFirstLoad(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itinerary]);

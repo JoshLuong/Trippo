@@ -27,6 +27,7 @@ export const AddressSpan = styled.span`
   font-weight: 100;
   font-size: 0.85em;
   margin-bottom: 0.45em;
+  margin-top: 0.35em;
 `;
 
 export const Slot = styled.div<StyledTimeSlotProps>`
@@ -116,6 +117,19 @@ export const Destination = styled.div`
   }
 `;
 
+export const CostGrid = styled(Grid)`
+  @media (max-width: 600px) {
+    top: 0.75em;
+    right: 7px;
+    position: absolute;
+  }
+`;
+
+export const IconGrid = styled(Grid)`
+  display: flex;
+  align-items: center;
+`;
+
 export const Cost = styled.div`
   font-weight: 500;
   float: right;
@@ -124,9 +138,6 @@ export const Cost = styled.div`
   flex-direction: row;
   align-self: flex-start;
   align-items: center;
-  div {
-    margin-right: 0.5em;
-  }
 
   button {
     border: none;

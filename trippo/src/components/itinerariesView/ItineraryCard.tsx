@@ -101,9 +101,10 @@ const ItineraryCard: FC<Props> = ({
             </Grid>
             <sc.DateGrid container item lg={5} sm={12}>
               <i className="far fa-calendar-alt"></i>
-              {moment(card.start_date).format("MMM Do YYYY") +
+              <span>{moment(card.start_date).format("MMM Do YYYY") +
                 ` - ` +
                 moment(card.end_date).format("MMM Do YYYY")}
+              </span>
             </sc.DateGrid>
             <sc.StyledIconButton
               color="inherit"

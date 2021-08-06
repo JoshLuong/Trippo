@@ -106,8 +106,9 @@ const Map: FC<Props> = ({
 
   useEffect(() => {
     if (data) {
+      const longitude = window.innerWidth <= 700 ? data.dest_coords.lng : data.dest_coords.lng - 0.2;
       setViewport({
-        longitude: data.dest_coords.lng - 0.2,
+        longitude: longitude,
         latitude: data.dest_coords.lat - 0.1,
         zoom: 10,
         transitionDuration: 300,

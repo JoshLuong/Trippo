@@ -17,7 +17,8 @@ mongoose.connect(process.env.DATABASE_URL!, {
 }).then(() => {
   const app = express();
   const PORT = process.env.PORT || 4000;
-
+  var redirectToHTTPS = require('express-http-to-https').redirectToHTTPS;
+  app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
   // Serve React app from express
   app.use(express.static(path.join(__dirname, '..', '..', 'trippo', 'build')));
   app.get('*', (req, res, next) => {

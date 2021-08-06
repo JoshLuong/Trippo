@@ -104,7 +104,7 @@ const TimeSlot: FC<Props> = ({
           sm={10}
           xs={10}
         >
-          <Grid container item lg={1} md={1} sm={1} xs={1}>
+          <Grid container item lg={1} md={1} sm={1} xs={2}>
             {d.renderIcon(type)}
           </Grid>
           <Grid

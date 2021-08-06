@@ -25,7 +25,7 @@ import {
 import { setItinerary } from "app/reducers/itinerarySlice";
 import Snackbar, { SnackbarCloseReason } from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import { Itinerary } from "types/models";
+import { Activity, Itinerary, ActivityPopup } from "types/models";
 import ItineraryReadOnlyView from "components/itineraryReadOnlyView/ItineraryReadOnlyView";
 
 export type ContextInterface = {
@@ -35,6 +35,8 @@ export type ContextInterface = {
   updateItinerary: (value: Itinerary) => void;
   activeDay: Date | null;
   setActiveDay: (date: Date | null) => void;
+  activityPopups: ActivityPopup[];
+  handleSetActivityPopups: (slot: Activity) => void;
 } | null;
 
 export const ItineraryContext = React.createContext<ContextInterface>(null);
@@ -61,12 +63,31 @@ function ItineraryPage() {
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { data: itinerary } = useGetItineraryByIdQuery(id);
+  const [activityPopups, setActivityPopups] = useState<ActivityPopup[]>([]);
   const [activeDay, setActiveDay] = useState<Date | null>(
     itinerary?.start_date || null
   );
   const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] =
     useUpdateItineraryMutation();
   const [searchResult, setSearchResult] = useState<any>(null);
+
+  const handleSetActivityPopups = (slot: Activity) => {
+    const activityPopup: ActivityPopup = {
+      _id: slot._id,
+      destination: slot.destination,
+      time: slot.time,
+      location: slot.location,
+    };
+    const arrSize = activityPopups.length;
+    const filteredArray = activityPopups.filter(
+      (a: ActivityPopup) => a._id !== activityPopup._id
+    );
+    const newActivityPopup: ActivityPopup[] =
+      filteredArray.length === arrSize
+        ? [...activityPopups, activityPopup]
+        : filteredArray;
+    setActivityPopups(newActivityPopup);
+  };
 
   useEffect(() => {
     if (updatedItinerary || closeSlotNewActivity) {
@@ -190,6 +211,8 @@ function ItineraryPage() {
     updateItinerary,
     activeDay,
     setActiveDay,
+    activityPopups,
+    handleSetActivityPopups,
   };
 
   return (
@@ -272,7 +295,7 @@ function ItineraryPage() {
             />
           ) : null}
         </sc.ItineraryDiv>
-       </sc.ItineraryPage>
+      </sc.ItineraryPage>
       {getDialogContainer()}
     </ItineraryContext.Provider>
   );

@@ -3,8 +3,52 @@ import { Yelp, Itinerary } from "database/models";
 
 const router = express.Router();
 const yelp = require("yelp-fusion");
-const apiKey =
-  "gpiujEUL6xRxguPmZsGwZqXqE2SBRjDVPtuLeWZg2he767IOkfXt2yZHFkxnhcmCkL_jQJREJtNYe08jR84HCppQJ8OHTDrEuPEzWYXfwXuBdIvmZO4IuTC2OrrvYHYx";
+const apiKey = process.env.YELP_API_KEY;
+const client = yelp.client(apiKey);
+const updateItinerary = async (
+  itineraryId: string,
+  activityId: string,
+  businessIds: string[]
+) => {
+  const itinerary = await Itinerary.findOne({ _id: itineraryId });
+  const activity = itinerary?.activities.filter((activity: any) => {
+    return activity._id == activityId;
+  });
+  if (activity && activity.length >= 1)
+    activity[0]?.business_ids.push(...businessIds);
+  itinerary?.save();
+};
+
+const filterYelpData = async (results: any, rating: number) => {
+  const filteredResults = results.filter(
+    (yelpData: any) =>
+      yelpData.rating >= rating - 1 && yelpData.rating <= rating + 1
+  );
+  const randomIndex = Math.floor(
+    Math.random() * (filteredResults.length - 2) + 2
+  );
+  const savedResults =
+    filteredResults.length >= 2
+      ? filteredResults.slice(randomIndex - 2, randomIndex)
+      : filteredResults;
+  return savedResults;
+};
+
+const saveYelpData = async (savedResults: any) => {
+  let businessIds: string[] = [];
+  for (let res of savedResults) {
+    const result: any = res;
+    const yelpData = { ...result, business_id: result.alias };
+    businessIds.push(result.alias);
+    await Yelp.findOneAndUpdate({ business_id: result.alias }, yelpData, {
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true,
+    });
+  }
+
+  return businessIds;
+};
 
 // use this endpoint when the user creates an activity with time between 6:00am - 11:00am
 router.post("/restaurants/breakfast_brunch", async (req, res, _next) => {
@@ -29,44 +73,15 @@ router.post("/restaurants/breakfast_brunch", async (req, res, _next) => {
     limit: 25,
   };
 
-  const client = yelp.client(apiKey);
-
   client
     .search(searchRequest)
     .then(async (response: any) => {
       const results = response.jsonBody.businesses;
-      const filteredResults = results.filter(
-        (restaurant: any) =>
-          restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1
-      );
-      const randomIndex = Math.floor(
-        Math.random() * (filteredResults.length - 2) + 2
-      );
-      const savedResults =
-        filteredResults.length >= 2
-          ? filteredResults.slice(randomIndex - 2, randomIndex)
-          : filteredResults;
-      let businessIds: string[] = [];
-      for (let res of savedResults) {
-        const result: any = res;
-        const yelpData = { ...result, business_id: result.alias };
-        businessIds.push(result.alias);
-        await Yelp.findOneAndUpdate({ business_id: result.alias }, yelpData, {
-          upsert: true,
-          new: true,
-          setDefaultsOnInsert: true,
-        });
-      }
+      const savedResults: any = await filterYelpData(results, rating);
+      const businessIds = await saveYelpData(savedResults);
 
-      const itinerary = await Itinerary.findOne({ _id: itineraryId });
-      const activity = itinerary?.activities.filter((activity: any) => {
-        return activity._id == activityId;
-      });
-      if (activity && activity.length >= 1)
-        activity[0]?.business_ids.push(...businessIds);
-      itinerary?.save().then(() => {
-        res.status(200).send(savedResults);
-      });
+      await updateItinerary(itineraryId, activityId, businessIds);
+      res.status(200).send(savedResults);
     })
     .catch((e: any) => {
       console.log(e);
@@ -96,41 +111,13 @@ router.post("/restaurants", async (req, res, _next) => {
     limit: 25,
   };
 
-  const client = yelp.client(apiKey);
-
   client
     .search(searchRequest)
     .then(async (response: any) => {
       const results = response.jsonBody.businesses;
-      const filteredResults = results.filter(
-        (restaurant: any) =>
-          restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1
-      );
-      const randomIndex = Math.floor(
-        Math.random() * (filteredResults.length - 2) + 2
-      );
-      const savedResults =
-        filteredResults.length >= 2
-          ? filteredResults.slice(randomIndex - 2, randomIndex)
-          : filteredResults;
-      let businessIds: string[] = [];
-      for (let res of savedResults) {
-        const result: any = res;
-        const yelpData = { ...result, business_id: result.alias };
-        businessIds.push(result.alias);
-        await Yelp.findOneAndUpdate({ business_id: result.alias }, yelpData, {
-          upsert: true,
-          new: true,
-          setDefaultsOnInsert: true,
-        });
-      }
-      const itinerary = await Itinerary.findOne({ _id: itineraryId });
-      const activity = itinerary?.activities.filter((activity: any) => {
-        return activity._id == activityId;
-      });
-      if (activity && activity.length >= 1)
-        activity[0]?.business_ids.push(...businessIds);
-      itinerary?.save();
+      const savedResults: any = await filterYelpData(results, rating);
+      const businessIds = await saveYelpData(savedResults);
+      await updateItinerary(itineraryId, activityId, businessIds);
       res.status(200).send(savedResults);
     })
     .catch((e: string) => {
@@ -158,42 +145,14 @@ router.post("/nightlife", async (req, res, _next) => {
     limit: 15,
   };
 
-  const client = yelp.client(apiKey);
-
   client
     .search(searchRequest)
     .then(async (response: any) => {
       const results = response.jsonBody.businesses;
-      const filteredResults = results.filter(
-        (attraction: any) =>
-          attraction.rating >= rating - 1 && attraction.rating <= rating + 1
-      );
-      const randomIndex = Math.floor(
-        Math.random() * (filteredResults.length - 2) + 2
-      );
-      const savedResults =
-        filteredResults.length >= 2
-          ? filteredResults.slice(randomIndex - 2, randomIndex)
-          : filteredResults;
-      let businessIds: string[] = [];
-      for (let res of savedResults) {
-        const result: any = res;
-        const yelpData = { ...result, business_id: result.alias };
-        businessIds.push(result.alias);
-        await Yelp.findOneAndUpdate({ business_id: result.alias }, yelpData, {
-          upsert: true,
-          new: true,
-          setDefaultsOnInsert: true,
-        });
-      }
+      const savedResults: any = await filterYelpData(results, rating);
+      const businessIds = await saveYelpData(savedResults);
 
-      const itinerary = await Itinerary.findOne({ _id: itineraryId });
-      const activity = itinerary?.activities.filter((activity: any) => {
-        return activity._id == activityId;
-      });
-      if (activity && activity.length >= 1)
-        activity[0]?.business_ids.push(...businessIds);
-      itinerary?.save();
+      await updateItinerary(itineraryId, activityId, businessIds);
       res.status(200).send(savedResults);
     })
     .catch((e: string) => {
@@ -226,41 +185,13 @@ router.post("/attractions", async (req, res, _next) => {
     limit: 25,
   };
 
-  const client = yelp.client(apiKey);
-
   client
     .search(searchRequest)
     .then(async (response: any) => {
       const results = response.jsonBody.businesses;
-      const filteredResults = results.filter(
-        (attraction: any) =>
-          attraction.rating >= rating - 1 && attraction.rating <= rating + 1
-      );
-      const randomIndex = Math.floor(
-        Math.random() * (filteredResults.length - 2) + 2
-      );
-      const savedResults =
-        filteredResults.length >= 2
-          ? filteredResults.slice(randomIndex - 2, randomIndex)
-          : filteredResults;
-      let businessIds: string[] = [];
-      for (let res of savedResults) {
-        const result: any = res;
-        const yelpData = { ...result, business_id: result.alias };
-        businessIds.push(result.alias);
-        await Yelp.findOneAndUpdate({ business_id: result.alias }, yelpData, {
-          upsert: true,
-          new: true,
-          setDefaultsOnInsert: true,
-        });
-      }
-      const itinerary = await Itinerary.findOne({ _id: itineraryId });
-      const activity = itinerary?.activities.filter((activity: any) => {
-        return activity._id == activityId;
-      });
-      if (activity && activity.length >= 1)
-        activity[0]?.business_ids.push(...businessIds);
-      itinerary?.save();
+      const savedResults: any = await filterYelpData(results, rating);
+      const businessIds = await saveYelpData(savedResults);
+      await updateItinerary(itineraryId, activityId, businessIds);
       res.status(200).send(savedResults);
     })
     .catch((e: string) => {
@@ -272,7 +203,6 @@ router.post("/attractions", async (req, res, _next) => {
 // use this when displaying suggestions
 router.post("/businesses", async (req, res, _next) => {
   const { itineraryId, activityId } = req.body;
-  const client = yelp.client(apiKey);
 
   let businessIds: string[] = [];
   const itinerary = await Itinerary.findOne({ _id: itineraryId });

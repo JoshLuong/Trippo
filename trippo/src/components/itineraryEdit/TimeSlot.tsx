@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useCallback } from "react";
+import React, { FC, useState, useRef, useCallback, useContext } from "react";
 import { TextField } from "@material-ui/core";
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
@@ -7,7 +7,11 @@ import { Grid, Tooltip, Input, InputAdornment } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
-import { Activity } from "types/models";
+import { Activity, ActivityPopup } from "types/models";
+import {
+  ContextInterface,
+  ItineraryContext,
+} from "../itineraryPage/ItineraryPage";
 import { useEffect } from "react";
 import { debounce } from "lodash";
 
@@ -31,6 +35,7 @@ const TimeSlot: FC<Props> = ({
   size,
   isReadOnly,
 }) => {
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
   const { time, destination, comments, type, address, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
@@ -95,7 +100,14 @@ const TimeSlot: FC<Props> = ({
 
   const headerSize = size === "small" ? 12 : 11;
   const renderHeaderContent = () => (
-    <sc.HeaderGrid container item lg={headerSize} md={headerSize} sm={headerSize} xs={headerSize}>
+    <sc.HeaderGrid
+      container
+      item
+      lg={headerSize}
+      md={headerSize}
+      sm={headerSize}
+      xs={headerSize}
+    >
       <sc.Destination>
         <Grid
           container
@@ -116,7 +128,17 @@ const TimeSlot: FC<Props> = ({
             sm={10}
             xs={10}
           >
-            <span>{destination}</span>
+            {size === "small" ? (
+              <span>{destination}</span>
+            ) : (
+              <sc.DestinationSpan
+                onClick={() =>
+                  itineraryContext?.handleSetActivityPopups(activity)
+                }
+              >
+                {destination}
+              </sc.DestinationSpan>
+            )}
           </Grid>
           <sc.AddressSpan>{address}</sc.AddressSpan>
         </Grid>
@@ -129,7 +151,7 @@ const TimeSlot: FC<Props> = ({
           xs={3}
         >
           <sc.Cost {...costStyling}>
-          {activity.cost && !showEdit ? (
+            {activity.cost && !showEdit ? (
               <Tooltip
                 title={`${
                   showCost ? "Hide from" : "Include in"
@@ -150,10 +172,13 @@ const TimeSlot: FC<Props> = ({
                   disabled={!showEdit}
                   value={activity.cost}
                   onChange={(e) => {
-                    if (Number.isInteger(Number(e.target.value)) || e.target.value === "") {
+                    if (
+                      Number.isInteger(Number(e.target.value)) ||
+                      e.target.value === ""
+                    ) {
                       editActivity({
                         ...activity,
-                        cost: Number(e.target.value) || undefined
+                        cost: Number(e.target.value) || undefined,
                       });
                     }
                   }}
@@ -213,13 +238,11 @@ const TimeSlot: FC<Props> = ({
           small={size === "small"}
         >
           {renderHeaderContent()}
-          {
-            size !== "small" ? (
-              <Grid container item lg={1} md={1} sm={1} xs={1}>
+          {size !== "small" ? (
+            <Grid container item lg={1} md={1} sm={1} xs={1}>
               <sc.CommentButton>{!isReadOnly && getButtons()}</sc.CommentButton>
             </Grid>
-            ) : null
-          }
+          ) : null}
           <Grid container item lg={12} md={12} sm={12} xs={12}>
             <sc.Comments small={size === "small"}>
               <sc.StyledTextField

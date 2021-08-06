@@ -125,6 +125,13 @@ export const CostGrid = styled(Grid)`
   }
 `;
 
+export const DestinationSpan = styled.span`
+  :hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
+
 export const IconGrid = styled(Grid)`
   display: flex;
   align-items: center;

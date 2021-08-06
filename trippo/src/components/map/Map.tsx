@@ -18,7 +18,8 @@ import {
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
 import "./Map.css";
-import { useAppSelector } from 'app/store';
+import { ActivityPopup } from "types/models";
+import { useAppSelector } from "app/store";
 
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
@@ -44,10 +45,10 @@ const reverseGeocodeAddress = async (lat: number, lng: number) => {
       lat +
       ".json?access_token=" +
       process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
-      {method: "GET",
-    }
-  ).then((res: any) => res.json())
-  .then((data: any) => address = data.features[0].place_name);
+    { method: "GET" }
+  )
+    .then((res: any) => res.json())
+    .then((data: any) => (address = data.features[0].place_name));
   // let exactAddress = address.data.features[0].place_name;
   return address;
 };
@@ -62,10 +63,10 @@ const reverseGeocodeName = async (lat: number, lng: number) => {
       lat +
       ".json?access_token=" +
       process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
-      {method: "GET",
-    }
-  ).then((res: any) => res.json())
-  .then((data: any) => name = data.features[0].text);
+    { method: "GET" }
+  )
+    .then((res: any) => res.json())
+    .then((data: any) => (name = data.features[0].text));
   return name;
 };
 
@@ -97,18 +98,19 @@ const Map: FC<Props> = ({
         ]
       : [];
 
-  const [activityPopup, setActivityPopup] = useState<number[]>([]);
-
   const handleViewportChange = (viewport: any) => {
     setViewport({ ...viewport, zoom: 11, pitch: 30 });
   };
 
   useEffect(() => {
     if (itinerary) {
-      const longitude = window.innerWidth <= 700 ? itinerary.dest_coords.lng : itinerary.dest_coords.lng - 0.2;
+      const longitude =
+        window.innerWidth <= 700
+          ? itinerary.dest_coords.lng
+          : itinerary.dest_coords.lng - 0.2;
       setViewport({
         longitude: !isFirstLoad ? viewport.longitude : longitude,
-        latitude: !isFirstLoad ? viewport.latitude : itinerary.dest_coords.lat ,
+        latitude: !isFirstLoad ? viewport.latitude : itinerary.dest_coords.lat,
         zoom: 10,
         transitionDuration: 400,
         pitch: 30,
@@ -133,55 +135,46 @@ const Map: FC<Props> = ({
     >
       {itinerary?.activities.map((slot, index) => {
         return (
-        <Marker
-          key={slot._id}
-          latitude={slot.location.lat}
-          longitude={slot.location.lng}
-          // SVG width / 2
-          offsetLeft={-13.415}
-          // SVG height + 1px
-          offsetTop={-41}
-        >
-          <Pin
-            className="marker"
-            onClick={() => {
-              const arrSize = activityPopup.length;
-              const filteredArray = activityPopup.filter((a) => a !== index);
-              const newActivityPopup: number[] =
-                filteredArray.length === arrSize
-                  ? [...activityPopup, index]
-                  : filteredArray;
-              setActivityPopup(newActivityPopup);
-              // dispatch(setHighlighted(slot.id))
-            }}
-            fill={
-              moment(itineraryContext?.activeDay).format("MMM Do YYYY") ===
-              moment(new Date(slot.time)).format("MMM Do YYYY")
-                ? t.getIconColor(slot.type, "0.95")
-                : t.getIconColor(slot.type, "0.25")
-            }
-          />
-        </Marker>
-      )})}
+          <Marker
+            key={slot._id}
+            latitude={slot.location.lat}
+            longitude={slot.location.lng}
+            // SVG width / 2
+            offsetLeft={-13.415}
+            // SVG height + 1px
+            offsetTop={-41}
+          >
+            <Pin
+              className="marker"
+              onClick={() => {
+                itineraryContext?.handleSetActivityPopups(slot);
+              }}
+              fill={
+                moment(itineraryContext?.activeDay).format("MMM Do YYYY") ===
+                moment(new Date(slot.time)).format("MMM Do YYYY")
+                  ? t.getIconColor(slot.type, "0.95")
+                  : t.getIconColor(slot.type, "0.25")
+              }
+            />
+          </Marker>
+        );
+      })}
       {itinerary?.activities &&
-        activityPopup.map((popupIndex) => (
+        itineraryContext?.activityPopups.map((activityPopup: ActivityPopup) => (
           <Popup
-            key={popupIndex}
-            latitude={itinerary?.activities[popupIndex].location.lat}
-            longitude={itinerary?.activities[popupIndex].location.lng}
+            key={activityPopup._id}
+            latitude={activityPopup.location.lat}
+            longitude={activityPopup.location.lng}
             closeButton={false}
             offsetTop={-47}
             anchor="bottom"
           >
-            <div>{itinerary?.activities[popupIndex].destination}</div>
+            <div>{activityPopup.destination}</div>
+            <div>{new Date(activityPopup.time!).toDateString()}</div>
             <div>
-              {new Date(itinerary?.activities[popupIndex].time!).toDateString()}
-            </div>
-            <div>
-              {moment(
-                new Date(itinerary?.activities[popupIndex].time!),
+              {moment(new Date(activityPopup.time!), "hh:mm A").format(
                 "hh:mm A"
-              ).format("hh:mm A")}
+              )}
             </div>
           </Popup>
         ))}

@@ -128,19 +128,7 @@ const TimeSlot: FC<Props> = ({
           xs={3}
         >
           <sc.Cost {...costStyling}>
-            <sc.StyledFormControl fullWidth>
-              {activity.cost || showEdit ? (
-                <Input
-                  disabled={!showEdit}
-                  value={activity.cost}
-                  onChange={() => alert("TODO")}
-                  startAdornment={
-                    <InputAdornment position="start">$</InputAdornment>
-                  }
-                />
-              ) : null}
-            </sc.StyledFormControl>
-            {activity.cost && !showEdit ? (
+          {activity.cost && !showEdit ? (
               <Tooltip
                 title={`${
                   showCost ? "Hide from" : "Include in"
@@ -155,6 +143,26 @@ const TimeSlot: FC<Props> = ({
                 </button>
               </Tooltip>
             ) : null}
+            <sc.StyledFormControl fullWidth>
+              {activity.cost || showEdit ? (
+                <Input
+                  disabled={!showEdit}
+                  value={activity.cost}
+                  onChange={(e) => {
+                    console.log(Number.isInteger(Number(e.target.value)));
+                    if (Number.isInteger(Number(e.target.value)) || e.target.value === "") {
+                      editActivity({
+                        ...activity,
+                        cost: Number(e.target.value) || undefined
+                      });
+                    }
+                  }}
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
+                />
+              ) : null}
+            </sc.StyledFormControl>
           </sc.Cost>
         </Grid>
       </sc.Destination>

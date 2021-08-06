@@ -13,12 +13,13 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { setItinerary } from 'app/reducers/itinerarySlice';
-import { useCreateActivityMutation } from "services/itinerary";
+import { useCreateActivityMutation, useLazyGetItineraryByIdQuery } from "services/itinerary";
 import { Activity } from "types/models";
 import {
   ContextInterface,
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
+import { useParams } from 'react-router-dom';
 
 interface Props {
   handleClose: () => void;
@@ -47,10 +48,18 @@ const NewSlot: FC<Props> = ({
   const [comments, setComments] = useState("");
   const [time, setTime] = useState("12:00");
   const [selectedDate, setSelectedDate] = useState(itineraryContext?.activeDay || itinerary?.start_date);
-  const [
-    createActivity, // This is the mutation trigger
-    { isLoading: isUpdating, data: updatedItinerary }, // This is the destructured mutation result
-  ] = useCreateActivityMutation();
+  const [createActivity] = useCreateActivityMutation();
+  const [triggerGetQuery, result] = useLazyGetItineraryByIdQuery();
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    if (result.data) {
+      dispatch(setItinerary(result.data));
+      setSearchResult(null);
+      handleSubmitAndClose();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result]);
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
@@ -189,21 +198,18 @@ const NewSlot: FC<Props> = ({
       type: type,
       comments: comments.split("\n"),
     };
-    createActivity(newActivity).then((res: any) => {
+    createActivity(newActivity).then(async (res: any) => {
     // uncomment after fixing rendering issue below
       // if (res.error) {
       //   handleClose();
       //   return;
       // }
-      dispatch(setItinerary({
-        ...itinerary,
-        activities: itinerary?.activities ? [...itinerary?.activities, res.data] : [res.data],
-      }));
-      getSuggestedBusinesses(res.data._id);
+      await getSuggestedBusinesses(res.data._id);
+      triggerGetQuery(id);
     });
     // these should go inside createActivity but it creates a rendering issue for the activities.
-    setSearchResult(null);
-    handleSubmitAndClose();
+    // setSearchResult(null);
+    // handleSubmitAndClose();
   };
 
   const selectStyles = sc.selectStyles();

@@ -4,7 +4,7 @@
 
 // If they are: they proceed to the page
 // If not: they are redirected to the login page.
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 
 interface Props {

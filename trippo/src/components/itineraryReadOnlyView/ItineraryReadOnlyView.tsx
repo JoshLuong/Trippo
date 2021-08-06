@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import * as sc from "./ItineraryReadOnlyView.styles";
 import Day from "../itineraryEdit/Day";
 import moment from "moment";

@@ -18,8 +18,7 @@ import {
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
 import "./Map.css";
-import { useGetItineraryByIdQuery } from "services/itinerary";
-import { useParams } from "react-router-dom";
+import { useAppSelector } from 'app/store';
 
 interface Props {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
@@ -85,8 +84,7 @@ const Map: FC<Props> = ({
     zoom: 2,
   });
 
-  const { id } = useParams<{ id: string }>();
-  const { data } = useGetItineraryByIdQuery(id);
+  const itinerary = useAppSelector((state) => state.itinerary.value);
 
   const bbox =
     viewport.longitude && viewport.latitude
@@ -105,10 +103,10 @@ const Map: FC<Props> = ({
   };
 
   useEffect(() => {
-    if (data) {
+    if (itinerary) {
       setViewport({
-        longitude: data.dest_coords.lng - 0.2,
-        latitude: data.dest_coords.lat - 0.1,
+        longitude: itinerary.dest_coords.lng - 0.2,
+        latitude: itinerary.dest_coords.lat - 0.1,
         zoom: 10,
         transitionDuration: 300,
         pitch: 30,
@@ -116,7 +114,7 @@ const Map: FC<Props> = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [itinerary]);
 
   return (
     <ReactMapGL
@@ -130,7 +128,8 @@ const Map: FC<Props> = ({
       onLoad={handleIsLoading}
       mapStyle="mapbox://styles/mapbox/streets-v11"
     >
-      {data?.activities.map((slot, index) => (
+      {itinerary?.activities.map((slot, index) => {
+        return (
         <Marker
           key={slot._id}
           latitude={slot.location.lat}
@@ -160,24 +159,24 @@ const Map: FC<Props> = ({
             }
           />
         </Marker>
-      ))}
-      {data?.activities &&
+      )})}
+      {itinerary?.activities &&
         activityPopup.map((popupIndex) => (
           <Popup
             key={popupIndex}
-            latitude={data?.activities[popupIndex].location.lat}
-            longitude={data?.activities[popupIndex].location.lng}
+            latitude={itinerary?.activities[popupIndex].location.lat}
+            longitude={itinerary?.activities[popupIndex].location.lng}
             closeButton={false}
             offsetTop={-47}
             anchor="bottom"
           >
-            <div>{data?.activities[popupIndex].destination}</div>
+            <div>{itinerary?.activities[popupIndex].destination}</div>
             <div>
-              {new Date(data?.activities[popupIndex].time!).toDateString()}
+              {new Date(itinerary?.activities[popupIndex].time!).toDateString()}
             </div>
             <div>
               {moment(
-                new Date(data?.activities[popupIndex].time!),
+                new Date(itinerary?.activities[popupIndex].time!),
                 "hh:mm A"
               ).format("hh:mm A")}
             </div>

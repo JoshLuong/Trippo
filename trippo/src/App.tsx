@@ -50,6 +50,7 @@ function App() {
 
   useEffect(() => {
     setShowSignInError(((user && !user.isLoggedIn) || user === null) && history.location.state && history.location.state.from.pathname !== '/')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history])
 
   return (

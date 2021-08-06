@@ -52,6 +52,7 @@ const Navbar = (props: { history: any }) => {
         credentials: "include",
       });
       dispatch(setUser({ isLoggedIn: false }));
+      window.localStorage.removeItem('user');
       handleMenuClick("/");
     } catch (e) {
       console.log(e);

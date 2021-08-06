@@ -9,6 +9,15 @@ export const FooterImage = styled.div`
   opacity: 0.85;
 `;
 
+export const SearchDiv = styled.div`
+  height: 7em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
+  text-align: center;
+`;
+
 export const ItinerariesViewGrid = styled.div`
   margin-top: 64px;
   min-height: 100%;

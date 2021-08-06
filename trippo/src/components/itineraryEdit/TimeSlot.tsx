@@ -93,8 +93,9 @@ const TimeSlot: FC<Props> = ({
     setShowCost(!showCost);
   };
 
+  const headerSize = size === "small" ? 12 : 11;
   const renderHeaderContent = () => (
-    <sc.HeaderGrid container item lg={11} md={11} sm={11} xs={11}>
+    <sc.HeaderGrid container item lg={headerSize} md={headerSize} sm={headerSize} xs={headerSize}>
       <sc.Destination>
         <Grid
           container
@@ -212,9 +213,13 @@ const TimeSlot: FC<Props> = ({
           small={size === "small"}
         >
           {renderHeaderContent()}
-          <Grid container item lg={1} md={1} sm={1} xs={1}>
-            <sc.CommentButton>{!isReadOnly && getButtons()}</sc.CommentButton>
-          </Grid>
+          {
+            size !== "small" ? (
+              <Grid container item lg={1} md={1} sm={1} xs={1}>
+              <sc.CommentButton>{!isReadOnly && getButtons()}</sc.CommentButton>
+            </Grid>
+            ) : null
+          }
           <Grid container item lg={12} md={12} sm={12} xs={12}>
             <sc.Comments small={size === "small"}>
               <sc.StyledTextField

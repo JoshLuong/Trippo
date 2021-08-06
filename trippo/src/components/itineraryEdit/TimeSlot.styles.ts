@@ -120,7 +120,7 @@ export const Destination = styled.div`
 export const CostGrid = styled(Grid)`
   @media (max-width: 600px) {
     top: 0.75em;
-    right: 7px;
+    right: 12px;
     position: absolute;
   }
 `;

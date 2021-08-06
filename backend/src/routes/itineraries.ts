@@ -13,6 +13,11 @@ router.get("/", async (req: any, res, _next) => {
         collaborators: { $elemMatch: { _id: req.session.userId } },
         name: { $regex: regex },
       },
+      { user_id: req.session.userId, tags: { $regex: regex } },
+      {
+        collaborators: { $elemMatch: { _id: req.session.userId } },
+        tags: { $regex: regex },
+      },
     ],
   };
 

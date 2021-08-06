@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import WelcomePage from "components/welcomePage/WelcomePage";
+import AboutPage from "components/aboutPage/AboutPage";
 import { setUser } from 'app/reducers/userSlice';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import Snackbar, { SnackbarCloseReason } from "@material-ui/core/Snackbar";
@@ -62,6 +63,7 @@ function App() {
       <Navbar />
       <Switch>
         <Route exact path="/" component={() => <WelcomePage />} />
+        <Route exact path="/about" component={() => <AboutPage />} />
         <PrivateRoute exact path="/itinerary/:id" component={() => <ItineraryPage />} />
         <PrivateRoute exact path="/home" component={() => <ItinerariesView />} />
       </Switch>

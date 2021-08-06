@@ -2,19 +2,19 @@ import styled from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
-import { TextField, FormControl } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { TextField, FormControl } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const darkGrey = c.GREY;
-const disabledBorder = 'border-right: 0px;';
+const disabledBorder = "border-right: 0px;";
 
-export interface StyledTimeSlotProps{
-  showSuggestions: boolean
-  borderColor: string
+export interface StyledTimeSlotProps {
+  showSuggestions: boolean;
+  borderColor: string;
 }
 
-export interface StyledCardSize{
-  small: boolean
+export interface StyledCardSize {
+  small: boolean;
 }
 
 export const StyledIconButton = styled(IconButton)`
@@ -34,7 +34,8 @@ export const Slot = styled.div<StyledTimeSlotProps>`
   padding-top: 0.75em;
   padding-bottom: 0.75em;
   padding-left: 0.25em;
-  border-left: 8px solid ${props => !props.showSuggestions ? props.borderColor : c.DARK_ORANGE};
+  border-left: 8px solid
+    ${(props) => (!props.showSuggestions ? props.borderColor : c.DARK_ORANGE)};
   padding-right: 0.25em;
   background-color: #fff;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.4);
@@ -50,7 +51,8 @@ export const Time = styled.div<StyledCardSize>`
   padding-bottom: 0.5em;
   padding-left: 4px;
 
-  div:before, div:after{
+  div:before,
+  div:after {
     content: none;
   }
 
@@ -66,7 +68,9 @@ export const Time = styled.div<StyledCardSize>`
   @media (max-width: 960px) {
     ${disabledBorder}
   }
-  ${({ small }) => small && `
+  ${({ small }) =>
+    small &&
+    `
     ${disabledBorder}
   `}
 `;
@@ -77,7 +81,9 @@ export const SlotGrid = styled(Grid)<StyledCardSize>`
     padding-right: 10px;
   }
 
-  ${({ small }) => small && `
+  ${({ small }) =>
+    small &&
+    `
   padding-left: 10px;
   padding-right: 10px;
 `}
@@ -166,8 +172,14 @@ export const Comments = styled.ul<StyledCardSize>`
     margin-left: 1em;
   }
 
-  
-  ${({ small }) => small && `
+  @media (max-width: 600px) {
+    margin: 0.4em 0;
+    padding: 0;
+  }
+
+  ${({ small }) =>
+    small &&
+    `
   margin-left: 1em;
 `}
 `;
@@ -208,7 +220,9 @@ export const StyledFormControl = styled(FormControl)`
     margin-right: -6px;
   }
 
-  .MuiInput-underline, .MuiInput-underline:before, .MuiInput-underline:after {
+  .MuiInput-underline,
+  .MuiInput-underline:before,
+  .MuiInput-underline:after {
     transition: none;
     border-bottom: 0 !important;
     margin-right: 0;
@@ -216,32 +230,32 @@ export const StyledFormControl = styled(FormControl)`
 `;
 export const StyledTextField = withStyles({
   root: {
-    '& label': {
+    "& label": {
       paddingRight: `7px`,
-      backgroundColor: 'white',
+      backgroundColor: "white",
     },
-    '& label.Mui-focused': {
+    "& label.Mui-focused": {
       color: `${c.DARK_GREY}`,
     },
-    '& .MuiInput-underline:after': {
+    "& .MuiInput-underline:after": {
       borderBottomColor: `${c.DARK_GREY}`,
     },
-    '& .MuiOutlinedInput-root': {
-      '&:hover fieldset': {
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": {
         borderColor: `${c.DARK_GREY}`,
       },
-      '&.Mui-focused fieldset': {
+      "&.Mui-focused fieldset": {
         borderColor: `${c.DARK_GREY}`,
       },
     },
-    '& .Mui-disabled .Mui-disabled': {
-      opacity: '10',
-      color: 'initial'
+    "& .Mui-disabled .Mui-disabled": {
+      opacity: "10",
+      color: "initial",
     },
-    '& .MuiInputBase-formControl': {
-      opacity: '10',
-      color: 'initial',
-      fontSize: '0.90em'
-    }
+    "& .MuiInputBase-formControl": {
+      opacity: "10",
+      color: "initial",
+      fontSize: "0.90em",
+    },
   },
 })(TextField);

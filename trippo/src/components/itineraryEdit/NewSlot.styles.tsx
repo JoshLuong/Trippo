@@ -175,6 +175,7 @@ export const textField = withStyles({
   root: {
     '& label.Mui-focused': {
       color: '#219EBC',
+      width: '100%',
     },
     '& .MuiInput-underline:after': {
       borderBottomColor: '#219EBC',

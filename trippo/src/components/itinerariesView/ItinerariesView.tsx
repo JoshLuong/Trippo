@@ -110,16 +110,9 @@ const ItinerariesView = () => {
           priveleges.
         </Alert>
       </Snackbar>
-      <div
-        style={{
-          height: "7em",
-          width: "100%",
-          boxShadow: "0 4.5px 4px 0 rgba(0, 0, 0, 0.4)",
-          textAlign: "center",
-        }}
-      >
+      <sc.SearchDiv>
         <Searchbar onChange={search} />
-      </div>
+      </sc.SearchDiv>
       <sc.ButtonDiv>
         <button onClick={() => setShowNewItinerary(true)}>
           Plan A New Trip

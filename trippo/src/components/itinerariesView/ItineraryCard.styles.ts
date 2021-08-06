@@ -40,6 +40,10 @@ export const Card = styled.div`
   @media (max-width: 960px) {
     width: 70%;
   }
+
+  @media (max-width: 660px) {
+    width: 80%;
+  }
 `;
 
 export const StyledLabelIcon = styled(LabelIcon)`
@@ -55,6 +59,10 @@ export const TripName = styled.a`
   font-size: 1.75em;
   margin-bottom: 0.35em;
   overflow: hidden;
+
+  @media (max-width: 660px) {
+    font-size: 1.5em;
+  }
 `;
 
 export const StyledPeopleIcon = styled(PeopleIcon)`
@@ -73,6 +81,10 @@ export const Collaborators = styled.div`
   font-weight: 300;
   display: flex;
   justify-content: flex-start;
+
+  @media (max-width: 660px) {
+    font-size: 0.95em;
+  }
 `;
 
 export const LabelDiv = styled.div`
@@ -106,6 +118,10 @@ export const DateGrid = styled(Grid)`
     color: ${c.DARK_ORANGE};
     margin-top: 0.2em;
     margin-right: 0.35em;
+  }
+
+  @media (max-width: 660px) {
+    font-size: 0.95em;
   }
 `;
 

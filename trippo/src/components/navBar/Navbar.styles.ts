@@ -8,6 +8,10 @@ const drawerWidth = 240;
 export const Logo = styled.div`
   position: absolute;
   left: 64px;
+
+  @media (max-width: 660px) {
+    left: 50px;
+  }
 `;
 
 export const DateGrid = styled(Grid)`

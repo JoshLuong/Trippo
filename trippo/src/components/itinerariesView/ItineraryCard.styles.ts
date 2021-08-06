@@ -144,5 +144,6 @@ export const EditButton = styled.button`
   }
   :hover {
     cursor: pointer;
+    text-decoration: underline;
   }
 `;

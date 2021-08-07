@@ -80,7 +80,7 @@ Trippo uses Git and GitHub for version control, with collaborators using differe
 
 ## Above and Beyond Functionality:
 
-Trippo securely uses the Google Login API to login to user accounts, linking itineraries to their Google login. Using the Mapbox map components, Trippo actively updates and displays itinerary information and activity information. Trippo uses custom Yelp API calls to get suggested destinations based on destination times and the business hours of suggested destinations. Trippo allows users the ability to create shareable read-only itinerary links that can be shared and accessed without creating an account, so any itinerary you make can be shared among your group. The UI of Trippo is stylish, clean, and responsive to any changes the user makes, giving it a professional and practical appearance.
+Trippo securely uses the Google Login API to login to user accounts, linking itineraries to their Google login. Using the Mapbox map components, Trippo actively updates and displays itinerary information and activity information. Trippo uses custom Yelp API calls to get suggested destinations based on destination times and the business hours of suggested destinations. Trippo allows users the ability to create shareable read-only itinerary links that can be shared and accessed without creating an account, as well as creating a downloadable pdf of your full itinerary so any itinerary you make can be shared among your group, online or offline. The UI of Trippo is stylish, clean, and responsive to any changes the user makes, giving it a professional and practical appearance.
 
 ## Next Steps:
 

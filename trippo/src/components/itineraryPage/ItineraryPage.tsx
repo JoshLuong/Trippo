@@ -17,7 +17,7 @@ import {
   DialogTitle,
   Tooltip,
 } from "@material-ui/core";
-import { useAppDispatch } from "app/store";
+import { useAppDispatch, useAppSelector } from "app/store";
 import { useParams, useHistory } from "react-router-dom";
 import {
   useGetItineraryByIdQuery,
@@ -66,6 +66,7 @@ function ItineraryPage() {
   const [closeSlotNewActivity, setCloseSlotNewActivity] = useState(false);
   const [closeSlotNoActivity, setCloseSlotNoActivity] = useState(false);
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.value);
   const { id } = useParams<{ id: string }>();
   const [sharedItinerary, setSharedItinerary] = useState<Itinerary | null>(
     null
@@ -324,9 +325,9 @@ function ItineraryPage() {
             setSearchResult={setSearchResult}
           />
           <sc.SideBar disabled={IS_SHARED}>
-            {itinerary && (
+            {itinerary && user && (
               <sc.StyledPDFDownloadLink
-                document={<ItineraryPDF itinerary={itinerary} />}
+                document={<ItineraryPDF itinerary={itinerary} user={user} />}
                 fileName={`${itinerary.name.replace(/\s/g, "_")}.pdf`}
               >
                 {() => (

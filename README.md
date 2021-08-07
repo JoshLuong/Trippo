@@ -41,7 +41,7 @@ Minimal(3-5):
 
 -Introducing a “share your itinerary” with other users of the platform that decide to go to the same place (i.e. if a user decides to go to LA, the user can see popular itineraries that past users created)
 
-- **Above requirement replaced with**: Introducing a “share your itinerary” with other users of the platform 
+- **Above requirement replaced with**: Introducing a “share your itinerary” with others
 :heavy_check_mark:
 
 
@@ -55,7 +55,7 @@ Minimal(3-5):
 
 
 
-## Technology Used: 
+## Technologies Used: 
 
 ### - Unit 1: HTML, CSS, JS
 
@@ -71,4 +71,49 @@ Node and Express allowed us to call the external API's used within Trippo such a
 
 ### - Unit 4: NoSQL with MongoDB
 
-Trippo uses a MongoDB backend with custom schemas to store user, itinerary, and activity information. The flexible nature of NoSQL allowed us to plan a way that we wanted to store information, and make requests to the stored information in the MongoDB Atlas cloud database. With document-based query language and JSON-style information storage, working with and querying the data in our database was quicker and easier than would have been possible using traditional SQL storage considering our documents all do not have a standard layout.
+Trippo uses a MongoDB backend with custom schemas to store user, itinerary, and activity information. The flexible nature of NoSQL allowed us to plan a way that we wanted to store information, and make requests to the stored information in the MongoDB Atlas cloud database. With document-based query language and JSON-style information storage, working with and querying the data in our database was quicker and easier than would have been possible using traditional SQL storage considering our documents do not all have a standard layout.
+
+### - Unit 5: Release Engineering
+
+Trippo uses Git and GitHub for version control, with collaborators using different branches to write enhancements and fix bugs. We only push changes to the "final_project" branch after collaborators manually test enhancements to ensure there are no new bugs introduced. We set up an admin email with a new Heroku account, configuring the "final_project" branch to automatically deploy changes to the production build through Heroku because Heroku is a simple to use platform that team members were familiar with, and it contains GitHub integration. 
+
+
+## Above and Beyond Functionality:
+
+Trippo securely uses the Google Login API to login to user accounts, linking itineraries to their Google login. Using the Mapbox map components, Trippo actively updates and displays itinerary information and activity information. Trippo uses custom Yelp API calls to get suggested destinations based on destination times and the business hours of suggested destinations. Trippo allows users the ability to create shareable read-only itinerary links that can be shared and accessed without creating an account, so any itinerary you make can be shared among your group. The UI of Trippo is stylish, clean, and responsive to any changes the user makes, giving it a professional and practical appearance.
+
+## Next Steps:
+
+To further improve on Trippo, we plan to complete our missing standard requirement and use AirBNB's API to allow users to book lodging for their trips through Trippo. We also plan to look into flight planning API's, use information from a users previously created itineraries to recommend new locations, and allows users to choose their mode of travel to return estimated times between destinations.
+
+## List of Contributions:
+
+#### Joshua Luong:
+
+- 
+- 
+- 
+
+#### Andre Ramkairsingh:
+
+- 
+- 
+- 
+
+#### Richard Ho:
+
+- 
+- 
+- 
+
+#### Rohit Bassi:
+
+- Integrated the navigation bar and search bar with routing and styling, created and assisted in styling the About page for Trippo.
+- Creation and form validation for new activities, adding new activities to existing itineraries, itinerary deletion, retrieving information about existing map pins from itineraries.
+- Connected Yelp API requests to new activity creation, created Trippo user documentation*, drafted presentation script, wrote final project report.
+
+*will be done soon
+
+## Prototypes: 
+![image](https://user-images.githubusercontent.com/45836234/119914722-b2ce1200-bf15-11eb-976d-943d2b00ca87.png)
+![image](https://user-images.githubusercontent.com/45836234/119914746-c8433c00-bf15-11eb-9cfc-3f1f57b5c5a6.png)

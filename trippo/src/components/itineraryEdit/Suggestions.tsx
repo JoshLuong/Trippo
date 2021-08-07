@@ -48,6 +48,7 @@ const Suggestions: FC<Props> = ({ activity }) => {
       }
     })
     return () => { isMounted = false };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -77,8 +78,8 @@ const Suggestions: FC<Props> = ({ activity }) => {
                   <img alt={`${s.rating} stars`} src={starString} width="70"/>
                 </sc.YelpStarsAndCost>
                 <sc.Comments>
-                  <a target="_blank" href={s.url}>
-                    <img src='/yelp/yelp_logo.png' width="40"></img>
+                  <a target="blank" rel="noreferrer" href={s.url}>
+                    <img src='/yelp/yelp_logo.png' alt="Yelp logo" width="40"></img>
                   </a>
                 </sc.Comments>
               </Grid>

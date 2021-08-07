@@ -16,7 +16,6 @@ import { useAppSelector } from "app/store";
 import { User } from "types/models";
 import { useGetUserByIdQuery } from "services/user";
 import MainEditItineraryContainer from "components/itineraryForm/MainEditItineraryContainer";
-import { useEffect } from "react";
 
 interface Props {
   updateItinerary: (arg: Partial<Itinerary>) => any;

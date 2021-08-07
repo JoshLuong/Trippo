@@ -17,6 +17,7 @@ import {
   ContextInterface,
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
+import { useHistory } from "react-router-dom";
 import "./Map.css";
 import { ActivityPopup } from "types/models";
 import { useAppSelector } from "app/store";
@@ -86,6 +87,8 @@ const Map: FC<Props> = ({
     zoom: 2,
   });
 
+  const history = useHistory();
+  const IS_SHARED = history.location.pathname.includes("/shared");
   const itinerary = useAppSelector((state) => state.itinerary.value);
 
   const bbox =
@@ -105,12 +108,14 @@ const Map: FC<Props> = ({
   useEffect(() => {
     if (itinerary) {
       const longitude =
-        window.innerWidth <= 700
+        window.innerWidth <= 700 || IS_SHARED
           ? itinerary.dest_coords.lng
           : itinerary.dest_coords.lng - 0.2;
       setViewport({
         longitude: !isFirstLoad ? viewport.longitude : longitude,
-        latitude: !isFirstLoad ? viewport.latitude : itinerary.dest_coords.lat,
+        latitude: !isFirstLoad
+          ? viewport.latitude
+          : itinerary.dest_coords.lat - 0.1,
         zoom: 10,
         transitionDuration: 400,
         pitch: 30,
@@ -145,7 +150,7 @@ const Map: FC<Props> = ({
             offsetTop={-41}
           >
             <Pin
-              className="marker"
+              className="marker pointer"
               onClick={() => {
                 itineraryContext?.handleSetActivityPopups(slot);
               }}
@@ -188,20 +193,22 @@ const Map: FC<Props> = ({
           offsetTop={-41}
         >
           <Pin
-            className="marker"
+            className={`marker ${IS_SHARED ? `disable` : `pointer`}`}
             onClick={async () => {
-              handleNewSlotClick(
-                await reverseGeocodeName(
+              if (!IS_SHARED) {
+                handleNewSlotClick(
+                  await reverseGeocodeName(
+                    searchResult.geometry.coordinates[1],
+                    searchResult.geometry.coordinates[0]
+                  ),
+                  await reverseGeocodeAddress(
+                    searchResult.geometry.coordinates[1],
+                    searchResult.geometry.coordinates[0]
+                  ),
                   searchResult.geometry.coordinates[1],
                   searchResult.geometry.coordinates[0]
-                ),
-                await reverseGeocodeAddress(
-                  searchResult.geometry.coordinates[1],
-                  searchResult.geometry.coordinates[0]
-                ),
-                searchResult.geometry.coordinates[1],
-                searchResult.geometry.coordinates[0]
-              );
+                );
+              }
             }}
             fill={DARK_ORANGE}
           />

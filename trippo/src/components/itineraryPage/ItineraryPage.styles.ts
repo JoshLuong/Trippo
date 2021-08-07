@@ -1,6 +1,22 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import Button from "@material-ui/core/Button";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
+export const StyledPDFDownloadLink = styled(PDFDownloadLink)`
+  background: ${c.DARK_BLUE};
+  padding-top: 5px;
+`;
+
+export const StyledPictureAsPdfIcon = styled(PictureAsPdfIcon)`
+  color: ${c.WHITE};
+  padding: 1px;
+  padding-left: 1.5px;
+`;
+export interface DisabledButtonProps {
+  disabled: boolean;
+}
 
 export const fancytext = styled.div`
   text-align: center;
@@ -25,7 +41,7 @@ export const dayDiv = styled.div`
 `;
 
 export const StyledViewListIcon = styled.div`
-  padding: 1em 0;
+  padding: 0.5em 0;
   display: flex;
   justify-content: center;
   color: ${c.WHITE};
@@ -51,7 +67,7 @@ export const LoadingDiv = styled.div`
   }
 `;
 
-export const SideBar = styled.div`
+export const SideBar = styled.div<DisabledButtonProps>`
   z-index: 1;
   height: 95%;
   width: 2em;
@@ -65,13 +81,14 @@ export const SideBar = styled.div`
     padding: 0;
     background-color: ${c.DARK_BLUE};
     i {
+      padding-top: 100%;
       display: inline;
       color: ${c.WHITE};
       font-size: 1.5em;
     }
   }
   button:hover {
-    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? `not-allowed` : `pointer`)};
   }
 
   @media (max-width: 668px) {

@@ -115,8 +115,11 @@ router.delete("/:id", (req: any, res, _next) => {
     _id: req.params.id,
     user_id: req.session.userId,
   })
-    .then((doc) => {
+    .then(async (doc) => {
       if (!doc) return res.status(500).send("Unable to delete itinerary");
+      await ShareableItinerary.findOneAndRemove({
+        itinerary_id: req.params.id,
+      })
       res.send(doc);
     })
     .catch((err) => {

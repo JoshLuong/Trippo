@@ -381,14 +381,14 @@ function ItineraryPage() {
       {getInvalidItineraryDialog()}
       {!isLoading && (
         <Snackbar
-          transitionDuration={300}
+          transitionDuration={500}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           open={showSharedItineraryToast}
-          onClose={handleCloseSharedItineraryToast}
-          autoHideDuration={7000}
         >
-          <Alert severity="warning">
-            You have limited read-only access for this itinerary
+          <Alert onClose={handleCloseSharedItineraryToast} severity="warning">
+            You have <strong>restricted</strong> read-only access for this itinerary. 
+            <br/>
+            To get write access, please ask the owner to add you as a collaborator.
           </Alert>
         </Snackbar>
       )}

@@ -192,10 +192,9 @@ const ItineraryPDF: FC<Props> = ({ itinerary, user }) => {
           </Text>
           <Text style={styles.headerComments}>{itinerary.comments}</Text>
           <Text style={styles.headerCollaborators}>
+            {user.name} (owner)
             {itinerary.collaborators.map((collaborator, i) => {
-              let name = "";
-              if (i === 0) name = `${user.name} (owner), ${collaborator.name}`;
-              if (i > 0) name = `, ${collaborator.name}`;
+              let name = `, ${collaborator.name}`;
               if (i > 0 && i === itinerary.collaborators.length - 1)
                 name = `, and ${collaborator.name}`;
               return name;

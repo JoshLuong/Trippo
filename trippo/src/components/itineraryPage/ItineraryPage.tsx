@@ -8,6 +8,7 @@ import { GeocoderContainer } from "components/map/Map.styles";
 import Searchbar from "components/searchBar/Searchbar";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import NewSlot from "components/itineraryEdit/NewSlot";
+import ItineraryPDF from "../itineraryPDF/ItineraryPDF";
 import {
   Dialog,
   DialogActions,
@@ -323,6 +324,18 @@ function ItineraryPage() {
             setSearchResult={setSearchResult}
           />
           <sc.SideBar disabled={IS_SHARED}>
+            {itinerary && (
+              <sc.StyledPDFDownloadLink
+                document={<ItineraryPDF itinerary={itinerary} />}
+                fileName={`${itinerary.name.replace(/\s/g, "_")}.pdf`}
+              >
+                {() => (
+                  <Tooltip title="Export to PDF" aria-label="Export to PDF">
+                    <sc.StyledPictureAsPdfIcon />
+                  </Tooltip>
+                )}
+              </sc.StyledPDFDownloadLink>
+            )}
             <sc.StyledViewListIcon>
               <Tooltip
                 title="Itinerary master plan"

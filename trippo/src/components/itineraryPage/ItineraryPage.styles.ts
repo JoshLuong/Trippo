@@ -1,7 +1,19 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import Button from "@material-ui/core/Button";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
+export const StyledPDFDownloadLink = styled(PDFDownloadLink)`
+  background: ${c.DARK_BLUE};
+  padding-top: 5px;
+`;
+
+export const StyledPictureAsPdfIcon = styled(PictureAsPdfIcon)`
+  color: ${c.WHITE};
+  padding: 1px;
+  padding-left: 1.5px;
+`;
 export interface DisabledButtonProps {
   disabled: boolean;
 }
@@ -29,7 +41,7 @@ export const dayDiv = styled.div`
 `;
 
 export const StyledViewListIcon = styled.div`
-  padding: 1em 0;
+  padding: 0.5em 0;
   display: flex;
   justify-content: center;
   color: ${c.WHITE};

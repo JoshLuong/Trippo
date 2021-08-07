@@ -26,6 +26,9 @@ export const DateGrid = styled(Grid)`
   @media (max-width: 660px) {
     font-size: 0.5em;
   }
+  @media (max-width: 400px) {
+    font-size: 0.45em;
+  }
 `;
 
 export const ItineraryTitle = styled.div`

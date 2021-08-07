@@ -119,6 +119,10 @@ export const IPhoneImage1 = styled.img`
     width: 200px;
     left: 15%;
   }
+
+  @media (max-width: 400px) {
+    left: 5%;
+  }
 `;
 
 export const IPhoneImage2 = styled.img`
@@ -134,5 +138,9 @@ export const IPhoneImage2 = styled.img`
     top: 0;
     width: 200px;
     left: 45%;
+  }
+
+  @media (max-width: 400px) {
+    left: 35%;
   }
 `;

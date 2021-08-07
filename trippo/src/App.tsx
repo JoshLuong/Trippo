@@ -50,9 +50,11 @@ function App() {
       })
       .catch((e: string) => {
         window.localStorage.removeItem("user");
+        console.log(history);
         if (
           history.location.pathname !== "/about" &&
-          history.location.pathname !== "/"
+          history.location.pathname !== "/" &&
+          !history.location.pathname.includes("/shared")
         )
           history.push("/");
       });
@@ -84,6 +86,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={() => <WelcomePage />} />
         <Route exact path="/about" component={() => <AboutPage />} />
+        <Route exact path="/shared/:id" component={() => <ItineraryPage />} />
         <PrivateRoute
           exact
           path="/itinerary/:id"

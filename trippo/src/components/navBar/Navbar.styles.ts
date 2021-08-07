@@ -1,9 +1,21 @@
 import { makeStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import { Button, Tooltip } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 
 const drawerWidth = 240;
+
+export const StyledButton = styled(Button)`
+  span {
+    color: ${c.DARK_ORANGE};
+  }
+`;
+
+export const StyledTooltip = styled(Tooltip)`
+  margin-left: 0.5em;
+`;
 
 export const Logo = styled.div`
   position: absolute;
@@ -40,6 +52,15 @@ export const ItineraryTitle = styled.div`
   }
 `;
 
+export const StyledLink = styled.input`
+  width: 100%;
+  border: none;
+  border-color: transparent;
+  :focus {
+    border: none;
+  }
+`;
+
 export const LogoButton = styled.button`
   &:hover {
     cursor: pointer;
@@ -60,6 +81,13 @@ export const LogoButton = styled.button`
       display: block;
     }
   }
+`;
+
+export const StyledIconButton = styled(IconButton)`
+  width: 24px !important;
+  height: 24px !important;
+  margin-top: -6px;
+  position: relative;
 `;
 
 export const useStyles = makeStyles((theme) => ({

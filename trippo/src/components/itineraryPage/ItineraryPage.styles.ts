@@ -2,6 +2,10 @@ import styled from "styled-components";
 import * as c from "../../colors/colors";
 import Button from "@material-ui/core/Button";
 
+export interface DisabledButtonProps {
+  disabled: boolean;
+}
+
 export const fancytext = styled.div`
   text-align: center;
   font-style: italic;
@@ -51,7 +55,7 @@ export const LoadingDiv = styled.div`
   }
 `;
 
-export const SideBar = styled.div`
+export const SideBar = styled.div<DisabledButtonProps>`
   z-index: 1;
   height: 95%;
   width: 2em;
@@ -65,13 +69,14 @@ export const SideBar = styled.div`
     padding: 0;
     background-color: ${c.DARK_BLUE};
     i {
+      padding-top: 100%;
       display: inline;
       color: ${c.WHITE};
       font-size: 1.5em;
     }
   }
   button:hover {
-    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? `not-allowed` : `pointer`)};
   }
 
   @media (max-width: 668px) {

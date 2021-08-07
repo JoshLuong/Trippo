@@ -17,7 +17,7 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import { useAppDispatch } from "app/store";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import {
   useGetItineraryByIdQuery,
   useUpdateItineraryMutation,
@@ -47,6 +47,10 @@ let destinationLat: number;
 let destinationLng: number;
 
 function ItineraryPage() {
+  const history = useHistory();
+  const IS_SHARED = history.location.pathname.includes("/shared");
+  const [showSharedItineraryToast, setShowSharedItineraryToast] =
+    useState(false);
   const [showItinerary, setShowItinerary] = useState(true);
   const [showItineraryReadOnlyView, setShowItineraryReadOnlyView] =
     useState(false);
@@ -62,7 +66,12 @@ function ItineraryPage() {
   const [closeSlotNoActivity, setCloseSlotNoActivity] = useState(false);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
-  const { data: itinerary } = useGetItineraryByIdQuery(id);
+  const [sharedItinerary, setSharedItinerary] = useState<Itinerary | null>(
+    null
+  );
+  const [isInvalidSharedLink, setIsInvalidSharedLink] = useState(false);
+  const { data: editableItinerary } = useGetItineraryByIdQuery(id);
+  const itinerary = IS_SHARED ? sharedItinerary : editableItinerary;
   const [activityPopups, setActivityPopups] = useState<ActivityPopup[]>([]);
   const [activeDay, setActiveDay] = useState<Date | null>(
     itinerary?.start_date || null
@@ -70,7 +79,6 @@ function ItineraryPage() {
   const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] =
     useUpdateItineraryMutation();
   const [searchResult, setSearchResult] = useState<any>(null);
-
   const handleSetActivityPopups = (slot: Activity) => {
     const activityPopup: ActivityPopup = {
       _id: slot._id,
@@ -88,6 +96,32 @@ function ItineraryPage() {
         : filteredArray;
     setActivityPopups(newActivityPopup);
   };
+
+  const handleCloseSharedItineraryToast = () => {
+    setShowSharedItineraryToast(false);
+  };
+
+  useEffect(() => {
+    if (IS_SHARED) {
+      fetch(`/api/shared/itineraries/${id}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((itinerary) => {
+          if (itinerary.error) {
+            setIsInvalidSharedLink(true);
+            return;
+          }
+          dispatch(setItinerary(itinerary));
+          setSharedItinerary(itinerary);
+          setShowSharedItineraryToast(true);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     if (updatedItinerary || closeSlotNewActivity) {
@@ -166,6 +200,39 @@ function ItineraryPage() {
       setCloseSlotNoActivity(false);
     }
   };
+
+  function getInvalidItineraryDialog() {
+    return (
+      <Dialog
+        open={isInvalidSharedLink && !isLoading}
+        onClose={() => setIsInvalidSharedLink(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Oops! It looks like the itinerary you're trying to view doesn't exist!
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please make sure the link is correct, or log in to start creating
+            itineraries!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <sc.StyledButton
+            onClick={() => {
+              setIsInvalidSharedLink(false);
+              history.push("/");
+            }}
+            color="primary"
+            autoFocus
+          >
+            Okay
+          </sc.StyledButton>
+        </DialogActions>
+      </Dialog>
+    );
+  }
 
   function getDialogContainer() {
     return (
@@ -255,7 +322,7 @@ function ItineraryPage() {
             searchResult={searchResult}
             setSearchResult={setSearchResult}
           />
-          <sc.SideBar>
+          <sc.SideBar disabled={IS_SHARED}>
             <sc.StyledViewListIcon>
               <Tooltip
                 title="Itinerary master plan"
@@ -264,7 +331,7 @@ function ItineraryPage() {
                 <ViewListIcon onClick={handleReadOnlyView} />
               </Tooltip>
             </sc.StyledViewListIcon>
-            <button onClick={handleOpenItinerary}>
+            <button onClick={handleOpenItinerary} disabled={IS_SHARED}>
               {showItinerary ? (
                 <i className="fas fa-chevron-left"></i>
               ) : (
@@ -273,7 +340,7 @@ function ItineraryPage() {
             </button>
           </sc.SideBar>
 
-          {showItinerary ? (
+          {showItinerary && !IS_SHARED ? (
             <sc.Container>
               <Container />
             </sc.Container>
@@ -297,6 +364,20 @@ function ItineraryPage() {
         </sc.ItineraryDiv>
       </sc.ItineraryPage>
       {getDialogContainer()}
+      {getInvalidItineraryDialog()}
+      {!isLoading && (
+        <Snackbar
+          transitionDuration={300}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          open={showSharedItineraryToast}
+          onClose={handleCloseSharedItineraryToast}
+          autoHideDuration={7000}
+        >
+          <Alert severity="warning">
+            You have limited read-only access for this itinerary
+          </Alert>
+        </Snackbar>
+      )}
     </ItineraryContext.Provider>
   );
 }

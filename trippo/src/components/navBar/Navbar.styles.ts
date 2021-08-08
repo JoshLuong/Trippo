@@ -11,7 +11,7 @@ export const LoopDiv = styled.div`
   position: absolute;
   color: ${c.BLACK};
   font-size: 16px;
-  left: 43%;
+  left: 40%;
   top: 38%;
 
   @media (max-width: 1780px) {

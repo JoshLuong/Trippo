@@ -224,11 +224,11 @@ function ItineraryPage() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Add a <strong>custom</strong> background image, or leave it blank to use the provided default image.
+            Add a <strong>custom</strong> background image, or leave it blank to use the provided <strong>default</strong> image.
             <br/>
             For best results, find a high resolution image and copy the 'Image address' into the below field:
           </DialogContentText>
-          <sc.StyledTextField onChange={handleChange} id="standard-basic" label="Image URL" />
+          <sc.StyledTextField onChange={handleChange} id="standard-basic" label="Image Address" />
         </DialogContent>
         <DialogActions>
         <sc.StyledPDFDownloadLink

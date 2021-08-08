@@ -30,7 +30,7 @@ const Container = () => {
 
   return (
     <sc.containerDiv>
-      <div>
+      <>
         {itineraryContext?.activeDay ? (
           <Day
             handleCalendarView={handleCalendarView}
@@ -41,7 +41,7 @@ const Container = () => {
             <Calendar handleDayClick={handleDayClick} />
           </sc.calendarDiv>
         )}
-      </div>
+      </>
     </sc.containerDiv>
   );
 };

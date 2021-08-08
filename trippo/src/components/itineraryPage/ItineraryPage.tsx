@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./loading.css";
 import Container from "../itineraryEdit/Container";
+import { debounce } from "lodash";
 import * as sc from "./ItineraryPage.styles";
 import Map from "../map/Map";
 import "../map/Map.css";
@@ -23,6 +24,7 @@ import {
   useGetItineraryByIdQuery,
   useUpdateItineraryMutation,
 } from "services/itinerary";
+import { useGetUserByIdQuery } from "services/user";
 import { setItinerary } from "app/reducers/itinerarySlice";
 import Snackbar, { SnackbarCloseReason } from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
@@ -66,7 +68,6 @@ function ItineraryPage() {
   const [closeSlotNewActivity, setCloseSlotNewActivity] = useState(false);
   const [closeSlotNoActivity, setCloseSlotNoActivity] = useState(false);
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.value);
   const { id } = useParams<{ id: string }>();
   const [sharedItinerary, setSharedItinerary] = useState<Itinerary | null>(
     null
@@ -74,7 +75,10 @@ function ItineraryPage() {
   const [isInvalidSharedLink, setIsInvalidSharedLink] = useState(false);
   const { data: editableItinerary } = useGetItineraryByIdQuery(id);
   const itinerary = IS_SHARED ? sharedItinerary : editableItinerary;
+  const { data: user } = useGetUserByIdQuery(itinerary?.user_id);
   const [activityPopups, setActivityPopups] = useState<ActivityPopup[]>([]);
+  const [showCustomizePDF, setShowCustomizePDF] = useState(false);
+  const [customURL, setCustomURL] = useState<string>("");
   const [activeDay, setActiveDay] = useState<Date | null>(
     itinerary?.start_date || null
   );
@@ -203,6 +207,43 @@ function ItineraryPage() {
     }
   };
 
+  function getCustomizeablePDFDialog() {
+    const handleChange = debounce((e: any) => {
+      console.log(e.target.value)
+      setCustomURL(e.target.value)
+    }, 500);
+    return itinerary && user && (
+      <Dialog
+        open={showCustomizePDF}
+        onClose={() => setShowCustomizePDF(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Customize your PDF!
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Add a <strong>custom</strong> background image, or leave it blank to use the provided default image.
+            <br/>
+            For best results, find a high resolution image and copy the 'Image address' into the below field:
+          </DialogContentText>
+          <sc.StyledTextField onChange={handleChange} id="standard-basic" label="Image URL" />
+        </DialogContent>
+        <DialogActions>
+        <sc.StyledPDFDownloadLink
+              document={<ItineraryPDF imageURL={customURL} itinerary={itinerary} user={user} />}
+              fileName={`${itinerary.name.replace(/\s/g, "_")}.pdf`}
+            >
+              {() => (
+                <span>Export</span>
+              )}
+        </sc.StyledPDFDownloadLink>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
   function getInvalidItineraryDialog() {
     return (
       <Dialog
@@ -325,18 +366,11 @@ function ItineraryPage() {
             setSearchResult={setSearchResult}
           />
           <sc.SideBar disabled={IS_SHARED}>
-            {itinerary && user && (
-              <sc.StyledPDFDownloadLink
-                document={<ItineraryPDF itinerary={itinerary} user={user} />}
-                fileName={`${itinerary.name.replace(/\s/g, "_")}.pdf`}
-              >
-                {() => (
+              <sc.StyledPDFButton onClick={() => setShowCustomizePDF(true)}>
                   <Tooltip title="Export to PDF" aria-label="Export to PDF">
                     <sc.StyledPictureAsPdfIcon />
                   </Tooltip>
-                )}
-              </sc.StyledPDFDownloadLink>
-            )}
+              </sc.StyledPDFButton>
             <sc.StyledViewListIcon>
               <Tooltip
                 title="Itinerary master plan"
@@ -379,6 +413,7 @@ function ItineraryPage() {
       </sc.ItineraryPage>
       {getDialogContainer()}
       {getInvalidItineraryDialog()}
+      {getCustomizeablePDFDialog()}
       {!isLoading && (
         <Snackbar
           transitionDuration={500}

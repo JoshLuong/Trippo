@@ -131,7 +131,6 @@ export const SideBar = styled.div<DisabledButtonProps>`
 
 export const Container = styled.div`
   border-radius: 7px;
-  // z-index: 1;
   display: inline-block;
   background-color: #fff;
   height: 95%;
@@ -148,7 +147,6 @@ export const Container = styled.div`
 `;
 
 export const SearchContainer = styled.div`
-  z-index: 2000;
   height: 85px;
   width: 100%;
   text-align: center;

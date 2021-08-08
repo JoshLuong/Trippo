@@ -17,4 +17,8 @@ export const Container = styled.div`
 export const Day = styled.div`
   max-width: 30em;
   flex-shrink: 0;
+
+  @media (max-width: 600px) {
+    max-width: 25em;
+  }
 `;

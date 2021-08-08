@@ -2,19 +2,19 @@ import styled from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
-import { TextField, FormControl } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { TextField, FormControl } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const darkGrey = c.GREY;
-const disabledBorder = 'border-right: 0px;';
+const disabledBorder = "border-right: 0px;";
 
-export interface StyledTimeSlotProps{
-  showSuggestions: boolean
-  borderColor: string
+export interface StyledTimeSlotProps {
+  showSuggestions: boolean;
+  borderColor: string;
 }
 
-export interface StyledCardSize{
-  small: boolean
+export interface StyledCardSize {
+  small: boolean;
 }
 
 export const StyledIconButton = styled(IconButton)`
@@ -27,6 +27,7 @@ export const AddressSpan = styled.span`
   font-weight: 100;
   font-size: 0.85em;
   margin-bottom: 0.45em;
+  margin-top: 0.35em;
 `;
 
 export const Slot = styled.div<StyledTimeSlotProps>`
@@ -34,7 +35,8 @@ export const Slot = styled.div<StyledTimeSlotProps>`
   padding-top: 0.75em;
   padding-bottom: 0.75em;
   padding-left: 0.25em;
-  border-left: 8px solid ${props => !props.showSuggestions ? props.borderColor : c.DARK_ORANGE};
+  border-left: 8px solid
+    ${(props) => (!props.showSuggestions ? props.borderColor : c.DARK_ORANGE)};
   padding-right: 0.25em;
   background-color: #fff;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.4);
@@ -50,7 +52,8 @@ export const Time = styled.div<StyledCardSize>`
   padding-bottom: 0.5em;
   padding-left: 4px;
 
-  div:before, div:after{
+  div:before,
+  div:after {
     content: none;
   }
 
@@ -66,7 +69,9 @@ export const Time = styled.div<StyledCardSize>`
   @media (max-width: 960px) {
     ${disabledBorder}
   }
-  ${({ small }) => small && `
+  ${({ small }) =>
+    small &&
+    `
     ${disabledBorder}
   `}
 `;
@@ -77,7 +82,9 @@ export const SlotGrid = styled(Grid)<StyledCardSize>`
     padding-right: 10px;
   }
 
-  ${({ small }) => small && `
+  ${({ small }) =>
+    small &&
+    `
   padding-left: 10px;
   padding-right: 10px;
 `}
@@ -86,6 +93,7 @@ export const SlotGrid = styled(Grid)<StyledCardSize>`
 export const Destination = styled.div`
   color: ${c.BLACK};
   display: flex;
+  justify-content: space-around;
   flex-grow: 1;
   font-weight: 550;
   i {
@@ -109,6 +117,26 @@ export const Destination = styled.div`
   }
 `;
 
+export const CostGrid = styled(Grid)`
+  @media (max-width: 600px) {
+    top: 0.75em;
+    right: 12px;
+    position: absolute;
+  }
+`;
+
+export const DestinationSpan = styled.span`
+  :hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
+
+export const IconGrid = styled(Grid)`
+  display: flex;
+  align-items: center;
+`;
+
 export const Cost = styled.div`
   font-weight: 500;
   float: right;
@@ -117,9 +145,6 @@ export const Cost = styled.div`
   flex-direction: row;
   align-self: flex-start;
   align-items: center;
-  div {
-    margin-right: 0.5em;
-  }
 
   button {
     border: none;
@@ -166,8 +191,14 @@ export const Comments = styled.ul<StyledCardSize>`
     margin-left: 1em;
   }
 
-  
-  ${({ small }) => small && `
+  @media (max-width: 600px) {
+    margin: 0.4em 0;
+    padding: 0;
+  }
+
+  ${({ small }) =>
+    small &&
+    `
   margin-left: 1em;
 `}
 `;
@@ -199,6 +230,7 @@ export const HeaderGrid = styled(Grid)`
   align-items: flex-start;
 `;
 export const StyledFormControl = styled(FormControl)`
+  padding-left: 2px;
   input {
     padding: 0;
     font-size: 0.75em;
@@ -208,7 +240,9 @@ export const StyledFormControl = styled(FormControl)`
     margin-right: -6px;
   }
 
-  .MuiInput-underline, .MuiInput-underline:before, .MuiInput-underline:after {
+  .MuiInput-underline,
+  .MuiInput-underline:before,
+  .MuiInput-underline:after {
     transition: none;
     border-bottom: 0 !important;
     margin-right: 0;
@@ -216,32 +250,32 @@ export const StyledFormControl = styled(FormControl)`
 `;
 export const StyledTextField = withStyles({
   root: {
-    '& label': {
+    "& label": {
       paddingRight: `7px`,
-      backgroundColor: 'white',
+      backgroundColor: "white",
     },
-    '& label.Mui-focused': {
+    "& label.Mui-focused": {
       color: `${c.DARK_GREY}`,
     },
-    '& .MuiInput-underline:after': {
+    "& .MuiInput-underline:after": {
       borderBottomColor: `${c.DARK_GREY}`,
     },
-    '& .MuiOutlinedInput-root': {
-      '&:hover fieldset': {
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": {
         borderColor: `${c.DARK_GREY}`,
       },
-      '&.Mui-focused fieldset': {
+      "&.Mui-focused fieldset": {
         borderColor: `${c.DARK_GREY}`,
       },
     },
-    '& .Mui-disabled .Mui-disabled': {
-      opacity: '10',
-      color: 'initial'
+    "& .Mui-disabled .Mui-disabled": {
+      opacity: "10",
+      color: "initial",
     },
-    '& .MuiInputBase-formControl': {
-      opacity: '10',
-      color: 'initial',
-      fontSize: '0.90em'
-    }
+    "& .MuiInputBase-formControl": {
+      opacity: "10",
+      color: "initial",
+      fontSize: "0.90em",
+    },
   },
 })(TextField);

@@ -96,6 +96,7 @@ export const {
   useGetItinerariesQuery,
   useLazyGetItinerariesQuery,
   useGetItineraryByIdQuery,
+  useLazyGetItineraryByIdQuery,
   useCreateItineraryMutation,
   useDeleteItineraryMutation,
   useUpdateItineraryMutation,

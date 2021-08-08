@@ -12,6 +12,15 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Tooltip,
+} from "@material-ui/core";
+import LinkIcon from "@material-ui/icons/Link";
 import { setUser } from "app/reducers/userSlice";
 import ListItem from "@material-ui/core/ListItem";
 import Menu from "@material-ui/core/Menu";
@@ -28,10 +37,13 @@ import * as sc from "./Navbar.styles";
 
 const Navbar = (props: { history: any }) => {
   const { history } = props;
+  const IS_SHARED = history.location.pathname.includes("/shared");
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isShareableLinkOpen, setIsShareableLinkOpen] = React.useState(false);
+  const [sharedID, setSharedID] = React.useState(null);
 
   const user = useAppSelector((state) => state.user.value);
   const itinerary = useAppSelector((state) => state.itinerary.value);
@@ -52,11 +64,64 @@ const Navbar = (props: { history: any }) => {
         credentials: "include",
       });
       dispatch(setUser({ isLoggedIn: false }));
+      window.localStorage.removeItem("user");
       handleMenuClick("/");
     } catch (e) {
       console.log(e);
     }
     // store returned user somehow
+  };
+
+  const handleGetShareableLink = async () => {
+    try {
+      const res = await fetch(
+        `/api/itineraries/shareable-link/` + itinerary?._id,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const id = await res.json();
+      setSharedID(id);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getInvalidItineraryDialog = () => {
+    const link: string = "https://trippoapp.herokuapp.com/shared/" + sharedID;
+    return (
+      <Dialog
+        open={isShareableLinkOpen && sharedID !== null}
+        onClose={() => setIsShareableLinkOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Anyone with this link has <strong>restricted</strong> read-only
+          access.
+          <br />
+          <sc.StyledLink value={link} />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            To allow read and write access, add collaborators to your itinerary!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <sc.StyledButton
+            onClick={() => {
+              if (navigator.clipboard) navigator.clipboard.writeText(link);
+              setIsShareableLinkOpen(false);
+            }}
+            color="primary"
+            autoFocus
+          >
+            Copy link
+          </sc.StyledButton>
+        </DialogActions>
+      </Dialog>
+    );
   };
 
   const handleDrawerOpen = () => {
@@ -120,10 +185,28 @@ const Navbar = (props: { history: any }) => {
               </>
             </sc.LogoButton>
           </sc.Logo>
-          {history.location.pathname.includes("itinerary") && itinerary ? (
+          {(history.location.pathname.includes("itinerary") || IS_SHARED) &&
+          itinerary ? (
             <sc.ItineraryTitle>
               <FadeIn transitionDuration={600} delay={500}>
-                {itinerary?.name}
+                <div>
+                  {itinerary?.name}
+                  {!IS_SHARED && (
+                    <sc.StyledTooltip
+                      title="Get shareable link"
+                      aria-label="Get shareable link"
+                    >
+                      <sc.StyledIconButton
+                        onClick={() => {
+                          setIsShareableLinkOpen(true);
+                          handleGetShareableLink();
+                        }}
+                      >
+                        <LinkIcon />
+                      </sc.StyledIconButton>
+                    </sc.StyledTooltip>
+                  )}
+                </div>
                 <sc.DateGrid container item lg={12} sm={12}>
                   <i className="far fa-calendar-alt"></i>
                   {moment(itinerary?.start_date).format("MMM Do YYYY") +
@@ -199,8 +282,12 @@ const Navbar = (props: { history: any }) => {
               </ListItem>
             );
           })}
+          <ListItem button onClick={() => handleMenuClick("/about")}>
+            {"About"}
+          </ListItem>
         </List>
       </Drawer>
+      {getInvalidItineraryDialog()}
     </div>
   );
 };

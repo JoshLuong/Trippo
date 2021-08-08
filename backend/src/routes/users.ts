@@ -12,7 +12,7 @@ router.get("/:id", async (req, res, _next) => {
   }
 });
 
-router.get("/:email", async (req, res, _next) => {
+router.get("/email/:email", async (req, res, _next) => {
   const user = await User.findOne({ email: req.params.email });
   if (user) {
     res.status(200).send(user);

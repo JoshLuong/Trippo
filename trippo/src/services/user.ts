@@ -9,7 +9,7 @@ export const userApi = createApi({
     getUserByEmail: builder.query<User, string>({
       query: (email: string) => {
         return {
-          url: `/${email}`,
+          url: `/email/${email}`,
           credentials: "include",
         };
       },

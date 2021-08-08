@@ -10,7 +10,7 @@
 
 ### <a name="about"> About </a>
 
-Trippo is a collaborative, map-based, suggestive itinerary planner that allows users to create create customizable itineraries while managing their expenses at each destination.
+Trippo is a collaborative, map-based, suggestive itinerary planner that allows users to create customizable itineraries while managing their expenses at each destination.
 
 With Trippo, you can plan for your favorite destinations, add collaborators, create budgets, get Yelp® suggested activities, and more!
 Say Goodbye to using traditional documents and spreadsheets, and say Hello to Trippo!

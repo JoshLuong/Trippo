@@ -110,9 +110,8 @@ To further improve on Trippo, we plan to complete our missing standard requireme
 
 - Integrated the navigation bar and search bar with routing and styling, created and assisted in styling the About page for Trippo.
 - Creation and form validation for new activities, adding new activities to existing itineraries, itinerary deletion, retrieving information about existing map pins from itineraries.
-- Connected Yelp API requests to new activity creation, created Trippo user documentation*, drafted presentation script, wrote final project report.
+- Connected Yelp API requests to new activity creation, created Trippo user documentation, drafted presentation script, wrote final project report.
 
-*will be done soon
 
 ## Prototypes: 
 ![image](https://user-images.githubusercontent.com/45836234/119914722-b2ce1200-bf15-11eb-976d-943d2b00ca87.png)

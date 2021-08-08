@@ -2,8 +2,8 @@ import styled from "styled-components";
 import * as c from "../../colors/colors";
 import Button from "@material-ui/core/Button";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import {  TextField } from "@material-ui/core";
-import { withStyles } from '@material-ui/core/styles';
+import { TextField } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
 export const StyledPDFDownloadLink = styled(PDFDownloadLink)`
@@ -13,25 +13,24 @@ export const StyledPDFDownloadLink = styled(PDFDownloadLink)`
 
 export const StyledTextField = withStyles({
   root: {
-    width: '100%',
-    '& label.Mui-focused': {
-      color: '#219EBC',
-      width: '100%',
+    width: "100%",
+    "& label.Mui-focused": {
+      color: "#219EBC",
+      width: "100%",
     },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#219EBC',
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#219EBC",
     },
-    '& .MuiOutlinedInput-root': {
-      '&:hover fieldset': {
-        borderColor: '#219EBC',
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": {
+        borderColor: "#219EBC",
       },
-      '&.Mui-focused fieldset': {
-        borderColor: '#219EBC',
+      "&.Mui-focused fieldset": {
+        borderColor: "#219EBC",
       },
     },
   },
 })(TextField);
-
 
 export const StyledPDFButton = styled.button`
   background: ${c.DARK_BLUE};
@@ -89,7 +88,7 @@ export const LoadingDiv = styled.div`
   background-color: ${c.WHITE};
   z-index: 1999;
   display: flex;
-  height: calc(100% - 162px);
+  height: calc(100% - 149px);
   margin-top: 64px;
   width: 100%;
   justify-content: center;
@@ -102,6 +101,7 @@ export const LoadingDiv = styled.div`
 export const SideBar = styled.div<DisabledButtonProps>`
   z-index: 1;
   height: 95%;
+  margin-top: 1em;
   max-height: 720px;
   width: 2em;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
@@ -135,6 +135,7 @@ export const Container = styled.div`
   display: inline-block;
   background-color: #fff;
   height: 95%;
+  margin-top: 1em;
   max-height: 720px;
   flex: 0 0 585px;
   position: relative;
@@ -148,9 +149,8 @@ export const Container = styled.div`
 
 export const SearchContainer = styled.div`
   z-index: 2000;
-  height: 98px;
+  height: 85px;
   width: 100%;
-  box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
   text-align: center;
   background: transparent;
   display: flex;
@@ -163,8 +163,7 @@ export const SearchContainer = styled.div`
   }
 
   @media (max-width: 650px) {
-    height: 5em;
-    margin-top: 4em;
+    height: 65px;
   }
 `;
 
@@ -172,12 +171,11 @@ export const ItineraryDiv = styled.div`
   bottom: 0;
   position: relative;
   display: flex;
-  margin-top: 8.5px;
   overflow-x: hidden;
-  height: calc(100% - 106.5px);
+  height: calc(100% - 85px);
   min-height: 80vh;
   @media (max-width: 650px) {
-    height: calc(100% - 5.6em);
+    height: calc(100% - 65px);
   }
 `;
 

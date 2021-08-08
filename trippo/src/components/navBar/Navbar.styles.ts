@@ -7,6 +7,30 @@ import * as c from "../../colors/colors";
 
 const drawerWidth = 240;
 
+export const LoopDiv = styled.div`
+  position: absolute;
+  color: ${c.BLACK};
+  font-size: 16px;
+  left: 43%;
+  top: 38%;
+
+  @media (max-width: 1780px) {
+    left: 38%;
+  }
+
+  @media (max-width: 1400px) {
+    left: 35%;
+  }
+
+  @media (max-width: 1200px) {
+    left: 30%;
+  }
+
+  @media (max-width: 950px) {
+    display: none;
+  }
+`;
+
 export const StyledButton = styled(Button)`
   span {
     color: ${c.DARK_ORANGE};
@@ -110,6 +134,7 @@ export const StyledIconButton = styled(IconButton)`
   height: 24px !important;
   margin-top: -6px;
   position: relative;
+  color: ${c.BLACK};
 `;
 
 export const useStyles = makeStyles((theme) => ({

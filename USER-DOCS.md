@@ -78,7 +78,7 @@ Clicking on that button will generate a shareable link to your itinerary. Your i
 
 ![Export to PDF](trippo/public/user-docs/8.PNG)
 
-You can also click the "Export to PDF" button on the top left of your side calendar on the map view to download a PDF version of your itinerary to share with others offline.
+You can also click the "Export to PDF" button on the top left of your side calendar on the map view to download a PDF version of your itinerary to share with others offline. Clicking on the "Export to PDF" button will open a pop up that will allow you to input any custom background for the PDF, but you may also choose to use the default background.
 
 
 ### <a name="contact"> Contact Us </a>

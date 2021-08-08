@@ -49,7 +49,7 @@ Opening the side calendar and selecting any date on your trip will open day view
 
 ![Itinerary Master Plan](trippo/public/user-docs/9.png)
 
-You can also click on the "Itinerary master plan" button to see a full itinerary of your trip.
+You can also click on the "Itinerary master plan" button to see the full itinerary of your trip in a compact, read-only view.
 
 
 ### <a name="make-changes"> Making Changes </a>

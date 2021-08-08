@@ -96,9 +96,9 @@ To further improve on Trippo, we plan to complete our missing standard requireme
 
 #### Andre Ramkairsingh:
 
-- 
-- 
-- 
+- Created database models for itineraries, activities and users, added seed scripts and setup the backend directory structure.
+- Connected the itinerary list and edit pages to the backend, added the map feature with Mapbox's API.
+- Created build scripts for continuous deployment via Heroku and GitHub.
 
 #### Richard Ho:
 

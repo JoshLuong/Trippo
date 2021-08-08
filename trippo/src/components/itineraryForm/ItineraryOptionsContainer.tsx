@@ -180,7 +180,7 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
                 <Grid item xs={12} md={6} lg={6}>
                     <sc.inputTags>Collaborators
                         <Tooltip
-                            title={"Please enter valid user emails"}
+                            title={"Please enter valid user Gmails. Any collaborator will have full read and write access, but will not have the ability to delete the itinerary."}
                         >
                             <sc.StyledInfoIcon />
                         </Tooltip>

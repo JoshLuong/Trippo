@@ -38,7 +38,7 @@ To add a new destination to your trip, use the search bar on the map page to sea
 Once you click on the pin that appears on your destination, a new form will appear. 
 ![New Destination Form](trippo/public/user-docs/5.PNG)
 
-If you had selected a date on your side calendar, the date on the new form will correspond to that date, otherwise it will be set to the first day of your trip. You can also change this date whichever date during your trip that you want to visit this destination.
+If you had selected a date on your side calendar, the date on the new form will correspond to that date, otherwise it will be set to the first day of your trip. You can also change the date of your new destiantion to any day during your trip.
 
 You can select the type of destination to keep your itinerary organized and colour-coordinated, select a time to visit, add any notes in the Notes field, and although not required, set a cost that you expect to spend at this destination (which will later be used to calculate your daily costs in accordance to your budget, if set). Once you have filled out your destination information, you can click the "Add" button on the bottom right of the form to save this destination to your itinerary. 
 

@@ -24,6 +24,7 @@ export const EditButton = styled.button`
   padding: 0;
   border-radius: 16px;
   margin-bottom: 0.5em;
+  margin-top: 0.5em;
   :hover {
     cursor: pointer;
   }
@@ -39,9 +40,13 @@ export const Spacer = styled.div`
   width: 2em;
 `;
 
+export const StickyDiv = styled.div`
+  position: sticky;
+  top: 0;
+`;
+
 export const dayDate = styled.div`
   margin-bottom: 0.5em;
-  position: relative;
   display: flex;
   color: ${c.WHITE};
   font-weight: 545;
@@ -91,6 +96,8 @@ export const TimeSlots = styled.div`
 export const Cost = styled(Grid)`
   padding-top: 1em;
   padding-left: 0.5em;
+  display: flex;
+  align-items: center;
 
   div:nth-child(2) {
     display: flex;

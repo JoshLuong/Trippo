@@ -29,11 +29,10 @@ export const ItineraryTitle = styled.div`
   text-align: center;
   color: ${c.DARK_BLUE};
   font-size: 1.5em;
-  
+
   @media (max-width: 660px) {
     max-width: 160px;
     overflow: hidden;
-    font-size: 1.25em;
   }
 `;
 
@@ -44,6 +43,19 @@ export const LogoButton = styled.button`
 
   border: none;
   background: transparent;
+
+  #icon-logo {
+    display: none;
+  }
+
+  @media (max-width: 800px) {
+    #full-logo {
+      display: none;
+    }
+    #icon-logo {
+      display: block;
+    }
+  }
 `;
 
 export const useStyles = makeStyles((theme) => ({
@@ -64,9 +76,7 @@ export const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
+  menuButton: {},
   hide: {
     display: "none",
   },

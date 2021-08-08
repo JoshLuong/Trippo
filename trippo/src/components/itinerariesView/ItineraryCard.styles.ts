@@ -16,7 +16,7 @@ export const StyledIconButton = styled(IconButton)`
   right: 0;
   width: 16px;
   height: 16px;
-  margin: 0.40em;
+  margin: 0.4em;
   color: ${c.GREY};
 `;
 
@@ -29,7 +29,7 @@ export const Card = styled.div`
   width: 705px;
   box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
   border-radius: 8px;
-  border-top: 16px solid ${c.DARK_BLUE};
+  border-top: 16px solid ${(props) => props.color};
   &:hover {
     transform: scale(1.025);
   }
@@ -100,6 +100,9 @@ export const NameGrid = styled(Grid)`
 export const DateGrid = styled(Grid)`
   margin-top: 1em;
   i {
+    @media (min-width: 1278px) {
+      margin-left: auto;
+    }
     color: ${c.DARK_ORANGE};
     margin-top: 0.2em;
     margin-right: 0.35em;

@@ -4,10 +4,17 @@ import { Grid } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { TextField, FormControl } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
 const darkGrey = c.GREY;
+const disabledBorder = 'border-right: 0px;';
+
 export interface StyledTimeSlotProps{
   showSuggestions: boolean
   borderColor: string
+}
+
+export interface StyledCardSize{
+  small: boolean
 }
 
 export const StyledIconButton = styled(IconButton)`
@@ -36,8 +43,7 @@ export const Slot = styled.div<StyledTimeSlotProps>`
     transform: scale(1.025);
   }
 `;
-
-export const Time = styled.div`
+export const Time = styled.div<StyledCardSize>`
   color: ${c.BLACK};
   border-right: 1.5px solid ${c.DARK_GREY};
   width: 7.5em;
@@ -58,15 +64,23 @@ export const Time = styled.div`
   }
 
   @media (max-width: 960px) {
-    border-right: 0px;
+    ${disabledBorder}
   }
+  ${({ small }) => small && `
+    ${disabledBorder}
+  `}
 `;
 
-export const SlotGrid = styled(Grid)`
+export const SlotGrid = styled(Grid)<StyledCardSize>`
   @media (max-width: 960px) {
     padding-left: 10px;
     padding-right: 10px;
   }
+
+  ${({ small }) => small && `
+  padding-left: 10px;
+  padding-right: 10px;
+`}
 `;
 
 export const Destination = styled.div`
@@ -141,7 +155,7 @@ export const CommentButton = styled.div`
   }
 `;
 
-export const Comments = styled.ul`
+export const Comments = styled.ul<StyledCardSize>`
   margin-top: 0.25em;
   margin-right: 1.5em;
   color: ${c.BLACK};
@@ -151,6 +165,11 @@ export const Comments = styled.ul`
   @media (max-width: 960px) {
     margin-left: 1em;
   }
+
+  
+  ${({ small }) => small && `
+  margin-left: 1em;
+`}
 `;
 
 export const Icon = styled.i`
@@ -197,6 +216,10 @@ export const StyledFormControl = styled(FormControl)`
 `;
 export const StyledTextField = withStyles({
   root: {
+    '& label': {
+      paddingRight: `7px`,
+      backgroundColor: 'white',
+    },
     '& label.Mui-focused': {
       color: `${c.DARK_GREY}`,
     },

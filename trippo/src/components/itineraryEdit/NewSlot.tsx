@@ -22,6 +22,7 @@ import {
 
 interface Props {
   handleClose: () => void;
+  handleSubmitAndClose: () => void;
   destinationName: string;
   destinationAddress: string;
   destinationLat: number;
@@ -31,31 +32,37 @@ interface Props {
 
 const NewSlot: FC<Props> = ({
   handleClose,
+  handleSubmitAndClose,
   destinationName,
   destinationAddress,
   destinationLat,
   destinationLng,
   setSearchResult,
 }) => {
+  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
   const dispatch = useAppDispatch();
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [type, setType] = useState(d.OTHER);
   const [cost, setCost] = useState(0);
   const [comments, setComments] = useState("");
   const [time, setTime] = useState("12:00");
-  const [selectedDate, setSelectedDate] = useState(itinerary?.start_date);
+  const [selectedDate, setSelectedDate] = useState(itineraryContext?.activeDay || itinerary?.start_date);
   const [
     createActivity, // This is the mutation trigger
     { isLoading: isUpdating, data: updatedItinerary }, // This is the destructured mutation result
   ] = useCreateActivityMutation();
-  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
   };
 
   const handleCostChange = (event: any) => {
-    setCost(event.target.value);
+    if (event.target.value <= -1) {
+      setCost(0);
+    } else {
+      setCost(event.target.value);
+    }
+    
   };
 
   const handleCommentsChange = (event: any) => {
@@ -70,12 +77,6 @@ const NewSlot: FC<Props> = ({
     setSelectedDate(event);
   };
 
-  useEffect(() => {
-    if (updatedItinerary) {
-      dispatch(setItinerary(updatedItinerary));
-      console.log("useffect1")
-    }
-  }, [itinerary, updatedItinerary, isUpdating, handleClose]);
 
   const getSuggestedBusinesses = async (activityId: any) => {
     await fetch(`/api/yelp/attractions`, {
@@ -189,14 +190,20 @@ const NewSlot: FC<Props> = ({
       comments: comments.split("\n"),
     };
     createActivity(newActivity).then((res: any) => {
+    // uncomment after fixing rendering issue below
+      // if (res.error) {
+      //   handleClose();
+      //   return;
+      // }
       dispatch(setItinerary({
         ...itinerary,
         activities: itinerary?.activities ? [...itinerary?.activities, res.data] : [res.data],
       }));
       getSuggestedBusinesses(res.data._id);
     });
+    // these should go inside createActivity but it creates a rendering issue for the activities.
     setSearchResult(null);
-    handleClose();
+    handleSubmitAndClose();
   };
 
   const selectStyles = sc.selectStyles();
@@ -320,7 +327,7 @@ const NewSlot: FC<Props> = ({
             {renderHeaderContent()}
             <Grid container item lg={12} md={12} sm={12} xs={12}>
               <sc.textField
-                label="Comments"
+                label="Notes"
                 multiline
                 rows={3}
                 variant="outlined"

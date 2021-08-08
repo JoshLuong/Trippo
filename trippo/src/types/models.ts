@@ -64,6 +64,7 @@ export interface Itinerary {
     email: string;
   }[];
   budget?: number | null;
+  current_cost?: number;
   comments?: string;
   tags: string[];
   activities: Activity[];

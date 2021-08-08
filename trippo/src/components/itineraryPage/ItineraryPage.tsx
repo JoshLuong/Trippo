@@ -4,26 +4,38 @@ import Container from "../itineraryEdit/Container";
 import * as sc from "./ItineraryPage.styles";
 import Map from "../map/Map";
 import "../map/Map.css";
-import { GeocoderContainer } from 'components/map/Map.styles';
+import { GeocoderContainer } from "components/map/Map.styles";
 import Searchbar from "components/searchBar/Searchbar";
-import ReceiptIcon from '@material-ui/icons/Receipt';
+import ViewListIcon from "@material-ui/icons/ViewList";
 import NewSlot from "components/itineraryEdit/NewSlot";
-import ExpensePage from "./ExpensePage";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
-import { useAppDispatch } from 'app/store';
-import { useParams } from 'react-router-dom';
-import { useGetItineraryByIdQuery, useUpdateItineraryMutation } from 'services/itinerary';
-import { setItinerary } from 'app/reducers/itinerarySlice';
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-import { Itinerary } from 'types/models';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Tooltip,
+} from "@material-ui/core";
+import { useAppDispatch } from "app/store";
+import { useParams } from "react-router-dom";
+import {
+  useGetItineraryByIdQuery,
+  useUpdateItineraryMutation,
+} from "services/itinerary";
+import { setItinerary } from "app/reducers/itinerarySlice";
+import Snackbar, { SnackbarCloseReason } from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import { Itinerary } from "types/models";
+import ItineraryReadOnlyView from "components/itineraryReadOnlyView/ItineraryReadOnlyView";
 
 export type ContextInterface = {
   setUnsavedChanges: (value: any) => void;
   unsavedChanges: boolean;
   setShowUnsavedChangesModal: (value: any) => void;
   updateItinerary: (value: Itinerary) => void;
-} | null
+  activeDay: Date | null;
+  setActiveDay: (date: Date | null) => void;
+} | null;
 
 export const ItineraryContext = React.createContext<ContextInterface>(null);
 
@@ -34,30 +46,37 @@ let destinationLng: number;
 
 function ItineraryPage() {
   const [showItinerary, setShowItinerary] = useState(true);
-  const [showExpenses, setShowExpenses] = useState(false);
+  const [showItineraryReadOnlyView, setShowItineraryReadOnlyView] =
+    useState(false);
   const [showEditFeedback, setShowEditFeedback] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   // populate with the handler the user wants to execute
-  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<any>(null);
+  const [showUnsavedChangesModal, setShowUnsavedChangesModal] =
+    useState<any>(null);
   const geocoderContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
   const [closeSlotNewActivity, setCloseSlotNewActivity] = useState(false);
+  const [closeSlotNoActivity, setCloseSlotNoActivity] = useState(false);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { data: itinerary } = useGetItineraryByIdQuery(id);
-  const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] = useUpdateItineraryMutation();
+  const [activeDay, setActiveDay] = useState<Date | null>(
+    itinerary?.start_date || null
+  );
+  const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] =
+    useUpdateItineraryMutation();
   const [searchResult, setSearchResult] = useState<any>(null);
-
 
   useEffect(() => {
     if (updatedItinerary || closeSlotNewActivity) {
       dispatch(setItinerary(updatedItinerary));
       setShowEditFeedback(true);
+      setCloseSlotNewActivity(false);
     } else if (!isUpdating) {
       dispatch(setItinerary(itinerary));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itinerary, updatedItinerary, isUpdating, closeSlotNewActivity]);
 
   // tip: to use showUnsavedChangesModal, pass in handler function the user wants to execute when there are unsaved changes,
@@ -68,28 +87,28 @@ function ItineraryPage() {
       setShowUnsavedChangesModal(() => handleOpenItineraryNoChanges);
       return;
     }
-    handleOpenItineraryNoChanges()
+    handleOpenItineraryNoChanges();
   }
 
   function handleOpenItineraryNoChanges() {
     setShowItinerary(!showItinerary);
-    setShowExpenses(false);
+    setShowItineraryReadOnlyView(false);
   }
 
   function handleClose() {
     setShowUnsavedChangesModal(null);
-  };
-
-  function handleShowExpenses() {
-    if (unsavedChanges) {
-      setShowUnsavedChangesModal(() => handleShowExpensesNoChanges);
-      return;
-    }
-    handleShowExpensesNoChanges();
   }
 
-  function handleShowExpensesNoChanges() {
-    setShowExpenses(!showExpenses);
+  function handleReadOnlyView() {
+    if (unsavedChanges) {
+      setShowUnsavedChangesModal(() => handleReadOnlyViewNoChanges);
+      return;
+    }
+    handleReadOnlyViewNoChanges();
+  }
+
+  function handleReadOnlyViewNoChanges() {
+    setShowItineraryReadOnlyView(!showItineraryReadOnlyView);
     setShowItinerary(false);
   }
 
@@ -97,7 +116,12 @@ function ItineraryPage() {
     setIsLoading(!isLoading);
   }
 
-  function handleNewSlotClick(name: string, address: string, lat: number, lng: number) {
+  function handleNewSlotClick(
+    name: string,
+    address: string,
+    lat: number,
+    lng: number
+  ) {
     destinationName = name;
     destinationAddress = address;
     destinationLat = lat;
@@ -105,51 +129,58 @@ function ItineraryPage() {
     setCanOpenNewSlot(true);
   }
 
-  function handleNewSlotClose() { 
+  function handleNewSlotClose() {
+    setCanOpenNewSlot(false);
+    setCloseSlotNoActivity(true);
+  }
+
+  function handleNewSlotSubmitAndClose() {
     setCanOpenNewSlot(false);
     setCloseSlotNewActivity(true);
   }
 
   const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {
-    if (reason !== 'clickaway') {
+    if (reason !== "clickaway") {
       setShowEditFeedback(false);
+      setCloseSlotNoActivity(false);
     }
-  }
+  };
 
   function getDialogContainer() {
     return (
-    <Dialog
-      open={showUnsavedChangesModal !== null}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        Are you sure you want to exit?
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-        You are currently editing, and you may have unsaved changes. Click 'Done' to save the changes.
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <sc.StyledButton onClick={handleClose} color="primary">
-          Cancel
-        </sc.StyledButton>
-        <sc.StyledButton
-          onClick={() => {
-            setUnsavedChanges(!unsavedChanges); // ignore changes
-            handleClose();
-            setTimeout(() => showUnsavedChangesModal(), 500); // execute the handler
-          }}
-          color="primary"
-          autoFocus
-        >
-          Exit
-        </sc.StyledButton>
-      </DialogActions>
-    </Dialog>
-    )
+      <Dialog
+        open={showUnsavedChangesModal !== null}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Are you sure you want to exit?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You are currently editing, and you may have unsaved changes. Click
+            'Done' to save the changes.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <sc.StyledButton onClick={handleClose} color="primary">
+            Cancel
+          </sc.StyledButton>
+          <sc.StyledButton
+            onClick={() => {
+              setUnsavedChanges(!unsavedChanges); // ignore changes
+              handleClose();
+              setTimeout(() => showUnsavedChangesModal(), 500); // execute the handler
+            }}
+            color="primary"
+            autoFocus
+          >
+            Exit
+          </sc.StyledButton>
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   const contextValue = {
@@ -157,14 +188,29 @@ function ItineraryPage() {
     unsavedChanges,
     setShowUnsavedChangesModal,
     updateItinerary,
-  }  
+    activeDay,
+    setActiveDay,
+  };
 
   return (
     <ItineraryContext.Provider value={contextValue}>
-      <Snackbar transitionDuration={1000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={showEditFeedback} autoHideDuration={5000} onClose={handleFeedbackClose}>
-        <Alert severity="success">
-          Your itinerary has been updated
-        </Alert>
+      <Snackbar
+        transitionDuration={700}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={showEditFeedback}
+        autoHideDuration={1300}
+        onClose={handleFeedbackClose}
+      >
+        <Alert severity="success">Your itinerary has been updated</Alert>
+      </Snackbar>
+      <Snackbar
+        transitionDuration={700}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={closeSlotNoActivity}
+        autoHideDuration={1300}
+        onClose={handleFeedbackClose}
+      >
+        <Alert severity="warning">Your itinerary was not changed</Alert>
       </Snackbar>
       <div>
         {isLoading ? (
@@ -187,9 +233,14 @@ function ItineraryPage() {
             setSearchResult={setSearchResult}
           />
           <sc.SideBar>
-            <sc.StyledReceiptIcon>
-              <ReceiptIcon onClick={handleShowExpenses}/>
-            </sc.StyledReceiptIcon>
+            <sc.StyledViewListIcon>
+              <Tooltip
+                title="Itinerary master plan"
+                aria-label="Itinerary master plan"
+              >
+                <ViewListIcon onClick={handleReadOnlyView} />
+              </Tooltip>
+            </sc.StyledViewListIcon>
             <button onClick={handleOpenItinerary}>
               {showItinerary ? (
                 <i className="fas fa-chevron-left"></i>
@@ -198,32 +249,31 @@ function ItineraryPage() {
               )}
             </button>
           </sc.SideBar>
-          
+
           {showItinerary ? (
             <sc.Container>
               <Container />
-            </sc.Container> 
+            </sc.Container>
           ) : null}
-          {showExpenses ? (
+          {showItineraryReadOnlyView ? (
             <sc.Container>
-              <ExpensePage />
-          </sc.Container>
+              <ItineraryReadOnlyView />
+            </sc.Container>
           ) : null}
-          {
-            canOpenNewSlot ? <NewSlot 
-            handleClose={handleNewSlotClose} 
-            destinationName = {destinationName} 
-            destinationAddress={destinationAddress} 
-            destinationLat={destinationLat} 
-            destinationLng={destinationLng}
-            setSearchResult={setSearchResult}/>
-              : null
-          }
+          {canOpenNewSlot ? (
+            <NewSlot
+              handleClose={handleNewSlotClose}
+              handleSubmitAndClose={handleNewSlotSubmitAndClose}
+              destinationName={destinationName}
+              destinationAddress={destinationAddress}
+              destinationLat={destinationLat}
+              destinationLng={destinationLng}
+              setSearchResult={setSearchResult}
+            />
+          ) : null}
         </sc.ItineraryDiv>
       </div>
-      {
-        getDialogContainer()
-      }
+      {getDialogContainer()}
     </ItineraryContext.Provider>
   );
 }

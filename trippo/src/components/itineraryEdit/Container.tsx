@@ -7,12 +7,14 @@ import Day from "./Day";
 // import { useParams } from 'react-router-dom';
 // import { useEffect } from 'react';
 // import { setItinerary } from 'app/reducers/itinerarySlice';
-import {ContextInterface, ItineraryContext} from "../itineraryPage/ItineraryPage"
+import {
+  ContextInterface,
+  ItineraryContext,
+} from "../itineraryPage/ItineraryPage";
 
 const Container = () => {
   // TODO: change this
   const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
-  const [day, setDay] = useState<Date | null>(null);
   // const dispatch = useAppDispatch();
   // const { id } = useParams<{ id: string }>();
   // const { data: itinerary } = useGetItineraryByIdQuery(id);
@@ -23,26 +25,31 @@ const Container = () => {
   // }, [itinerary])
 
   const handleDayClick = (date: Date | null) => {
-    setDay(date);
+    itineraryContext?.setActiveDay(date);
   };
 
   function handleCalendarView() {
     if (itineraryContext?.unsavedChanges) {
-      itineraryContext?.setShowUnsavedChangesModal(() => handleCalendarViewNoChanges);
+      itineraryContext?.setShowUnsavedChangesModal(
+        () => handleCalendarViewNoChanges
+      );
       return;
     }
     handleCalendarViewNoChanges();
   }
 
   function handleCalendarViewNoChanges() {
-    setDay(null);
+    itineraryContext?.setActiveDay(null);
   }
 
   return (
     <sc.containerDiv>
       <div>
-        {day !== null ? (
-          <Day handleCalendarView={handleCalendarView} date={day} />
+        {itineraryContext?.activeDay ? (
+          <Day
+            handleCalendarView={handleCalendarView}
+            date={itineraryContext?.activeDay}
+          />
         ) : (
           <sc.calendarDiv>
             <Calendar handleDayClick={handleDayClick} />

@@ -24,12 +24,15 @@ export const dayDiv = styled.div`
   height: 100%;
 `;
 
-export const StyledReceiptIcon = styled.div`
+export const StyledViewListIcon = styled.div`
   padding: 1em 0;
   display: flex;
   justify-content: center;
   color: ${c.WHITE};
   background-color: ${c.DARK_BLUE};
+  :hover {
+    cursor: pointer;
+  }
 `;
 export const LoadingDiv = styled.div`
   position: absolute;

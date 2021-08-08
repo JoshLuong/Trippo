@@ -1,15 +1,15 @@
 import React, { FC, useState, useRef, useCallback } from "react";
-import { TextField } from '@material-ui/core';
+import { TextField } from "@material-ui/core";
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { Grid, Tooltip, Input, InputAdornment } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
-import { Activity } from 'types/models';
-import { useEffect } from 'react';
-import { debounce } from 'lodash';
+import { Activity } from "types/models";
+import { useEffect } from "react";
+import { debounce } from "lodash";
 
 interface Props {
   handleHideCostToggle: (cost: number | undefined) => void;
@@ -18,13 +18,23 @@ interface Props {
   index: number;
   editActivity: (activity: Activity) => void;
   deleteActivity: (activity: Activity) => void;
+  isReadOnly?: boolean;
+  size?: string;
 }
 
-const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editActivity, deleteActivity }) => {
+const TimeSlot: FC<Props> = ({
+  handleHideCostToggle,
+  activity,
+  showEdit,
+  editActivity,
+  deleteActivity,
+  size,
+  isReadOnly,
+}) => {
   const { time, destination, comments, type, address, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
-  const [commentsString, setCommentsString] = useState(comments.join('\n'));
+  const [commentsString, setCommentsString] = useState(comments.join("\n"));
   const timeRef = useRef(null);
   const isMounted = useRef(false);
 
@@ -36,13 +46,13 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
       isMounted.current = true;
       return;
     }
-    const comments = commentsString.split('\n').filter(e => Boolean(e));
+    const comments = commentsString.split("\n").filter((e) => Boolean(e));
 
     edit({
       ...activity,
       comments,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commentsString]);
 
   const setTime = (e: any) => {
@@ -52,13 +62,7 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
       ...activity,
       time,
     });
-  }
-
-  // TODO: Fix cost input
-  // const editCost = (costString: string) => {
-  //   const newCost = costString.slice(1);
-  //   setCost(Number(newCost));
-  // }
+  };
 
   const getButtons = () => {
     return showEdit ? (
@@ -67,17 +71,14 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
       </sc.StyledIconButton>
     ) : (
       <button onClick={() => setShowSuggestions(!showSuggestions)}>
-      {!showSuggestions ? (
-        <i className="fas fa-chevron-down"></i>
-      ) : (
-        <i
-          style={{ color: c.DARK_ORANGE }}
-          className="fas fa-chevron-up"
-        ></i>
-      )}
-    </button>
-    )
-  }
+        {!showSuggestions ? (
+          <i className="fas fa-chevron-down"></i>
+        ) : (
+          <i style={{ color: c.DARK_ORANGE }} className="fas fa-chevron-up"></i>
+        )}
+      </button>
+    );
+  };
   const handleShowCostToggle = () => {
     !showCost
       ? handleHideCostToggle(activity.cost)
@@ -88,31 +89,55 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   const renderHeaderContent = () => (
     <sc.HeaderGrid container item lg={11} md={11} sm={11} xs={11}>
       <sc.Destination>
-        <Grid container item lg={9} md={9} sm={10} xs={10}>
-        <Grid container item lg={1} md={1} sm={1} xs={1}>
-          {d.renderIcon(type)}
+        <Grid
+          container
+          item
+          lg={size === "small" ? 10 : 9}
+          md={9}
+          sm={10}
+          xs={10}
+        >
+          <Grid container item lg={1} md={1} sm={1} xs={1}>
+            {d.renderIcon(type)}
+          </Grid>
+          <Grid
+            container
+            item
+            lg={size === "small" ? 10 : 9}
+            md={size === "small" ? 10 : 9}
+            sm={10}
+            xs={10}
+          >
+            <span>{destination}</span>
+          </Grid>
+          <sc.AddressSpan>{address}</sc.AddressSpan>
         </Grid>
-        <Grid container item lg={9} md={9} sm={10} xs={10}>
-          <span>{destination}</span>
-        </Grid>
-        <sc.AddressSpan>{address}</sc.AddressSpan>
-        </Grid>
-        <Grid container item lg={2} md={2} sm={3} xs={3}>
+        <Grid
+          container
+          item
+          lg={size === "small" ? 3 : 2}
+          md={size === "small" ? 3 : 2}
+          sm={3}
+          xs={3}
+        >
           <sc.Cost {...costStyling}>
-              <sc.StyledFormControl fullWidth>
-                {activity.cost || showEdit ? (
+            <sc.StyledFormControl fullWidth>
+              {activity.cost || showEdit ? (
                 <Input
                   disabled={!showEdit}
                   value={activity.cost}
                   onChange={() => alert("TODO")}
-                  startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
                 />
-                ) : null}
+              ) : null}
             </sc.StyledFormControl>
             {activity.cost && !showEdit ? (
               <Tooltip
-                title={`${showCost ? "Hide from" : "Include in"
-                  } the total daily cost`}
+                title={`${
+                  showCost ? "Hide from" : "Include in"
+                } the total daily cost`}
               >
                 <button onClick={handleShowCostToggle}>
                   {showCost ? (
@@ -132,17 +157,28 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
   const date = time ? new Date(time) : new Date();
 
   return (
-    <sc.Slot showSuggestions={showSuggestions} borderColor={d.getIconColor(type)}>
+    <sc.Slot
+      showSuggestions={showSuggestions}
+      borderColor={d.getIconColor(type, "0.73")}
+    >
       <Grid container item lg={12}>
-        <Grid container item lg={3} md={3} sm={12}>
-          <sc.Time>
+        <Grid
+          container
+          item
+          lg={size === "small" ? 12 : 3}
+          md={size === "small" ? 12 : 3}
+          sm={12}
+        >
+          <sc.Time small={size === "small"}>
             <TextField
               disabled={!showEdit}
               onChange={(e) => setTime(e)}
               ref={timeRef}
               id="time"
               type="time"
-              defaultValue={moment(date, "dd DD-MMM-YYYY, hh:mm").format("HH:mm")}
+              defaultValue={moment(date, "dd DD-MMM-YYYY, hh:mm").format(
+                "HH:mm"
+              )}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -152,19 +188,25 @@ const TimeSlot: FC<Props> = ({ handleHideCostToggle, activity, showEdit, editAct
             />
           </sc.Time>
         </Grid>
-        <sc.SlotGrid container item lg={9} md={9} sm={12} xs={12}>
+        <sc.SlotGrid
+          container
+          item
+          lg={size === "small" ? 12 : 9}
+          md={size === "small" ? 12 : 9}
+          sm={12}
+          xs={12}
+          small={size === "small"}
+        >
           {renderHeaderContent()}
           <Grid container item lg={1} md={1} sm={1} xs={1}>
-            <sc.CommentButton>
-              {getButtons()}
-            </sc.CommentButton>
+            <sc.CommentButton>{!isReadOnly && getButtons()}</sc.CommentButton>
           </Grid>
           <Grid container item lg={12} md={12} sm={12} xs={12}>
-            <sc.Comments>
+            <sc.Comments small={size === "small"}>
               <sc.StyledTextField
                 fullWidth
                 id="filled-textarea"
-                label="Comments"
+                label="Notes"
                 disabled={!showEdit}
                 multiline
                 variant="outlined"

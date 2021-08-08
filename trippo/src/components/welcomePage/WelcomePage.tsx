@@ -31,8 +31,13 @@ function WelcomePage() {
             }
             <sc.headerDiv>
                 <sc.homeHeader>Plan Your Trips Like A Pro With Trippo</sc.homeHeader>
-                <br></br>
-                <sc.descHeader>An all-in-one itinerary management application</sc.descHeader>
+                <br/>
+                <sc.descHeader>
+                    <span>Sick of planning your trips with spread sheets and documents?</span>
+                    <br/>
+                    <sc.Divider />
+                    <span>Watch your travel ideas come to life with our collaborative, map-based, suggestive itinerary planner.</span>
+                </sc.descHeader>
             </sc.headerDiv>
             <sc.loginDiv>
                 <LoginContainer handleLoginError={handleLoginError}/>

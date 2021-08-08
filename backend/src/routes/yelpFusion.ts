@@ -39,10 +39,12 @@ router.post("/restaurants/breakfast_brunch", async (req, res, _next) => {
         (restaurant: any) =>
           restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1
       );
-      const randomIndex = Math.floor(Math.random() * (filteredResults.length - 2) + 2);
+      const randomIndex = Math.floor(
+        Math.random() * (filteredResults.length - 2) + 2
+      );
       const savedResults =
         filteredResults.length >= 2
-          ? filteredResults.slice(randomIndex-2, randomIndex)
+          ? filteredResults.slice(randomIndex - 2, randomIndex)
           : filteredResults;
       let businessIds: string[] = [];
       for (let res of savedResults) {
@@ -104,10 +106,12 @@ router.post("/restaurants", async (req, res, _next) => {
         (restaurant: any) =>
           restaurant.rating >= rating - 1 && restaurant.rating <= rating + 1
       );
-      const randomIndex = Math.floor(Math.random() * (filteredResults.length - 2) + 2);
+      const randomIndex = Math.floor(
+        Math.random() * (filteredResults.length - 2) + 2
+      );
       const savedResults =
         filteredResults.length >= 2
-          ? filteredResults.slice(randomIndex-2, randomIndex)
+          ? filteredResults.slice(randomIndex - 2, randomIndex)
           : filteredResults;
       let businessIds: string[] = [];
       for (let res of savedResults) {
@@ -164,10 +168,12 @@ router.post("/nightlife", async (req, res, _next) => {
         (attraction: any) =>
           attraction.rating >= rating - 1 && attraction.rating <= rating + 1
       );
-      const randomIndex = Math.floor(Math.random() * (filteredResults.length - 2) + 2);
+      const randomIndex = Math.floor(
+        Math.random() * (filteredResults.length - 2) + 2
+      );
       const savedResults =
         filteredResults.length >= 2
-          ? filteredResults.slice(randomIndex-2, randomIndex)
+          ? filteredResults.slice(randomIndex - 2, randomIndex)
           : filteredResults;
       let businessIds: string[] = [];
       for (let res of savedResults) {
@@ -230,10 +236,12 @@ router.post("/attractions", async (req, res, _next) => {
         (attraction: any) =>
           attraction.rating >= rating - 1 && attraction.rating <= rating + 1
       );
-      const randomIndex = Math.floor(Math.random() * (filteredResults.length - 2) + 2);
+      const randomIndex = Math.floor(
+        Math.random() * (filteredResults.length - 2) + 2
+      );
       const savedResults =
         filteredResults.length >= 2
-          ? filteredResults.slice(randomIndex-2, randomIndex)
+          ? filteredResults.slice(randomIndex - 2, randomIndex)
           : filteredResults;
       let businessIds: string[] = [];
       for (let res of savedResults) {

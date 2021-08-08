@@ -111,6 +111,7 @@ export const NameDiv = styled.h1`
 `;
 
 export const AddButton = styled.button`
+  display: flex;
   background-color: ${c.DARK_BLUE};
   border-radius: 12px;
   color: ${c.WHITE};
@@ -121,6 +122,10 @@ export const AddButton = styled.button`
   margin: 0.5em 0.75em 0em auto;
   &:hover {
     cursor: pointer;
+  }
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.4;
   }
 `;
 
@@ -175,6 +180,7 @@ export const textField = withStyles({
   root: {
     '& label.Mui-focused': {
       color: '#219EBC',
+      width: '100%',
     },
     '& .MuiInput-underline:after': {
       borderBottomColor: '#219EBC',

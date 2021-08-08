@@ -1,13 +1,29 @@
 import { makeStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import { Button, Tooltip } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 
 const drawerWidth = 240;
 
+export const StyledButton = styled(Button)`
+  span {
+    color: ${c.DARK_ORANGE};
+  }
+`;
+
+export const StyledTooltip = styled(Tooltip)`
+  margin-left: 0.5em;
+`;
+
 export const Logo = styled.div`
   position: absolute;
   left: 64px;
+
+  @media (max-width: 660px) {
+    left: 50px;
+  }
 `;
 
 export const DateGrid = styled(Grid)`
@@ -22,6 +38,9 @@ export const DateGrid = styled(Grid)`
   @media (max-width: 660px) {
     font-size: 0.5em;
   }
+  @media (max-width: 400px) {
+    font-size: 0.45em;
+  }
 `;
 
 export const ItineraryTitle = styled.div`
@@ -33,6 +52,15 @@ export const ItineraryTitle = styled.div`
   @media (max-width: 660px) {
     max-width: 160px;
     overflow: hidden;
+  }
+`;
+
+export const StyledLink = styled.input`
+  width: 100%;
+  border: none;
+  border-color: transparent;
+  :focus {
+    border: none;
   }
 `;
 
@@ -56,6 +84,13 @@ export const LogoButton = styled.button`
       display: block;
     }
   }
+`;
+
+export const StyledIconButton = styled(IconButton)`
+  width: 24px !important;
+  height: 24px !important;
+  margin-top: -6px;
+  position: relative;
 `;
 
 export const useStyles = makeStyles((theme) => ({

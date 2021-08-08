@@ -1,5 +1,5 @@
 import express from "express";
-import { Itinerary, Activity } from "database/models";
+import { Itinerary, Activity, ShareableItinerary } from "database/models";
 
 const router = express.Router();
 
@@ -12,6 +12,11 @@ router.get("/", async (req: any, res, _next) => {
       {
         collaborators: { $elemMatch: { _id: req.session.userId } },
         name: { $regex: regex },
+      },
+      { user_id: req.session.userId, tags: { $regex: regex } },
+      {
+        collaborators: { $elemMatch: { _id: req.session.userId } },
+        tags: { $regex: regex },
       },
     ],
   };
@@ -64,6 +69,20 @@ router.post("/", (req: any, res, _next) => {
     });
 });
 
+router.get("/shareable-link/:id", async (req: any, res, _next) => {
+  let query = { itinerary_id: req.params.id };
+  let update = { itinerary_id: req.params.id };
+  let options = { upsert: true, new: true, setDefaultsOnInsert: true };
+  let itinerary = await ShareableItinerary.findOneAndUpdate(
+    query,
+    update,
+    options
+  );
+  if (!itinerary) return res.status(404).send("Invalid Itinerary");
+  console.log(itinerary);
+  res.send(itinerary._id);
+});
+
 router.post("/new-activity", async (req: any, res, _next) => {
   const product = await Itinerary.findOne({
     $or: [
@@ -87,7 +106,7 @@ router.post("/new-activity", async (req: any, res, _next) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.status(404).send({message: 'Invalid Activity'});
+      return res.status(404).send({ message: "Invalid Activity" });
     });
 });
 
@@ -96,8 +115,11 @@ router.delete("/:id", (req: any, res, _next) => {
     _id: req.params.id,
     user_id: req.session.userId,
   })
-    .then((doc) => {
+    .then(async (doc) => {
       if (!doc) return res.status(500).send("Unable to delete itinerary");
+      await ShareableItinerary.findOneAndRemove({
+        itinerary_id: req.params.id,
+      })
       res.send(doc);
     })
     .catch((err) => {

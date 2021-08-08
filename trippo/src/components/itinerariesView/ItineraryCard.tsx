@@ -16,7 +16,6 @@ import { useAppSelector } from "app/store";
 import { User } from "types/models";
 import { useGetUserByIdQuery } from "services/user";
 import MainEditItineraryContainer from "components/itineraryForm/MainEditItineraryContainer";
-import { useEffect } from "react";
 
 interface Props {
   updateItinerary: (arg: Partial<Itinerary>) => any;
@@ -35,16 +34,16 @@ const renderNames = (
   const users = collaborators.slice();
   let names = "";
 
-  names = `${result.name} (owner), `;
+  names = `${result.name} (owner)`;
 
   if (users.length === 1) {
-    names += `${users[0].name}`;
+    names += `, ${users[0].name}`;
   } else if (users.length === 2) {
-    names += `${users[0].name} and ${users[1].name}`;
+    names += `, ${users[0].name} and ${users[1].name}`;
   } else if (users.length === 3) {
-    names += `${users[0].name}, ${users[1].name} + 1 other`;
+    names += `, ${users[0].name}, ${users[1].name} + 1 other`;
   } else if (users.length > 3) {
-    names += `${users[0].name}, ${users[1].name} + ${users.length - 2} others`;
+    names += `, ${users[0].name}, ${users[1].name} + ${users.length - 2} others`;
   }
 
   return (
@@ -102,9 +101,10 @@ const ItineraryCard: FC<Props> = ({
             </Grid>
             <sc.DateGrid container item lg={5} sm={12}>
               <i className="far fa-calendar-alt"></i>
-              {moment(card.start_date).format("MMM Do YYYY") +
+              <span>{moment(card.start_date).format("MMM Do YYYY") +
                 ` - ` +
                 moment(card.end_date).format("MMM Do YYYY")}
+              </span>
             </sc.DateGrid>
             <sc.StyledIconButton
               color="inherit"

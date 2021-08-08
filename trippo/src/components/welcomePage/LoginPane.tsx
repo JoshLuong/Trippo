@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useAppDispatch } from 'app/store';
 import { setUser } from 'app/reducers/userSlice';
 import * as sc from './Pane.styles';
+import { User } from "types/models"
 import { Grid } from '@material-ui/core';
 
 interface Props {
@@ -28,9 +29,10 @@ const LoginPane: FC<Props> = (Props) => {
                 "Content-Type": "application/json"
               }
             })
-            const data = await res.json()
+            const data: User = await res.json()
             //do something...
             dispatch(setUser({isLoggedIn: true, ...data}));
+            window.localStorage.setItem('user', data.name);
             history.push("/home?page=1");
         } catch(e) {
             Props.handleLoginError();

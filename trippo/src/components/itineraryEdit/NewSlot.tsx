@@ -6,19 +6,20 @@ import {
 } from "@material-ui/core";
 import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
-import { Grid } from "@material-ui/core";
+import { Grid, CircularProgress } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { useAppDispatch, useAppSelector } from "app/store";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { setItinerary } from 'app/reducers/itinerarySlice';
-import { useCreateActivityMutation } from "services/itinerary";
+import { useCreateActivityMutation, useLazyGetItineraryByIdQuery } from "services/itinerary";
 import { Activity } from "types/models";
 import {
   ContextInterface,
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
+import { useParams } from 'react-router-dom';
 
 interface Props {
   handleClose: () => void;
@@ -47,10 +48,19 @@ const NewSlot: FC<Props> = ({
   const [comments, setComments] = useState("");
   const [time, setTime] = useState("12:00");
   const [selectedDate, setSelectedDate] = useState(itineraryContext?.activeDay || itinerary?.start_date);
-  const [
-    createActivity, // This is the mutation trigger
-    { isLoading: isUpdating, data: updatedItinerary }, // This is the destructured mutation result
-  ] = useCreateActivityMutation();
+  const [addDisabled, setAddDisabled] = useState(false);
+  const [createActivity] = useCreateActivityMutation();
+  const [triggerGetQuery, result] = useLazyGetItineraryByIdQuery();
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    if (result.data) {
+      dispatch(setItinerary(result.data));
+      setSearchResult(null);
+      handleSubmitAndClose();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result]);
 
   const handleTypechange = (event: any) => {
     setType(event.target.value);
@@ -189,21 +199,13 @@ const NewSlot: FC<Props> = ({
       type: type,
       comments: comments.split("\n"),
     };
-    createActivity(newActivity).then((res: any) => {
-    // uncomment after fixing rendering issue below
-      // if (res.error) {
-      //   handleClose();
-      //   return;
-      // }
-      dispatch(setItinerary({
-        ...itinerary,
-        activities: itinerary?.activities ? [...itinerary?.activities, res.data] : [res.data],
-      }));
-      getSuggestedBusinesses(res.data._id);
-    });
-    // these should go inside createActivity but it creates a rendering issue for the activities.
-    setSearchResult(null);
-    handleSubmitAndClose();
+    setAddDisabled(true);
+    createActivity(newActivity)
+      .then(async (res: any) => {
+        await getSuggestedBusinesses(res.data._id);
+        triggerGetQuery(id);
+      })
+      .catch(() => handleClose());
   };
 
   const selectStyles = sc.selectStyles();
@@ -336,7 +338,9 @@ const NewSlot: FC<Props> = ({
               />
             </Grid>
           </sc.SlotGrid>
-          <sc.AddButton onClick={() => addToItinerary()}>Add</sc.AddButton>
+          <sc.AddButton disabled={addDisabled} onClick={() => addToItinerary()}>
+            {!addDisabled ? "Add" : <CircularProgress size="1.25em" color="inherit" />}
+          </sc.AddButton>
         </sc.SlotContainer>
       </sc.NewSlot>
     </>

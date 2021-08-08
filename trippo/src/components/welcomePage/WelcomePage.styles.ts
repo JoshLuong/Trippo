@@ -56,7 +56,6 @@ export const Divider = styled.div`
 
 export const descHeader = styled.h2`
   color: #ffffff;
-  text-shadow: 1px 0px 6px ${c.DARK_GREY};  
   font-size: 26px;
   font-weight: normal;
 

@@ -68,7 +68,7 @@ export const descHeader = styled.h2`
   }
 
   a {
-    display: flex;
+    display: inline;
     align-items: center;
 
     span {

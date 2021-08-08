@@ -60,12 +60,12 @@ Here, you are able to click on the Edit button, which allows you to change the t
 
 ![Edit Your Day](trippo/public/user-docs/6.PNG)
 
-Make sure to click the "Done" button when you have finished making changes to your destinations, otherwise they may will not be saved.
+Make sure to click the "Done" button when you have finished making changes to your destinations, otherwise they will not be saved.
 
 Opening the navigation bar in the top left and clicking on your Home page will bring you back to your itineraries. 
 
 ![Edit Itinerary](trippo/public/user-docs/10.png)
-Here you can also make changed to your overall trip by clicking on the marker in the top right of your itinerary. In this form you can make changes to your existing itinerary, or even delete it. After you have made any changes, make sure to click the "Update" button to save any changes.
+Here you can also make changes to your overall trip by clicking on the marker in the top right of your itinerary. In this form you can make edits to your existing itinerary, or even delete it. After you have made any changes, make sure to click the "Update" button to save them.
 
 
 ### <a name="share"> Sharing Itineraries </a>
@@ -83,4 +83,4 @@ You can also click the "Export to PDF" button on the top left of your side calen
 
 ### <a name="contact"> Contact Us </a>
 
-For any other questions or concerns regarding Trippo that have not been addressed in these user docs, feel free to contact us at [tripposupport@protonmail.com](mailto:tripposupport@protonmail.com)
+For any other questions or concerns regarding Trippo that have not been addressed in this documentation, feel free to contact us at [tripposupport@protonmail.com](mailto:tripposupport@protonmail.com)

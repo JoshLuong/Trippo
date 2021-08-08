@@ -98,9 +98,11 @@ export const ButtonDiv = styled.div`
     }
   }
 
-  @media (max-width: 1072px) {
+  @media (max-width: 1000px) {
+    margin-left: 0em;
     button {
       margin-bottom: 1.25em;
+      margin-left: 0em;
     }
   }
 `;

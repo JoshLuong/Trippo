@@ -187,10 +187,10 @@ const Navbar = (props: { history: any }) => {
           </sc.Logo>
           {(history.location.pathname.includes("itinerary") || IS_SHARED) &&
           itinerary ? (
-            <sc.ItineraryTitle>
+            <sc.ItineraryTitleContainer>
               <FadeIn transitionDuration={600} delay={500}>
-                <div>
-                  {itinerary?.name}
+                <sc.ItineraryTitle>
+                  <span>{itinerary?.name}</span>
                   {!IS_SHARED && (
                     <sc.StyledTooltip
                       title="Get shareable link"
@@ -206,7 +206,7 @@ const Navbar = (props: { history: any }) => {
                       </sc.StyledIconButton>
                     </sc.StyledTooltip>
                   )}
-                </div>
+                </sc.ItineraryTitle>
                 <sc.DateGrid container item lg={12} sm={12}>
                   <i className="far fa-calendar-alt"></i>
                   {moment(itinerary?.start_date).format("MMM Do YYYY") +
@@ -214,7 +214,7 @@ const Navbar = (props: { history: any }) => {
                     moment(itinerary?.end_date).format("MMM Do YYYY")}
                 </sc.DateGrid>
               </FadeIn>
-            </sc.ItineraryTitle>
+            </sc.ItineraryTitleContainer>
           ) : null}
           <IconButton
             style={{ position: "absolute", right: 20 }}

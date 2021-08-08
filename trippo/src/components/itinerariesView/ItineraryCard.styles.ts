@@ -28,8 +28,8 @@ export const Card = styled.div`
   min-height: 14em;
   width: 705px;
   box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
-  border-radius: 8px;
-  border-top: 16px solid ${(props) => props.color};
+  border-radius: 2px 2px 8px 8px;
+  border-top: 10px solid ${(props) => props.color};
   &:hover {
     transform: scale(1.025);
   }

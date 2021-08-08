@@ -29,6 +29,7 @@ export const Logo = styled.div`
 export const DateGrid = styled(Grid)`
   font-size: 0.65em;
   display: flex;
+  justify-content: center;
   color: ${c.DARK_GREY};
   i {
     color: ${c.DARK_ORANGE};
@@ -43,15 +44,33 @@ export const DateGrid = styled(Grid)`
   }
 `;
 
-export const ItineraryTitle = styled.div`
+export const ItineraryTitleContainer = styled.div`
   margin: auto;
-  text-align: center;
-  color: ${c.DARK_BLUE};
   font-size: 1.5em;
+  text-align: center;
+  display: flex;
+  justify-content: center;
 
   @media (max-width: 660px) {
     max-width: 160px;
     overflow: hidden;
+  }
+`;
+
+export const ItineraryTitle = styled.div`
+  margin: auto;
+  text-align: center;
+  overflow-x: scroll;
+  white-space: nowrap;
+  color: ${c.DARK_BLUE};
+
+  @media (max-width: 660px) {
+    max-width: 140px;
+    font-size: 0.75em;
+  }
+  ::-webkit-scrollbar {
+    height: 0px;
+    width: 0px;
   }
 `;
 

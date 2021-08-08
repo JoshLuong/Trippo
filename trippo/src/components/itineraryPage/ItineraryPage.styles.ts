@@ -2,11 +2,42 @@ import styled from "styled-components";
 import * as c from "../../colors/colors";
 import Button from "@material-ui/core/Button";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import {  TextField } from "@material-ui/core";
+import { withStyles } from '@material-ui/core/styles';
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
 export const StyledPDFDownloadLink = styled(PDFDownloadLink)`
+  padding: 1em;
+  color: ${c.BLACK};
+`;
+
+export const StyledTextField = withStyles({
+  root: {
+    width: '100%',
+    '& label.Mui-focused': {
+      color: '#219EBC',
+      width: '100%',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#219EBC',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&:hover fieldset': {
+        borderColor: '#219EBC',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#219EBC',
+      },
+    },
+  },
+})(TextField);
+
+
+export const StyledPDFButton = styled.button`
   background: ${c.DARK_BLUE};
-  padding-top: 5px;
+  height: 3em !important;
+  padding-bottom: 5px !important;
+  padding-top: 5px !important;
 `;
 
 export const StyledPictureAsPdfIcon = styled(PictureAsPdfIcon)`

@@ -3,6 +3,9 @@ import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
 
+interface ButtonProps {
+  edit?: boolean;
+}
 export const dayDiv = styled.div`
   padding: 1em;
   position: relative;
@@ -12,12 +15,12 @@ export const dayDiv = styled.div`
   overflow-x: hidden;
 `;
 
-export const EditButton = styled.button`
+export const EditButton = styled.button<ButtonProps>`
   margin: auto;
   border: none;
   height: 2em;
   width: 5em;
-  background-color: ${c.DARK_BLUE};
+  background-color: ${ props => props.edit ? c.YELLOW : c.DARK_BLUE};
   color: ${c.WHITE};
   letter-spacing: 1px;
   font-weight: 545;

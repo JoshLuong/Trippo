@@ -74,7 +74,7 @@ To share your itinerary, navigate to the map page with the side calendar view. A
 
 ![Shareable Link](trippo/public/user-docs/11.png)
 
-Clicking on that button will generate a shareable link to your itinerary. Your itinerary will not be editable through this link and will be displayed in a read-only format. To allow others to make edits to your itinerary, you must add their google emails as collaborators and they can access your itinerary once they log in to Trippo.
+Clicking on that button will generate a shareable link to your itinerary. Your itinerary will not be editable through this link, and will be displayed in a read-only format. To allow others to make edits to your itinerary, you must add their google emails as collaborators.
 
 ![Export to PDF](trippo/public/user-docs/8.PNG)
 

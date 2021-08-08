@@ -35,7 +35,6 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
     const [cityData, setCityData] = useState([]);
     const [destError, setDestError] = useState(undefined);
     const [nameError, setNameError] = useState<string | undefined>(undefined);
-    const [value, setValue] = useState<string[]>([]);
 
     const search = _.debounce((text: string) => {
         handleCitySearch(text);
@@ -52,7 +51,7 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
             setFail(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [result, value]);
+    }, [result]);
 
 
     const processCollaborators = (newValue: any) => {

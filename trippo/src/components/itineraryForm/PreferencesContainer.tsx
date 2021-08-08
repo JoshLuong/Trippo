@@ -18,7 +18,7 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
 
     return (
         <Fragment>
-            <Grid item lg={12} container direction="row">
+            <Grid item lg={12} container direction="row" wrap="nowrap">
                 <sc.preferencesButton onClick={() => setPreference(!showPreference)}>More Preferences
                     {!showPreference ? (
                         <i className="fas fa-chevron-down"></i>
@@ -36,7 +36,7 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
             </Grid>
             {showPreference && <Grid container item direction="row" spacing={3}>
                 <Grid container item direction="row" spacing={2} xs={12} md={6} lg={6}>
-                    <Grid item xs={6} lg={6}>
+                    <Grid item lg={6}>
                         <sc.inputTags>Restaurant Ratings</sc.inputTags>
                         <Select value={defaultRating} onChange={(e: any) => { setRating(e.target.value) }}>
                             <MenuItem value={1}>1 stars</MenuItem>

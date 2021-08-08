@@ -8,6 +8,7 @@ import { GeocoderContainer } from "components/map/Map.styles";
 import Searchbar from "components/searchBar/Searchbar";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import NewSlot from "components/itineraryEdit/NewSlot";
+import ItineraryPDF from "../itineraryPDF/ItineraryPDF";
 import {
   Dialog,
   DialogActions,
@@ -16,8 +17,8 @@ import {
   DialogTitle,
   Tooltip,
 } from "@material-ui/core";
-import { useAppDispatch } from "app/store";
-import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "app/store";
+import { useParams, useHistory } from "react-router-dom";
 import {
   useGetItineraryByIdQuery,
   useUpdateItineraryMutation,
@@ -25,7 +26,7 @@ import {
 import { setItinerary } from "app/reducers/itinerarySlice";
 import Snackbar, { SnackbarCloseReason } from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import { Itinerary } from "types/models";
+import { Activity, Itinerary, ActivityPopup } from "types/models";
 import ItineraryReadOnlyView from "components/itineraryReadOnlyView/ItineraryReadOnlyView";
 
 export type ContextInterface = {
@@ -35,6 +36,8 @@ export type ContextInterface = {
   updateItinerary: (value: Itinerary) => void;
   activeDay: Date | null;
   setActiveDay: (date: Date | null) => void;
+  activityPopups: ActivityPopup[];
+  handleSetActivityPopups: (slot: Activity) => void;
 } | null;
 
 export const ItineraryContext = React.createContext<ContextInterface>(null);
@@ -45,6 +48,10 @@ let destinationLat: number;
 let destinationLng: number;
 
 function ItineraryPage() {
+  const history = useHistory();
+  const IS_SHARED = history.location.pathname.includes("/shared");
+  const [showSharedItineraryToast, setShowSharedItineraryToast] =
+    useState(false);
   const [showItinerary, setShowItinerary] = useState(true);
   const [showItineraryReadOnlyView, setShowItineraryReadOnlyView] =
     useState(false);
@@ -57,20 +64,72 @@ function ItineraryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [canOpenNewSlot, setCanOpenNewSlot] = useState(false);
   const [closeSlotNewActivity, setCloseSlotNewActivity] = useState(false);
+  const [closeSlotNoActivity, setCloseSlotNoActivity] = useState(false);
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.value);
   const { id } = useParams<{ id: string }>();
-  const { data: itinerary } = useGetItineraryByIdQuery(id);
+  const [sharedItinerary, setSharedItinerary] = useState<Itinerary | null>(
+    null
+  );
+  const [isInvalidSharedLink, setIsInvalidSharedLink] = useState(false);
+  const { data: editableItinerary } = useGetItineraryByIdQuery(id);
+  const itinerary = IS_SHARED ? sharedItinerary : editableItinerary;
+  const [activityPopups, setActivityPopups] = useState<ActivityPopup[]>([]);
   const [activeDay, setActiveDay] = useState<Date | null>(
     itinerary?.start_date || null
   );
   const [updateItinerary, { isLoading: isUpdating, data: updatedItinerary }] =
     useUpdateItineraryMutation();
   const [searchResult, setSearchResult] = useState<any>(null);
+  const handleSetActivityPopups = (slot: Activity) => {
+    const activityPopup: ActivityPopup = {
+      _id: slot._id,
+      destination: slot.destination,
+      time: slot.time,
+      location: slot.location,
+    };
+    const arrSize = activityPopups.length;
+    const filteredArray = activityPopups.filter(
+      (a: ActivityPopup) => a._id !== activityPopup._id
+    );
+    const newActivityPopup: ActivityPopup[] =
+      filteredArray.length === arrSize
+        ? [...activityPopups, activityPopup]
+        : filteredArray;
+    setActivityPopups(newActivityPopup);
+  };
+
+  const handleCloseSharedItineraryToast = () => {
+    setShowSharedItineraryToast(false);
+  };
+
+  useEffect(() => {
+    if (IS_SHARED) {
+      fetch(`/api/shared/itineraries/${id}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((itinerary) => {
+          if (itinerary.error) {
+            setIsInvalidSharedLink(true);
+            return;
+          }
+          dispatch(setItinerary(itinerary));
+          setSharedItinerary(itinerary);
+          setShowSharedItineraryToast(true);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     if (updatedItinerary || closeSlotNewActivity) {
       dispatch(setItinerary(updatedItinerary));
       setShowEditFeedback(true);
+      setCloseSlotNewActivity(false);
     } else if (!isUpdating) {
       dispatch(setItinerary(itinerary));
     }
@@ -129,14 +188,53 @@ function ItineraryPage() {
 
   function handleNewSlotClose() {
     setCanOpenNewSlot(false);
+    setCloseSlotNoActivity(true);
+  }
+
+  function handleNewSlotSubmitAndClose() {
+    setCanOpenNewSlot(false);
     setCloseSlotNewActivity(true);
   }
 
   const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {
     if (reason !== "clickaway") {
       setShowEditFeedback(false);
+      setCloseSlotNoActivity(false);
     }
   };
+
+  function getInvalidItineraryDialog() {
+    return (
+      <Dialog
+        open={isInvalidSharedLink && !isLoading}
+        onClose={() => setIsInvalidSharedLink(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Oops! It looks like the itinerary you're trying to view doesn't exist!
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please make sure the link is correct, or log in to start creating
+            itineraries!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <sc.StyledButton
+            onClick={() => {
+              setIsInvalidSharedLink(false);
+              history.push("/");
+            }}
+            color="primary"
+            autoFocus
+          >
+            Okay
+          </sc.StyledButton>
+        </DialogActions>
+      </Dialog>
+    );
+  }
 
   function getDialogContainer() {
     return (
@@ -182,20 +280,31 @@ function ItineraryPage() {
     updateItinerary,
     activeDay,
     setActiveDay,
+    activityPopups,
+    handleSetActivityPopups,
   };
 
   return (
     <ItineraryContext.Provider value={contextValue}>
       <Snackbar
-        transitionDuration={1000}
+        transitionDuration={700}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={showEditFeedback}
-        autoHideDuration={5000}
+        autoHideDuration={1300}
         onClose={handleFeedbackClose}
       >
         <Alert severity="success">Your itinerary has been updated</Alert>
       </Snackbar>
-      <div>
+      <Snackbar
+        transitionDuration={700}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={closeSlotNoActivity}
+        autoHideDuration={1300}
+        onClose={handleFeedbackClose}
+      >
+        <Alert severity="warning">Your itinerary was not changed</Alert>
+      </Snackbar>
+      <sc.ItineraryPage>
         {isLoading ? (
           <sc.LoadingDiv>
             <div className="loader"></div>
@@ -215,7 +324,19 @@ function ItineraryPage() {
             searchResult={searchResult}
             setSearchResult={setSearchResult}
           />
-          <sc.SideBar>
+          <sc.SideBar disabled={IS_SHARED}>
+            {itinerary && user && (
+              <sc.StyledPDFDownloadLink
+                document={<ItineraryPDF itinerary={itinerary} user={user} />}
+                fileName={`${itinerary.name.replace(/\s/g, "_")}.pdf`}
+              >
+                {() => (
+                  <Tooltip title="Export to PDF" aria-label="Export to PDF">
+                    <sc.StyledPictureAsPdfIcon />
+                  </Tooltip>
+                )}
+              </sc.StyledPDFDownloadLink>
+            )}
             <sc.StyledViewListIcon>
               <Tooltip
                 title="Itinerary master plan"
@@ -224,7 +345,7 @@ function ItineraryPage() {
                 <ViewListIcon onClick={handleReadOnlyView} />
               </Tooltip>
             </sc.StyledViewListIcon>
-            <button onClick={handleOpenItinerary}>
+            <button onClick={handleOpenItinerary} disabled={IS_SHARED}>
               {showItinerary ? (
                 <i className="fas fa-chevron-left"></i>
               ) : (
@@ -233,7 +354,7 @@ function ItineraryPage() {
             </button>
           </sc.SideBar>
 
-          {showItinerary ? (
+          {showItinerary && !IS_SHARED ? (
             <sc.Container>
               <Container />
             </sc.Container>
@@ -246,6 +367,7 @@ function ItineraryPage() {
           {canOpenNewSlot ? (
             <NewSlot
               handleClose={handleNewSlotClose}
+              handleSubmitAndClose={handleNewSlotSubmitAndClose}
               destinationName={destinationName}
               destinationAddress={destinationAddress}
               destinationLat={destinationLat}
@@ -254,8 +376,22 @@ function ItineraryPage() {
             />
           ) : null}
         </sc.ItineraryDiv>
-      </div>
+      </sc.ItineraryPage>
       {getDialogContainer()}
+      {getInvalidItineraryDialog()}
+      {!isLoading && (
+        <Snackbar
+          transitionDuration={500}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          open={showSharedItineraryToast}
+        >
+          <Alert onClose={handleCloseSharedItineraryToast} severity="warning">
+            You have <strong>restricted</strong> read-only access for this itinerary. 
+            <br/>
+            To get write access, please ask the owner to add you as a collaborator.
+          </Alert>
+        </Snackbar>
+      )}
     </ItineraryContext.Provider>
   );
 }

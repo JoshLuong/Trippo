@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useCallback } from "react";
+import React, { FC, useState, useRef, useCallback, useContext } from "react";
 import { TextField } from "@material-ui/core";
 import * as sc from "./TimeSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
@@ -7,7 +7,11 @@ import { Grid, Tooltip, Input, InputAdornment } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
 import * as c from "../../colors/colors";
-import { Activity } from "types/models";
+import { Activity, ActivityPopup } from "types/models";
+import {
+  ContextInterface,
+  ItineraryContext,
+} from "../itineraryPage/ItineraryPage";
 import { useEffect } from "react";
 import { debounce } from "lodash";
 
@@ -31,6 +35,7 @@ const TimeSlot: FC<Props> = ({
   size,
   isReadOnly,
 }) => {
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
   const { time, destination, comments, type, address, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
@@ -72,9 +77,16 @@ const TimeSlot: FC<Props> = ({
     ) : (
       <button onClick={() => setShowSuggestions(!showSuggestions)}>
         {!showSuggestions ? (
-          <i className="fas fa-chevron-down"></i>
+          <Tooltip title="Show suggestions" aria-label="Show suggestions">
+            <i className="fas fa-chevron-down"></i>
+          </Tooltip>
         ) : (
-          <i style={{ color: c.DARK_ORANGE }} className="fas fa-chevron-up"></i>
+          <Tooltip title="Hide suggestions" aria-label="Hide suggestions">
+            <i
+              style={{ color: c.DARK_ORANGE }}
+              className="fas fa-chevron-up"
+            ></i>
+          </Tooltip>
         )}
       </button>
     );
@@ -86,8 +98,16 @@ const TimeSlot: FC<Props> = ({
     setShowCost(!showCost);
   };
 
+  const headerSize = size === "small" ? 12 : 11;
   const renderHeaderContent = () => (
-    <sc.HeaderGrid container item lg={11} md={11} sm={11} xs={11}>
+    <sc.HeaderGrid
+      container
+      item
+      lg={headerSize}
+      md={headerSize}
+      sm={headerSize}
+      xs={headerSize}
+    >
       <sc.Destination>
         <Grid
           container
@@ -97,9 +117,9 @@ const TimeSlot: FC<Props> = ({
           sm={10}
           xs={10}
         >
-          <Grid container item lg={1} md={1} sm={1} xs={1}>
+          <sc.IconGrid container item lg={1} md={1} sm={1} xs={2}>
             {d.renderIcon(type)}
-          </Grid>
+          </sc.IconGrid>
           <Grid
             container
             item
@@ -108,11 +128,21 @@ const TimeSlot: FC<Props> = ({
             sm={10}
             xs={10}
           >
-            <span>{destination}</span>
+            {size === "small" ? (
+              <span>{destination}</span>
+            ) : (
+              <sc.DestinationSpan
+                onClick={() =>
+                  itineraryContext?.handleSetActivityPopups(activity)
+                }
+              >
+                {destination}
+              </sc.DestinationSpan>
+            )}
           </Grid>
           <sc.AddressSpan>{address}</sc.AddressSpan>
         </Grid>
-        <Grid
+        <sc.CostGrid
           container
           item
           lg={size === "small" ? 3 : 2}
@@ -121,18 +151,6 @@ const TimeSlot: FC<Props> = ({
           xs={3}
         >
           <sc.Cost {...costStyling}>
-            <sc.StyledFormControl fullWidth>
-              {activity.cost || showEdit ? (
-                <Input
-                  disabled={!showEdit}
-                  value={activity.cost}
-                  onChange={() => alert("TODO")}
-                  startAdornment={
-                    <InputAdornment position="start">$</InputAdornment>
-                  }
-                />
-              ) : null}
-            </sc.StyledFormControl>
             {activity.cost && !showEdit ? (
               <Tooltip
                 title={`${
@@ -148,8 +166,30 @@ const TimeSlot: FC<Props> = ({
                 </button>
               </Tooltip>
             ) : null}
+            <sc.StyledFormControl fullWidth>
+              {activity.cost || showEdit ? (
+                <Input
+                  disabled={!showEdit}
+                  value={activity.cost}
+                  onChange={(e) => {
+                    if (
+                      Number.isInteger(Number(e.target.value)) ||
+                      e.target.value === ""
+                    ) {
+                      editActivity({
+                        ...activity,
+                        cost: Number(e.target.value) || undefined,
+                      });
+                    }
+                  }}
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
+                />
+              ) : null}
+            </sc.StyledFormControl>
           </sc.Cost>
-        </Grid>
+        </sc.CostGrid>
       </sc.Destination>
     </sc.HeaderGrid>
   );
@@ -198,9 +238,11 @@ const TimeSlot: FC<Props> = ({
           small={size === "small"}
         >
           {renderHeaderContent()}
-          <Grid container item lg={1} md={1} sm={1} xs={1}>
-            <sc.CommentButton>{!isReadOnly && getButtons()}</sc.CommentButton>
-          </Grid>
+          {size !== "small" ? (
+            <Grid container item lg={1} md={1} sm={1} xs={1}>
+              <sc.CommentButton>{!isReadOnly && getButtons()}</sc.CommentButton>
+            </Grid>
+          ) : null}
           <Grid container item lg={12} md={12} sm={12} xs={12}>
             <sc.Comments small={size === "small"}>
               <sc.StyledTextField

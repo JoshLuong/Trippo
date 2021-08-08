@@ -1,6 +1,16 @@
 import "dotenv/config";
 import { Schema, model, ObjectId } from "mongoose";
 
+export interface IShareableItinerary {
+  itinerary_id: ObjectId;
+}
+
+export const shareableItinerarySchema = new Schema<IShareableItinerary>(
+  {
+    itinerary_id: { type: Schema.Types.ObjectId, required: true, unique: true },
+  },
+  { toObject: { versionKey: false } }
+);
 export interface IYelp {
   name: string;
   business_id: string;
@@ -178,3 +188,7 @@ export const User = model<IUser>("User", userSchema);
 export const Yelp = model<IYelp>("Yelp", yelpSchema);
 export const Itinerary = model<IItinerary>("Itinerary", itinerarySchema);
 export const Activity = model<IActivity>("Activity", activitySchema);
+export const ShareableItinerary = model<IShareableItinerary>(
+  "ShareableItinerary",
+  shareableItinerarySchema
+);

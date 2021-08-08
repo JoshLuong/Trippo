@@ -1,6 +1,22 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import Button from "@material-ui/core/Button";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
+export const StyledPDFDownloadLink = styled(PDFDownloadLink)`
+  background: ${c.DARK_BLUE};
+  padding-top: 5px;
+`;
+
+export const StyledPictureAsPdfIcon = styled(PictureAsPdfIcon)`
+  color: ${c.WHITE};
+  padding: 1px;
+  padding-left: 1.5px;
+`;
+export interface DisabledButtonProps {
+  disabled: boolean;
+}
 
 export const fancytext = styled.div`
   text-align: center;
@@ -25,7 +41,7 @@ export const dayDiv = styled.div`
 `;
 
 export const StyledViewListIcon = styled.div`
-  padding: 1em 0;
+  padding: 0.5em 0;
   display: flex;
   justify-content: center;
   color: ${c.WHITE};
@@ -51,9 +67,9 @@ export const LoadingDiv = styled.div`
   }
 `;
 
-export const SideBar = styled.div`
+export const SideBar = styled.div<DisabledButtonProps>`
   z-index: 1;
-  height: 650px;
+  height: 95%;
   width: 2em;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
   display: flex;
@@ -65,13 +81,18 @@ export const SideBar = styled.div`
     padding: 0;
     background-color: ${c.DARK_BLUE};
     i {
+      padding-top: 100%;
       display: inline;
       color: ${c.WHITE};
       font-size: 1.5em;
     }
   }
   button:hover {
-    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? `not-allowed` : `pointer`)};
+  }
+
+  @media (max-width: 668px) {
+    height: 90%;
   }
 `;
 
@@ -80,13 +101,14 @@ export const Container = styled.div`
   // z-index: 1;
   display: inline-block;
   background-color: #fff;
-  height: 650px;
+  height: 95%;
   flex: 0 0 585px;
   position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
 
   @media (max-width: 668px) {
     flex: 0 0 80%;
+    height: 90%;
   }
 `;
 
@@ -96,11 +118,19 @@ export const SearchContainer = styled.div`
   width: 100%;
   box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
   text-align: center;
+  background: transparent;
+  display: flex;
+  justify-content: center;
 
   input {
     &:focus {
       outline: none;
     }
+  }
+
+  @media (max-width: 650px) {
+    height: 5em;
+    margin-top: 4em;
   }
 `;
 
@@ -109,5 +139,10 @@ export const ItineraryDiv = styled.div`
   position: relative;
   display: flex;
   margin-top: 0.6em;
+  overflow-x: hidden;
+  height: 100%;
+`;
+
+export const ItineraryPage = styled.div`
   height: 80%;
 `;

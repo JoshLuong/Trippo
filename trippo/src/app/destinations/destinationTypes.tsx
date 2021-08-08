@@ -54,7 +54,6 @@ export function renderIcon(t: string | undefined) {
       return <Icon color="#ef476f" className="fas fa-camera"></Icon>;
     default:
       return <Icon color={c.YELLOW} className="fas fa-map-marker-alt"></Icon>;
-    // code block
   }
 }
 
@@ -76,6 +75,26 @@ export function getIconColor(t: string | undefined, opacity: string): string {
       return `rgba(239,71,111,${opacity})`;
     default:
       return `rgba(255,183,3,${opacity})`;
-    // code block
+  }
+}
+
+export function getIconHexColor(t: string | undefined) {
+  switch (t) {
+    case RESTAURANT:
+      return "#073B4C";
+    case AIRPORT:
+      return "#277DA1";
+    case HOTEL:
+      return "#2ec4b6";
+    case PARK:
+      return "#6dbe73";
+    case BEACH:
+      return "#00bbf9";
+    case SHOPPING:
+      return "#ffd500";
+    case ATTRACTION:
+      return "#ef476f";
+    default: 
+      return c.YELLOW;
   }
 }

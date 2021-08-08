@@ -1,3 +1,13 @@
+export interface ActivityPopup {
+  _id: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
+  time: string;
+  destination?: string;
+}
+
 export interface Activity {
   itinerary_id?: string;
   _id: string;

@@ -8,6 +8,10 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 export const StyledInfoIcon = styled(InfoIcon)`
   margin: auto 0.5em;
   color: ${c.DARK_GREY};
+
+  @media(width: 430px){
+    margin: auto 0.2em;
+  }
 `;
 
 export const StyledIconButton = styled(IconButton)`
@@ -40,7 +44,7 @@ export const newItineraryContainer = styled.div`
   border-radius: 16px 16px 7px 7px;
   border-top: 16px solid ${c.DARK_BLUE};
   @media (max-width: 960px) {
-    width: 70%;
+    width: 90%;
   }
 
   

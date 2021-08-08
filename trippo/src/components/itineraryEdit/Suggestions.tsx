@@ -48,6 +48,7 @@ const Suggestions: FC<Props> = ({ activity }) => {
       }
     })
     return () => { isMounted = false };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -70,13 +71,15 @@ const Suggestions: FC<Props> = ({ activity }) => {
                 </sc.Distance>
               </Grid>
               <Grid container item lg={4} md={4} sm={4} xs={4}>
-                <sc.Comments>
-                  {s.price}
+                <sc.YelpStarsAndCost>
+                  <span>
+                    {s.price}
+                  </span>
                   <img alt={`${s.rating} stars`} src={starString} width="70"/>
-                </sc.Comments>
+                </sc.YelpStarsAndCost>
                 <sc.Comments>
-                  <a target="_blank" href={s.url}>
-                    <img src='/yelp/yelp_logo.png' width="40"></img>
+                  <a target="blank" rel="noreferrer" href={s.url}>
+                    <img src='/yelp/yelp_logo.png' alt="Yelp logo" width="40"></img>
                   </a>
                 </sc.Comments>
               </Grid>

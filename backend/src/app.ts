@@ -7,6 +7,7 @@ import cors from 'cors';
 import session from 'express-session';
 import path from 'path';
 import itineraryRouter from './routes/itineraries';
+import sharedItineraryRouter from './routes/sharedItineraries';
 import userRouter from './routes/users';
 import googleAuthRouter from './routes/googleAuth';
 import yelpFusionRouter from './routes/yelpFusion';
@@ -17,7 +18,8 @@ mongoose.connect(process.env.DATABASE_URL!, {
 }).then(() => {
   const app = express();
   const PORT = process.env.PORT || 4000;
-
+  var redirectToHTTPS = require('express-http-to-https').redirectToHTTPS;
+  app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
   // Serve React app from express
   app.use(express.static(path.join(__dirname, '..', '..', 'trippo', 'build')));
   app.get('*', (req, res, next) => {
@@ -29,6 +31,9 @@ mongoose.connect(process.env.DATABASE_URL!, {
 
   // TODO: change to secure https://www.npmjs.com/package/express-session
   app.use(session({ resave: true, secret: process.env.EXPRESS_SESSION_SECRET!, saveUninitialized: true, cookie: { secure: false } }));
+
+  // place above middleware to allow un-authenticated users to view shareable itineraries
+  app.use('/api/shared/itineraries', sharedItineraryRouter);
 
   app.use(async (req: any, res, next) => {
     const user = await User.findById(req.session.userId).exec();

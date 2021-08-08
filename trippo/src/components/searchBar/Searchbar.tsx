@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       width: "80%",
     },
+    [theme.breakpoints.down('xs')]: {
+      width: "90%",
+    },
     
   },
   input: {

@@ -83,13 +83,14 @@ export const StyledViewListIcon = styled.div`
 `;
 export const LoadingDiv = styled.div`
   position: absolute;
+  bottom: 0;
   font-size: 2.25em;
   color: ${c.DARK_ORANGE};
   background-color: ${c.WHITE};
-  z-index: 2000;
+  z-index: 1999;
   display: flex;
-  height: 750px;
-  margin-top: 3em;
+  height: calc(100% - 162px);
+  margin-top: 64px;
   width: 100%;
   justify-content: center;
   align-items: center;
@@ -101,6 +102,7 @@ export const LoadingDiv = styled.div`
 export const SideBar = styled.div<DisabledButtonProps>`
   z-index: 1;
   height: 95%;
+  max-height: 720px;
   width: 2em;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
   display: flex;
@@ -133,6 +135,7 @@ export const Container = styled.div`
   display: inline-block;
   background-color: #fff;
   height: 95%;
+  max-height: 720px;
   flex: 0 0 585px;
   position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
@@ -144,8 +147,8 @@ export const Container = styled.div`
 `;
 
 export const SearchContainer = styled.div`
-  margin-top: 5em;
-  height: 7em;
+  z-index: 2000;
+  height: 98px;
   width: 100%;
   box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
   text-align: center;
@@ -169,11 +172,16 @@ export const ItineraryDiv = styled.div`
   bottom: 0;
   position: relative;
   display: flex;
-  margin-top: 0.6em;
+  margin-top: 8.5px;
   overflow-x: hidden;
-  height: 100%;
+  height: calc(100% - 106.5px);
+  min-height: 80vh;
+  @media (max-width: 650px) {
+    height: calc(100% - 5.6em);
+  }
 `;
 
 export const ItineraryPage = styled.div`
-  height: 80%;
+  height: calc(100% - 64px);
+  margin-top: 64px;
 `;

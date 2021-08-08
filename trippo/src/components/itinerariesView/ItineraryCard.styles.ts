@@ -44,6 +44,12 @@ export const Card = styled.div`
   @media (max-width: 660px) {
     width: 80%;
   }
+
+  @media (max-width: 400px) {
+    width: 95%;
+    border-radius: 4px;
+    margin-bottom: 2em;
+  }
 `;
 
 export const StyledLabelIcon = styled(LabelIcon)`

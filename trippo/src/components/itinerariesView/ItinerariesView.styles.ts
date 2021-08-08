@@ -57,6 +57,12 @@ export const ButtonDiv = styled.div`
     cursor: pointer;
   }
 
+  @media (max-width: 400px) {
+    margin-top: 1.5em;
+
+    button {
+      margin-bottom: 1.5em;
+    }
   }
 `;
 

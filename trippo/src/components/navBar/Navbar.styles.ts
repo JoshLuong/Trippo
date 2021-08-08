@@ -66,7 +66,7 @@ export const ItineraryTitle = styled.div`
 
   @media (max-width: 660px) {
     max-width: 140px;
-    font-size: 0.75em;
+    font-size: 0.65em;
   }
   ::-webkit-scrollbar {
     height: 0px;

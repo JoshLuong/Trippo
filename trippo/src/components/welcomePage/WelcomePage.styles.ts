@@ -5,7 +5,7 @@ export const containerDiv = styled.div`
   display: flex;
   position: sticky;
   min-height: 100%;
-  background: url(/welcome.png) no-repeat fixed center;
+  background: url(/welcome.jpg) no-repeat fixed center;
   background-size: cover;
   flex-direction: row-reverse;
   flex-wrap: wrap;
@@ -51,7 +51,7 @@ export const homeHeader = styled.h1`
 `;
 
 export const Divider = styled.div`
-  height: 0.35em;
+  height: 0.5em;
 `;
 
 export const descHeader = styled.h2`
@@ -64,8 +64,10 @@ export const descHeader = styled.h2`
     margin-top: 0;
   }
 
-  @media(max-width: 600px){
-    display: none;
+  span {
+    padding: 0 7px;
+    border-radius: 6px;
+    background: #c0b3b499;
   }
 `;
 

@@ -78,7 +78,7 @@ function ItineraryPage() {
   const { data: user } = useGetUserByIdQuery(itinerary?.user_id);
   const [activityPopups, setActivityPopups] = useState<ActivityPopup[]>([]);
   const [showCustomizePDF, setShowCustomizePDF] = useState(false);
-  const [customURL, setCustomURL] = useState<string>("");
+  const [customURL, setCustomURL] = useState<ArrayBuffer | null>(null);
   const [activeDay, setActiveDay] = useState<Date | null>(
     itinerary?.start_date || null
   );
@@ -209,8 +209,13 @@ function ItineraryPage() {
 
   function getCustomizeablePDFDialog() {
     const handleChange = debounce((e: any) => {
-      console.log(e.target.value)
-      setCustomURL(e.target.value)
+      if (e.target.files && e.target.files[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          setCustomURL(e?.target?.result as ArrayBuffer);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
     }, 500);
     return itinerary && user && (
       <Dialog
@@ -226,9 +231,9 @@ function ItineraryPage() {
           <DialogContentText>
             Add a <strong>custom</strong> background image, or leave it blank to use the provided <strong>default</strong> image.
             <br/>
-            For best results, find a high resolution image and copy the 'Image address' into the below field:
+            Tip: use a high resolution image with a landscape orientation.
           </DialogContentText>
-          <sc.StyledTextField onChange={handleChange} id="standard-basic" label="Image Address" />
+          <sc.StyledTextField type="file" onChange={handleChange}/>
         </DialogContent>
         <DialogActions>
         <sc.StyledPDFDownloadLink

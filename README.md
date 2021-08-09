@@ -90,9 +90,9 @@ To further improve on Trippo, we plan to complete our missing standard requireme
 
 #### Joshua Luong:
 
-- 
-- 
-- 
+- Overhauled UX/UI design of the application, as well as contributing to the re-design- implementing the itineraries home page, itinerary edit/ calendar page, itinerary master plan view, and new activitiy popup
+- Implemented secure Google log in, user validation, React router redirects, Yelp APIs/ models/ suggested yelp data design; assisted in form validation and overall UI implementation
+- Created the secure link sharing capability, and export to PDF feature.
 
 #### Andre Ramkairsingh:
 

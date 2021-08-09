@@ -63,7 +63,7 @@ Trippo uses CSS within React styled-components to write CSS and import style int
 
 ### - Unit 2: React
 
-Trippo uses React to create functional UI components that are reactive to state changes within the application such as forms, map data, and itinerary information. React lets us use the dynamic features of TypeScript to efficiently organize and reuse components, and allows sharing of component properties and state so that the right data is always updated displayed throughout the application. Compared to plain JavaScript, React allowed us to split our UI into functional components which helped streamline the coding process between teammates, along with combining HTML and JavaScript wherever was required.
+Trippo uses React to create reusable, functional UI components that are reactive to state changes within the application such as forms, map data, and itinerary information. React lets us use the dynamic features of TypeScript to efficiently organize and reuse components, and allows sharing of component properties and state so that the right data is always updated displayed throughout the application.  Through various state management techniques (e.g. Redux, React Context) we were able to efficiently propagate any state changes to the React components, effectively updating the UI, while also benefiting from Redux's internal performance optimizations.
 
 ### - Unit 3: Node & Express
 

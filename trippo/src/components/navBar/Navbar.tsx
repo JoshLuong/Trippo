@@ -18,7 +18,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Tooltip,
 } from "@material-ui/core";
 import LinkIcon from "@material-ui/icons/Link";
 import { setUser } from "app/reducers/userSlice";
@@ -166,7 +165,6 @@ const Navbar = (props: { history: any }) => {
           </IconButton>
           <sc.Logo>
             <sc.LogoButton
-              disabled={!user?.isLoggedIn}
               onClick={() => handleMenuClick("/home?page=1")}
             >
               <>
@@ -273,7 +271,6 @@ const Navbar = (props: { history: any }) => {
             const { menuTitle, pageURL } = menuItem;
             return (
               <ListItem
-                disabled={!user?.isLoggedIn}
                 button
                 onClick={() => handleMenuClick(pageURL)}
                 key={index}

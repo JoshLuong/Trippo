@@ -37,6 +37,7 @@ const Day: FC<Props> = ({
           e._id === activity._id ? activity : e
         ),
       });
+      console.log('test');
       itineraryContext?.setUnsavedChanges(true);
     }
   };

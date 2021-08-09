@@ -4,10 +4,13 @@ import { Activity, Yelp } from 'types/models';
 import { useAppSelector } from 'app/store';
 import { Grid } from "@material-ui/core";
 import { getDistanceFromLatLonInKm } from './utils';
+import FadeIn from "react-fade-in";
+import { Bbox } from "@mapbox/mapbox-gl-geocoder";
 
 interface Props {
   renderIcon: (icon: string) => JSX.Element;
   activity: Activity;
+  hidden?: boolean;
   suggested?: {
     destination?: string;
     type?: string;
@@ -23,7 +26,7 @@ interface Props {
   }[];
 }
 
-const Suggestions: FC<Props> = ({ activity }) => {
+const Suggestions: FC<Props> = ({ activity, hidden = false }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [suggested, setSuggested] = useState<Yelp[]>([]);
 
@@ -52,7 +55,7 @@ const Suggestions: FC<Props> = ({ activity }) => {
   }, [])
 
   return (
-    <Grid container item lg={12}>
+    <sc.ContainerGrid isHidden={hidden} container item lg={12}>
       <Grid container item lg={3} md={3} sm={12} xs={12}>
         <sc.SuggestionTitle>Suggestions</sc.SuggestionTitle>
       </Grid>
@@ -88,7 +91,7 @@ const Suggestions: FC<Props> = ({ activity }) => {
         })
         }
       </Grid>
-    </Grid>
+    </sc.ContainerGrid>
   );
 };
 

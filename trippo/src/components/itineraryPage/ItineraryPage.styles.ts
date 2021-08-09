@@ -5,8 +5,19 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
 export const StyledPDFDownloadLink = styled(PDFDownloadLink)`
+  padding: 1em;
+  color: ${c.BLACK};
+`;
+
+export const StyledTextField = styled.input`
+  width: 100%;
+`;
+
+export const StyledPDFButton = styled.button`
   background: ${c.DARK_BLUE};
-  padding-top: 5px;
+  height: 3em !important;
+  padding-bottom: 5px !important;
+  padding-top: 5px !important;
 `;
 
 export const StyledPictureAsPdfIcon = styled(PictureAsPdfIcon)`
@@ -52,13 +63,14 @@ export const StyledViewListIcon = styled.div`
 `;
 export const LoadingDiv = styled.div`
   position: absolute;
+  bottom: 0;
   font-size: 2.25em;
   color: ${c.DARK_ORANGE};
   background-color: ${c.WHITE};
-  z-index: 2000;
+  z-index: 1999;
   display: flex;
-  height: 750px;
-  margin-top: 3em;
+  height: calc(100% - 149px);
+  margin-top: 64px;
   width: 100%;
   justify-content: center;
   align-items: center;
@@ -70,6 +82,8 @@ export const LoadingDiv = styled.div`
 export const SideBar = styled.div<DisabledButtonProps>`
   z-index: 1;
   height: 95%;
+  margin-top: 1em;
+  max-height: 720px;
   width: 2em;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
   display: flex;
@@ -98,10 +112,11 @@ export const SideBar = styled.div<DisabledButtonProps>`
 
 export const Container = styled.div`
   border-radius: 7px;
-  // z-index: 1;
   display: inline-block;
   background-color: #fff;
   height: 95%;
+  margin-top: 1em;
+  max-height: 720px;
   flex: 0 0 585px;
   position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45);
@@ -113,10 +128,8 @@ export const Container = styled.div`
 `;
 
 export const SearchContainer = styled.div`
-  margin-top: 5em;
-  height: 7em;
+  height: 85px;
   width: 100%;
-  box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
   text-align: center;
   background: transparent;
   display: flex;
@@ -129,8 +142,7 @@ export const SearchContainer = styled.div`
   }
 
   @media (max-width: 650px) {
-    height: 5em;
-    margin-top: 4em;
+    height: 65px;
   }
 `;
 
@@ -138,11 +150,15 @@ export const ItineraryDiv = styled.div`
   bottom: 0;
   position: relative;
   display: flex;
-  margin-top: 0.6em;
   overflow-x: hidden;
-  height: 100%;
+  height: calc(100% - 85px);
+  min-height: 80vh;
+  @media (max-width: 650px) {
+    height: calc(100% - 65px);
+  }
 `;
 
 export const ItineraryPage = styled.div`
-  height: 80%;
+  height: calc(100% - 64px);
+  margin-top: 64px;
 `;

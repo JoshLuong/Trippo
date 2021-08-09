@@ -166,7 +166,7 @@ const Day: FC<Props> = ({
           xs={12}
         >
           {!isReadOnly ? (
-            <sc.EditButton onClick={handleEditView}>
+            <sc.EditButton edit={edit} onClick={handleEditView}>
               {edit ? "Done" : "Edit"}
             </sc.EditButton>
           ) : null}

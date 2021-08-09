@@ -41,6 +41,7 @@ const TimeSlot: FC<Props> = ({
   const itineraryContext = useContext<ContextInterface>(ItineraryContext);
   const { time, destination, comments, type, address, suggested } = activity;
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [shouldFetchSuggestions, setShouldFetchSuggestions] = useState(false);
   const [showCost, setShowCost] = useState(true);
   const [commentsString, setCommentsString] = useState(comments.join("\n"));
   const [cost, setCost] = useState(`${activity.cost || ""}`);
@@ -49,6 +50,12 @@ const TimeSlot: FC<Props> = ({
   // Prevents each effect hook from running on initial render
   const isCommentEffectMounted = useRef(false);
   const isCostEffectMounted = useRef(false);
+
+  useEffect(() => {
+    if (!shouldFetchSuggestions && showSuggestions) {
+      setShouldFetchSuggestions(true);
+    }
+  },[showSuggestions])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const edit = useCallback(debounce(editActivity, 400), []);
@@ -277,16 +284,19 @@ const TimeSlot: FC<Props> = ({
             </sc.Comments>
           </Grid>
         </sc.SlotGrid>
-        {showSuggestions ? (
-          <Suggestions
+        {
+          shouldFetchSuggestions && (
+            <Suggestions
+            hidden={!showSuggestions}
             activity={activity}
             renderIcon={d.renderIcon}
             suggested={suggested}
-          ></Suggestions>
-        ) : null}
+          />
+          )
+        }
       </Grid>
     </sc.Slot>
   );
 };
 
-export default TimeSlot;
+export default React.memo(TimeSlot);

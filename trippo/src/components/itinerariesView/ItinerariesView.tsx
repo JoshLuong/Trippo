@@ -68,7 +68,8 @@ const ItinerariesView = () => {
       // on filter change, if page > 1, destroy pagination
       handlePageChange(null, 1);
     }
-  }, [filterText, page, handlePageChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterText]);
 
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);
@@ -111,13 +112,16 @@ const ItinerariesView = () => {
         </Alert>
       </Snackbar>
       <sc.SearchDiv>
-        <Searchbar onChange={search} />
+        <sc.StyledSearchbar>
+          <Searchbar onChange={search} />
+        </sc.StyledSearchbar>
+        <sc.ButtonDiv>
+          <sc.AddButton size="small" onClick={() => setShowNewItinerary(true)}>
+            <sc.StyledAddIcon />
+            <span>Plan A New Trip</span>
+          </sc.AddButton>
+        </sc.ButtonDiv>
       </sc.SearchDiv>
-      <sc.ButtonDiv>
-        <button onClick={() => setShowNewItinerary(true)}>
-          Plan A New Trip
-        </button>
-      </sc.ButtonDiv>
       <sc.PaginationDiv>
         <Pagination
           count={result.data?.count ? Math.ceil(result.data.count / 5) : 1}
@@ -159,6 +163,9 @@ const ItinerariesView = () => {
           })}
         </sc.Cards>
       )}
+      <sc.Landscape>
+        <sc.Background src="/manarola.jpg" />
+      </sc.Landscape>
     </sc.ItinerariesViewGrid>
   );
 };

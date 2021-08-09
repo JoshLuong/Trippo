@@ -1,8 +1,8 @@
 import React, { FC, useState } from "react";
 import { enGB } from "date-fns/locale";
+import * as sc from "./Container.styles";
 import {
   DateRangeFocus,
-  DateRangePickerCalendar,
   Modifiers,
 } from "react-nice-dates";
 import "./Calendar.scss";
@@ -27,8 +27,8 @@ const Calendar: FC<Props> = ({ handleDayClick }) => {
     highlight: "-highlight",
   };
   return itinerary ? (
-    <div>
-      <DateRangePickerCalendar
+    <sc.Calendar>
+      <sc.StyledDatePicker
         startDate={new Date(itinerary.start_date)}
         endDate={new Date(itinerary.end_date)}
         focus={focus}
@@ -41,7 +41,7 @@ const Calendar: FC<Props> = ({ handleDayClick }) => {
         //@ts-ignore
         onDayClick={handleDayClick}
       />
-    </div>
+    </sc.Calendar>
   ) : null;
 };
 

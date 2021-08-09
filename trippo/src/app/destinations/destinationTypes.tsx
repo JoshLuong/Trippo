@@ -91,3 +91,5 @@ export function getIconHexColor(t: string | undefined) {
       return c.YELLOW;
   }
 }
+
+export const hexColorList = ["#073B4C", "#277DA1", "#2ec4b6", "#6dbe73", "#00bbf9", "#ffd500", "#ef476f", c.YELLOW];

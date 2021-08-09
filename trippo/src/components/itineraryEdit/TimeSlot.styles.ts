@@ -51,6 +51,7 @@ export const Time = styled.div<StyledCardSize>`
   width: 7.5em;
   padding-bottom: 0.5em;
   padding-left: 4px;
+  font-size: 14px;
 
   div:before,
   div:after {

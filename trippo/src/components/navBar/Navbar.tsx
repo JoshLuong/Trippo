@@ -12,13 +12,15 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import TextLoop from "react-text-loop";
+import * as c from "../../colors/colors";
+import { hexColorList } from "../../app/destinations/destinationTypes";
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Tooltip,
 } from "@material-ui/core";
 import LinkIcon from "@material-ui/icons/Link";
 import { setUser } from "app/reducers/userSlice";
@@ -86,6 +88,54 @@ const Navbar = (props: { history: any }) => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const getLoopSpan = (text: string) => {
+    const max = hexColorList.length;
+    const min = 0;
+    return (
+      <span
+        aria-hidden
+        style={{
+          color: hexColorList[Math.floor(Math.random() * (max - min) + min)],
+        }}
+      >
+        {text}
+      </span>
+    );
+  };
+
+  const getLoopText = () => {
+    return (
+      <sc.LoopDiv>
+        {`Where would you like to visit? `}
+        <TextLoop>
+          {getLoopSpan("Bora Bora Island, French Polynesia?")}
+          {getLoopSpan("Machu Picchu, Peru?")}
+          {getLoopSpan("Great Barrier Reef, Australia?")}
+          {getLoopSpan("Bangkok, Thailand?")}
+          {getLoopSpan("Cappadocia, Turkey?")}
+          {getLoopSpan("Paris, France?")}
+          {getLoopSpan("New York, United States?")}
+          {getLoopSpan("Rothenburg – Germany?")}
+          {getLoopSpan("Guanajuato, Mexico?")}
+          {getLoopSpan("Angkor Wat, Cambodia?")}
+          {getLoopSpan("Cinque Terre, Italy?")}
+          {getLoopSpan("Taj Mahal, India?")}
+          {getLoopSpan("Bali, Indonesia?")}
+          {getLoopSpan("Singapore – City of Garden?")}
+          {getLoopSpan("Santorini, Greece?")}
+          {getLoopSpan("Milford Sound, New Zealand?")}
+          {getLoopSpan("Blue Lake Luzern, Switzerland?")}
+          {getLoopSpan("Madrid, Spain?")}
+          {getLoopSpan("London, United Kingdom?")}
+          {getLoopSpan("The Colosseum Rome, Italy?")}
+          {getLoopSpan("Bryce Canyon Bryce, Utah?")}
+          {getLoopSpan("Niagara Falls, Canada?")}
+          {getLoopSpan("Budapest, Hungary?")}
+        </TextLoop>
+      </sc.LoopDiv>
+    );
   };
 
   const getInvalidItineraryDialog = () => {
@@ -166,7 +216,6 @@ const Navbar = (props: { history: any }) => {
           </IconButton>
           <sc.Logo>
             <sc.LogoButton
-              disabled={!user?.isLoggedIn}
               onClick={() => handleMenuClick("/home?page=1")}
             >
               <>
@@ -185,12 +234,17 @@ const Navbar = (props: { history: any }) => {
               </>
             </sc.LogoButton>
           </sc.Logo>
+          {history.location.pathname.includes("/home") && (
+            <sc.ItineraryTitleContainer>
+              {getLoopText()}
+            </sc.ItineraryTitleContainer>
+          )}
           {(history.location.pathname.includes("itinerary") || IS_SHARED) &&
           itinerary ? (
-            <sc.ItineraryTitle>
+            <sc.ItineraryTitleContainer>
               <FadeIn transitionDuration={600} delay={500}>
-                <div>
-                  {itinerary?.name}
+                <sc.ItineraryTitle>
+                  <span>{itinerary?.name}</span>
                   {!IS_SHARED && (
                     <sc.StyledTooltip
                       title="Get shareable link"
@@ -206,7 +260,7 @@ const Navbar = (props: { history: any }) => {
                       </sc.StyledIconButton>
                     </sc.StyledTooltip>
                   )}
-                </div>
+                </sc.ItineraryTitle>
                 <sc.DateGrid container item lg={12} sm={12}>
                   <i className="far fa-calendar-alt"></i>
                   {moment(itinerary?.start_date).format("MMM Do YYYY") +
@@ -214,7 +268,7 @@ const Navbar = (props: { history: any }) => {
                     moment(itinerary?.end_date).format("MMM Do YYYY")}
                 </sc.DateGrid>
               </FadeIn>
-            </sc.ItineraryTitle>
+            </sc.ItineraryTitleContainer>
           ) : null}
           <IconButton
             style={{ position: "absolute", right: 20 }}
@@ -273,7 +327,6 @@ const Navbar = (props: { history: any }) => {
             const { menuTitle, pageURL } = menuItem;
             return (
               <ListItem
-                disabled={!user?.isLoggedIn}
                 button
                 onClick={() => handleMenuClick(pageURL)}
                 key={index}

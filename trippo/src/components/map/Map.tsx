@@ -133,7 +133,7 @@ const Map: FC<Props> = ({
       width="100%"
       height="100%"
       // className doesn't work here, it styles the wrong element
-      style={{ position: "absolute", minHeight: "80vh" }}
+      style={{ position: "absolute" }}
       onViewportChange={setViewport}
       onLoad={handleIsLoading}
       mapStyle="mapbox://styles/mapbox/streets-v11"

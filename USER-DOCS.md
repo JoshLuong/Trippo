@@ -44,7 +44,7 @@ You can select the type of destination to keep your itinerary organized and colo
 
 ![Side Calendar Day View](trippo/public/user-docs/4.PNG)
 
-Opening the side calendar and selecting any date on your trip will open day view of any activities you have added. It will also highlight the pins on the map that correspond to the currently selected day.
+Opening the side calendar and selecting any date on your trip will open day view of any activities you have added. It will also highlight the pins on the map that correspond to the currently selected day. Click on the name of any activity to get a visual cue of where the marker is on the map, as the marker will show a small popup of the name and date of the activity.
 
 
 ![Itinerary Master Plan](trippo/public/user-docs/9.png)

@@ -1,4 +1,15 @@
 import styled from "styled-components";
+import {
+  DateRangeFocus,
+  DateRangePickerCalendar,
+  Modifiers,
+} from "react-nice-dates";
+
+export const StyledDatePicker = styled(DateRangePickerCalendar)`
+  display: flex;
+  width: 100%;
+`;
+
 
 export const fancytext = styled.div`
   text-align: center;
@@ -9,7 +20,7 @@ export const containerDiv = styled.div`
   border-radius: 0 10px 10px 0;
   position: absolute;
   width: 100%;
-  max-height: 100%;
+  height: 100%;
   box-sizing: border-box;
   background-color: #fff;
   overflow-x: hidden;
@@ -18,12 +29,22 @@ export const containerDiv = styled.div`
 export const calendarDiv = styled.div`
   height: 100%;
   overflow-y: none;
-  margin-top: 3em;
-
-  @media (max-width: 668px) {
-    margin-top: 20%;
-  }
   @media (max-width: 400px) {
-    margin-top: 25%;
+    margin-top: 25px;
+    height: calc(100% - 25px);
+  }
+`;
+
+export const Calendar = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  > div {
+    width: 100%;
+    height: 100%;
   }
 `;

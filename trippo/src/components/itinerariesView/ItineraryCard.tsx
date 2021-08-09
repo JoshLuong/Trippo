@@ -43,12 +43,17 @@ const renderNames = (
   } else if (users.length === 3) {
     names += `, ${users[0].name}, ${users[1].name} + 1 other`;
   } else if (users.length > 3) {
-    names += `, ${users[0].name}, ${users[1].name} + ${users.length - 2} others`;
+    names += `, ${users[0].name}, ${users[1].name} + ${
+      users.length - 2
+    } others`;
   }
 
   return (
     <sc.NameGrid container item lg={8} sm={12}>
-      <sc.TripName href={`./itinerary/${card._id}`}>{name}</sc.TripName>
+      <sc.TripName href={`./itinerary/${card._id}`}>
+        <span>{name}</span>
+        <sc.StyledLaunchIcon />
+      </sc.TripName>
       <sc.Collaborators>
         <sc.StyledPeopleIcon />
         {names}
@@ -101,9 +106,10 @@ const ItineraryCard: FC<Props> = ({
             </Grid>
             <sc.DateGrid container item lg={5} sm={12}>
               <i className="far fa-calendar-alt"></i>
-              <span>{moment(card.start_date).format("MMM Do YYYY") +
-                ` - ` +
-                moment(card.end_date).format("MMM Do YYYY")}
+              <span>
+                {moment(card.start_date).format("MMM Do YYYY") +
+                  ` - ` +
+                  moment(card.end_date).format("MMM Do YYYY")}
               </span>
             </sc.DateGrid>
             <sc.StyledIconButton

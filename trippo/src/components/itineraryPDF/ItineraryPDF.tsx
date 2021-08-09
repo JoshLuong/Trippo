@@ -6,10 +6,10 @@ import {
   Page,
   Text,
   View,
-  StyleSheet,
   Link,
   Image,
 } from "@react-pdf/renderer";
+import { styles } from "./ItineraryPDF.styles";
 import { Activity, Itinerary, User } from "types/models";
 import { getDates } from "../itineraryReadOnlyView/ItineraryReadOnlyView";
 import moment from "moment";
@@ -17,6 +17,7 @@ import moment from "moment";
 interface Props {
   itinerary: Itinerary;
   user: User;
+  imageURL?: string;
 }
 
 const days = [
@@ -29,155 +30,13 @@ const days = [
   "Sunday",
 ];
 
-// Create styles
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    fontSize: 12,
-    padding: 20,
-  },
-  section: {
-    flexGrow: 1,
-    flexDirection: "column",
-    paddingBottom: 30,
-  },
-  activityContent: {
-    margin: 5,
-    padding: 7,
-    borderRightColor: "#EEEEEE",
-    borderRightWidth: 2,
-  },
-  address: {
-    color: "#474747",
-    paddingTop: 4,
-  },
-  comments: {
-    paddingTop: 7,
-    paddingLeft: 12,
-    fontSize: 11,
-  },
-  activity: {
-    margin: 7,
-    flexDirection: "row",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: "#F4F4F4 ",
-    borderLeftWidth: 1,
-    borderLeftColor: "#F4F4F4 ",
-    borderBottomColor: "#EEEEEE",
-    borderBottomWidth: 2,
-    borderRightColor: "#EEEEEE",
-    borderRightWidth: 2,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
-    borderBottomLeftRadius: 5,
-  },
-  date: {
-    paddingLeft: 5,
-    color: "#219EBC",
-  },
-  destination: {
-    fontSize: 14,
-  },
-  dateContainer: {
-    flexDirection: "row",
-    paddingBottom: 8,
-  },
-  day: {
-    alignSelf: "flex-end",
-  },
-  destinationHeader: {
-    alignSelf: "center",
-    fontSize: 15,
-    paddingBottom: 8,
-  },
-  title: {
-    flexDirection: "column",
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 520,
-    width: 747,
-    backgroundColor: "#FFFFFF99",
-    borderRadius: 3,
-  },
-  titlePage: {
-    justifyContent: "center",
-    display: "flex",
-    fontSize: 20,
-  },
-  logo: {
-    width: 200,
-  },
-  titleDates: {
-    fontSize: 10,
-    paddingTop: 4,
-    textAlign: "center",
-    color: "#FB8500",
-  },
-  time: {
-    padding: 7,
-  },
-  headerComments: {
-    fontSize: 14,
-    paddingTop: 8,
-    color: "#474747",
-  },
-  headerCollaborators: {
-    fontSize: 13,
-    color: "#474747",
-    paddingTop: 8,
-    width: 400,
-    textAlign: "center",
-  },
-  headerNames: {
-    fontSize: 11,
-    paddingTop: 8,
-    color: "#474747",
-  },
-  distanceContainer: {
-    flexDirection: "column",
-  },
-  distance: {
-    fontSize: 10,
-    marginLeft: 15,
-    paddingLeft: 5,
-    paddingTop: 4,
-    paddingBottom: 4,
-    color: "#474747",
-  },
-  icon: {
-    alignSelf: "flex-end",
-    width: 30,
-    position: "absolute",
-    bottom: 0,
-    right: 3,
-    padding: 4,
-  },
-  pageNumber: {
-    position: "absolute",
-    fontSize: 10,
-    bottom: 9,
-    right: 40,
-    textAlign: "center",
-    color: "#474747",
-  },
-  titleBackground: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: 842,
-    height: 595,
-  },
-});
 // Create Document Component
-const ItineraryPDF: FC<Props> = ({ itinerary, user }) => {
+const ItineraryPDF: FC<Props> = ({ itinerary, user, imageURL }) => {
   const dates = itinerary && getDates(itinerary.start_date, itinerary.end_date);
   return (
     <Document>
       <Page orientation="landscape" size="A4" style={styles.titlePage}>
-        <Image style={styles.titleBackground} src="/about.jpg" />
+        <Image style={styles.titleBackground} src={(!imageURL || imageURL === "") ? "/about.jpg" : imageURL} />
         <View style={styles.title}>
           <Image style={styles.logo} src="/trippo.png" />
           <Link
@@ -202,7 +61,7 @@ const ItineraryPDF: FC<Props> = ({ itinerary, user }) => {
           </Text>
         </View>
       </Page>
-      {dates?.map((date) => {
+      {dates?.map((date, i) => {
         const dayActivities = itinerary?.activities.filter((activity: any) =>
           moment(date).isSame(moment(activity.time), "date")
         );
@@ -214,7 +73,7 @@ const ItineraryPDF: FC<Props> = ({ itinerary, user }) => {
               <Link
                 src={`https://trippoapp.herokuapp.com/itinerary/${itinerary._id}`}
               >
-                {itinerary.destination}
+                Day {i + 1} in {itinerary.destination}
               </Link>
             </View>
             <View style={styles.dateContainer} fixed>
@@ -278,7 +137,7 @@ const ItineraryPDF: FC<Props> = ({ itinerary, user }) => {
                   );
                 })}
             </View>
-            <View fixed>
+            <View style={styles.footer} fixed>
               <Text
                 style={styles.pageNumber}
                 render={({ pageNumber }) => `page ${pageNumber - 1}`}

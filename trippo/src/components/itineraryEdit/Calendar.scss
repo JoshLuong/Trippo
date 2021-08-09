@@ -14,7 +14,7 @@ $nice-dates-cell-width: calc(100% / 7);
 .nice-dates {
   &-navigation {
     align-items: center;
-    color: $nice-dates-color-gray-dark;
+    color: #24272b;
     display: flex;
     justify-content: space-between;
     position: relative;
@@ -85,11 +85,16 @@ $nice-dates-cell-width: calc(100% / 7);
     }
   }
 
+  &-grid_container {
+    height: 100%;
+  }
+
   &-grid {
     box-sizing: content-box;
     overflow: hidden;
     position: relative;
     user-select: none;
+    height: calc(100% - 120px) !important;
 
     &_container {
       backface-visibility: hidden;

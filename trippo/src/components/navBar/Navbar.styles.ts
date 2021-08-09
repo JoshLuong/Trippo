@@ -7,6 +7,30 @@ import * as c from "../../colors/colors";
 
 const drawerWidth = 240;
 
+export const LoopDiv = styled.div`
+  position: absolute;
+  color: ${c.BLACK};
+  font-size: 16px;
+  left: 40%;
+  top: 38%;
+
+  @media (max-width: 1780px) {
+    left: 38%;
+  }
+
+  @media (max-width: 1400px) {
+    left: 35%;
+  }
+
+  @media (max-width: 1200px) {
+    left: 30%;
+  }
+
+  @media (max-width: 950px) {
+    display: none;
+  }
+`;
+
 export const StyledButton = styled(Button)`
   span {
     color: ${c.DARK_ORANGE};
@@ -29,6 +53,7 @@ export const Logo = styled.div`
 export const DateGrid = styled(Grid)`
   font-size: 0.65em;
   display: flex;
+  justify-content: center;
   color: ${c.DARK_GREY};
   i {
     color: ${c.DARK_ORANGE};
@@ -43,15 +68,33 @@ export const DateGrid = styled(Grid)`
   }
 `;
 
-export const ItineraryTitle = styled.div`
+export const ItineraryTitleContainer = styled.div`
   margin: auto;
-  text-align: center;
-  color: ${c.DARK_BLUE};
   font-size: 1.5em;
+  text-align: center;
+  display: flex;
+  justify-content: center;
 
   @media (max-width: 660px) {
     max-width: 160px;
     overflow: hidden;
+  }
+`;
+
+export const ItineraryTitle = styled.div`
+  margin: auto;
+  text-align: center;
+  overflow-x: scroll;
+  white-space: nowrap;
+  color: ${c.DARK_BLUE};
+
+  @media (max-width: 660px) {
+    max-width: 140px;
+    font-size: 0.65em;
+  }
+  ::-webkit-scrollbar {
+    height: 0px;
+    width: 0px;
   }
 `;
 
@@ -91,6 +134,7 @@ export const StyledIconButton = styled(IconButton)`
   height: 24px !important;
   margin-top: -6px;
   position: relative;
+  color: ${c.BLACK};
 `;
 
 export const useStyles = makeStyles((theme) => ({

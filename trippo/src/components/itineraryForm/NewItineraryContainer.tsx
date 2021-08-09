@@ -1,6 +1,6 @@
 /// <reference path='./NewItineraryContainer.d.ts' />
 import { FC, useState, useRef } from 'react';
-import { Grid } from '@material-ui/core'
+import { Dialog, Grid } from '@material-ui/core'
 import { useAppSelector } from 'app/store';
 import * as sc from './NewItinieraryContainer.styles'
 import { Itinerary } from 'types/models';
@@ -120,6 +120,10 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
     }
 
     return (
+        <Dialog
+        open={true}
+        onClose={() => handleShowNewItinerary(false)}
+        >
         <sc.newItineraryContainer>
             <sc.header>New Itinerary:</sc.header>
             <sc.FormGrid direction="column">
@@ -139,6 +143,7 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
                 </Grid>
             </sc.FormGrid>
         </sc.newItineraryContainer>
+        </Dialog>
     )
 }
 

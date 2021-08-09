@@ -44,7 +44,7 @@ export const newItineraryContainer = styled.div`
   border-radius: 16px 16px 7px 7px;
   border-top: 16px solid ${c.DARK_BLUE};
   @media (max-width: 960px) {
-    width: 90%;
+    width: 97%;
   }
 
   
@@ -54,6 +54,7 @@ export const header = styled.p`
   background-color: ${c.DARK_BLUE};
   position: relative;
   padding-left: 2em;
+  width: 100%;
   padding-bottom: 3px;
   color: white;
   margin-top: -1px;
@@ -66,7 +67,7 @@ export const inputTags = styled.h2`
     flex-direction: row;
     align-items: center;
     font-size: small;
-    color: ${c.DARK_BLUE};
+    color: ${c.GREY};
 
     svg {
       height: 0.75em;

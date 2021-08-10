@@ -95,9 +95,9 @@ const NewSlot: FC<Props> = ({
       body: JSON.stringify({
         latitude: destinationLat,
         longitude: destinationLng,
-        rating: 3, // TODO: change to user input
-        price: "1, 2, 3", // TODO: change to user input
-        distance: 10000, // TODO: change to user input
+        rating: itinerary?.restaurant_ratings, 
+        price: itinerary?.dining_budget?.toString(), 
+        distance: (itinerary?.max_traveling_dist! * 1000), 
         time: new Date(selectedDate!).setHours(
           Number(time.split(":")[0]),
           Number(time.split(":")[1])
@@ -117,9 +117,9 @@ const NewSlot: FC<Props> = ({
         body: JSON.stringify({
           latitude: destinationLat,
           longitude: destinationLng,
-          rating: 3, // TODO: change to user input
-          price: "1, 2, 3", // TODO: change to user input
-          distance: 10000, // TODO: change to user input
+          rating: itinerary?.restaurant_ratings, 
+          price: itinerary?.dining_budget?.toString(), 
+          distance: (itinerary?.max_traveling_dist! * 1000), 
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])
@@ -143,9 +143,9 @@ const NewSlot: FC<Props> = ({
         body: JSON.stringify({
           latitude: destinationLat,
           longitude: destinationLng,
-          rating: 3, // TODO: change to user input
-          price: "1, 2, 3", // TODO: change to user input
-          distance: 10000, // TODO: change to user input
+          rating: itinerary?.restaurant_ratings, 
+          price: itinerary?.dining_budget?.toString(), 
+          distance: (itinerary?.max_traveling_dist! * 1000), 
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])
@@ -166,9 +166,9 @@ const NewSlot: FC<Props> = ({
         body: JSON.stringify({
           latitude: destinationLat,
           longitude: destinationLng,
-          rating: 3, // TODO: change to user input
-          price: "3, 4", // TODO: change to user input
-          distance: 10000, // TODO: change to user input
+          rating: itinerary?.restaurant_ratings, 
+          price: itinerary?.dining_budget?.toString(),
+          distance: (itinerary?.max_traveling_dist! * 1000), 
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])

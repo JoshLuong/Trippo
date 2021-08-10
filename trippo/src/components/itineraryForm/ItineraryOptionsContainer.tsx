@@ -145,7 +145,7 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
                     value={defaultDestination}
                     onChange={(e: any, newValue: any) => {
                         destinationSetter(newValue);
-                        if (newValue) tagSetter([newValue.country, ...defaultTags]);
+                        if (newValue) tagSetter([newValue.country, newValue.name, newValue.region, ...defaultTags]);
                     }}
                     onBlur={() => setDestError(defaultDestination)}
                     size="small"

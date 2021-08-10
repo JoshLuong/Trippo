@@ -51,7 +51,7 @@ export const Card = styled.div`
     width: 80%;
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 500px) {
     width: 95%;
     border-radius: 4px;
     margin-bottom: 2em;

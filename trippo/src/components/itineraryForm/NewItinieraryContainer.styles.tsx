@@ -45,6 +45,7 @@ export const newItineraryContainer = styled.div`
   border-top: 16px solid ${c.DARK_BLUE};
   @media (max-width: 960px) {
     width: 97%;
+    height: 70vh;
   }
 
   
@@ -77,8 +78,8 @@ export const inputTags = styled.h2`
 
 export const userButton = styled(Button)` && {
   position: relative;
-  background-color: ${c.DARK_ORANGE};
-  color: white;
+  background-color: rgba(0, 0, 0, 0.12);
+  color: ${c.BLACK};
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   width: 40%;
   margin: 8px;

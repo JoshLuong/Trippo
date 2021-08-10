@@ -19,7 +19,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Snackbar,
+  SnackbarCloseReason,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import LinkIcon from "@material-ui/icons/Link";
 import { setUser } from "app/reducers/userSlice";
 import ListItem from "@material-ui/core/ListItem";
@@ -42,6 +45,8 @@ const Navbar = (props: { history: any }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isShareableLinkOpen, setIsShareableLinkOpen] = useState(false);
   const [sharedID, setSharedID] = useState(null);
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
+
 
   const user = useAppSelector((state) => state.user.value);
   const itinerary = useAppSelector((state) => state.itinerary.value);
@@ -55,6 +60,13 @@ const Navbar = (props: { history: any }) => {
     setAnchorEl(null);
   };
 
+  const handleErrorClose = (event: any, reason: SnackbarCloseReason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setErrorSnackbar(false);
+  };
+
   const handleLogout = async () => {
     try {
       await fetch(`/api/v1/auth/logout`, {
@@ -65,7 +77,7 @@ const Navbar = (props: { history: any }) => {
       window.localStorage.removeItem("user");
       handleMenuClick("/");
     } catch (e: any) {
-      alert("There was an error logging you out: " + e.message);
+      setErrorSnackbar(true);
     }
   };
 
@@ -81,7 +93,7 @@ const Navbar = (props: { history: any }) => {
       const id = await res.json();
       setSharedID(id);
     } catch (e: any) {
-      alert("There was an error creating a shareaeble link: " + e.message);
+      setErrorSnackbar(true);
     }
   };
 
@@ -334,6 +346,15 @@ const Navbar = (props: { history: any }) => {
         </List>
       </Drawer>
       {getInvalidItineraryDialog()}
+      <Snackbar
+        open={errorSnackbar}
+        autoHideDuration={3000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={() => setErrorSnackbar(false)} severity="error">
+          An unexpected error has occurred, please try again later.
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

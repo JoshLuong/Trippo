@@ -31,6 +31,13 @@ export const FormGrid = styled(Grid)`
   height: 93%;
   overflow-x: hidden;
 `;
+
+export const ButtonGrid = styled(Grid)`
+  @media(max-width: 600px){
+    margin-left: 2em;
+  }
+`;
+
 export const newItineraryContainer = styled.div`
   z-index: 100;
   position: fixed;

@@ -21,6 +21,9 @@ const updateItinerary = async (
       },
     ],
   });
+  if (!itinerary){
+    throw new Error("Itinerary not found")
+  }
   const activity = itinerary?.activities.filter((activity: any) => {
     return activity._id == activityId;
   });
@@ -235,11 +238,13 @@ router.post("/businesses", async (req, res, _next) => {
       }
     }
   }
-  try {
+    if (!itinerary) {
+      res.status(404).send({ error: "Could not get itinerary" });
+    }
+    if (!businesses) {
+      res.status(404).send({ error: "Could not get businesses" });
+    }
     res.status(200).send(businesses);
-  } catch (e) {
-    res.status(404).send({ error: e + "Could not send display businesses" });
-  }
 });
 
 export default router;

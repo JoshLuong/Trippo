@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import { useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -38,10 +38,10 @@ const Navbar = (props: { history: any }) => {
   const IS_SHARED = history.location.pathname.includes("/shared");
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [isShareableLinkOpen, setIsShareableLinkOpen] = React.useState(false);
-  const [sharedID, setSharedID] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isShareableLinkOpen, setIsShareableLinkOpen] = useState(false);
+  const [sharedID, setSharedID] = useState(null);
 
   const user = useAppSelector((state) => state.user.value);
   const itinerary = useAppSelector((state) => state.itinerary.value);

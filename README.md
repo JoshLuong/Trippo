@@ -103,7 +103,7 @@ To further improve on Trippo, we plan to complete our missing standard requireme
 #### Richard Ho:
 
 - Constructed API for itinerary (PUT/DEL), and user (GET by email or id) using RTK toolkit for client-side and Express on server side. 
-- Ensuring data integrity with form validation + mongoose schemas/indexes on both front end and back end for itinerary creation and edits, and rendering server response in UI
+- Ensuring data integrity with form validation + mongoose schemas/indexes on both front end and back end for itinerary creation and edits, and rendering server response in front-end with toasts.
 - Creating responsive UI for welcome page and itinerary creation/edit.
 
 #### Rohit Bassi:

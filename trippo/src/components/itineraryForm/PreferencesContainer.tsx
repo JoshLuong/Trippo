@@ -29,7 +29,7 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
                     )}
                 </sc.preferencesButton>
                 <Tooltip
-                    title={"The suggested destinations are filtered based on your preferences, but may differ slightly."}
+                    title={"The suggested Yelp activites are filtered based on your preferences, but may differ slightly."}
                 >
                     <sc.StyledInfoIcon />
                 </Tooltip>

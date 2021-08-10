@@ -68,7 +68,8 @@ const ItinerariesView = () => {
       // on filter change, if page > 1, destroy pagination
       handlePageChange(null, 1);
     }
-  }, [filterText, page, handlePageChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterText]);
 
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);

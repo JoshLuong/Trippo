@@ -55,7 +55,6 @@ const Suggestions: FC<Props> = ({ activity, hidden = false }) => {
   }, [])
 
   return (
-    <FadeIn transitionDuration={1000} delay={600}>
     <sc.ContainerGrid isHidden={hidden} container item lg={12}>
       <Grid container item lg={3} md={3} sm={12} xs={12}>
         <sc.SuggestionTitle>Suggestions</sc.SuggestionTitle>
@@ -93,7 +92,6 @@ const Suggestions: FC<Props> = ({ activity, hidden = false }) => {
         }
       </Grid>
     </sc.ContainerGrid>
-    </FadeIn>
   );
 };
 

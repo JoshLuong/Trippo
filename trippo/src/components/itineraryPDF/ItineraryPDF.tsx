@@ -17,7 +17,7 @@ import moment from "moment";
 interface Props {
   itinerary: Itinerary;
   user: User;
-  imageURL?: string;
+  imageURL?: ArrayBuffer | null;
 }
 
 const days = [
@@ -36,7 +36,7 @@ const ItineraryPDF: FC<Props> = ({ itinerary, user, imageURL }) => {
   return (
     <Document>
       <Page orientation="landscape" size="A4" style={styles.titlePage}>
-        <Image style={styles.titleBackground} src={(!imageURL || imageURL === "") ? "/about.jpg" : imageURL} />
+        <Image style={styles.titleBackground} src={!imageURL ? "/about.jpg" : imageURL as Buffer} />
         <View style={styles.title}>
           <Image style={styles.logo} src="/trippo.png" />
           <Link

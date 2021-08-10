@@ -5,7 +5,6 @@ import AddIcon from "@material-ui/icons/Add";
 
 export const AddButton = styled(IconButton)`
   width: 12em;
-  line-height: 1.25em;
   border-radius: 10px;
   margin-bottom: 2em;
   text-transform: none;
@@ -35,7 +34,6 @@ export const SearchDiv = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  // box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.4);
   text-align: center;
 
   @media (max-width: 1000px) {
@@ -98,9 +96,11 @@ export const ButtonDiv = styled.div`
     }
   }
 
-  @media (max-width: 1072px) {
+  @media (max-width: 1000px) {
+    margin-left: 0em;
     button {
       margin-bottom: 1.25em;
+      margin-left: 0em;
     }
   }
 `;

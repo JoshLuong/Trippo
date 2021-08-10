@@ -40,12 +40,9 @@ function App() {
     })
       .then((status) => status.json())
       .then((user) => {
-        if (user) {
+        if (user && !user.error) {
           dispatch(setUser({ isLoggedIn: true, ...user }));
           window.localStorage.setItem("user", user.name);
-        } else {
-          dispatch(setUser({ isLoggedIn: false }));
-          history.push("/");
         }
       })
       .catch((e: string) => {

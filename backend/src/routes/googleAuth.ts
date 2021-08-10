@@ -25,11 +25,14 @@ router.post("/google", async (req: any, res: any) => {
     res.json(user);
   } catch (e) {
     console.log(e);
-    res.status(500).send("Error logging in");
+    res.status(500).send({ error: "Could not log in" });
   }
 });
 
 router.delete("/logout", async (req: any, res) => {
+  if (!req.user) {
+    return res.status(500).send({ error: "No user logged in" });
+  }
   await req.session.destroy();
   res.status(200);
   res.json({
@@ -38,6 +41,9 @@ router.delete("/logout", async (req: any, res) => {
 });
 
 router.get("/current/user", async (req: any, res) => {
+  if (!req.user) {
+    return res.status(404).send({ error: "User not found" });
+  }
   res.status(200);
   res.json(req.user);
 });

@@ -106,6 +106,17 @@ const Day: FC<Props> = ({
       </sc.StickyDiv>
       <div>
         <sc.TimeSlots>
+          {
+            dayActivities.length === 0 && (
+              <sc.NoContent>
+                <span>You have <strong>no activities</strong> to show!</span>
+                <br/>
+                <span>
+                  <sc.Tip>Tip:</sc.Tip> start adding activities by searching for destinations in the search bar above!
+                </span>
+              </sc.NoContent>
+            )
+          }
           {dayActivities
             .sort((a, b) => a.time.localeCompare(b.time))
             .map((activity, idx) => {
@@ -164,7 +175,7 @@ const Day: FC<Props> = ({
           sm={12}
           xs={12}
         >
-          {!isReadOnly ? (
+          {!isReadOnly && dayActivities.length > 0 ? (
             <sc.EditButton edit={edit} onClick={handleEditView}>
               {edit ? "Done" : "Edit"}
             </sc.EditButton>

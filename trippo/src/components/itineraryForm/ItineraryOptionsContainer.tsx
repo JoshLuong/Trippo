@@ -26,7 +26,7 @@ interface Props {
 
 const collabData: any[] = [];
 
-const tagsData = ["tag 1", "tag 2", "tag 3", "tag 4"];
+const tagsData: any[] = [];
 
 const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDesc, defaultDestination, defaultName, defaultTags,
     collabSetter, destinationSetter, tagSetter, nameRef, descRef, errorMessage, setFail, failSnackbar, setErrorMessage, user }) => {
@@ -145,7 +145,7 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
                     value={defaultDestination}
                     onChange={(e: any, newValue: any) => {
                         destinationSetter(newValue);
-                        if (newValue) tagSetter([newValue.country, ...defaultTags]);
+                        if (newValue) tagSetter([newValue.country, newValue.name, newValue.region, ...defaultTags]);
                     }}
                     onBlur={() => setDestError(defaultDestination)}
                     size="small"
@@ -180,7 +180,7 @@ const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDes
                 <Grid item xs={12} md={6} lg={6}>
                     <sc.inputTags>Collaborators
                         <Tooltip
-                            title={"Please enter valid user emails"}
+                            title={"Please enter valid user Gmails. Any collaborator will have full read and write access, but will not have the ability to delete the itinerary."}
                         >
                             <sc.StyledInfoIcon />
                         </Tooltip>

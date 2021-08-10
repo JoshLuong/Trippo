@@ -37,7 +37,7 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
             {showPreference && <Grid container item direction="row" spacing={3}>
                 <Grid container item direction="row" spacing={2} xs={12} md={6} lg={6}>
                     <Grid item xs={6} lg={6}>
-                        <sc.inputTags>Restaurant Ratings</sc.inputTags>
+                        <sc.inputTags>Attraction Ratings</sc.inputTags>
                         <Select value={defaultRating} onChange={(e: any) => { setRating(e.target.value) }}>
                             <MenuItem value={1}>1 stars</MenuItem>
                             <MenuItem value={2}>2 stars</MenuItem>
@@ -47,11 +47,12 @@ const PreferencesContainer: FC<Props> = ({ defaultRating, defaultPrice, defaultM
                         </Select>
                     </Grid>
                     <Grid item xs={6} lg={6}>
-                        <sc.inputTags>Restaurant Prices</sc.inputTags>
+                        <sc.inputTags>Attraction Prices</sc.inputTags>
                         <Select value={defaultPrice} onChange={(e: any) => { setPrice(e.target.value) }}>
                             <MenuItem value={1}>$</MenuItem>
                             <MenuItem value={2}>$$</MenuItem>
                             <MenuItem value={3}>$$$</MenuItem>
+                            <MenuItem value={4}>$$$$</MenuItem>
                         </Select>
                     </Grid>
                 </Grid>

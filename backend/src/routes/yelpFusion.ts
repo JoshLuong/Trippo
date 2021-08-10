@@ -5,12 +5,22 @@ const router = express.Router();
 const yelp = require("yelp-fusion");
 const apiKey = process.env.YELP_API_KEY;
 const client = yelp.client(apiKey);
+
 const updateItinerary = async (
+  req: any,
   itineraryId: string,
   activityId: string,
   businessIds: string[]
 ) => {
-  const itinerary = await Itinerary.findOne({ _id: itineraryId });
+  const itinerary = await Itinerary.findOne({
+    $or: [
+      { _id: itineraryId, user_id: req.session.userId },
+      {
+        _id: itineraryId,
+        collaborators: { $elemMatch: { _id: req.session.userId } },
+      },
+    ],
+  });
   const activity = itinerary?.activities.filter((activity: any) => {
     return activity._id == activityId;
   });
@@ -52,7 +62,6 @@ const saveYelpData = async (savedResults: any) => {
 
 // use this endpoint when the user creates an activity with time between 6:00am - 11:00am
 router.post("/restaurants/breakfast_brunch", async (req, res, _next) => {
-  // TODO make secure
   const {
     latitude,
     longitude,
@@ -80,12 +89,11 @@ router.post("/restaurants/breakfast_brunch", async (req, res, _next) => {
       const savedResults: any = await filterYelpData(results, rating);
       const businessIds = await saveYelpData(savedResults);
 
-      await updateItinerary(itineraryId, activityId, businessIds);
+      await updateItinerary(req, itineraryId, activityId, businessIds);
       res.status(200).send(savedResults);
     })
     .catch((e: any) => {
-      console.log(e);
-      res.send(e);
+      res.status(500).send({ error: e + "Could not resolve Yelp request" });
     });
 });
 
@@ -107,7 +115,7 @@ router.post("/restaurants", async (req, res, _next) => {
     longitude: longitude,
     price: price,
     radius: distance, // meters
-    open_at: time.now, // TODO: test purposing, should use the time from req.body (accepts unix int (use time.now if time is Date))
+    open_at: time.now,
     limit: 25,
   };
 
@@ -117,12 +125,11 @@ router.post("/restaurants", async (req, res, _next) => {
       const results = response.jsonBody.businesses;
       const savedResults: any = await filterYelpData(results, rating);
       const businessIds = await saveYelpData(savedResults);
-      await updateItinerary(itineraryId, activityId, businessIds);
+      await updateItinerary(req, itineraryId, activityId, businessIds);
       res.status(200).send(savedResults);
     })
     .catch((e: string) => {
-      console.log(e);
-      res.send(e);
+      res.status(500).send({ error: e + "Could not resolve Yelp request" });
     });
 });
 
@@ -142,6 +149,7 @@ router.post("/nightlife", async (req, res, _next) => {
     latitude: latitude,
     longitude: longitude,
     radius: distance, // meters
+    open_at: time.now,
     limit: 15,
   };
 
@@ -152,12 +160,11 @@ router.post("/nightlife", async (req, res, _next) => {
       const savedResults: any = await filterYelpData(results, rating);
       const businessIds = await saveYelpData(savedResults);
 
-      await updateItinerary(itineraryId, activityId, businessIds);
+      await updateItinerary(req, itineraryId, activityId, businessIds);
       res.status(200).send(savedResults);
     })
     .catch((e: string) => {
-      console.log(e);
-      res.status(500);
+      res.status(500).send({ error: e + "Could not resolve Yelp request" });
     });
 });
 
@@ -191,12 +198,11 @@ router.post("/attractions", async (req, res, _next) => {
       const results = response.jsonBody.businesses;
       const savedResults: any = await filterYelpData(results, rating);
       const businessIds = await saveYelpData(savedResults);
-      await updateItinerary(itineraryId, activityId, businessIds);
+      await updateItinerary(req, itineraryId, activityId, businessIds);
       res.status(200).send(savedResults);
     })
     .catch((e: string) => {
-      console.log(e);
-      res.status(500);
+      res.status(500).send({ error: e + "Could not resolve Yelp request" });
     });
 });
 
@@ -220,7 +226,6 @@ router.post("/businesses", async (req, res, _next) => {
     // some aren't in DB
     for (const id of businessIds) {
       if (!cachedBusinessIds.includes(id)) {
-        console.log(id);
         const yelpBusiness = await client.business(id);
         const business = await Yelp.create({
           ...yelpBusiness.jsonBody,
@@ -230,11 +235,11 @@ router.post("/businesses", async (req, res, _next) => {
       }
     }
   }
-
-  res.status(200).send(businesses);
+  try {
+    res.status(200).send(businesses);
+  } catch (e) {
+    res.status(404).send({ error: e + "Could not send display businesses" });
+  }
 });
 
 export default router;
-
-// Place holder for Yelp Fusion's API Key. Grab them
-// from https://www.yelp.com/developers/v3/manage_app

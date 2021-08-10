@@ -4,7 +4,6 @@ import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 
-
 export const SearchContainer = styled.div`
   width: 100%;
   display: flex;
@@ -47,10 +46,9 @@ export const RootContainer = styled(Paper)`
   display: flex;
   align-items: center;
   border-radius: 25px;
-  box-shadow: 1px 3px 2px 1px rgba(0, 0, 0, .4);
+  box-shadow: 1px 3px 2px 1px rgba(0, 0, 0, 0.4);
   height: 3em;
   width: 100%;
-  
 `;
 
 export const InputContainer = styled(InputBase)`

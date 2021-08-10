@@ -21,11 +21,7 @@ const Searchbar: FC<Props> = ({ children, onChange }) => {
               onChange={onChange}
               inputProps={{ "aria-label": "search itineraries" }}
             />
-            <sc.StyledIconButton
-              type="submit"
-              aria-label="search"
-              disabled
-            >
+            <sc.StyledIconButton type="submit" aria-label="search" disabled>
               <SearchIcon />
             </sc.StyledIconButton>
           </sc.RootContainer>

@@ -1,6 +1,5 @@
 import * as sc from "./AboutPage.styles";
 
-// TODO: link to user documentation
 function AboutPage() {
   return (
     <sc.containerDiv>

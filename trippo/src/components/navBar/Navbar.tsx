@@ -13,7 +13,6 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import TextLoop from "react-text-loop";
-import * as c from "../../colors/colors";
 import { hexColorList } from "../../app/destinations/destinationTypes";
 import {
   Dialog,
@@ -34,8 +33,6 @@ import { useAppDispatch, useAppSelector } from "app/store";
 import { BLACK, GREY, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
 import * as sc from "./Navbar.styles";
-
-// https://github.com/mui-org/material-ui/tree/master/docs/src/pages/components/drawers
 
 const Navbar = (props: { history: any }) => {
   const { history } = props;
@@ -68,10 +65,9 @@ const Navbar = (props: { history: any }) => {
       dispatch(setUser({ isLoggedIn: false }));
       window.localStorage.removeItem("user");
       handleMenuClick("/");
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      alert("There was an error logging you out: " + e.message);
     }
-    // store returned user somehow
   };
 
   const handleGetShareableLink = async () => {
@@ -85,8 +81,8 @@ const Navbar = (props: { history: any }) => {
       );
       const id = await res.json();
       setSharedID(id);
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      alert("There was an error creating a shareaeble link: " + e.message);
     }
   };
 
@@ -215,9 +211,7 @@ const Navbar = (props: { history: any }) => {
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
           <sc.Logo>
-            <sc.LogoButton
-              onClick={() => handleMenuClick("/home?page=1")}
-            >
+            <sc.LogoButton onClick={() => handleMenuClick("/home?page=1")}>
               <>
                 <img
                   id="full-logo"

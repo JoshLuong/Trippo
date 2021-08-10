@@ -47,7 +47,9 @@ router.get("/:id", async (req: any, res, _next) => {
       { _id: id, user_id: req.session.userId },
       { _id: id, collaborators: { $elemMatch: { _id: req.session.userId } } },
     ],
-  }); // TODO update to use session user id too
+  });
+
+  if (!itinerary) return res.status(404).send({ error: "Invalid Itinerary" });
 
   res.status(200).send(itinerary);
 });
@@ -64,8 +66,9 @@ router.post("/", (req: any, res, _next) => {
       res.send(doc);
     })
     .catch((err) => {
-      console.error(err);
-      return res.status(404).send("Invalid Itinerary");
+      return res
+        .status(404)
+        .send({ error: err + ": Itinerary was not created" });
     });
 });
 
@@ -78,8 +81,8 @@ router.get("/shareable-link/:id", async (req: any, res, _next) => {
     update,
     options
   );
-  if (!itinerary) return res.status(404).send("Invalid Itinerary");
-  console.log(itinerary);
+  if (!itinerary) return res.status(404).send({ error: "Invalid Itinerary" });
+
   res.send(itinerary._id);
 });
 
@@ -105,8 +108,7 @@ router.post("/new-activity", async (req: any, res, _next) => {
       res.send(activity);
     })
     .catch((err) => {
-      console.error(err);
-      return res.status(404).send({ message: "Invalid Activity" });
+      return res.status(404).send({ error: err + ": Invalid Activity" });
     });
 });
 
@@ -119,12 +121,13 @@ router.delete("/:id", (req: any, res, _next) => {
       if (!doc) return res.status(500).send("Unable to delete itinerary");
       await ShareableItinerary.findOneAndRemove({
         itinerary_id: req.params.id,
-      })
+      });
       res.send(doc);
     })
     .catch((err) => {
-      console.error(err);
-      res.status(404).send("Card with the given id does not exist");
+      return res
+        .status(404)
+        .send({ error: err + ": Itinerary with that id does not exist" });
     });
 });
 
@@ -150,7 +153,9 @@ router.patch("/:id", async (req: any, res) => {
   );
 
   if (!product)
-    return res.status(404).send("The product with the given ID was not found.");
+    return res
+      .status(404)
+      .send({ error: ": The product with the given ID was not found." });
 
   res.send(product);
 });

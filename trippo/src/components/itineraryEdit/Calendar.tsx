@@ -6,7 +6,8 @@ import {
   Modifiers,
 } from "react-nice-dates";
 import "./Calendar.scss";
-import { useAppSelector } from 'app/store';
+import { useAppSelector } from "app/store";
+import moment from "moment";
 
 interface Props {
   handleDayClick: (date: Date | null) => void;
@@ -20,8 +21,12 @@ const Calendar: FC<Props> = ({ handleDayClick }) => {
   };
   const modifiers: Modifiers = {
     disabled: (date) => {
-      return !itinerary || date < new Date(itinerary.start_date) || date > new Date(itinerary.end_date);
-    }, // Disables Saturdays
+      return (
+        !itinerary ||
+        moment(date).isBefore(moment(itinerary.start_date), "date") ||
+        moment(date).isAfter(moment(itinerary.end_date), "date")
+      );
+    },
   };
   const modifiersClassNames = {
     highlight: "-highlight",

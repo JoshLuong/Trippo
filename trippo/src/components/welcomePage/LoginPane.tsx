@@ -1,4 +1,3 @@
-/// <reference path='./LoginPane.d.ts' />
 import { FC } from 'react';
 import { useHistory } from "react-router-dom";
 import { useAppDispatch } from 'app/store';

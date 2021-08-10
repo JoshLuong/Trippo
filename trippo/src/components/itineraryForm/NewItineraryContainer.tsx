@@ -1,4 +1,3 @@
-/// <reference path='./NewItineraryContainer.d.ts' />
 import { FC, useState, useRef } from 'react';
 import { Grid } from '@material-ui/core'
 import { useAppSelector } from 'app/store';

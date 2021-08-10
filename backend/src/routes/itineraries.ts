@@ -44,8 +44,8 @@ router.get("/:id", async (req: any, res, _next) => {
   const { id } = req.params;
   const itinerary = await Itinerary.findOne({
     $or: [
-      { _id: id, user_id: req.session.userId },
-      { _id: id, collaborators: { $elemMatch: { _id: req.session.userId } } },
+      { _id: id },
+      { _id: id },
     ],
   }); // TODO update to use session user id too
 

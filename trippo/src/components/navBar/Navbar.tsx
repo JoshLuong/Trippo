@@ -32,7 +32,7 @@ import { withRouter } from "react-router-dom";
 import moment from "moment";
 import FadeIn from "react-fade-in";
 import { useAppDispatch, useAppSelector } from "app/store";
-import { BLACK, GREY, WHITE } from "../../colors/colors";
+import { BLACK, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
 import * as sc from "./Navbar.styles";
 
@@ -46,7 +46,6 @@ const Navbar = (props: { history: any }) => {
   const [isShareableLinkOpen, setIsShareableLinkOpen] = useState(false);
   const [sharedID, setSharedID] = useState(null);
   const [errorSnackbar, setErrorSnackbar] = useState(false);
-
 
   const user = useAppSelector((state) => state.user.value);
   const itinerary = useAppSelector((state) => state.itinerary.value);
@@ -202,7 +201,7 @@ const Navbar = (props: { history: any }) => {
   ];
 
   return (
-    <div className={classes.root}>
+    <sc.Root>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -355,7 +354,7 @@ const Navbar = (props: { history: any }) => {
           An unexpected error has occurred, please try again later.
         </Alert>
       </Snackbar>
-    </div>
+    </sc.Root>
   );
 };
 

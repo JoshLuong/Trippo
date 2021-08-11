@@ -92,8 +92,8 @@ const Day: FC<Props> = ({
   };
 
   return (
-    <sc.dayDiv>
-      <sc.StickyDiv>
+    <>
+          <sc.StickyDiv>
         <sc.dayDate>
           {!isReadOnly ? (
             <button style={{ float: "left" }} onClick={handleCalendarView}>
@@ -104,6 +104,7 @@ const Day: FC<Props> = ({
           <sc.daysWeek>{moment(date).format("MMMM Do YYYY")}</sc.daysWeek>
         </sc.dayDate>
       </sc.StickyDiv>
+    <sc.dayDiv>
       <div>
         <sc.TimeSlots>
           {
@@ -183,6 +184,7 @@ const Day: FC<Props> = ({
         </Grid>
       </div>
     </sc.dayDiv>
+    </>
   );
 };
 

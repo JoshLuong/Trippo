@@ -9,9 +9,9 @@ interface ButtonProps {
   $hasMarginTop?: boolean;
 }
 export const dayDiv = styled.div`
-  padding: 1em;
+  padding: 0.1em 1em 1em 1em;
   position: relative;
-  min-height: 100%;
+  min-height: calc(100% - 3.25em);
   box-sizing: border-box;
   overflow: auto;
   overflow-x: hidden;
@@ -37,6 +37,7 @@ export const NoContent = styled.div`
   width: 100%;
   height: 100%;
   text-align: center;
+  margin-top: 0.5em;
 `;
 
 export const Tip = styled.span`
@@ -57,10 +58,15 @@ export const Spacer = styled.div`
 export const StickyDiv = styled.div`
   position: sticky;
   top: 0;
+  margin: 0 0.52em 0.35em 0.52em;
+  padding: 0.5em 1em;
+  height: 2.9em;
+  border-radius: 2.5px;
+  background: #ffffff;
+  z-index:2;
 `;
 
 export const dayDate = styled.div`
-  margin-bottom: 0.5em;
   display: flex;
   color: ${c.WHITE};
   font-weight: 545;
@@ -87,6 +93,10 @@ export const dayDate = styled.div`
   div {
     margin: auto;
     text-align: center;
+  }
+
+  @media (max-width: 650px) {
+    font-size: 0.8em;
   }
 `;
 

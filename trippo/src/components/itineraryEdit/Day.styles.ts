@@ -6,6 +6,7 @@ import { IconButton } from "@material-ui/core";
 
 interface ButtonProps {
   edit?: boolean;
+  $hasMarginTop?: boolean;
 }
 export const dayDiv = styled.div`
   padding: 1em;
@@ -28,6 +29,8 @@ export const EditButton = styled(IconButton)<ButtonProps>`
   color: ${c.BLACK};
   font-size: 1em;
   padding: 8px;
+  margin-top: ${(props) =>
+    props.$hasMarginTop ? "1.5em" : "0"};
 `;
 
 export const NoContent = styled.div`

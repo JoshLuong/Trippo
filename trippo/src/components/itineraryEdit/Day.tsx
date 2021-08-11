@@ -176,7 +176,7 @@ const Day: FC<Props> = ({
           xs={12}
         >
           {!isReadOnly && dayActivities.length > 0 ? (
-            <sc.EditButton edit={edit} onClick={handleEditView}>
+            <sc.EditButton edit={edit} $hasMarginTop={dayCost === 0} onClick={handleEditView}>
               {edit ? "Done" : "Edit"}
             </sc.EditButton>
           ) : null}

@@ -33,8 +33,13 @@ export const FormGrid = styled(Grid)`
 `;
 
 export const ButtonGrid = styled(Grid)`
+  @media(max-width: 960px){
+    text-align: end;
+  }
+
   @media(max-width: 600px){
-    margin-left: 2em;
+    margin-right: 2em;
+    text-align: center;
   }
 `;
 
@@ -45,14 +50,14 @@ export const newItineraryContainer = styled.div`
   transform: translate(-50%, -50%);
   top: 50%;
   background-color: white; 
-  height: 65vh;
+  height: 70vh;
   width: 900px;
   box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.6);
   border-radius: 16px 16px 7px 7px;
   border-top: 16px solid ${c.DARK_BLUE};
   @media (max-width: 960px) {
     width: 97%;
-    height: 70vh;
+    height: 80vh;
   }
 
   
@@ -94,6 +99,15 @@ export const userButton = styled(Button)` && {
   text-overflow: ellipsis;
   white-space: nowrap;
   border-radius: 20px;
+
+  @media (max-width: 960px) {
+    width: 25%;
+    margin-left: 2em;
+  }
+
+  @media(max-width: 600px){
+    width: 30%
+  }
 }
 `;
 

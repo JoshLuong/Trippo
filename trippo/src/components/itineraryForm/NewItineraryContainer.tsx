@@ -136,10 +136,10 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
                     <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}
                         defaultMaxTravel={maxTravel} setMaxTravel={setMaxTravel} />
                     <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
-                        <Grid item xs={12} sm={9} md={6} lg={4}>
+                        <sc.ButtonGrid item xs={12} sm={9} md={7} lg={5}>
                             <sc.userButton onClick={() => handleShowNewItinerary(false)} >Cancel</sc.userButton>
                             <sc.userButton onClick={handleSubmit}>Submit</sc.userButton>
-                        </Grid>
+                        </sc.ButtonGrid>
                     </Grid>
                 </sc.FormGrid>
             </sc.newItineraryContainer>

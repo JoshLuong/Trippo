@@ -2,7 +2,6 @@ import React from "react";
 import * as sc from "./ItineraryReadOnlyView.styles";
 import Day from "../itineraryEdit/Day";
 import moment from "moment";
-import ItineraryPDF from "../itineraryPDF/ItineraryPDF";
 import { useAppSelector } from "app/store";
 
 export const getDates = (startDate: Date, endDate: Date): string[] => {
@@ -22,11 +21,11 @@ function ItineraryReadOnlyView() {
     <sc.Container>
       {dates?.map((date) => {
         return (
-          <sc.Day>
+          <sc.Day key={date}>
             <Day
               isReadOnly
               size="small"
-              handleCalendarView={() => {}}
+              handleCalendarView={() => { }}
               date={new Date(date + "T00:00:00")}
             />
           </sc.Day>

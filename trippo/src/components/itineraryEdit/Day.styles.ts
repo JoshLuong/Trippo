@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
 import { IconButton } from "@material-ui/core";
 interface ButtonProps {
-  edit?: boolean;
+  $edit?: boolean;
   $hasMarginTop?: boolean;
 }
 
@@ -17,11 +17,11 @@ export const dayDiv = styled.div`
   overflow-x: hidden;
 `;
 
-export const EditButton = styled(IconButton)<ButtonProps>`
+export const EditButton = styled(IconButton) <ButtonProps>`
   background-color: ${(props) =>
     props.$edit ? c.YELLOW : "rgba(0, 0, 0, 0.12)"};
   width: 7em;
-  line-heght: 1.25em;
+  line-height: 1.25em;
   border-radius: 10px;
   margin-bottom: 2em;
   text-transform: none;

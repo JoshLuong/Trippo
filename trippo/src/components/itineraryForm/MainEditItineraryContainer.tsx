@@ -90,7 +90,7 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
                 handleShowEditItinerary();
             })
             .catch((error: any) => {
-                setErrorMessage("Something went wrong. Make sure itinerary names are unique or try again later.")
+                setErrorMessage("Something went wrong. Please make sure itinerary names are unique or try again later.")
                 setFail(true);
             });
     }
@@ -148,16 +148,35 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
                     <CancelIcon style={{ color: c.WHITE }} />
                 </sc.StyledIconButton>
                 <sc.header>Edit Itinerary:</sc.header>
-                <sc.FormGrid direction="column">
+                <sc.FormGrid>
                     <ItineraryOptionsContainer
                         user={user}
-                        collabSetter={setCollaborators} destinationSetter={setDestination} tagSetter={setTags} setErrorMessage={setErrorMessage}
-                        descRef={descRef} nameRef={nameRef} errorMessage={errorMessage} setFail={setFail} failSnackbar={failSnackBar}
-                        defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={card.comments || ""} defaultName={card.name} />
-                    <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={card.budget || undefined}
-                        defaultEnd={parseDate(card.end_date)} defaultStart={parseDate(card.start_date)} />
-                    <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}
-                        defaultMaxTravel={maxTravel} setMaxTravel={setMaxTravel} />
+                        collabSetter={setCollaborators}
+                        destinationSetter={setDestination}
+                        tagSetter={setTags}
+                        setErrorMessage={setErrorMessage}
+                        descRef={descRef}
+                        nameRef={nameRef}
+                        errorMessage={errorMessage}
+                        setFail={setFail}
+                        failSnackbar={failSnackBar}
+                        defaultCollaborators={collaborators}
+                        defaultDestination={destination}
+                        defaultTags={tags}
+                        defaultDesc={card.comments || ""}
+                        defaultName={card.name} />
+                    <DateGrid budgetRef={budgetRef}
+                        endRef={endRef} startRef={startRef}
+                        defaultBudget={card.budget || undefined}
+                        defaultEnd={parseDate(card.end_date)}
+                        defaultStart={parseDate(card.start_date)} />
+                    <PreferencesContainer
+                        setPrice={setPrice}
+                        setRating={setRating}
+                        defaultRating={rating}
+                        defaultPrice={price}
+                        defaultMaxTravel={maxTravel}
+                        setMaxTravel={setMaxTravel} />
                     <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
                         <sc.ButtonGrid item xs={12} sm={9} md={7} lg={5}>
                             <sc.userButton onClick={() => openDialog()} >Delete</sc.userButton>

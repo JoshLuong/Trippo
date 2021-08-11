@@ -23,8 +23,8 @@ interface Props {
     failSnackbar: boolean;
 }
 
+// required prop for autocompletes
 const collabData: any[] = [];
-
 const tagsData: any[] = [];
 
 const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDesc, defaultDestination, defaultName, defaultTags,

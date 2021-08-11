@@ -4,6 +4,7 @@ import * as sc from "./Container.styles";
 import { DateRangeFocus, Modifiers } from "react-nice-dates";
 import "./Calendar.scss";
 import { useAppSelector } from "app/store";
+import moment from "moment";
 
 interface Props {
   handleDayClick: (date: Date | null) => void;
@@ -19,10 +20,10 @@ const Calendar: FC<Props> = ({ handleDayClick }) => {
     disabled: (date) => {
       return (
         !itinerary ||
-        date < new Date(itinerary.start_date) ||
-        date > new Date(itinerary.end_date)
+        moment(date).isBefore(moment(itinerary.start_date), "date") ||
+        moment(date).isAfter(moment(itinerary.end_date), "date")
       );
-    }, // Disables Saturdays
+    },
   };
   const modifiersClassNames = {
     highlight: "-highlight",

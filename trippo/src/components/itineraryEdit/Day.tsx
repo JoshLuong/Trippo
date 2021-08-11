@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useContext } from "react";
 import * as sc from "./Day.styles";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
@@ -27,7 +27,7 @@ const Day: FC<Props> = ({
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [editedItinerary, setEditedItinerary] = useState(itinerary);
   let prevActivity: Activity | null = null;
-  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
 
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(0);
@@ -97,12 +97,12 @@ const Day: FC<Props> = ({
     <sc.dayDiv>
       <sc.StickyDiv>
         <sc.dayDate>
-          {!isReadOnly ? (
+          {!isReadOnly && (
             <button style={{ float: "left" }} onClick={handleCalendarView}>
               <i className="fas fa-chevron-left"></i>
               <i className="far fa-calendar-alt"></i>
             </button>
-          ) : null}
+          )}
           <sc.daysWeek>{moment(date).format("MMMM Do YYYY")}</sc.daysWeek>
         </sc.dayDate>
       </sc.StickyDiv>
@@ -122,9 +122,9 @@ const Day: FC<Props> = ({
               prevActivity = activity;
               return (
                 <div key={activity._id}>
-                  {prevDistance >= 0 ? (
+                  {prevDistance >= 0 && (
                     <sc.Distance>{prevDistance} kms away</sc.Distance>
-                  ) : null}
+                  )}
                   <TimeSlot
                     isReadOnly={isReadOnly}
                     size={size}
@@ -139,7 +139,7 @@ const Day: FC<Props> = ({
               );
             })}
         </sc.TimeSlots>
-        {dayCost > 0 ? (
+        {dayCost > 0 && (
           <sc.Cost container item lg={12}>
             <div>Total cost for {moment(date).format("MMM Do YYYY")}:</div>
             <div>
@@ -157,7 +157,7 @@ const Day: FC<Props> = ({
               <span>${dayCost}</span>
             </div>
           </sc.Cost>
-        ) : null}
+        )}
         <Grid
           item
           style={{ marginTop: "0.65em", textAlign: "center" }}
@@ -166,11 +166,11 @@ const Day: FC<Props> = ({
           sm={12}
           xs={12}
         >
-          {!isReadOnly ? (
-            <sc.EditButton edit={edit} onClick={handleEditView}>
+          {!isReadOnly && (
+            <sc.EditButton $edit={edit} onClick={handleEditView}>
               {edit ? "Done" : "Edit"}
             </sc.EditButton>
-          ) : null}
+          )}
         </Grid>
       </div>
     </sc.dayDiv>

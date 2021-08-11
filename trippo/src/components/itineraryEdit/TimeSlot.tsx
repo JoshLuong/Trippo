@@ -26,7 +26,7 @@ interface Props {
   size?: string;
 }
 
-// Arbitrary max cost of 1 trillion so we don't have integer overflows 
+// Arbitrary max cost of 1 trillion so we don't have integer overflows
 const MAX_COST = 1000000000000;
 
 const TimeSlot: FC<Props> = ({
@@ -201,10 +201,9 @@ const TimeSlot: FC<Props> = ({
                   value={cost}
                   onChange={(e) => {
                     if (
-                      (
-                        Number.isInteger(Number(e.target.value)) &&
-                        Number(e.target.value) < MAX_COST
-                      ) || e.target.value === ""
+                      (Number.isInteger(Number(e.target.value)) &&
+                        Number(e.target.value) < MAX_COST) ||
+                      e.target.value === ""
                     ) {
                       setCost(e.target.value);
                     }
@@ -225,8 +224,8 @@ const TimeSlot: FC<Props> = ({
 
   return (
     <sc.Slot
-      showSuggestions={showSuggestions}
-      borderColor={d.getIconColor(type, "0.73")}
+      $showSuggestions={showSuggestions}
+      $borderColor={d.getIconColor(type, "0.73")}
     >
       <Grid container item lg={12}>
         <Grid
@@ -236,7 +235,7 @@ const TimeSlot: FC<Props> = ({
           md={size === "small" ? 12 : 3}
           sm={12}
         >
-          <sc.Time small={size === "small"}>
+          <sc.Time $small={size === "small"}>
             <TextField
               disabled={!showEdit}
               onChange={(e) => setTime(e)}
@@ -262,7 +261,7 @@ const TimeSlot: FC<Props> = ({
           md={size === "small" ? 12 : 9}
           sm={12}
           xs={12}
-          small={size === "small"}
+          $small={size === "small"}
         >
           {renderHeaderContent()}
           {size !== "small" ? (
@@ -271,7 +270,7 @@ const TimeSlot: FC<Props> = ({
             </Grid>
           ) : null}
           <Grid container item lg={12} md={12} sm={12} xs={12}>
-            <sc.Comments small={size === "small"}>
+            <sc.Comments $small={size === "small"}>
               <sc.StyledTextField
                 fullWidth
                 id="filled-textarea"
@@ -285,16 +284,14 @@ const TimeSlot: FC<Props> = ({
             </sc.Comments>
           </Grid>
         </sc.SlotGrid>
-        {
-          shouldFetchSuggestions && (
-            <Suggestions
+        {shouldFetchSuggestions && (
+          <Suggestions
             hidden={!showSuggestions}
             activity={activity}
             renderIcon={d.renderIcon}
             suggested={suggested}
           />
-          )
-        }
+        )}
       </Grid>
     </sc.Slot>
   );

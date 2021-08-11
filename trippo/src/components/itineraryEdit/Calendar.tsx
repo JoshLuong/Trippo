@@ -1,10 +1,7 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { enGB } from "date-fns/locale";
 import * as sc from "./Container.styles";
-import {
-  DateRangeFocus,
-  Modifiers,
-} from "react-nice-dates";
+import { DateRangeFocus, Modifiers } from "react-nice-dates";
 import "./Calendar.scss";
 import { useAppSelector } from "app/store";
 import moment from "moment";
@@ -31,23 +28,25 @@ const Calendar: FC<Props> = ({ handleDayClick }) => {
   const modifiersClassNames = {
     highlight: "-highlight",
   };
-  return itinerary ? (
-    <sc.Calendar>
-      <sc.StyledDatePicker
-        startDate={new Date(itinerary.start_date)}
-        endDate={new Date(itinerary.end_date)}
-        focus={focus}
-        onStartDateChange={handleDayClick}
-        onEndDateChange={handleDayClick}
-        onFocusChange={handleFocusChange}
-        locale={enGB}
-        modifiers={modifiers}
-        modifiersClassNames={modifiersClassNames}
-        //@ts-ignore
-        onDayClick={handleDayClick}
-      />
-    </sc.Calendar>
-  ) : null;
+  return (
+    itinerary && (
+      <sc.Calendar>
+        <sc.StyledDatePicker
+          startDate={new Date(itinerary.start_date)}
+          endDate={new Date(itinerary.end_date)}
+          focus={focus}
+          onStartDateChange={handleDayClick}
+          onEndDateChange={handleDayClick}
+          onFocusChange={handleFocusChange}
+          locale={enGB}
+          modifiers={modifiers}
+          modifiersClassNames={modifiersClassNames}
+          //@ts-ignore
+          onDayClick={handleDayClick}
+        />
+      </sc.Calendar>
+    )
+  );
 };
 
 export default Calendar;

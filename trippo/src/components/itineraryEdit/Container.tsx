@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext } from "react";
 import Calendar from "./Calendar";
 import * as sc from "./Container.styles";
 import Day from "./Day";
@@ -8,7 +8,7 @@ import {
 } from "../itineraryPage/ItineraryPage";
 
 const Container = () => {
-  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
 
   const handleDayClick = (date: Date | null) => {
     itineraryContext?.setActiveDay(date);

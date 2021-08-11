@@ -9,12 +9,12 @@ const darkGrey = c.GREY;
 const disabledBorder = "border-right: 0px;";
 
 export interface StyledTimeSlotProps {
-  showSuggestions: boolean;
-  borderColor: string;
+  $showSuggestions: boolean;
+  $borderColor: string;
 }
 
 export interface StyledCardSize {
-  small: boolean;
+  $small: boolean;
 }
 
 export const StyledIconButton = styled(IconButton)`
@@ -36,7 +36,7 @@ export const Slot = styled.div<StyledTimeSlotProps>`
   padding-bottom: 0.75em;
   padding-left: 0.25em;
   border-left: 8px solid
-    ${(props) => (!props.showSuggestions ? props.borderColor : c.DARK_ORANGE)};
+    ${(props) => (!props.$showSuggestions ? props.$borderColor : c.DARK_ORANGE)};
   padding-right: 0.25em;
   background-color: #fff;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.4);
@@ -70,8 +70,8 @@ export const Time = styled.div<StyledCardSize>`
   @media (max-width: 960px) {
     ${disabledBorder}
   }
-  ${({ small }) =>
-    small &&
+  ${({ $small }) =>
+    $small &&
     `
     ${disabledBorder}
   `}
@@ -83,8 +83,8 @@ export const SlotGrid = styled(Grid)<StyledCardSize>`
     padding-right: 10px;
   }
 
-  ${({ small }) =>
-    small &&
+  ${({ $small }) =>
+    $small &&
     `
   padding-left: 10px;
   padding-right: 10px;
@@ -197,8 +197,8 @@ export const Comments = styled.ul<StyledCardSize>`
     padding: 0;
   }
 
-  ${({ small }) =>
-    small &&
+  ${({ $small }) =>
+    $small &&
     `
   margin-left: 1em;
 `}

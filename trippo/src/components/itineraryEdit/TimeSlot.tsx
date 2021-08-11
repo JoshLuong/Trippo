@@ -55,10 +55,11 @@ const TimeSlot: FC<Props> = ({
     if (!shouldFetchSuggestions && showSuggestions) {
       setShouldFetchSuggestions(true);
     }
-  }, [showSuggestions]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[showSuggestions])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const edit = useCallback(debounce(editActivity, 400), []);
+  const edit = useCallback(debounce(editActivity, 400), [editActivity]);
 
   useEffect(() => {
     if (!isCommentEffectMounted.current) {

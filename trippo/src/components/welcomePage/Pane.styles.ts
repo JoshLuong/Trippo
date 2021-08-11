@@ -2,7 +2,6 @@ import { Button, TextField } from "@material-ui/core";
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login'
 import { Grid } from '@material-ui/core';
 
 export const loginHeader = styled.h1`
@@ -24,7 +23,6 @@ export const userTextField = styled(TextField)` && {
   margin: 12px;
   width: 75%;
 }`;
-
 
 export const userButton = styled(Button)` && {
   position: relative;
@@ -75,19 +73,6 @@ export const StyledGoogleLogin = styled(GoogleLogin)`
 
   span {
     color: ${c.BLACK};
-  }
-`;
-
-export const StyledFacebookLogin = styled(FacebookLogin)`
-  margin-top: 2em;
-  width: 80%;
-  justify-content:center;
-
-  span {
-    width: 100%;
-  }
-  button {
-    width: 80%;
   }
 `;
 

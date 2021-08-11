@@ -90,14 +90,14 @@ function AboutPage() {
             </sc.StyledLink>
           </sc.Developer>
           <sc.Developer>
-            <span>Rohit</span>
-            <sc.StyledLink target="blank" rel="noreferrer" href="">
+            <span>Rohit Bassi</span>
+            <sc.StyledLink target="blank" rel="noreferrer" href="https://www.linkedin.com/in/r-bassi/">
               <sc.StyledLinkedInIcon />
             </sc.StyledLink>
-            <sc.StyledLink target="blank" rel="noreferrer" href="">
+            <sc.StyledLink target="blank" rel="noreferrer" href="https://rohitbassi.me/">
               <sc.StyledWebIcon />
             </sc.StyledLink>
-            <sc.StyledLink target="blank" rel="noreferrer" href="">
+            <sc.StyledLink target="blank" rel="noreferrer" href="https://github.com/r-bassi">
               <sc.StyledGitHubIcon />
             </sc.StyledLink>
           </sc.Developer>

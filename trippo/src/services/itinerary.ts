@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
 import { Itinerary, Activity } from 'types/models';
 
-
 interface GetItinerariesRequest {
   offset: number;
   limit: number;
@@ -43,7 +42,7 @@ export const itineraryApi = createApi({
           method: 'DELETE',
           credentials: 'include',
           headers: {
-            'Content-Type': 'application/json', // need for cookies
+            'Content-Type': 'application/json',
           },
         }
       }

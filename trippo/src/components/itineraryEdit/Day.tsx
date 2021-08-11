@@ -29,17 +29,24 @@ const Day: FC<Props> = ({
   let prevActivity: Activity | null = null;
   const itineraryContext = useContext<ContextInterface>(ItineraryContext);
 
+  const [edit, setEdit] = useState(false);
+  const [dayCost, setDayCost] = useState(0);
+  const [currentCostOffset, setCurrentCostOffset] = useState(
+    itinerary?.current_cost || 0
+  );
+
   const editActivity = (activity: Activity) => {
     if (editedItinerary) {
+      const activities: Activity[] = editedItinerary.activities.map((e) => {
+        return e._id === activity._id ? activity : e;
+      });
       setEditedItinerary({
         ...editedItinerary,
-        activities: editedItinerary.activities.map((e) =>
-          e._id === activity._id ? activity : e
-        ),
+        activities,
       });
       itineraryContext?.setUnsavedChanges(true);
     }
-  };
+  }
 
   const deleteActivity = (activity: Activity) => {
     if (editedItinerary) {
@@ -65,18 +72,13 @@ const Day: FC<Props> = ({
     ) || [];
 
   useEffect(() => {
-    setDayCost(
-      dayActivities.reduce(function (total, activity) {
-        return total + (activity.cost || 0);
-      }, 0)
-    );
+    const totalCost = dayActivities.reduce(function (total, activity) {
+      return total + (activity.cost || 0);
+    }, 0);
+
+    setDayCost(totalCost);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayActivities.length, editedItinerary]);
-  const [edit, setEdit] = useState(false);
-  const [dayCost, setDayCost] = useState(0);
-  const [currentCostOffset, setCurrentCostOffset] = useState(
-    itinerary?.current_cost || 0
-  );
 
   const handleEditView = () => {
     if (edit && itineraryContext?.unsavedChanges) {

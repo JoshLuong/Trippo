@@ -40,7 +40,7 @@ function AboutPage() {
 
           <span>
             For questions or concerns regarding Trippo, please see the user
-            documentation "here", or contact us.&nbsp;
+            documentation <a href="https://github.com/JoshLuong/Trippo/blob/master/USER-DOCS.md">here</a>, or contact us.&nbsp;
             <br />
             <a href="mailto: tripposupport@protonmail.com">
               <sc.StyledEmailIcon />

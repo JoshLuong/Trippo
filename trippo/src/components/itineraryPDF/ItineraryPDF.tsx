@@ -1,14 +1,7 @@
 import React, { FC } from "react";
 import * as d from "../../app/destinations/destinationTypes";
 import * as utils from "../itineraryEdit/utils";
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  Link,
-  Image,
-} from "@react-pdf/renderer";
+import { Document, Page, Text, View, Link, Image } from "@react-pdf/renderer";
 import { styles } from "./ItineraryPDF.styles";
 import { Activity, Itinerary, User } from "types/models";
 import { getDates } from "../itineraryReadOnlyView/ItineraryReadOnlyView";
@@ -36,7 +29,10 @@ const ItineraryPDF: FC<Props> = ({ itinerary, user, imageURL }) => {
   return (
     <Document>
       <Page orientation="landscape" size="A4" style={styles.titlePage}>
-        <Image style={styles.titleBackground} src={!imageURL ? "/about.jpg" : imageURL as Buffer} />
+        <Image
+          style={styles.titleBackground}
+          src={!imageURL ? "/about.jpg" : (imageURL as Buffer)}
+        />
         <View style={styles.title}>
           <Image style={styles.logo} src="/trippo.png" />
           <Link

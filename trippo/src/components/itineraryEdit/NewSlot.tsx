@@ -1,9 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import {
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@material-ui/core";
+import { InputLabel, Select, MenuItem } from "@material-ui/core";
 import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid, CircularProgress } from "@material-ui/core";
@@ -12,14 +8,17 @@ import { useAppDispatch, useAppSelector } from "app/store";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import { setItinerary } from 'app/reducers/itinerarySlice';
-import { useCreateActivityMutation, useLazyGetItineraryByIdQuery } from "services/itinerary";
+import { setItinerary } from "app/reducers/itinerarySlice";
+import {
+  useCreateActivityMutation,
+  useLazyGetItineraryByIdQuery,
+} from "services/itinerary";
 import { Activity } from "types/models";
 import {
   ContextInterface,
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 interface Props {
   handleClose: () => void;
@@ -47,7 +46,9 @@ const NewSlot: FC<Props> = ({
   const [cost, setCost] = useState(0);
   const [comments, setComments] = useState("");
   const [time, setTime] = useState("12:00");
-  const [selectedDate, setSelectedDate] = useState(itineraryContext?.activeDay || itinerary?.start_date);
+  const [selectedDate, setSelectedDate] = useState(
+    itineraryContext?.activeDay || itinerary?.start_date
+  );
   const [addDisabled, setAddDisabled] = useState(false);
   const [createActivity] = useCreateActivityMutation();
   const [triggerGetQuery, result] = useLazyGetItineraryByIdQuery();
@@ -59,7 +60,7 @@ const NewSlot: FC<Props> = ({
       setSearchResult(null);
       handleSubmitAndClose();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
   const handleTypechange = (event: any) => {
@@ -72,7 +73,6 @@ const NewSlot: FC<Props> = ({
     } else {
       setCost(event.target.value);
     }
-    
   };
 
   const handleCommentsChange = (event: any) => {
@@ -86,7 +86,6 @@ const NewSlot: FC<Props> = ({
   const handleDateChange = (event: any) => {
     setSelectedDate(event);
   };
-
 
   const getSuggestedBusinesses = async (activityId: any) => {
     await fetch(`/api/yelp/attractions`, {
@@ -339,7 +338,11 @@ const NewSlot: FC<Props> = ({
             </Grid>
           </sc.SlotGrid>
           <sc.AddButton disabled={addDisabled} onClick={() => addToItinerary()}>
-            {!addDisabled ? "Add" : <CircularProgress size="1.25em" color="inherit" />}
+            {!addDisabled ? (
+              "Add"
+            ) : (
+              <CircularProgress size="1.25em" color="inherit" />
+            )}
           </sc.AddButton>
         </sc.SlotContainer>
       </sc.NewSlot>

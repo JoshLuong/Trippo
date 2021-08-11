@@ -82,13 +82,13 @@ export const Distance = styled.div`
 `;
 
 interface HiddenProps {
-  isHidden?: boolean;
+  $isHidden?: boolean;
 }
 export const ContainerGrid = styled(Grid)<HiddenProps>`
   width: 100%;
   color: rgba(71, 71, 71, 0.55);
   font-size: 0.85em;
-  display: ${props => props.isHidden ? 'none' : 'flex'};
+  display: ${(props) => (props.$isHidden ? "none" : "flex")};
 `;
 
 export const Icon = styled.i`

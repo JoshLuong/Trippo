@@ -1,15 +1,10 @@
 import styled from "styled-components";
-import {
-  DateRangeFocus,
-  DateRangePickerCalendar,
-  Modifiers,
-} from "react-nice-dates";
+import { DateRangePickerCalendar } from "react-nice-dates";
 
 export const StyledDatePicker = styled(DateRangePickerCalendar)`
   display: flex;
   width: 100%;
 `;
-
 
 export const fancytext = styled.div`
   text-align: center;

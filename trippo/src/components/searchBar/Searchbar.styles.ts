@@ -9,7 +9,7 @@ export const SearchContainer = styled.div`
 
 export const Container = styled.div`
   border-radius: 7px;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;

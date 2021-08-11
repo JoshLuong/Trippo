@@ -1,7 +1,29 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import EmailIcon from "@material-ui/icons/Email";
+import LinkedInIcon from "@material-ui/icons/LinkedIn";
+import LanguageIcon from "@material-ui/icons/Language";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
+export const StyledLink = styled.a`
+  color: ${c.WHITE};
+`;
+export const StyledGitHubIcon = styled(GitHubIcon)`
+  margin-left: 0.5em;
+`;
+
+export const StyledWebIcon = styled(LanguageIcon)`
+  margin-left: 0.5em;
+`;
+
+export const Developer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+export const StyledLinkedInIcon = styled(LinkedInIcon)`
+  margin-left: 0.5em;
+`;
 export const StyledEmailIcon = styled(EmailIcon)``;
 
 export const containerDiv = styled.div`
@@ -26,11 +48,14 @@ export const leftHeaderDiv = styled.div`
   }
 `;
 
-export const aboutHeader = styled.h1`
+interface HeaderProps {
+  $size: string;
+}
+export const aboutHeader = styled.h1<HeaderProps>`
   color: #ffffff;
   left: 0;
-  text-shadow: 2px 0px 7px ${c.DARK_GREY};
-  font-size: 48px;
+  text-shadow: 1px 0px 3px ${c.DARK_GREY};
+  font-size: ${(props) => props.$size};
   font-weight: extra bold;
 
   @media (max-width: 600px) {
@@ -44,7 +69,11 @@ export const Divider = styled.div`
   height: 0.35em;
 `;
 
-export const descHeader = styled.h2`
+interface descProps {
+  $isAlignedCenter: boolean;
+}
+
+export const descHeader = styled.h2<descProps>`
   color: #ffffff;
   font-size: 22px;
   font-weight: normal;
@@ -57,6 +86,14 @@ export const descHeader = styled.h2`
   @media (max-width: 600px) {
     font-size: 20px;
     text-align: center;
+    ${(props) =>
+      props.$isAlignedCenter
+        ? `
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    `
+        : ``}
     a {
       display: flex;
       align-items: center;

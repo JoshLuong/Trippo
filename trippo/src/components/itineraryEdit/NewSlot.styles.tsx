@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid, TextField, FormControl } from "@material-ui/core";
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { KeyboardDatePicker } from "@material-ui/pickers";
 
 export const Cancel = styled.button`
   top: 0;
@@ -50,7 +50,7 @@ export const NewSlot = styled(Grid)`
     transform: translate(-50%, -51%);
   }
 
-  .MuiFormControl-root{
+  .MuiFormControl-root {
     width: 90%;
   }
 `;
@@ -62,14 +62,14 @@ export const Time = styled.div`
   padding-bottom: 0.5em;
   margin-left: 9px;
 
-  div:before, div:after{
+  div:before,
+  div:after {
     content: none;
   }
 
   .MuiInput-root {
     font-size: 1em;
     letter-spacing: 0px;
-
   }
 
   @media (max-width: 960px) {
@@ -135,7 +135,8 @@ export const Destination = styled.div`
   flex-grow: 1;
   font-weight: 550;
   margin-bottom: 7px;
-  i, svg {
+  i,
+  svg {
     margin-right: 5px;
   }
 
@@ -154,23 +155,22 @@ export const Destination = styled.div`
   button:hover {
     cursor: pointer;
   }
-
 `;
 
 export const StyledFormControl = withStyles({
   root: {
-    '& label.Mui-focused': {
-      color: 'initial',
+    "& label.Mui-focused": {
+      color: "initial",
     },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#219EBC',
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#219EBC",
     },
-    '& .MuiOutlinedInput-root': {
-      '&:hover fieldset': {
-        borderColor: '#219EBC',
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": {
+        borderColor: "#219EBC",
       },
-      '&.Mui-focused fieldset': {
-        borderColor: '#219EBC',
+      "&.Mui-focused fieldset": {
+        borderColor: "#219EBC",
       },
     },
   },
@@ -178,19 +178,19 @@ export const StyledFormControl = withStyles({
 
 export const textField = withStyles({
   root: {
-    '& label.Mui-focused': {
-      color: '#219EBC',
-      width: '100%',
+    "& label.Mui-focused": {
+      color: "#219EBC",
+      width: "100%",
     },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#219EBC',
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#219EBC",
     },
-    '& .MuiOutlinedInput-root': {
-      '&:hover fieldset': {
-        borderColor: '#219EBC',
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": {
+        borderColor: "#219EBC",
       },
-      '&.Mui-focused fieldset': {
-        borderColor: '#219EBC',
+      "&.Mui-focused fieldset": {
+        borderColor: "#219EBC",
       },
     },
   },
@@ -198,15 +198,15 @@ export const textField = withStyles({
 
 export const selectStyles = makeStyles((theme) => ({
   underline: {
-    color: '#219EBC',
-    '&::after': {
-      borderBottom: '#219EBC'
+    color: "#219EBC",
+    "&::after": {
+      borderBottom: "#219EBC",
     },
-    '&::before': {
-      borderBottom: '#219EBC'
-    }
+    "&::before": {
+      borderBottom: "#219EBC",
+    },
   },
   inputLabelRoot: {
-    color: '#219EBC',
-  }
+    color: "#219EBC",
+  },
 }));

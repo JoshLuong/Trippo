@@ -2,7 +2,11 @@ import styled from "styled-components";
 import * as c from "../../colors/colors";
 import { Grid } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
+import { IconButton } from "@material-ui/core";
 
+interface ButtonProps {
+  edit?: boolean;
+}
 export const dayDiv = styled.div`
   padding: 1em;
   position: relative;
@@ -12,22 +16,18 @@ export const dayDiv = styled.div`
   overflow-x: hidden;
 `;
 
-export const EditButton = styled.button`
-  margin: auto;
+export const EditButton = styled(IconButton)<ButtonProps>`
+  background-color: ${(props) =>
+    props.edit ? c.YELLOW : "rgba(0, 0, 0, 0.12)"};
+  width: 7em;
+  line-heght: 1.25em;
+  border-radius: 10px;
+  margin-bottom: 2em;
+  text-transform: none;
   border: none;
-  height: 2em;
-  width: 5em;
-  background-color: ${c.DARK_BLUE};
-  color: ${c.WHITE};
-  letter-spacing: 1px;
-  font-weight: 545;
-  padding: 0;
-  border-radius: 16px;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-  :hover {
-    cursor: pointer;
-  }
+  color: ${c.BLACK};
+  font-size: 1em;
+  padding: 8px;
 `;
 
 export const StyledWarningIcon = styled(WarningIcon)`

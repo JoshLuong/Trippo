@@ -4,10 +4,13 @@ import { Activity, Yelp } from 'types/models';
 import { useAppSelector } from 'app/store';
 import { Grid } from "@material-ui/core";
 import { getDistanceFromLatLonInKm } from './utils';
+import FadeIn from "react-fade-in";
+import { Bbox } from "@mapbox/mapbox-gl-geocoder";
 
 interface Props {
   renderIcon: (icon: string) => JSX.Element;
   activity: Activity;
+  hidden?: boolean;
   suggested?: {
     destination?: string;
     type?: string;
@@ -23,7 +26,7 @@ interface Props {
   }[];
 }
 
-const Suggestions: FC<Props> = ({ activity }) => {
+const Suggestions: FC<Props> = ({ activity, hidden = false }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [suggested, setSuggested] = useState<Yelp[]>([]);
 
@@ -48,10 +51,11 @@ const Suggestions: FC<Props> = ({ activity }) => {
       }
     })
     return () => { isMounted = false };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <Grid container item lg={12}>
+    <sc.ContainerGrid isHidden={hidden} container item lg={12}>
       <Grid container item lg={3} md={3} sm={12} xs={12}>
         <sc.SuggestionTitle>Suggestions</sc.SuggestionTitle>
       </Grid>
@@ -77,8 +81,8 @@ const Suggestions: FC<Props> = ({ activity }) => {
                   <img alt={`${s.rating} stars`} src={starString} width="70"/>
                 </sc.YelpStarsAndCost>
                 <sc.Comments>
-                  <a target="_blank" href={s.url}>
-                    <img src='/yelp/yelp_logo.png' width="40"></img>
+                  <a target="blank" rel="noreferrer" href={s.url}>
+                    <img src='/yelp/yelp_logo.png' alt="Yelp logo" width="40"></img>
                   </a>
                 </sc.Comments>
               </Grid>
@@ -87,7 +91,7 @@ const Suggestions: FC<Props> = ({ activity }) => {
         })
         }
       </Grid>
-    </Grid>
+    </sc.ContainerGrid>
   );
 };
 

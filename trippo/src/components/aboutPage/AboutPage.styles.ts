@@ -94,6 +94,17 @@ export const RightHeader = styled.div`
 `;
 
 export const IPhoneImage1 = styled.img`
+  // https://stackoverflow.com/questions/6805482/css3-transition-animation-on-load
+  @keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  animation-delay: 1s;
+  animation: 1s ease-out 0s 1 slideInFromLeft;
   position: absolute;
   top: 30%;
   left: 20%;

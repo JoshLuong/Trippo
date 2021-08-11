@@ -7,6 +7,7 @@ import cors from 'cors';
 import session from 'express-session';
 import path from 'path';
 import itineraryRouter from './routes/itineraries';
+import sharedItineraryRouter from './routes/sharedItineraries';
 import userRouter from './routes/users';
 import googleAuthRouter from './routes/googleAuth';
 import yelpFusionRouter from './routes/yelpFusion';
@@ -30,6 +31,9 @@ mongoose.connect(process.env.DATABASE_URL!, {
 
   // TODO: change to secure https://www.npmjs.com/package/express-session
   app.use(session({ resave: true, secret: process.env.EXPRESS_SESSION_SECRET!, saveUninitialized: true, cookie: { secure: false } }));
+
+  // place above middleware to allow un-authenticated users to view shareable itineraries
+  app.use('/api/shared/itineraries', sharedItineraryRouter);
 
   app.use(async (req: any, res, next) => {
     const user = await User.findById(req.session.userId).exec();

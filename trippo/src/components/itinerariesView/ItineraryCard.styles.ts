@@ -4,11 +4,17 @@ import { Grid, IconButton } from "@material-ui/core";
 import PeopleIcon from "@material-ui/icons/People";
 import LabelIcon from "@material-ui/icons/Label";
 import Button from "@material-ui/core/Button";
+import LaunchIcon from "@material-ui/icons/Launch";
 
 export const StyledButton = styled(Button)`
   span {
     color: ${c.DARK_ORANGE};
   }
+`;
+
+export const StyledLaunchIcon = styled(LaunchIcon)`
+  width: 0.75em;
+  margin-left: 0.25em;
 `;
 
 export const StyledIconButton = styled(IconButton)`
@@ -24,12 +30,12 @@ export const Card = styled.div`
   background-color: white;
   margin: auto;
   position: relative;
-  margin-bottom: 7em;
+  margin-bottom: 5em;
   min-height: 14em;
-  width: 705px;
+  width: 50%;
   box-shadow: 0 4.5px 4px 0 rgba(0, 0, 0, 0.4);
   border-radius: 8px;
-  border-top: 16px solid ${(props) => props.color};
+  border-top: 10px solid ${(props) => props.color};
   &:hover {
     transform: scale(1.025);
   }
@@ -44,6 +50,12 @@ export const Card = styled.div`
   @media (max-width: 660px) {
     width: 80%;
   }
+
+  @media (max-width: 400px) {
+    width: 95%;
+    border-radius: 4px;
+    margin-bottom: 2em;
+  }
 `;
 
 export const StyledLabelIcon = styled(LabelIcon)`
@@ -52,16 +64,25 @@ export const StyledLabelIcon = styled(LabelIcon)`
 `;
 
 export const TripName = styled.a`
-  display: block;
+  display: flex;
+  flex-direction: row;
   margin-right: auto;
-  color: ${c.DARK_BLUE};
-  font-weight: 600;
-  font-size: 1.75em;
+  color: ${c.BLACK};
+  font-size: 1.55em;
   margin-bottom: 0.35em;
   overflow: hidden;
+  text-decoration: none;
 
   @media (max-width: 660px) {
     font-size: 1.5em;
+  }
+
+  span {
+    width: calc(100% - 1em);
+  }
+
+  :hover {
+    text-decoration: underline;
   }
 `;
 
@@ -144,5 +165,6 @@ export const EditButton = styled.button`
   }
   :hover {
     cursor: pointer;
+    text-decoration: underline;
   }
 `;

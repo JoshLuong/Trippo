@@ -49,8 +49,9 @@ router.get("/:id", async (req: any, res, _next) => {
     ],
   });
 
-  if (!itinerary) return res.status(404).send({ error: "Invalid Itinerary" });
-
+  if (!itinerary) {
+    return res.status(404).send({ error: "Itinerary with id: " + id + "not found" });
+  }
   res.status(200).send(itinerary);
 });
 
@@ -67,7 +68,7 @@ router.post("/", (req: any, res, _next) => {
     })
     .catch((err) => {
       return res
-        .status(404)
+        .status(400)
         .send({ error: err + ": Itinerary was not created" });
     });
 });
@@ -81,8 +82,9 @@ router.get("/shareable-link/:id", async (req: any, res, _next) => {
     update,
     options
   );
-  if (!itinerary) return res.status(404).send({ error: "Invalid Itinerary" });
-
+  if (!itinerary) {
+    return res.status(404).send({ error: "Itinerary with id: " + req.params.id + "not found" });
+  }
   res.send(itinerary._id);
 });
 
@@ -108,7 +110,7 @@ router.post("/new-activity", async (req: any, res, _next) => {
       res.send(activity);
     })
     .catch((err) => {
-      return res.status(404).send({ error: err + ": Invalid Activity" });
+      return res.status(400).send({ error: err + ": Invalid Activity" });
     });
 });
 

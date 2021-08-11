@@ -388,7 +388,7 @@ const NewSlot: FC<Props> = ({
         onClose={handleErrorClose}
       >
         <Alert onClose={() => setErrorSnackbar(false)} severity="error">
-          There was an error saving Yelp data
+          There was an error saving some Yelp data
         </Alert>
       </Snackbar>
     </>

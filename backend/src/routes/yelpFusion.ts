@@ -96,7 +96,9 @@ router.post("/restaurants/breakfast_brunch", async (req, res, _next) => {
       res.status(200).send(savedResults);
     })
     .catch((e: any) => {
-      res.status(500).send({ error: e + "Could not resolve Yelp request" });
+      if (e) {
+      res.status(500).send({ error: "Could not resolve Yelp request" });
+      }
     });
 });
 
@@ -215,6 +217,9 @@ router.post("/businesses", async (req, res, _next) => {
 
   let businessIds: string[] = [];
   const itinerary = await Itinerary.findOne({ _id: itineraryId });
+  if (!itinerary) {
+    return res.status(404).send({ error: "Itinerary with id: " + itineraryId + "not found" });
+  }
   const activity = itinerary?.activities.filter((activity: any) => {
     return activity._id == activityId;
   });
@@ -238,11 +243,8 @@ router.post("/businesses", async (req, res, _next) => {
       }
     }
   }
-    if (!itinerary) {
-      res.status(404).send({ error: "Could not get itinerary" });
-    }
     if (!businesses) {
-      res.status(404).send({ error: "Could not get businesses" });
+      return res.status(404).send({ error: "Could not retrieve Yelp businesses" });
     }
     res.status(200).send(businesses);
 });

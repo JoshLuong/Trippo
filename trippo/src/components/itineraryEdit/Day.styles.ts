@@ -45,17 +45,6 @@ export const Tip = styled.span`
   font-weight: bold;
 `;
 
-export const NoContent = styled.div`
-  width: 100%;
-  height: 100%;
-  text-align: center;
-`;
-
-export const Tip = styled.span`
-  color: ${c.DARK_ORANGE};
-  font-weight: bold;
-`;
-
 export const StyledWarningIcon = styled(WarningIcon)`
   color: ${c.DARK_ORANGE};
   padding-right: 0.25em;

@@ -79,13 +79,18 @@ function AboutPage() {
           </sc.Developer>
           <sc.Developer>
             <span>Andre</span>
-            <sc.StyledLink target="blank" rel="noreferrer" href="">
+            <sc.StyledLink
+              target="blank"
+              rel="noreferrer"
+              href="https://www.linkedin.com/in/andre-r-60762918a/"
+            >
               <sc.StyledLinkedInIcon />
             </sc.StyledLink>
-            <sc.StyledLink target="blank" rel="noreferrer" href="">
-              <sc.StyledWebIcon />
-            </sc.StyledLink>
-            <sc.StyledLink target="blank" rel="noreferrer" href="">
+            <sc.StyledLink
+              target="blank"
+              rel="noreferrer"
+              href="https://github.com/andreram"
+            >
               <sc.StyledGitHubIcon />
             </sc.StyledLink>
           </sc.Developer>

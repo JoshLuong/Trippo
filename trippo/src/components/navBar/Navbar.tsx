@@ -72,8 +72,8 @@ const Navbar = (props: { history: any }) => {
         method: "DELETE",
         credentials: "include",
       });
+
       dispatch(setUser({ isLoggedIn: false }));
-      window.localStorage.removeItem("user");
       handleMenuClick("/");
     } catch (e: any) {
       setErrorSnackbar(true);

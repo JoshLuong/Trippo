@@ -1,14 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { User } from 'types/models';
 
-export type User = {
-  isLoggedIn: boolean,
-  name: string,
-  email: string,
-  _id: string,
-} | null
+interface IUser extends User {
+  isLoggedIn: boolean;
+}
 
 interface State {
-  value: User;
+  value: IUser | null;
+  isAppLoaded: boolean;
 }
 
 interface Action {
@@ -20,23 +19,23 @@ interface SliceReducers {
 }
 
 export const user = createSlice<State, SliceReducers, "user">({
-  // reducer uses the actions
   name: "user",
   initialState: {
-    value: null
+    value: null,
+    isAppLoaded: false,
   },
   reducers: {
     setUser: (state: State, action: Action) => {
-      if (action?.payload) {
+      if (action.payload) {
         state.value = action.payload;
       }
+    },
+    setAppLoaded: (state: State, action: Action) => {
+      state.isAppLoaded = action.payload;
     }
   },
 });
 
-// Action creators are generated for each case reducer function
-export const {
-  setUser
-} = user.actions;
+export const { setUser, setAppLoaded } = user.actions;
 
 export default user.reducer;

@@ -33,6 +33,7 @@ export const SlotContainer = styled(Grid)`
 export const NewSlot = styled(Grid)`
   padding-bottom: 0.5em;
   border-radius: 0 10px 10px 0;
+  z-index: 2;
   width: 40em;
   background: #fff;
   border-left: 7px solid ${c.YELLOW};
@@ -42,7 +43,6 @@ export const NewSlot = styled(Grid)`
   left: 50%;
   transform: translate(-50%, -50%);
   top: 50%;
-  z-index: 1;
   @media (max-width: 960px) {
     width: 60%;
   }

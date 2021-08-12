@@ -13,9 +13,11 @@ interface Props {
 const Calendar: FC<Props> = ({ handleDayClick }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [focus, setFocus] = useState<DateRangeFocus>("startDate");
+
   const handleFocusChange = (newFocus: DateRangeFocus) => {
     setFocus(newFocus || "startDate");
   };
+
   const modifiers: Modifiers = {
     disabled: (date) => {
       return (
@@ -25,9 +27,11 @@ const Calendar: FC<Props> = ({ handleDayClick }) => {
       );
     },
   };
+
   const modifiersClassNames = {
     highlight: "-highlight",
   };
+
   return (
     itinerary && (
       <sc.Calendar>

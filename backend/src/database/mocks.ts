@@ -1,11 +1,18 @@
-import { DestinationType } from '../types/destinationTypes';
+enum ActivityType {
+  ATTRACTION = "Attraction",
+  HOTEL = "Hotel",
+  AIRPORT = "Airport",
+  RESTAURANT = "Restaurant",
+  PARK = "Park",
+  BEACH = "Beach",
+  OTHER = "Other",
+  SHOPPING = "Shopping",
+}
 
 const date1 = new Date(2022, 5, 20);
 const date2 = new Date(2022, 5, 21);
 const date3 = new Date(2022, 5, 22);
 
-
-// need userID?
 export const users = [
   { name: "Joshua Luong", email: 'joshopolis321@gmail.com' },
   { name: "Joshua Luong2", email: 'joshualuong99@gmail.com' },
@@ -22,12 +29,12 @@ export const activities = [
     time: new Date(new Date(2022, 5, 20).setHours(8)),
     destination: "Executive Suites Hotel Metro Vancouver",
     cost: 10,
-    type: DestinationType.HOTEL,
+    type: ActivityType.HOTEL,
     comments: ["unpack", "rest"],
     suggested: [
       {
         destination: "Aquarium",
-        type: DestinationType.ATTRACTION,
+        type: ActivityType.ATTRACTION,
         comments: "3 min away",
       },
       {
@@ -163,12 +170,12 @@ export const activities = [
     time: new Date(date2.setHours(8)),
     destination: "Swimming pool",
     cost: 10,
-    type: DestinationType.RESTAURANT,
+    type: ActivityType.RESTAURANT,
     comments: ["swim", "eat"],
     suggested: [
       {
         destination: "Aquarium",
-        type: DestinationType.AIRPORT,
+        type: ActivityType.AIRPORT,
         comments: "3 min away",
       },
       {
@@ -304,12 +311,12 @@ export const activities = [
     time: new Date(date3.setHours(8)),
     destination: "English bay",
     cost: 10,
-    type: DestinationType.BEACH,
+    type: ActivityType.BEACH,
     comments: ["swimming", "tanning"],
     suggested: [
       {
         destination: "Aquarium",
-        type: DestinationType.BEACH,
+        type: ActivityType.BEACH,
         comments: "3 min away",
       },
       {
@@ -326,7 +333,7 @@ export const activities = [
     time: new Date(date3.setHours(8)),
     destination: "Pacific Center",
     cost: 20,
-    type: DestinationType.SHOPPING,
+    type: ActivityType.SHOPPING,
     comments: ["unpack", "rest"],
     suggested: [
       {
@@ -346,7 +353,7 @@ export const activities = [
     },
     time: new Date(date3.setHours(8)),
     destination: "Hotel",
-    type: DestinationType.HOTEL,
+    type: ActivityType.HOTEL,
     cost: 50,
     comments: ["unpack", "rest"],
     suggested: [
@@ -367,7 +374,7 @@ export const activities = [
     },
     time: new Date(date3.setHours(8)),
     destination: "Hotel",
-    type: DestinationType.ATTRACTION,
+    type: ActivityType.ATTRACTION,
     comments: ["unpack", "rest"],
     suggested: [
       {
@@ -387,7 +394,7 @@ export const activities = [
     },
     time: new Date(date3.setHours(8)),
     destination: "Hotel",
-    type: DestinationType.PARK,
+    type: ActivityType.PARK,
     comments: ["unpack", "rest"],
     suggested: [
       {

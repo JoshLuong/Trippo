@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import WelcomePage from "components/welcomePage/WelcomePage";
 import AboutPage from "components/aboutPage/AboutPage";
-import { setUser } from "app/reducers/userSlice";
+import { setUser, setAppLoaded } from "app/reducers/userSlice";
 import { useAppDispatch, useAppSelector } from "app/store";
 import Snackbar, { SnackbarCloseReason } from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
@@ -23,8 +23,9 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN!;
 
 function App() {
   const dispatch = useAppDispatch();
-  const history: any = useHistory();
   const user = useAppSelector((state) => state.user.value);
+
+  const history: any = useHistory();
   const [showSignInError, setShowSignInError] = useState(false);
 
   const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {
@@ -42,18 +43,19 @@ function App() {
       .then((user) => {
         if (user && !user.error) {
           dispatch(setUser({ isLoggedIn: true, ...user }));
-          window.localStorage.setItem("user", user.name);
         }
       })
       .catch((e: string) => {
-        window.localStorage.removeItem("user");
-        console.log(history);
         if (
           history.location.pathname !== "/about" &&
           history.location.pathname !== "/" &&
           !history.location.pathname.includes("/shared")
         )
           history.push("/");
+          console.error(e);
+      })
+      .finally(() => {
+        dispatch(setAppLoaded(true));
       });
   }, [dispatch, history]);
 

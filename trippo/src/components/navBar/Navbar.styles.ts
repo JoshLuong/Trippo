@@ -3,10 +3,21 @@ import IconButton from "@material-ui/core/IconButton";
 import { Button, Tooltip } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import styled from "styled-components";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import * as c from "../../colors/colors";
 
 const drawerWidth = 240;
 
+export const StyledAccountCircle = styled(AccountCircle)`
+  width: 35px;
+  height: 35px;
+  color: ${c.GREY};
+
+  @media (max-width: 800px) {
+    width: 30px;
+    height: 30px;
+  }
+`;
 export const LoopDiv = styled.div`
   position: absolute;
   color: ${c.BLACK};
@@ -137,10 +148,11 @@ export const StyledIconButton = styled(IconButton)`
   color: ${c.BLACK};
 `;
 
+export const Root = styled.div`
+  display: flex;
+`;
+
 export const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
   appBar: {
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,

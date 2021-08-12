@@ -18,7 +18,7 @@ import {
   DialogTitle,
   Tooltip,
 } from "@material-ui/core";
-import { useAppDispatch, useAppSelector } from "app/store";
+import { useAppDispatch } from "app/store";
 import { useParams, useHistory } from "react-router-dom";
 import {
   useGetItineraryByIdQuery,
@@ -127,7 +127,8 @@ function ItineraryPage() {
           setShowSharedItineraryToast(true);
         });
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [IS_SHARED, id]);
 
   useEffect(() => {
     if (updatedItinerary || closeSlotNewActivity) {

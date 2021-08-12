@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import { useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -11,17 +11,18 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import TextLoop from "react-text-loop";
-import * as c from "../../colors/colors";
-import { hexColorList } from "../../app/destinations/destinationTypes";
+import { hexColorList } from "../icons";
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Snackbar,
+  SnackbarCloseReason,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import LinkIcon from "@material-ui/icons/Link";
 import { setUser } from "app/reducers/userSlice";
 import ListItem from "@material-ui/core/ListItem";
@@ -31,21 +32,20 @@ import { withRouter } from "react-router-dom";
 import moment from "moment";
 import FadeIn from "react-fade-in";
 import { useAppDispatch, useAppSelector } from "app/store";
-import { BLACK, GREY, WHITE } from "../../colors/colors";
+import { BLACK, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
 import * as sc from "./Navbar.styles";
-
-// https://github.com/mui-org/material-ui/tree/master/docs/src/pages/components/drawers
 
 const Navbar = (props: { history: any }) => {
   const { history } = props;
   const IS_SHARED = history.location.pathname.includes("/shared");
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [isShareableLinkOpen, setIsShareableLinkOpen] = React.useState(false);
-  const [sharedID, setSharedID] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isShareableLinkOpen, setIsShareableLinkOpen] = useState(false);
+  const [sharedID, setSharedID] = useState(null);
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
 
   const user = useAppSelector((state) => state.user.value);
   const itinerary = useAppSelector((state) => state.itinerary.value);
@@ -59,19 +59,25 @@ const Navbar = (props: { history: any }) => {
     setAnchorEl(null);
   };
 
+  const handleErrorClose = (event: any, reason: SnackbarCloseReason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setErrorSnackbar(false);
+  };
+
   const handleLogout = async () => {
     try {
       await fetch(`/api/v1/auth/logout`, {
         method: "DELETE",
         credentials: "include",
       });
+
       dispatch(setUser({ isLoggedIn: false }));
-      window.localStorage.removeItem("user");
       handleMenuClick("/");
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      setErrorSnackbar(true);
     }
-    // store returned user somehow
   };
 
   const handleGetShareableLink = async () => {
@@ -85,8 +91,8 @@ const Navbar = (props: { history: any }) => {
       );
       const id = await res.json();
       setSharedID(id);
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      setErrorSnackbar(true);
     }
   };
 
@@ -195,7 +201,7 @@ const Navbar = (props: { history: any }) => {
   ];
 
   return (
-    <div className={classes.root}>
+    <sc.Root>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -215,9 +221,7 @@ const Navbar = (props: { history: any }) => {
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
           <sc.Logo>
-            <sc.LogoButton
-              onClick={() => handleMenuClick("/home?page=1")}
-            >
+            <sc.LogoButton onClick={() => handleMenuClick("/home?page=1")}>
               <>
                 <img
                   id="full-logo"
@@ -274,7 +278,7 @@ const Navbar = (props: { history: any }) => {
             style={{ position: "absolute", right: 20 }}
             onClick={handleDropdownClick}
           >
-            <AccountCircle style={{ width: 35, height: 35, color: GREY }} />
+            <sc.StyledAccountCircle />
           </IconButton>
           <Menu
             id="simple-menu"
@@ -341,7 +345,16 @@ const Navbar = (props: { history: any }) => {
         </List>
       </Drawer>
       {getInvalidItineraryDialog()}
-    </div>
+      <Snackbar
+        open={errorSnackbar}
+        autoHideDuration={3000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={() => setErrorSnackbar(false)} severity="error">
+          An unexpected error has occurred, please try again later.
+        </Alert>
+      </Snackbar>
+    </sc.Root>
   );
 };
 

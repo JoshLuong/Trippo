@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef, useCallback, useContext } from "react";
 import { TextField } from "@material-ui/core";
 import * as sc from "./TimeSlot.styles";
-import * as d from "../../app/destinations/destinationTypes";
+import * as d from "../icons";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { Grid, Tooltip, Input, InputAdornment } from "@material-ui/core";
 import moment from "moment";
@@ -55,8 +55,8 @@ const TimeSlot: FC<Props> = ({
     if (!shouldFetchSuggestions && showSuggestions) {
       setShouldFetchSuggestions(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[showSuggestions])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showSuggestions, setShouldFetchSuggestions])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const edit = useCallback(debounce(editActivity, 400), [editActivity]);
@@ -181,9 +181,8 @@ const TimeSlot: FC<Props> = ({
           <sc.Cost {...costStyling}>
             {activity.cost && !showEdit ? (
               <Tooltip
-                title={`${
-                  showCost ? "Hide from" : "Include in"
-                } the total daily cost`}
+                title={`${showCost ? "Hide from" : "Include in"
+                  } the total daily cost`}
               >
                 <button onClick={handleShowCostToggle}>
                   {showCost ? (

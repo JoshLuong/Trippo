@@ -19,17 +19,15 @@ import qs from "qs";
 import { useCallback } from "react";
 
 const ItinerariesView = () => {
-  const [
-    createItinerary, // This is the mutation trigger
-    { isLoading: isCreating }, // This is the destructured mutation result
-  ] = useCreateItineraryMutation();
-
-  const [updateItinerary, { isLoading: isUpdating }] =
-    useUpdateItineraryMutation();
-  const [deleteItinerary, { isLoading: isDeleting }] =
-    useDeleteItineraryMutation();
+  const [createItinerary, { isLoading: isCreating }] = useCreateItineraryMutation();
+  const [updateItinerary, { isLoading: isUpdating }] = useUpdateItineraryMutation();
+  const [deleteItinerary, { isLoading: isDeleting }] = useDeleteItineraryMutation();
   const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
+
   const [filterText, setFilterText] = useState("");
+  const [showNewItinerary, setShowNewItinerary] = useState(false);
+  const [successSnackbar, setSuccess] = useState(false);
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
 
   const history = useHistory();
   const location = useLocation();
@@ -38,11 +36,6 @@ const ItinerariesView = () => {
   const search = _.debounce((e: any) => {
     setFilterText(e.target.value);
   }, 400);
-
-  const [showNewItinerary, setShowNewItinerary] = useState(false);
-
-  const [successSnackbar, setSuccess] = useState(false);
-  const [errorSnackbar, setErrorSnackbar] = useState(false);
 
   const handlePageChange = useCallback(
     (_event: any, page: number) => {

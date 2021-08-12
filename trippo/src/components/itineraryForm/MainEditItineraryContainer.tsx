@@ -123,7 +123,7 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
         }
         const start_date = new Date(Date.UTC(Number(startDateArr[0]), Number(startDateArr[1]) - 1, Number(startDateArr[2])));
         const end_date = new Date(Date.UTC(Number(endDateArr[0]), Number(endDateArr[1]) - 1, Number(endDateArr[2])));
-        if (end_date <= start_date) {
+        if (end_date < start_date) {
             ret = false;
             setErrorMessage("Please ensure start date is before end date.");
         }

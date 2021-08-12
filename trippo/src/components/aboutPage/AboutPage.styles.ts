@@ -100,7 +100,7 @@ export const descHeader = styled.h2<descProps>`
     color: white;
   }
   a {
-    display: flex;
+    display: inline;
     align-items: center;
     span {
       margin-left: 7px;

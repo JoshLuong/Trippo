@@ -8,12 +8,13 @@ import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import WelcomePage from "components/welcomePage/WelcomePage";
 import AboutPage from "components/aboutPage/AboutPage";
-import { setUser } from "app/reducers/userSlice";
+import { setUser, setAppLoaded } from "app/reducers/userSlice";
 import { useAppDispatch, useAppSelector } from "app/store";
 import Snackbar, { SnackbarCloseReason } from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import PrivateRoute from "./PrivateRoute";
 import ItinerariesView from "components/itinerariesView/ItinerariesView";
+import Placeholder from 'components/placeholder/Placeholder';
 
 // Mapbox issue fix: https://github.com/mapbox/mapbox-gl-js/issues/10173#issuecomment-750489778
 // @ts-ignore
@@ -23,8 +24,10 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN!;
 
 function App() {
   const dispatch = useAppDispatch();
-  const history: any = useHistory();
   const user = useAppSelector((state) => state.user.value);
+  const isAppLoaded = useAppSelector((state) => state.user.isAppLoaded);
+
+  const history: any = useHistory();
   const [showSignInError, setShowSignInError] = useState(false);
 
   const handleFeedbackClose = (_event: any, reason: SnackbarCloseReason) => {
@@ -52,6 +55,9 @@ function App() {
         )
           history.push("/");
           console.error(e);
+      })
+      .finally(() => {
+        dispatch(setAppLoaded(true));
       });
   }, [dispatch, history]);
 
@@ -63,6 +69,10 @@ function App() {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history]);
+
+  if (!isAppLoaded) {
+    return <Placeholder />
+  }
 
   return (
     <>

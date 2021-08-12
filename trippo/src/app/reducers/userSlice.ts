@@ -7,6 +7,7 @@ interface IUser extends User {
 
 interface State {
   value: IUser | null;
+  isAppLoaded: boolean;
 }
 
 interface Action {
@@ -20,17 +21,21 @@ interface SliceReducers {
 export const user = createSlice<State, SliceReducers, "user">({
   name: "user",
   initialState: {
-    value: null
+    value: null,
+    isAppLoaded: false,
   },
   reducers: {
     setUser: (state: State, action: Action) => {
-      if (action?.payload) {
+      if (action.payload) {
         state.value = action.payload;
       }
+    },
+    setAppLoaded: (state: State, action: Action) => {
+      state.isAppLoaded = action.payload;
     }
   },
 });
 
-export const { setUser } = user.actions;
+export const { setUser, setAppLoaded } = user.actions;
 
 export default user.reducer;

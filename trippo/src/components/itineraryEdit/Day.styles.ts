@@ -5,22 +5,23 @@ import WarningIcon from "@material-ui/icons/Warning";
 import { IconButton } from "@material-ui/core";
 interface ButtonProps {
   $edit?: boolean;
+  $hasMarginTop?: boolean;
 }
 
 export const dayDiv = styled.div`
-  padding: 1em;
+  padding: 0.1em 1em 1em 1em;
   position: relative;
-  min-height: 100%;
+  min-height: calc(100% - 3.25em);
   box-sizing: border-box;
   overflow: auto;
   overflow-x: hidden;
 `;
 
-export const EditButton = styled(IconButton)<ButtonProps>`
+export const EditButton = styled(IconButton) <ButtonProps>`
   background-color: ${(props) =>
     props.$edit ? c.YELLOW : "rgba(0, 0, 0, 0.12)"};
   width: 7em;
-  line-heght: 1.25em;
+  line-height: 1.25em;
   border-radius: 10px;
   margin-bottom: 2em;
   text-transform: none;
@@ -28,6 +29,20 @@ export const EditButton = styled(IconButton)<ButtonProps>`
   color: ${c.BLACK};
   font-size: 1em;
   padding: 8px;
+  margin-top: ${(props) =>
+    props.$hasMarginTop ? "1.5em" : "0"};
+`;
+
+export const NoContent = styled.div`
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  margin-top: 0.5em;
+`;
+
+export const Tip = styled.span`
+  color: ${c.DARK_ORANGE};
+  font-weight: bold;
 `;
 
 export const NoContent = styled.div`
@@ -54,10 +69,15 @@ export const Spacer = styled.div`
 export const StickyDiv = styled.div`
   position: sticky;
   top: 0;
+  margin: 0 0.52em 0.35em 0.52em;
+  padding: 0.5em 1em;
+  height: 2.9em;
+  border-radius: 2.5px;
+  background: #ffffff;
+  z-index:2;
 `;
 
 export const dayDate = styled.div`
-  margin-bottom: 0.5em;
   display: flex;
   color: ${c.WHITE};
   font-weight: 545;
@@ -84,6 +104,10 @@ export const dayDate = styled.div`
   div {
     margin: auto;
     text-align: center;
+  }
+
+  @media (max-width: 650px) {
+    font-size: 0.8em;
   }
 `;
 

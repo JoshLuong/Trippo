@@ -1,17 +1,21 @@
 import styled from "styled-components";
 import BeachAccessIcon from "@material-ui/icons/BeachAccess";
 import * as c from "../../colors/colors";
-const Icon = styled.i`
+
+
+const Icon = styled.i <{ color: string }> `
   color: ${(props) => props.color};
   padding-right: 5px;
   margin-left: 3px;
 `;
+
 const StyledBeachIcon = styled(BeachAccessIcon)`
   padding-right: 5px;
   color: #00bbf9;
 `;
 
-const ShoppingIcon = styled.i`
+
+const ShoppingIcon = styled.i<{ color: string }>`
   color: ${(props) => props.color};
   padding-right: 5px;
 `;
@@ -94,7 +98,7 @@ export function getIconHexColor(t: string | undefined) {
       return "#ffd500";
     case ATTRACTION:
       return "#ef476f";
-    default: 
+    default:
       return c.YELLOW;
   }
 }

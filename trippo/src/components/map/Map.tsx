@@ -9,7 +9,6 @@ import ReactMapGL, {
 import Geocoder from "react-map-gl-geocoder";
 import moment from "moment";
 import { InteractiveMapProps } from "react-map-gl/src/components/interactive-map";
-// import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
 import { DARK_ORANGE } from "../../colors/colors";
 import { Pin } from "./Marker";
 import * as d from "../icons";
@@ -50,7 +49,7 @@ const reverseGeocodeAddress = async (lat: number, lng: number) => {
   )
     .then((res: any) => res.json())
     .then((data: any) => (address = data.features[0].place_name));
-  // let exactAddress = address.data.features[0].place_name;
+
   return address;
 };
 

@@ -13,11 +13,9 @@ interface GetItinerariesResponse {
   count: number;
 }
 
-// Define a service using a base URL and expected endpoints
 export const itineraryApi = createApi({
   reducerPath: 'itineraryApi',
   baseQuery: fetchBaseQuery({ baseUrl: `/api/itineraries` }),
-  // important: in order to use user cookie within backend, must have credentials and headers (if body present) present
   endpoints: (builder) => ({
     getItineraries: builder.query<GetItinerariesResponse, GetItinerariesRequest>({
       query: (req: GetItinerariesRequest) => {
@@ -89,8 +87,6 @@ export const itineraryApi = createApi({
   }),
 });
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
 export const {
   useGetItinerariesQuery,
   useLazyGetItinerariesQuery,

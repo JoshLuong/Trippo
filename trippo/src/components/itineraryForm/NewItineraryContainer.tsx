@@ -40,7 +40,6 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
 
     const handleSubmit = async () => {
         if (!user) return;
-        console.log(startRef.current?.value);
         const startDateArr = startRef.current?.value.split("-") || [];
         const endDateArr = endRef.current?.value.split("-") || [];
         if (!validate(startDateArr, endDateArr)) {
@@ -69,16 +68,15 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
             tags: tags,
             start_date: start_date,
             end_date: end_date,
-            activities: [], // TODO change
+            activities: [],
         };
-        console.log(newItinerary);
         await createItinerary(newItinerary).unwrap()
             .then((payload: any) => {
                 setSuccess(true);
                 handleShowNewItinerary(false);
             })
             .catch((error: any) => {
-                setErrorMessage("Something went wrong. Try again later.")
+                setErrorMessage("Something went wrong. Please make sure itinerary names are unique or try again later.")
                 setFail(true);
             });
     }
@@ -120,28 +118,49 @@ const NewItineraryContainer: FC<Props> = ({ setSuccess, handleShowNewItinerary, 
 
     return (
         <Dialog
-        open={true}
-        onClose={() => handleShowNewItinerary(false)}
+            open={true}
+            onClose={() => handleShowNewItinerary(false)}
         >
-        <sc.newItineraryContainer>
-            <sc.header>New Itinerary:</sc.header>
-            <sc.FormGrid direction="column">
-                <ItineraryOptionsContainer
-                    user={user} collabSetter={setCollaborators} destinationSetter={setDestination}
-                    tagSetter={setTags} setErrorMessage={setErrorMessage} descRef={descRef} nameRef={nameRef} errorMessage={errorMessage}
-                    setFail={setFail} failSnackbar={failSnackBar}
-                    defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={""} defaultName={""} />
-                <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={undefined} defaultEnd={""} defaultStart={""} />
-                <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}
-                    defaultMaxTravel={maxTravel} setMaxTravel={setMaxTravel} />
-                <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
-                    <Grid item xs={12} sm={9} md={6} lg={4}>
-                        <sc.userButton onClick={() => handleShowNewItinerary(false)} >Cancel</sc.userButton>
-                        <sc.userButton onClick={handleSubmit}>Submit</sc.userButton>
+            <sc.newItineraryContainer>
+                <sc.header>New Itinerary:</sc.header>
+                <sc.FormGrid>
+                    <ItineraryOptionsContainer
+                        user={user}
+                        collabSetter={setCollaborators}
+                        destinationSetter={setDestination}
+                        tagSetter={setTags}
+                        setErrorMessage={setErrorMessage}
+                        descRef={descRef}
+                        nameRef={nameRef}
+                        errorMessage={errorMessage}
+                        setFail={setFail}
+                        failSnackbar={failSnackBar}
+                        defaultCollaborators={collaborators}
+                        defaultDestination={destination}
+                        defaultTags={tags}
+                        defaultDesc={""}
+                        defaultName={""} />
+                    <DateGrid budgetRef={budgetRef}
+                        endRef={endRef}
+                        startRef={startRef}
+                        defaultBudget={undefined}
+                        defaultEnd={""}
+                        defaultStart={""} />
+                    <PreferencesContainer
+                        setPrice={setPrice}
+                        setRating={setRating}
+                        defaultRating={rating}
+                        defaultPrice={price}
+                        defaultMaxTravel={maxTravel}
+                        setMaxTravel={setMaxTravel} />
+                    <Grid container item direction="row" spacing={3} alignItems="flex-end" justify="flex-end">
+                        <sc.ButtonGrid item xs={12} sm={9} md={7} lg={5}>
+                            <sc.userButton onClick={() => handleShowNewItinerary(false)} >Cancel</sc.userButton>
+                            <sc.userButton onClick={handleSubmit}>Submit</sc.userButton>
+                        </sc.ButtonGrid>
                     </Grid>
-                </Grid>
-            </sc.FormGrid>
-        </sc.newItineraryContainer>
+                </sc.FormGrid>
+            </sc.newItineraryContainer>
         </Dialog>
     )
 }

@@ -13,7 +13,7 @@ export const SearchContainer = styled.div`
 
 export const Container = styled.div`
   border-radius: 7px;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,7 +21,6 @@ export const Container = styled.div`
   position: relative;
   @media (max-width: 1030px) {
     width: 60%;
-    height: 50%;
   }
   @media (max-width: 600px) {
     width: 90%;

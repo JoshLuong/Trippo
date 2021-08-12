@@ -1,7 +1,6 @@
 import { FC, useState, useEffect, Fragment, Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { TextField, Grid, Chip, Tooltip, Snackbar, SnackbarCloseReason } from '@material-ui/core'
-import { Autocomplete } from '@material-ui/lab';
-import Alert from '@material-ui/lab/Alert';
+import { Autocomplete, Alert } from '@material-ui/lab';
 import FaceIcon from '@material-ui/icons/Face';
 import * as sc from './NewItinieraryContainer.styles'
 import _ from "lodash";
@@ -24,8 +23,8 @@ interface Props {
     failSnackbar: boolean;
 }
 
+// required prop for autocompletes
 const collabData: any[] = [];
-
 const tagsData: any[] = [];
 
 const ItineraryOptionsContainer: FC<Props> = ({ defaultCollaborators, defaultDesc, defaultDestination, defaultName, defaultTags,

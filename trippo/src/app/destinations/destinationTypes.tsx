@@ -7,12 +7,13 @@ const Icon = styled.i <{ color: string }> `
   color: ${(props) => props.color};
   padding-right: 5px;
   margin-left: 3px;
-  `;
+`;
 
 const StyledBeachIcon = styled(BeachAccessIcon)`
   padding-right: 5px;
   color: #00bbf9;
 `;
+
 
 const ShoppingIcon = styled.i<{ color: string }>`
   color: ${(props) => props.color};

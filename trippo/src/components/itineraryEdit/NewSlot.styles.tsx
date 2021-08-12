@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import * as c from "../../colors";
 import { Grid, TextField, FormControl } from "@material-ui/core";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker } from "@material-ui/pickers";
@@ -196,7 +196,7 @@ export const textField = withStyles({
   },
 })(TextField);
 
-export const selectStyles = makeStyles((theme) => ({
+export const selectStyles = makeStyles(() => ({
   underline: {
     color: "#219EBC",
     "&::after": {

@@ -9,10 +9,9 @@ import ReactMapGL, {
 import Geocoder from "react-map-gl-geocoder";
 import moment from "moment";
 import { InteractiveMapProps } from "react-map-gl/src/components/interactive-map";
-// import { setHighlighted, TimeSlot } from 'app/reducers/daySlice';
-import { DARK_ORANGE } from "../../colors/colors";
+import { DARK_ORANGE } from "../../colors";
 import { Pin } from "./Marker";
-import * as t from "app/destinations/destinationTypes";
+import { getIconColor } from "../icons";
 import {
   ContextInterface,
   ItineraryContext,
@@ -157,8 +156,8 @@ const Map: FC<Props> = ({
               fill={
                 moment(itineraryContext?.activeDay).format("MMM Do YYYY") ===
                 moment(new Date(slot.time)).format("MMM Do YYYY")
-                  ? t.getIconColor(slot.type, "0.95")
-                  : t.getIconColor(slot.type, "0.25")
+                  ? getIconColor(slot.type, "0.95")
+                  : getIconColor(slot.type, "0.25")
               }
             />
           </Marker>

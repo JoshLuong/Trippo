@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import * as c from "../../colors";
 import { Grid, IconButton } from "@material-ui/core";
 import PeopleIcon from "@material-ui/icons/People";
 import LabelIcon from "@material-ui/icons/Label";

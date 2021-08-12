@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import * as d from "../../app/destinations/destinationTypes";
+import { FC } from "react";
+import * as d from "../icons";
 import * as utils from "../itineraryEdit/utils";
 import { Document, Page, Text, View, Link, Image } from "@react-pdf/renderer";
 import { styles } from "./ItineraryPDF.styles";

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import { DARK_GREY } from "../../colors";
 import EmailIcon from "@material-ui/icons/Email";
 
 export const StyledEmailIcon = styled(EmailIcon)``;
@@ -29,7 +29,7 @@ export const leftHeaderDiv = styled.div`
 export const aboutHeader = styled.h1`
   color: #ffffff;
   left: 0;
-  text-shadow: 2px 0px 7px ${c.DARK_GREY};
+  text-shadow: 2px 0px 7px ${DARK_GREY};
   font-size: 48px;
   font-weight: extra bold;
 

@@ -1,11 +1,8 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import * as c from "../../colors";
 import { Grid } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
 import { IconButton } from "@material-ui/core";
-interface ButtonProps {
-  $edit?: boolean;
-}
 
 export const dayDiv = styled.div`
   padding: 1em;
@@ -16,7 +13,7 @@ export const dayDiv = styled.div`
   overflow-x: hidden;
 `;
 
-export const EditButton = styled(IconButton)<ButtonProps>`
+export const EditButton = styled(IconButton)<{ $edit?: boolean }>`
   background-color: ${(props) =>
     props.$edit ? c.YELLOW : "rgba(0, 0, 0, 0.12)"};
   width: 7em;

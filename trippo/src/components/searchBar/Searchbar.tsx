@@ -5,8 +5,7 @@ import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import * as sc from "./Searchbar.styles";
-import { DARK_BLUE } from "../../colors/colors";
-import * as c from "../../colors/colors";
+import * as c from "../../colors";
 
 interface Props {
   children?: ReactElement<any, any>;
@@ -41,17 +40,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ColoredLine = () => (
-  // TODO remove inline style
-  <></>
-);
-
 const Searchbar: FC<Props> = ({ children, onChange }) => {
   const classes = useStyles();
-  // TODO remove inline line 60... do we need this? should just use margins
+
   return (
     <sc.SearchContainer>
-      <ColoredLine />
       {children ? (
         <sc.Container>{children}</sc.Container>
       ) : (

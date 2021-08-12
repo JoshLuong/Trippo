@@ -14,7 +14,6 @@ interface SliceReducers {
 }
 
 export const itinerary = createSlice<State, SliceReducers, "itinerary">({
-  // reducer uses the actions
   name: "itinerary",
   initialState: {
     value: null,
@@ -28,9 +27,6 @@ export const itinerary = createSlice<State, SliceReducers, "itinerary">({
   },
 });
 
-// Action creators are generated for each case reducer function
-export const {
-  setItinerary,
-} = itinerary.actions;
+export const { setItinerary } = itinerary.actions;
 
 export default itinerary.reducer;

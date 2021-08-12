@@ -8,7 +8,7 @@ import PreferencesContainer from './PreferencesContainer';
 import DateGrid from './DateGrid';
 import ItineraryOptionsContainer from "./ItineraryOptionsContainer"
 import CancelIcon from '@material-ui/icons/Close';
-import * as c from "../../colors/colors";
+import { WHITE } from "../../colors";
 
 interface Props {
     card: any;
@@ -143,15 +143,27 @@ const MainEditItineraryContainer: FC<Props> = ({ card, setSuccess, handleShowEdi
                 edge="start"
                 onClick={() => handleShowEditItinerary()}
             >
-                <CancelIcon style={{ color: c.WHITE }} />
+                <CancelIcon style={{ color: WHITE }} />
             </sc.StyledIconButton>
             <sc.header>Edit Itinerary:</sc.header>
             <sc.FormGrid direction="column">
                 <ItineraryOptionsContainer
                     user={user}
-                    collabSetter={setCollaborators} destinationSetter={setDestination} tagSetter={setTags} setErrorMessage={setErrorMessage}
-                    descRef={descRef} nameRef={nameRef} errorMessage={errorMessage} setFail={setFail} failSnackbar={failSnackBar}
-                    defaultCollaborators={collaborators} defaultDestination={destination} defaultTags={tags} defaultDesc={card.comments || ""} defaultName={card.name} />
+                    collabSetter={setCollaborators}
+                    destinationSetter={setDestination}
+                    tagSetter={setTags}
+                    setErrorMessage={setErrorMessage}
+                    descRef={descRef}
+                    nameRef={nameRef}
+                    errorMessage={errorMessage}
+                    setFail={setFail}
+                    failSnackbar={failSnackBar}
+                    defaultCollaborators={collaborators}
+                    defaultDestination={destination}
+                    defaultTags={tags}
+                    defaultDesc={card.comments || ""}
+                    defaultName={card.name}
+                />
                 <DateGrid budgetRef={budgetRef} endRef={endRef} startRef={startRef} defaultBudget={card.budget || undefined}
                     defaultEnd={parseDate(card.end_date)} defaultStart={parseDate(card.start_date)} />
                 <PreferencesContainer setPrice={setPrice} setRating={setRating} defaultRating={rating} defaultPrice={price}

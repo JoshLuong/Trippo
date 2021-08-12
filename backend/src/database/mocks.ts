@@ -1,11 +1,18 @@
-import { DestinationType } from '../types/destinationTypes';
+enum DestinationType {
+  ATTRACTION = "Attraction",
+  HOTEL = "Hotel",
+  AIRPORT = "Airport",
+  RESTAURANT = "Restaurant",
+  PARK = "Park",
+  BEACH = "Beach",
+  OTHER = "Other",
+  SHOPPING = "Shopping",
+}
 
 const date1 = new Date(2022, 5, 20);
 const date2 = new Date(2022, 5, 21);
 const date3 = new Date(2022, 5, 22);
 
-
-// need userID?
 export const users = [
   { name: "Joshua Luong", email: 'joshopolis321@gmail.com' },
   { name: "Joshua Luong2", email: 'joshualuong99@gmail.com' },

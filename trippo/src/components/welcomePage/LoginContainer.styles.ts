@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import { DARK_BLUE } from "../../colors";
 
 export const loginDiv = styled.div`
   text-align: center;
   position: relative;
   border-radius: 10px;
   background-color: white;
-  border-top: 10px solid ${c.DARK_BLUE};
+  border-top: 10px solid ${DARK_BLUE};
   margin-left: 5em;
   width: 80%;
   height: 60%;

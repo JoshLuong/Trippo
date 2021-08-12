@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import { BLACK } from "../../colors";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
@@ -10,7 +10,7 @@ export const AddButton = styled(IconButton)`
   text-transform: none;
   border: none;
   background-color: rgba(0, 0, 0, 0.12);
-  color: ${c.BLACK};
+  color: ${BLACK};
   font-size: 1em;
   padding: 8px;
 `;

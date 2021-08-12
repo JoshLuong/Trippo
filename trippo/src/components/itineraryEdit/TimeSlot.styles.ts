@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import * as c from "../../colors";
 import { Grid } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { TextField, FormControl } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
-const darkGrey = c.GREY;
 const disabledBorder = "border-right: 0px;";
 
 export interface StyledTimeSlotProps {
@@ -163,7 +162,7 @@ export const Cost = styled.div`
   }
 `;
 export const CommentButton = styled.div`
-  color: ${darkGrey};
+  color: ${c.GREY};
   button {
     border: none;
     height: 2em;

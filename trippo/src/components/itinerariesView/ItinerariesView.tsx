@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import * as sc from "./ItinerariesView.styles";
 import ItineraryCard from "./ItineraryCard";
-import _ from "lodash";
+import { debounce } from "lodash";
 import NewItineraryContainer from "components/itineraryForm/NewItineraryContainer";
 import Searchbar from "../searchBar/Searchbar";
 import {
@@ -19,30 +19,19 @@ import qs from "qs";
 import { useCallback } from "react";
 
 const ItinerariesView = () => {
-  const [
-    createItinerary, // This is the mutation trigger
-    { isLoading: isCreating }, // This is the destructured mutation result
-  ] = useCreateItineraryMutation();
-
-  const [updateItinerary, { isLoading: isUpdating }] =
-    useUpdateItineraryMutation();
-  const [deleteItinerary, { isLoading: isDeleting }] =
-    useDeleteItineraryMutation();
+  const [createItinerary,{ isLoading: isCreating }] = useCreateItineraryMutation();
+  const [updateItinerary, { isLoading: isUpdating }] = useUpdateItineraryMutation();
+  const [deleteItinerary, { isLoading: isDeleting }] = useDeleteItineraryMutation();
   const [triggerGetQuery, result] = useLazyGetItinerariesQuery();
+
   const [filterText, setFilterText] = useState("");
+  const [showNewItinerary, setShowNewItinerary] = useState(false);
+  const [successSnackbar, setSuccess] = useState(false);
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
 
   const history = useHistory();
   const location = useLocation();
   const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
-
-  const search = _.debounce((e: any) => {
-    setFilterText(e.target.value);
-  }, 400);
-
-  const [showNewItinerary, setShowNewItinerary] = useState(false);
-
-  const [successSnackbar, setSuccess] = useState(false);
-  const [errorSnackbar, setErrorSnackbar] = useState(false);
 
   const handlePageChange = useCallback(
     (_event: any, page: number) => {
@@ -64,12 +53,16 @@ const ItinerariesView = () => {
   }, [filterText, isUpdating, isCreating, isDeleting, page]);
 
   useEffect(() => {
+     // on filter change, if page > 1, destroy pagination
     if (Number(page || 1) !== 1 && filterText !== "") {
-      // on filter change, if page > 1, destroy pagination
       handlePageChange(null, 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterText]);
+
+  const search = debounce((e: any) => {
+    setFilterText(e.target.value);
+  }, 400);
 
   const handleShowNewItinerary = (canShow: boolean) => {
     setShowNewItinerary(canShow);
@@ -89,7 +82,6 @@ const ItinerariesView = () => {
     setErrorSnackbar(false);
   };
 
-  // TODO: take out inline style; move to search
   return (
     <sc.ItinerariesViewGrid>
       <Snackbar

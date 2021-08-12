@@ -1,4 +1,4 @@
-import {DARK_BLUE } from "../../colors/colors";
+import { DARK_BLUE } from "../../colors";
 
 export const Pin = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" height="40" viewBox="96.9 48.742 270.895 404.002" fill={props.fill || DARK_BLUE} {...props}>

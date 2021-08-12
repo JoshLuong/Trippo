@@ -13,8 +13,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import TextLoop from "react-text-loop";
-import * as c from "../../colors/colors";
-import { hexColorList } from "../../app/destinations/destinationTypes";
+import { hexColorList } from "../icons";
 import {
   Dialog,
   DialogActions,
@@ -31,7 +30,7 @@ import { withRouter } from "react-router-dom";
 import moment from "moment";
 import FadeIn from "react-fade-in";
 import { useAppDispatch, useAppSelector } from "app/store";
-import { BLACK, GREY, WHITE } from "../../colors/colors";
+import { BLACK, WHITE, GREY } from "../../colors";
 import { useStyles } from "./Navbar.styles";
 import * as sc from "./Navbar.styles";
 

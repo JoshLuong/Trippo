@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import FadeIn from "react-fade-in";
 import * as sc from "./ItineraryCard.styles";
-import * as c from "../../colors/colors";
+import * as c from "../../colors";
 import moment from "moment";
 import { Grid } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -27,14 +27,11 @@ interface Props {
 const renderNames = (
   name: string,
   card: Itinerary,
-  user: User,
   result: User
 ) => {
   const { collaborators } = card;
   const users = collaborators.slice();
-  let names = "";
-
-  names = `${result.name} (owner)`;
+  let names = `${result.name} (owner)`;
 
   if (users.length === 1) {
     names += `, ${users[0].name}`;
@@ -102,7 +99,7 @@ const ItineraryCard: FC<Props> = ({
         >
           <Grid item container lg={12}>
             <Grid container item lg={7} sm={12}>
-              {user && result && renderNames(card.name, card, user, result)}
+              {user && result && renderNames(card.name, card, result)}
             </Grid>
             <sc.DateGrid container item lg={5} sm={12}>
               <i className="far fa-calendar-alt"></i>
@@ -125,11 +122,11 @@ const ItineraryCard: FC<Props> = ({
             </sc.CommentGrid>
             {card.tags && (
               <sc.LabelGrid container item lg={12}>
-                {card.tags.map((card: any, index: number) => {
+                {card.tags.map((tag: string, index: number) => {
                   return (
                     <sc.LabelDiv key={index}>
                       <sc.StyledLabelIcon />
-                      {card}
+                      {tag}
                     </sc.LabelDiv>
                   );
                 })}
@@ -143,8 +140,7 @@ const ItineraryCard: FC<Props> = ({
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  Are you sure you want to delete {<strong>{card.name}</strong>}
-                  ?
+                  Are you sure you want to delete {<strong>{card.name}</strong>}?
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">

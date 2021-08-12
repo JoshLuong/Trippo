@@ -1,3 +1,14 @@
+export enum ActivityType {
+  ATTRACTION = "Attraction",
+  HOTEL = "Hotel",
+  AIRPORT = "Airport",
+  RESTAURANT = "Restaurant",
+  PARK = "Park",
+  BEACH = "Beach",
+  OTHER = "Other",
+  SHOPPING = "Shopping",
+}
+
 export interface ActivityPopup {
   _id: string;
   location: {
@@ -19,10 +30,9 @@ export interface Activity {
   time: string;
   destination?: string;
   cost?: number;
-  type?: string;
+  type?: ActivityType;
   comments: string[];
   business_ids?: string[];
-  // TODO DELETE
   suggested?: {
     destination?: string;
     type?: string;
@@ -56,7 +66,7 @@ export interface Yelp {
 
 export interface Itinerary {
   _id: string;
-  user_id: any; // should we use mongoose ObjectID type?
+  user_id: any;
   name: string;
   start_date: Date;
   end_date: Date;

@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { InputLabel, Select, MenuItem } from "@material-ui/core";
 import * as sc from "./NewSlot.styles";
-import * as d from "../../app/destinations/destinationTypes";
+import * as d from "../icons";
 import { Grid, CircularProgress } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { useAppDispatch, useAppSelector } from "app/store";
@@ -13,7 +13,7 @@ import {
   useCreateActivityMutation,
   useLazyGetItineraryByIdQuery,
 } from "services/itinerary";
-import { Activity } from "types/models";
+import { Activity, ActivityType } from "types/models";
 import {
   ContextInterface,
   ItineraryContext,
@@ -42,7 +42,7 @@ const NewSlot: FC<Props> = ({
   const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
   const dispatch = useAppDispatch();
   const itinerary = useAppSelector((state) => state.itinerary.value);
-  const [type, setType] = useState(d.OTHER);
+  const [type, setType] = useState(ActivityType.OTHER);
   const [cost, setCost] = useState(0);
   const [comments, setComments] = useState("");
   const [time, setTime] = useState("12:00");
@@ -223,37 +223,37 @@ const NewSlot: FC<Props> = ({
               onChange={handleTypechange}
               label="Type"
             >
-              <MenuItem value={d.AIRPORT}>
-                {d.renderIcon(d.AIRPORT)}
-                {d.AIRPORT}
+              <MenuItem value={ActivityType.AIRPORT}>
+                {d.renderIcon(ActivityType.AIRPORT)}
+                {ActivityType.AIRPORT}
               </MenuItem>
-              <MenuItem value={d.ATTRACTION}>
-                {d.renderIcon(d.ATTRACTION)}
-                {d.ATTRACTION}
+              <MenuItem value={ActivityType.ATTRACTION}>
+                {d.renderIcon(ActivityType.ATTRACTION)}
+                {ActivityType.ATTRACTION}
               </MenuItem>
-              <MenuItem value={d.BEACH}>
-                {d.renderIcon(d.BEACH)}
-                {d.BEACH}
+              <MenuItem value={ActivityType.BEACH}>
+                {d.renderIcon(ActivityType.BEACH)}
+                {ActivityType.BEACH}
               </MenuItem>
-              <MenuItem value={d.HOTEL}>
-                {d.renderIcon(d.HOTEL)}
-                {d.HOTEL}
+              <MenuItem value={ActivityType.HOTEL}>
+                {d.renderIcon(ActivityType.HOTEL)}
+                {ActivityType.HOTEL}
               </MenuItem>
-              <MenuItem value={d.PARK}>
-                {d.renderIcon(d.PARK)}
-                {d.PARK}
+              <MenuItem value={ActivityType.PARK}>
+                {d.renderIcon(ActivityType.PARK)}
+                {ActivityType.PARK}
               </MenuItem>
-              <MenuItem value={d.RESTAURANT}>
-                {d.renderIcon(d.RESTAURANT)}
-                {d.RESTAURANT}
+              <MenuItem value={ActivityType.RESTAURANT}>
+                {d.renderIcon(ActivityType.RESTAURANT)}
+                {ActivityType.RESTAURANT}
               </MenuItem>
-              <MenuItem value={d.SHOPPING}>
-                {d.renderIcon(d.SHOPPING)}
-                {d.SHOPPING}
+              <MenuItem value={ActivityType.SHOPPING}>
+                {d.renderIcon(ActivityType.SHOPPING)}
+                {ActivityType.SHOPPING}
               </MenuItem>
-              <MenuItem value={d.OTHER}>
-                <em>{d.renderIcon(d.OTHER)}</em>
-                {d.OTHER}
+              <MenuItem value={ActivityType.OTHER}>
+                <em>{d.renderIcon(ActivityType.OTHER)}</em>
+                {ActivityType.OTHER}
               </MenuItem>
             </Select>
           </sc.StyledFormControl>

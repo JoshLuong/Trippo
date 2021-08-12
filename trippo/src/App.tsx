@@ -42,18 +42,16 @@ function App() {
       .then((user) => {
         if (user && !user.error) {
           dispatch(setUser({ isLoggedIn: true, ...user }));
-          window.localStorage.setItem("user", user.name);
         }
       })
       .catch((e: string) => {
-        window.localStorage.removeItem("user");
-        console.log(history);
         if (
           history.location.pathname !== "/about" &&
           history.location.pathname !== "/" &&
           !history.location.pathname.includes("/shared")
         )
           history.push("/");
+          console.error(e);
       });
   }, [dispatch, history]);
 

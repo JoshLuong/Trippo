@@ -11,6 +11,7 @@ import sharedItineraryRouter from "./routes/sharedItineraries";
 import userRouter from "./routes/users";
 import googleAuthRouter from "./routes/googleAuth";
 import yelpFusionRouter from "./routes/yelpFusion";
+import { redirectToHTTPS } from "express-http-to-https";
 
 mongoose
   .connect(process.env.DATABASE_URL!, {
@@ -20,12 +21,19 @@ mongoose
   .then(() => {
     const app = express();
     const PORT = process.env.PORT || 4000;
-    var redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
+    const corsOptions = {
+      origin: process.env.ORIGIN,
+      credentials: true,
+      preflightContinue: false,
+    };
+
     app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
+
     // Serve React app from express
     app.use(
       express.static(path.join(__dirname, "..", "..", "trippo", "build"))
     );
+
     app.get("*", (req, res, next) => {
       if (req.path.startsWith("/api")) {
         return next();
@@ -44,11 +52,12 @@ mongoose
       })
     );
 
-    // place above middleware to allow un-authenticated users to view shareable itineraries
+    // Placed above middleware to allow un-authenticated users to view shareable itineraries
     app.use("/api/shared/itineraries", sharedItineraryRouter);
 
     app.use(async (req: any, res, next) => {
       const user = await User.findById(req.session.userId).exec();
+
       if (
         req.originalUrl !== "/api/v1/auth/google" &&
         req.originalUrl !== "/api/v1/auth/logout" &&
@@ -56,19 +65,15 @@ mongoose
         !user
       ) {
         res.status(404).send({ error: "User not found" });
-        return next("invalid user");
+        return next("Invalid user");
       }
-      req.user = user; // you can access req.user anywhere in the API now
+
+      req.user = user;
       next();
     });
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    const corsOptions = {
-      origin: process.env.ORIGIN,
-      credentials: true,
-      preflightContinue: false,
-    };
     app.use(cors(corsOptions));
 
     app.use("/api/itineraries", itineraryRouter);

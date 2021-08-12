@@ -1,14 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { User } from 'types/models';
 
-export type User = {
-  isLoggedIn: boolean,
-  name: string,
-  email: string,
-  _id: string,
-} | null
+interface IUser extends User {
+  isLoggedIn: boolean;
+}
 
 interface State {
-  value: User;
+  value: IUser | null;
 }
 
 interface Action {
@@ -20,7 +18,6 @@ interface SliceReducers {
 }
 
 export const user = createSlice<State, SliceReducers, "user">({
-  // reducer uses the actions
   name: "user",
   initialState: {
     value: null
@@ -34,9 +31,6 @@ export const user = createSlice<State, SliceReducers, "user">({
   },
 });
 
-// Action creators are generated for each case reducer function
-export const {
-  setUser
-} = user.actions;
+export const { setUser } = user.actions;
 
 export default user.reducer;

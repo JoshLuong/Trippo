@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import { DARK_GREY } from "../../colors";
 
 export const containerDiv = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ export const headerDiv = styled.div`
 
 export const homeHeader = styled.h1`
   color: #ffffff;
-  text-shadow: 2px 0px 7px ${c.DARK_GREY};  
+  text-shadow: 2px 0px 7px ${DARK_GREY};  
   font-size: 48px;
   font-weight: extra bold;
   @media(max-width: 1130px){

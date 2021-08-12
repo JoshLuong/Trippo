@@ -1,12 +1,12 @@
 import React, { FC, useState, useRef, useCallback, useContext } from "react";
 import { TextField } from "@material-ui/core";
 import * as sc from "./TimeSlot.styles";
-import * as d from "../../app/destinations/destinationTypes";
+import * as d from "../icons";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { Grid, Tooltip, Input, InputAdornment } from "@material-ui/core";
 import moment from "moment";
 import Suggestions from "./Suggestions";
-import * as c from "../../colors/colors";
+import { DARK_ORANGE } from "../../colors";
 import { Activity } from "types/models";
 import {
   ContextInterface,
@@ -111,7 +111,7 @@ const TimeSlot: FC<Props> = ({
         ) : (
           <Tooltip title="Hide suggestions" aria-label="Hide suggestions">
             <i
-              style={{ color: c.DARK_ORANGE }}
+              style={{ color: DARK_ORANGE }}
               className="fas fa-chevron-up"
             ></i>
           </Tooltip>

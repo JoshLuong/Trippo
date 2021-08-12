@@ -3,7 +3,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { Button, Tooltip } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import * as c from "../../colors";
 
 const drawerWidth = 240;
 

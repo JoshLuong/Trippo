@@ -4,6 +4,7 @@
 
 // If they are: they proceed to the page
 // If not: they are redirected to the login page.
+import { useAppSelector } from 'app/store';
 import React, { FC } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 
@@ -14,11 +15,13 @@ interface Props {
 }
 
 const PrivateRoute: FC<Props> = ({ component: Component, ...rest }) => {
+  const user = useAppSelector((state) => state.user.value);
+
   return (
     <Route
       {...rest}
       render={props =>
-        window.localStorage.getItem("user") ? (
+        user?.isLoggedIn ? (
           <Component {...props} />
         ) : (
           <Redirect to={{ pathname: '/', state: { from: props.location } }} />

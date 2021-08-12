@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import * as c from "../../colors/colors";
+import * as c from "../../colors";
 import { Grid } from "@material-ui/core";
 
 export const Time = styled.div`
@@ -81,10 +81,7 @@ export const Distance = styled.div`
   }
 `;
 
-interface HiddenProps {
-  $isHidden?: boolean;
-}
-export const ContainerGrid = styled(Grid)<HiddenProps>`
+export const ContainerGrid = styled(Grid)<{ $isHidden?: boolean }>`
   width: 100%;
   color: rgba(71, 71, 71, 0.55);
   font-size: 0.85em;

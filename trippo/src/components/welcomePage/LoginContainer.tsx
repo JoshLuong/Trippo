@@ -20,19 +20,12 @@ const LoginContainer: FC<Props> = (Props) => {
     updateForgotPassword(!forgotPasswordClicked);
   };
 
-    return (
-        <div>
-            {!signUpClicked && !forgotPasswordClicked &&
-                <LoginPane handleLoginError={Props.handleLoginError} onSignUp={handleSignUp} onForgotPassword={handleForgotPassword} />
-            }
-            {signUpClicked &&
-                <SignUpPane handleBack={handleSignUp} />
-            }
-            {forgotPasswordClicked &&
-                <ForgotPasswordPane handleBack={handleForgotPassword} />
-            }
-        </div>
-    )
+  return (
+    <div>
+
+      <LoginPane handleLoginError={Props.handleLoginError} onSignUp={handleSignUp} onForgotPassword={handleForgotPassword} />
+    </div>
+  )
 }
 
 export default LoginContainer;

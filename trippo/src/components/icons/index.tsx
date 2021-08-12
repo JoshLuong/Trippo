@@ -16,7 +16,7 @@ export function renderIcon(t: ActivityType | undefined) {
     case ActivityType.BEACH:
       return <StyledBeachIcon fontSize="small" />;
     case ActivityType.SHOPPING:
-      return <Icon color="#ffd500" className="fas fa-shopping-cart"></Icon>;
+      return <ShoppingIcon color="#ffd500" className="fas fa-shopping-cart"></ShoppingIcon>;
     case ActivityType.ATTRACTION:
       return <Icon color="#ef476f" className="fas fa-camera"></Icon>;
     default:
@@ -61,7 +61,7 @@ export function getIconHexColor(t: string | undefined) {
       return "#ffd500";
     case ActivityType.ATTRACTION:
       return "#ef476f";
-    default: 
+    default:
       return YELLOW;
   }
 }
@@ -80,7 +80,14 @@ export const hexColorList = [
 const Icon = styled.i`
   color: ${(props) => props.color};
   padding-right: 5px;
+  margin-left: 3px;
 `;
+
+const ShoppingIcon = styled.i`
+  color: ${(props) => props.color};
+  padding-right: 5px;
+`;
+
 const StyledBeachIcon = styled(BeachAccessIcon)`
   padding-right: 5px;
   color: #00bbf9;

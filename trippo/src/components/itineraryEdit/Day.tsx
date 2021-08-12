@@ -1,256 +1,178 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useState, useEffect, useContext } from "react";
 import * as sc from "./Day.styles";
-import * as d from "../../app/destinations/destinationTypes";
-import * as c from "../../colors/colors";
 import TimeSlot from "./TimeSlot";
 import moment from "moment";
-import Settings from "./Settings";
-import { Grid } from "@material-ui/core";
-import { setLocations, Location } from "../../app/reducers/locationSlice";
-import { useAppDispatch } from 'app/store';
+import {
+  ContextInterface,
+  ItineraryContext,
+} from "../itineraryPage/ItineraryPage";
+import { Grid, Tooltip } from "@material-ui/core";
+import { useAppSelector } from "app/store";
+import { Activity } from "types/models";
+import { getDistanceFromLatLonInKm } from "./utils";
 
 interface Props {
   date: Date;
+  size?: string;
+  isReadOnly?: boolean;
   handleCalendarView: () => void;
 }
 
-const Day: FC<Props> = ({ date, handleCalendarView }) => {
-  let timeSlots = [
-    {
-      id: 1,
-      coordinates: {
-        lat: 49.26765379043226,
-        lng: -123.01076355931461,
-      },
-      time: new Date(date.setHours(8)),
-      destination: "Executive Suites Hotel Metro Vancouver",
-      cost: 10,
-      type: d.HOTEL,
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          type: d.OTHER,
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      cost: 20,
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      cost: 50,
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(8)),
-      destination: "Hotel",
-      comments: [
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        "rest",
-      ],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-    {
-      time: new Date(date.setHours(13)),
-      destination: "Hotel",
-      comments: ["unpack", "rest"],
-      suggested: [
-        {
-          destination: "Aquarium",
-          comments: "3 min away",
-        },
-        {
-          destination: "Park",
-          comments: "10 min away",
-        },
-      ],
-    },
-  ];
-  let cost = timeSlots
-    .map((slot) => (slot.cost ? slot.cost : 0))
-    .reduce(function (total, cost) {
-      return total + cost;
-    });
-  const [settings, setSettings] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [dayCost, setDayCost] = useState(cost);
-  const dispatch = useAppDispatch();
+const Day: FC<Props> = ({
+  date,
+  handleCalendarView,
+  size = "regular",
+  isReadOnly = false,
+}) => {
+  const itinerary = useAppSelector((state) => state.itinerary.value);
+  const [editedItinerary, setEditedItinerary] = useState(itinerary);
+  let prevActivity: Activity | null = null;
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
 
-  const handleSettingsView = () => {
-    setSettings(!settings);
+  const [edit, setEdit] = useState(false);
+  const [dayCost, setDayCost] = useState(0);
+  const [currentCostOffset, setCurrentCostOffset] = useState(
+    itinerary?.current_cost || 0
+  );
+
+  const editActivity = (activity: Activity) => {
+    if (editedItinerary) {
+      const activities: Activity[] = editedItinerary.activities.map((e) => {
+        return e._id === activity._id ? activity : e;
+      });
+      setEditedItinerary({
+        ...editedItinerary,
+        activities,
+      });
+      itineraryContext?.setUnsavedChanges(true);
+    }
+  }
+
+  const deleteActivity = (activity: Activity) => {
+    if (editedItinerary) {
+      setEditedItinerary({
+        ...editedItinerary,
+        activities: editedItinerary.activities.filter(
+          (e) => e._id !== activity._id
+        ),
+      });
+      itineraryContext?.setUnsavedChanges(true);
+    }
   };
 
+  useEffect(() => {
+    if (itinerary) {
+      setEditedItinerary(itinerary);
+    }
+  }, [itinerary]);
+
+  const dayActivities =
+    editedItinerary?.activities.filter((activity) =>
+      moment(date).isSame(moment(activity.time), "date")
+    ) || [];
+
+  useEffect(() => {
+    const totalCost = dayActivities.reduce(function (total, activity) {
+      return total + (activity.cost || 0);
+    }, 0);
+
+    setDayCost(totalCost);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayActivities.length, editedItinerary]);
+
   const handleEditView = () => {
+    if (edit && itineraryContext?.unsavedChanges) {
+      itineraryContext.updateItinerary(editedItinerary!);
+      itineraryContext.setUnsavedChanges(false);
+    }
     setEdit(!edit);
   };
 
   const handleHideCostToggle = (slotCost: number | undefined) => {
     setDayCost(dayCost + (slotCost || 0));
+    setCurrentCostOffset(currentCostOffset + (slotCost || 0));
   };
-
-  const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-
-  useEffect(() => {
-    const locations = timeSlots.reduce((acc: Location[], slot) => {
-      if (slot.id) {
-        acc.push({
-          coordinates: slot.coordinates,
-          timeSlotId: slot.id,
-        });
-      }
-      return acc;
-    }, []);
-
-    dispatch(setLocations(locations));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <sc.dayDiv>
-      <sc.dayDate>
-        {settings ? (
-          <button style={{ float: "left" }} onClick={handleSettingsView}>
-            <i className="fas fa-chevron-left"></i>
-            <i className="fas fa-list"></i>
-          </button>
-        ) : (
-          <button style={{ float: "left" }} onClick={handleCalendarView}>
-            <i className="fas fa-chevron-left"></i>
-            <i className="far fa-calendar-alt"></i>
-          </button>
-        )}
-        <div>
-          {days.map((d, index) => {
-            if (index === date.getDay()) {
-              return <sc.daysWeek key={index}>{d}</sc.daysWeek>;
-            }
-            return (
-              <sc.daysWeek
-                key={index}
-                style={{ background: "#fff", color: c.BLACK }}
-              >
-                {d}
-              </sc.daysWeek>
-            );
-          })}
-        </div>
-        <button onClick={handleSettingsView}>
-          <i className="fas fa-cog"></i>
-        </button>
-      </sc.dayDate>
-      {settings ? (
-        <Settings></Settings>
-      ) : (
-        <div style={{ zIndex: 1 }}>
-          {timeSlots.map((slot, idx) => {
-            return (
-              <div key={idx}>
-                <TimeSlot
-                  handleHideCostToggle={handleHideCostToggle}
-                  timeSlot={slot}
-                  showEdit={edit}
-                />
-              </div>
-            );
-          })}
+      <sc.StickyDiv>
+        <sc.dayDate>
+          {!isReadOnly && (
+            <button style={{ float: "left" }} onClick={handleCalendarView}>
+              <i className="fas fa-chevron-left"></i>
+              <i className="far fa-calendar-alt"></i>
+            </button>
+          )}
+          <sc.daysWeek>{moment(date).format("MMMM Do YYYY")}</sc.daysWeek>
+        </sc.dayDate>
+      </sc.StickyDiv>
+      <div>
+        <sc.TimeSlots>
+          {dayActivities
+            .sort((a, b) => a.time.localeCompare(b.time))
+            .map((activity, idx) => {
+              const prevDistance = prevActivity
+                ? getDistanceFromLatLonInKm(
+                    prevActivity.location?.lat,
+                    prevActivity.location?.lng,
+                    activity.location.lat,
+                    activity.location.lng
+                  )
+                : -1;
+              prevActivity = activity;
+              return (
+                <div key={activity._id}>
+                  {prevDistance >= 0 && (
+                    <sc.Distance>{prevDistance} kms away</sc.Distance>
+                  )}
+                  <TimeSlot
+                    isReadOnly={isReadOnly}
+                    size={size}
+                    handleHideCostToggle={handleHideCostToggle}
+                    activity={activity}
+                    showEdit={edit}
+                    index={idx}
+                    editActivity={editActivity}
+                    deleteActivity={deleteActivity}
+                  />
+                </div>
+              );
+            })}
+        </sc.TimeSlots>
+        {dayCost > 0 && (
           <sc.Cost container item lg={12}>
-            <div>Total cost for {moment(date).format("YYYY/MM/DD")}:</div>
-            <div>${dayCost}</div>
-          </sc.Cost>
-          <Grid
-            item
-            style={{ marginTop: "0.65em", textAlign: "center" }}
-            lg={12}
-            md={12}
-            sm={12}
-            xs={12}
-          >
-            {edit ? (
-              <>
-                <sc.EditButton
-                  style={{ marginRight: "2em" }}
-                  onClick={() => alert("TODO")}
+            <div>Total cost for {moment(date).format("MMM Do YYYY")}:</div>
+            <div>
+              {itinerary &&
+              itinerary.budget &&
+              currentCostOffset > itinerary.budget ? (
+                <Tooltip
+                  title={`Warning: You're over the total trip budget of $${
+                    itinerary.budget
+                  } by $${currentCostOffset - itinerary.budget}`}
                 >
-                  Cancel
-                </sc.EditButton>
-                <sc.Spacer />
-              </>
-            ) : null}
-            <sc.EditButton onClick={handleEditView}>
+                  <sc.StyledWarningIcon />
+                </Tooltip>
+              ) : null}
+              <span>${dayCost}</span>
+            </div>
+          </sc.Cost>
+        )}
+        <Grid
+          item
+          style={{ marginTop: "0.65em", textAlign: "center" }}
+          lg={12}
+          md={12}
+          sm={12}
+          xs={12}
+        >
+          {!isReadOnly && (
+            <sc.EditButton $edit={edit} onClick={handleEditView}>
               {edit ? "Done" : "Edit"}
             </sc.EditButton>
-          </Grid>
-        </div>
-      )}
+          )}
+        </Grid>
+      </div>
     </sc.dayDiv>
   );
 };

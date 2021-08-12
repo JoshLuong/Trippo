@@ -11,18 +11,169 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import TextLoop from "react-text-loop";
+import * as c from "../../colors/colors";
+import { hexColorList } from "../../app/destinations/destinationTypes";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
+import LinkIcon from "@material-ui/icons/Link";
+import { setUser } from "app/reducers/userSlice";
 import ListItem from "@material-ui/core/ListItem";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import { withRouter } from "react-router-dom";
-import { BLACK, WHITE } from "../../colors/colors";
+import moment from "moment";
+import FadeIn from "react-fade-in";
+import { useAppDispatch, useAppSelector } from "app/store";
+import { BLACK, GREY, WHITE } from "../../colors/colors";
 import { useStyles } from "./Navbar.styles";
+import * as sc from "./Navbar.styles";
 
 // https://github.com/mui-org/material-ui/tree/master/docs/src/pages/components/drawers
 
 const Navbar = (props: { history: any }) => {
   const { history } = props;
+  const IS_SHARED = history.location.pathname.includes("/shared");
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isShareableLinkOpen, setIsShareableLinkOpen] = React.useState(false);
+  const [sharedID, setSharedID] = React.useState(null);
+
+  const user = useAppSelector((state) => state.user.value);
+  const itinerary = useAppSelector((state) => state.itinerary.value);
+  const dispatch = useAppDispatch();
+
+  const handleDropdownClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleDropdownClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch(`/api/v1/auth/logout`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      dispatch(setUser({ isLoggedIn: false }));
+      window.localStorage.removeItem("user");
+      handleMenuClick("/");
+    } catch (e) {
+      console.log(e);
+    }
+    // store returned user somehow
+  };
+
+  const handleGetShareableLink = async () => {
+    try {
+      const res = await fetch(
+        `/api/itineraries/shareable-link/` + itinerary?._id,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const id = await res.json();
+      setSharedID(id);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getLoopSpan = (text: string) => {
+    const max = hexColorList.length;
+    const min = 0;
+    return (
+      <span
+        aria-hidden
+        style={{
+          color: hexColorList[Math.floor(Math.random() * (max - min) + min)],
+        }}
+      >
+        {text}
+      </span>
+    );
+  };
+
+  const getLoopText = () => {
+    return (
+      <sc.LoopDiv>
+        {`Where would you like to visit? `}
+        <TextLoop>
+          {getLoopSpan("Bora Bora Island, French Polynesia?")}
+          {getLoopSpan("Machu Picchu, Peru?")}
+          {getLoopSpan("Great Barrier Reef, Australia?")}
+          {getLoopSpan("Bangkok, Thailand?")}
+          {getLoopSpan("Cappadocia, Turkey?")}
+          {getLoopSpan("Paris, France?")}
+          {getLoopSpan("New York, United States?")}
+          {getLoopSpan("Rothenburg – Germany?")}
+          {getLoopSpan("Guanajuato, Mexico?")}
+          {getLoopSpan("Angkor Wat, Cambodia?")}
+          {getLoopSpan("Cinque Terre, Italy?")}
+          {getLoopSpan("Taj Mahal, India?")}
+          {getLoopSpan("Bali, Indonesia?")}
+          {getLoopSpan("Singapore – City of Garden?")}
+          {getLoopSpan("Santorini, Greece?")}
+          {getLoopSpan("Milford Sound, New Zealand?")}
+          {getLoopSpan("Blue Lake Luzern, Switzerland?")}
+          {getLoopSpan("Madrid, Spain?")}
+          {getLoopSpan("London, United Kingdom?")}
+          {getLoopSpan("The Colosseum Rome, Italy?")}
+          {getLoopSpan("Bryce Canyon Bryce, Utah?")}
+          {getLoopSpan("Niagara Falls, Canada?")}
+          {getLoopSpan("Budapest, Hungary?")}
+        </TextLoop>
+      </sc.LoopDiv>
+    );
+  };
+
+  const getInvalidItineraryDialog = () => {
+    const link: string = "https://trippoapp.herokuapp.com/shared/" + sharedID;
+    return (
+      <Dialog
+        open={isShareableLinkOpen && sharedID !== null}
+        onClose={() => setIsShareableLinkOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Anyone with this link has <strong>restricted</strong> read-only
+          access.
+          <br />
+          <sc.StyledLink value={link} />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            To allow read and write access, add collaborators to your itinerary!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <sc.StyledButton
+            onClick={() => {
+              if (navigator.clipboard) navigator.clipboard.writeText(link);
+              setIsShareableLinkOpen(false);
+            }}
+            color="primary"
+            autoFocus
+          >
+            Copy link
+          </sc.StyledButton>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -33,16 +184,13 @@ const Navbar = (props: { history: any }) => {
 
   const handleMenuClick = (pageURL: string) => {
     history.push(pageURL);
+    handleDrawerClose();
   };
 
   const menuItems = [
     {
-      menuTitle: "Welcome",
-      pageURL: "/",
-    },
-    {
-      menuTitle: "My Itineraries",
-      pageURL: "/itineraries",
+      menuTitle: "Home",
+      pageURL: "/home?page=1",
     },
   ];
 
@@ -66,14 +214,98 @@ const Navbar = (props: { history: any }) => {
           >
             <MenuIcon style={{ color: BLACK }} />
           </IconButton>
-          <div style={{display: "flex", justifyContent: "center"}}>
-            <img src="trippo.png" alt="Trippo logo" width="120"></img>
-          </div>
+          <sc.Logo>
+            <sc.LogoButton
+              onClick={() => handleMenuClick("/home?page=1")}
+            >
+              <>
+                <img
+                  id="full-logo"
+                  alt="Trippo Logo"
+                  src="/trippo.png"
+                  width="120"
+                ></img>
+                <img
+                  id="icon-logo"
+                  alt="Trippo Logo"
+                  src="/trippo-icon.png"
+                  width="25"
+                ></img>
+              </>
+            </sc.LogoButton>
+          </sc.Logo>
+          {history.location.pathname.includes("/home") && (
+            <sc.ItineraryTitleContainer>
+              {getLoopText()}
+            </sc.ItineraryTitleContainer>
+          )}
+          {(history.location.pathname.includes("itinerary") || IS_SHARED) &&
+          itinerary ? (
+            <sc.ItineraryTitleContainer>
+              <FadeIn transitionDuration={600} delay={500}>
+                <sc.ItineraryTitle>
+                  <span>{itinerary?.name}</span>
+                  {!IS_SHARED && (
+                    <sc.StyledTooltip
+                      title="Get shareable link"
+                      aria-label="Get shareable link"
+                    >
+                      <sc.StyledIconButton
+                        onClick={() => {
+                          setIsShareableLinkOpen(true);
+                          handleGetShareableLink();
+                        }}
+                      >
+                        <LinkIcon />
+                      </sc.StyledIconButton>
+                    </sc.StyledTooltip>
+                  )}
+                </sc.ItineraryTitle>
+                <sc.DateGrid container item lg={12} sm={12}>
+                  <i className="far fa-calendar-alt"></i>
+                  {moment(itinerary?.start_date).format("MMM Do YYYY") +
+                    ` - ` +
+                    moment(itinerary?.end_date).format("MMM Do YYYY")}
+                </sc.DateGrid>
+              </FadeIn>
+            </sc.ItineraryTitleContainer>
+          ) : null}
+          <IconButton
+            style={{ position: "absolute", right: 20 }}
+            onClick={handleDropdownClick}
+          >
+            <AccountCircle style={{ width: 35, height: 35, color: GREY }} />
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            getContentAnchorEl={null}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            transformOrigin={{ vertical: "top", horizontal: "center" }}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleDropdownClose}
+          >
+            {user ? <MenuItem disabled>{user.name}</MenuItem> : null}
+            <MenuItem
+              onClick={() => {
+                if (user?.isLoggedIn) {
+                  handleLogout();
+                } else {
+                  handleMenuClick("/");
+                }
+                handleDropdownClose();
+              }}
+            >
+              {user?.isLoggedIn ? "Logout" : "Sign In"}
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
+        variant="temporary"
+        onBackdropClick={handleDrawerClose}
         anchor="left"
         open={open}
         classes={{
@@ -103,8 +335,12 @@ const Navbar = (props: { history: any }) => {
               </ListItem>
             );
           })}
+          <ListItem button onClick={() => handleMenuClick("/about")}>
+            {"About"}
+          </ListItem>
         </List>
       </Drawer>
+      {getInvalidItineraryDialog()}
     </div>
   );
 };

@@ -1,47 +1,51 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { enGB } from "date-fns/locale";
-import {
-  DateRangeFocus,
-  DateRangePickerCalendar,
-  Modifiers,
-} from "react-nice-dates";
+import * as sc from "./Container.styles";
+import { DateRangeFocus, Modifiers } from "react-nice-dates";
 import "./Calendar.scss";
+import { useAppSelector } from "app/store";
+import moment from "moment";
 
 interface Props {
   handleDayClick: (date: Date | null) => void;
 }
 
 const Calendar: FC<Props> = ({ handleDayClick }) => {
-  const [startDate] = useState(new Date(2022, 5, 20));
-  const [endDate] = useState(new Date(2022, 5, 30));
+  const itinerary = useAppSelector((state) => state.itinerary.value);
   const [focus, setFocus] = useState<DateRangeFocus>("startDate");
   const handleFocusChange = (newFocus: DateRangeFocus) => {
     setFocus(newFocus || "startDate");
   };
   const modifiers: Modifiers = {
     disabled: (date) => {
-      return date < startDate || date > endDate ? true : false;
-    }, // Disables Saturdays
+      return (
+        !itinerary ||
+        moment(date).isBefore(moment(itinerary.start_date), "date") ||
+        moment(date).isAfter(moment(itinerary.end_date), "date")
+      );
+    },
   };
   const modifiersClassNames = {
     highlight: "-highlight",
   };
   return (
-    <div>
-      <DateRangePickerCalendar
-        startDate={startDate}
-        endDate={endDate}
-        focus={focus}
-        onStartDateChange={handleDayClick}
-        onEndDateChange={handleDayClick}
-        onFocusChange={handleFocusChange}
-        locale={enGB}
-        modifiers={modifiers}
-        modifiersClassNames={modifiersClassNames}
-        //@ts-ignore
-        onDayClick={handleDayClick}
-      />
-    </div>
+    itinerary && (
+      <sc.Calendar>
+        <sc.StyledDatePicker
+          startDate={new Date(itinerary.start_date)}
+          endDate={new Date(itinerary.end_date)}
+          focus={focus}
+          onStartDateChange={handleDayClick}
+          onEndDateChange={handleDayClick}
+          onFocusChange={handleFocusChange}
+          locale={enGB}
+          modifiers={modifiers}
+          modifiersClassNames={modifiersClassNames}
+          //@ts-ignore
+          onDayClick={handleDayClick}
+        />
+      </sc.Calendar>
+    )
   );
 };
 

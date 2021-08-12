@@ -1,35 +1,47 @@
-import React, { FC, useState } from "react";
+import { useContext } from "react";
 import Calendar from "./Calendar";
 import * as sc from "./Container.styles";
 import Day from "./Day";
+import {
+  ContextInterface,
+  ItineraryContext,
+} from "../itineraryPage/ItineraryPage";
 
-interface Props {
-  handleClick?: (date: Date) => void;
-}
-
-const Container: FC<Props> = ({ children, handleClick }) => {
-  // TODO: change this
-  const [day, setDay] = useState<Date | null>(null);
+const Container = () => {
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
 
   const handleDayClick = (date: Date | null) => {
-    setDay(date);
+    itineraryContext?.setActiveDay(date);
   };
 
-  const handleCalendarView = () => {
-    setDay(null);
-  };
+  function handleCalendarView() {
+    if (itineraryContext?.unsavedChanges) {
+      itineraryContext?.setShowUnsavedChangesModal(
+        () => handleCalendarViewNoChanges
+      );
+      return;
+    }
+    handleCalendarViewNoChanges();
+  }
+
+  function handleCalendarViewNoChanges() {
+    itineraryContext?.setActiveDay(null);
+  }
 
   return (
     <sc.containerDiv>
-      <div>
-        {day !== null ? (
-          <Day handleCalendarView={handleCalendarView} date={day}></Day>
+      <>
+        {itineraryContext?.activeDay ? (
+          <Day
+            handleCalendarView={handleCalendarView}
+            date={itineraryContext?.activeDay}
+          />
         ) : (
           <sc.calendarDiv>
-            <Calendar handleDayClick={handleDayClick}></Calendar>
+            <Calendar handleDayClick={handleDayClick} />
           </sc.calendarDiv>
         )}
-      </div>
+      </>
     </sc.containerDiv>
   );
 };

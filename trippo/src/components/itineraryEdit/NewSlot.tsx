@@ -1,5 +1,11 @@
-import React, { FC, useState, useEffect } from "react";
-import { InputLabel, Select, MenuItem } from "@material-ui/core";
+import { FC, useState, useEffect, useContext } from "react";
+import {
+  InputLabel,
+  Select,
+  MenuItem,
+  Snackbar,
+  SnackbarCloseReason,
+} from "@material-ui/core";
 import * as sc from "./NewSlot.styles";
 import * as d from "../../app/destinations/destinationTypes";
 import { Grid, CircularProgress } from "@material-ui/core";
@@ -18,7 +24,9 @@ import {
   ContextInterface,
   ItineraryContext,
 } from "../itineraryPage/ItineraryPage";
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import Alert from "@material-ui/lab/Alert";
+
 
 interface Props {
   handleClose: () => void;
@@ -39,7 +47,7 @@ const NewSlot: FC<Props> = ({
   destinationLng,
   setSearchResult,
 }) => {
-  const itineraryContext = React.useContext<ContextInterface>(ItineraryContext);
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
   const dispatch = useAppDispatch();
   const itinerary = useAppSelector((state) => state.itinerary.value);
   const [type, setType] = useState(d.OTHER);
@@ -52,6 +60,7 @@ const NewSlot: FC<Props> = ({
   const [addDisabled, setAddDisabled] = useState(false);
   const [createActivity] = useCreateActivityMutation();
   const [triggerGetQuery, result] = useLazyGetItineraryByIdQuery();
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -87,6 +96,13 @@ const NewSlot: FC<Props> = ({
     setSelectedDate(event);
   };
 
+  const handleErrorClose = (event: any, reason: SnackbarCloseReason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setErrorSnackbar(false);
+  };
+    
   const getSuggestedBusinesses = async (activityId: any) => {
     await fetch(`/api/yelp/attractions`, {
       method: "POST",
@@ -94,9 +110,9 @@ const NewSlot: FC<Props> = ({
       body: JSON.stringify({
         latitude: destinationLat,
         longitude: destinationLng,
-        rating: 3, // TODO: change to user input
-        price: "1, 2, 3", // TODO: change to user input
-        distance: 10000, // TODO: change to user input
+        rating: itinerary?.restaurant_ratings, 
+        price: itinerary?.dining_budget, 
+        distance: (itinerary?.max_traveling_dist! * 1000), 
         time: new Date(selectedDate!).setHours(
           Number(time.split(":")[0]),
           Number(time.split(":")[1])
@@ -107,7 +123,12 @@ const NewSlot: FC<Props> = ({
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => res.json());
+    }).then((res) => res.json())
+    .catch((err) => {
+      if (err){
+        setErrorSnackbar(true);
+      }
+    });
 
     if (Number(time.split(":")[0]) >= 6 && Number(time.split(":")[0]) <= 11) {
       await fetch(`/api/yelp/restaurants/breakfast_brunch`, {
@@ -116,9 +137,9 @@ const NewSlot: FC<Props> = ({
         body: JSON.stringify({
           latitude: destinationLat,
           longitude: destinationLng,
-          rating: 3, // TODO: change to user input
-          price: "1, 2, 3", // TODO: change to user input
-          distance: 10000, // TODO: change to user input
+          rating: itinerary?.restaurant_ratings, 
+          price: itinerary?.dining_budget, 
+          distance: (itinerary?.max_traveling_dist! * 1000), 
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])
@@ -129,7 +150,12 @@ const NewSlot: FC<Props> = ({
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((res) => res.json());
+      }).then((res) => res.json())
+      .catch((err) => {
+        if (err){
+          setErrorSnackbar(true);
+        }
+      });
     }
 
     if (
@@ -142,9 +168,9 @@ const NewSlot: FC<Props> = ({
         body: JSON.stringify({
           latitude: destinationLat,
           longitude: destinationLng,
-          rating: 3, // TODO: change to user input
-          price: "1, 2, 3", // TODO: change to user input
-          distance: 10000, // TODO: change to user input
+          rating: itinerary?.restaurant_ratings, 
+          price: itinerary?.dining_budget, 
+          distance: (itinerary?.max_traveling_dist! * 1000), 
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])
@@ -155,7 +181,12 @@ const NewSlot: FC<Props> = ({
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((res) => res.json());
+      }).then((res) => res.json())
+      .catch((err) => {
+        if (err){
+          setErrorSnackbar(true);
+        }
+      });
     }
 
     if (Number(time.split(":")[0]) >= 20 || Number(time.split(":")[0]) <= 3) {
@@ -165,9 +196,9 @@ const NewSlot: FC<Props> = ({
         body: JSON.stringify({
           latitude: destinationLat,
           longitude: destinationLng,
-          rating: 3, // TODO: change to user input
-          price: "3, 4", // TODO: change to user input
-          distance: 10000, // TODO: change to user input
+          rating: itinerary?.restaurant_ratings, 
+          price: itinerary?.dining_budget,
+          distance: (itinerary?.max_traveling_dist! * 1000), 
           time: new Date(selectedDate!).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])
@@ -178,7 +209,12 @@ const NewSlot: FC<Props> = ({
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((res) => res.json());
+      }).then((res) => res.json())
+      .catch((err) => {
+        if (err){
+          setErrorSnackbar(true);
+        }
+      });
     }
   };
 
@@ -346,6 +382,15 @@ const NewSlot: FC<Props> = ({
           </sc.AddButton>
         </sc.SlotContainer>
       </sc.NewSlot>
+      <Snackbar
+        open={errorSnackbar}
+        autoHideDuration={3000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={() => setErrorSnackbar(false)} severity="error">
+          There was an error saving some Yelp data
+        </Alert>
+      </Snackbar>
     </>
   );
 };

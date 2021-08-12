@@ -4,8 +4,10 @@
 
 // If they are: they proceed to the page
 // If not: they are redirected to the login page.
-import React, { FC } from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import React, { FC } from 'react';
+import { Redirect, Route } from 'react-router-dom';
+import { useAppSelector } from 'app/store';
+import Placeholder from 'components/placeholder/Placeholder';
 
 interface Props {
   component: React.ElementType;
@@ -14,16 +16,26 @@ interface Props {
 }
 
 const PrivateRoute: FC<Props> = ({ component: Component, ...rest }) => {
+  const user = useAppSelector((state) => state.user.value);
+  const isAppLoaded = useAppSelector((state) => state.user.isAppLoaded);
+
+  if (!isAppLoaded) {
+    return <Placeholder />
+  }
   return (
     <Route
       {...rest}
-      render={props =>
-        window.localStorage.getItem("user") ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-        )
-      }
+      render={props => {
+        if (user?.isLoggedIn) {
+          return <Component {...props} />;
+        }
+
+        if (!isAppLoaded) {
+          return <Placeholder />;
+        }
+
+        return <Redirect to={{ pathname: '/', state: { from: props.location } }} />;
+      }}
     />
   )
 }

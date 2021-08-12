@@ -14,7 +14,7 @@ const Container = () => {
     itineraryContext?.setActiveDay(date);
   };
 
-  function handleCalendarView() {
+  const handleCalendarView = () => {
     if (itineraryContext?.unsavedChanges) {
       itineraryContext?.setShowUnsavedChangesModal(
         () => handleCalendarViewNoChanges
@@ -24,7 +24,7 @@ const Container = () => {
     handleCalendarViewNoChanges();
   }
 
-  function handleCalendarViewNoChanges() {
+  const handleCalendarViewNoChanges = () => {
     itineraryContext?.setActiveDay(null);
   }
 

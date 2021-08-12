@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import * as sc from "./Suggestions.styles";
-import { Activity, Yelp } from "types/models";
+import { Activity, ActivityType, Yelp } from "types/models";
 import { useAppSelector } from "app/store";
 import { Grid } from "@material-ui/core";
 import { getDistanceFromLatLonInKm } from "./utils";
 
 interface Props {
-  renderIcon: (icon: string) => JSX.Element;
+  renderIcon: (icon: ActivityType) => JSX.Element;
   activity: Activity;
   hidden?: boolean;
   suggested?: {
@@ -29,7 +29,6 @@ const Suggestions: FC<Props> = ({ activity, hidden = false }) => {
   const [suggested, setSuggested] = useState<Yelp[]>([]);
 
   useEffect(() => {
-    // removes console mounting error
     let isMounted = true;
     fetch(`/api/yelp/businesses`, {
       method: "POST",
@@ -61,7 +60,6 @@ const Suggestions: FC<Props> = ({ activity, hidden = false }) => {
       </Grid>
       <Grid container item lg={9} md={9} sm={12} xs={12}>
         {suggested?.map((s: Yelp, index) => {
-          // setDBSuggestions(s.name, s.url, s.rating, s.price, Math.round((getDistanceFromLatLonInKm(s.coordinates.latitude, s.coordinates.longitude, activity.location.lat, activity.location.lng)) * 10)/ 10, s.comments)
           const starString =
             Math.ceil(s.rating || 0) === s.rating
               ? `/yelp/regular_${s.rating}.png`

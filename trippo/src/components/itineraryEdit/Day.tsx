@@ -25,9 +25,10 @@ const Day: FC<Props> = ({
   isReadOnly = false,
 }) => {
   const itinerary = useAppSelector((state) => state.itinerary.value);
+  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
+
   const [editedItinerary, setEditedItinerary] = useState(itinerary);
   let prevActivity: Activity | null = null;
-  const itineraryContext = useContext<ContextInterface>(ItineraryContext);
 
   const [edit, setEdit] = useState(false);
   const [dayCost, setDayCost] = useState(0);

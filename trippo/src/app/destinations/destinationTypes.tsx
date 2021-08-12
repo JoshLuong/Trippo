@@ -1,14 +1,24 @@
 import styled from "styled-components";
 import BeachAccessIcon from "@material-ui/icons/BeachAccess";
 import * as c from "../../colors/colors";
-const Icon = styled.i`
+
+
+const Icon = styled.i <{ color: string }> `
   color: ${(props) => props.color};
   padding-right: 5px;
-`;
+  margin-left: 3px;
+  `;
+
 const StyledBeachIcon = styled(BeachAccessIcon)`
   padding-right: 5px;
   color: #00bbf9;
 `;
+
+const ShoppingIcon = styled.i<{ color: string }>`
+  color: ${(props) => props.color};
+  padding-right: 5px;
+`;
+
 export const ATTRACTION = "Attraction";
 export const HOTEL = "Hotel";
 export const AIRPORT = "Airport";
@@ -42,7 +52,7 @@ export function renderIcon(t: string | undefined) {
     case BEACH:
       return <StyledBeachIcon fontSize="small" />;
     case SHOPPING:
-      return <Icon color="#ffd500" className="fas fa-shopping-cart"></Icon>;
+      return <ShoppingIcon color="#ffd500" className="fas fa-shopping-cart"></ShoppingIcon>;
     case ATTRACTION:
       return <Icon color="#ef476f" className="fas fa-camera"></Icon>;
     default:
@@ -87,7 +97,7 @@ export function getIconHexColor(t: string | undefined) {
       return "#ffd500";
     case ATTRACTION:
       return "#ef476f";
-    default: 
+    default:
       return c.YELLOW;
   }
 }

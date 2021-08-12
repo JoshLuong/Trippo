@@ -69,6 +69,10 @@ export const descHeader = styled.h2`
     border-radius: 6px;
     background: #c0b3b499;
   }
+
+  @media(max-width: 600px){
+    font-size: 20px;
+  }
 `;
 
 export const loginDiv = styled.div`

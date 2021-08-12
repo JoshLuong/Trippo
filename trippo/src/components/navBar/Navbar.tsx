@@ -11,9 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import TextLoop from "react-text-loop";
-import * as c from "../../colors/colors";
 import { hexColorList } from "../../app/destinations/destinationTypes";
 import {
   Dialog,
@@ -274,7 +272,7 @@ const Navbar = (props: { history: any }) => {
             style={{ position: "absolute", right: 20 }}
             onClick={handleDropdownClick}
           >
-            <AccountCircle style={{ width: 35, height: 35, color: GREY }} />
+            <sc.StyledAccountCircle />
           </IconButton>
           <Menu
             id="simple-menu"

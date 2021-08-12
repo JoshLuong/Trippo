@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import * as sc from "./Suggestions.styles";
-import { Activity, Yelp } from "types/models";
+import { Activity, ActivityType, Yelp } from "types/models";
 import { useAppSelector } from "app/store";
 import { Grid } from "@material-ui/core";
 import { getDistanceFromLatLonInKm } from "./utils";
 
 interface Props {
-  renderIcon: (icon: string) => JSX.Element;
+  renderIcon: (icon: ActivityType) => JSX.Element;
   activity: Activity;
   hidden?: boolean;
   suggested?: {

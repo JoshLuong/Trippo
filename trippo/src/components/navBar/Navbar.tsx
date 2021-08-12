@@ -12,7 +12,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import TextLoop from "react-text-loop";
-import { hexColorList } from "../../app/destinations/destinationTypes";
+import { hexColorList } from "../icons";
 import {
   Dialog,
   DialogActions,

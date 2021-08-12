@@ -59,7 +59,7 @@ export const StickyDiv = styled.div`
   position: sticky;
   top: 0;
   margin: 0 0.52em 0.35em 0.52em;
-  padding: 0.5em 1em;
+  padding: 0.75em 1em;
   height: 2.9em;
   border-radius: 2.5px;
   background: #ffffff;
